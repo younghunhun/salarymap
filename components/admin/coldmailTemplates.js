@@ -2102,6 +2102,42 @@ export const COLDMAIL_TEMPLATES = [
     html: (lang) => prestoShell(lang, { intro: PRESTO_INTRO.private, tail: BENEFIT_PRIVATE }),
   },
   {
+    match: /^zest-cad-recommend1-public/,
+    subject: {
+      vi: '[FYI] Zest đã xem hồ sơ của bạn và mời bạn ứng tuyển — Thiết kế kiến trúc & CAD',
+      ko: '[FYI] Zest가 회원님의 이력서를 보고 지원을 요청했습니다 — 건축설계·CAD',
+      en: '[FYI] Zest viewed your profile and invited you to apply — Architecture & CAD',
+    },
+    desc: 'Zest 건축설계·CAD(ZE3502) 추천 · 공개 프레임 (9/11): "Zest 담당자가 이력서를 보고 보냈다 · 우선검토". 대상=CAD/건축툴 보유 ≤4y 비개발(9/11 실측 4명 — FYI 풀 IT 편중으로 건축 풀 극소).',
+    source: 'scripts/outreach/zest-cad-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Nhà tuyển dụng của <b>Zest</b> — công ty Hàn Quốc chuyên về kiến trúc bền vững, tư vấn chứng nhận công trình xanh và mô phỏng năng lượng tòa nhà — đã xem hồ sơ của bạn trên FYI và <b>gửi cho bạn vị trí này</b> vì kỹ năng CAD/kỹ thuật xây dựng của bạn phù hợp với yêu cầu.',
+        ko: '지속가능 건축·그린빌딩 인증 컨설팅·건물 에너지 시뮬레이션 기업 <b>Zest</b>의 채용 담당자가 FYI에서 회원님의 프로필을 확인하고, CAD·건축 기술 역량이 요구사항과 맞아 <b>이 포지션을 직접 보냈습니다</b>.',
+        en: 'A recruiter at <b>Zest</b> — a Korean company specializing in sustainable architecture, green building certification consulting and building energy simulation — viewed your profile on FYI and <b>sent you this position</b> because your CAD/construction skills match the requirements.',
+      },
+      initial: 'Z', company: 'Zest', title: 'Nhân viên thiết kế kiến trúc & CAD', meta: 'HCM/ĐN/HN · Fresher–3y · 10–14tr ₫', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^zest-cad-recommend1-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên thiết kế kiến trúc & CAD tại Zest',
+      ko: '[FYI] Zest 건축설계·CAD 포지션 추천 명단에 선정되셨습니다',
+      en: '[FYI] You\'ve been selected for the nominee list — Architecture & CAD at Zest',
+    },
+    desc: 'Zest 건축설계·CAD(ZE3502) 추천 · 비공개 프레임 (9/11): "FYI가 전체 이력서 검토 후 추천 명단에 선정 · 우선검토"(기한 문구 없음).',
+    source: 'scripts/outreach/zest-cad-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Đội ngũ FYI đã xem xét toàn bộ hồ sơ đã đăng ký và <b>chọn bạn vào danh sách đề cử</b> cho vị trí này tại <b>Zest</b> — công ty Hàn Quốc chuyên về kiến trúc bền vững, tư vấn chứng nhận công trình xanh và mô phỏng năng lượng tòa nhà.',
+        ko: 'FYI 팀이 등록된 이력서 전체를 검토해, 지속가능 건축·그린빌딩 인증 컨설팅 기업 <b>Zest</b>의 이 포지션 <b>추천 명단에 회원님을 선정</b>했습니다.',
+        en: 'The FYI team reviewed every registered CV and <b>selected you for the nominee list</b> for this position at <b>Zest</b> — a Korean company specializing in sustainable architecture and green building consulting.',
+      },
+      initial: 'Z', company: 'Zest', title: 'Nhân viên thiết kế kiến trúc & CAD', meta: 'HCM/ĐN/HN · Fresher–3y · 10–14tr ₫', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
     match: /^zest-recommend1-public/,
     subject: invitedSubject('Zest'),
     desc: 'Zest Full-stack 추천 · 공개 프레임 (7/30): "Zest 담당자가 당신 이력서를 보고 보냈다 · 우선검토".',
