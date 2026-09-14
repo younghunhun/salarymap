@@ -3168,6 +3168,150 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'B', company: 'BECUAI VIETNAM', title: 'Nhân viên Xử lý Dữ liệu (Data Labels)', meta: 'Onsite · Q.3, TP.HCM · Gross 12 triệu ₫ + phụ cấp đêm', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^lomen-recommend1-web-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Web Developer tại Lomen',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Lomen 웹 개발자',
+      en: "[FYI] You've been nominated — Web Developer at Lomen",
+    },
+    desc: 'Lomen(R194) 웹 개발자 recommend (9/14, Len 게시 당일 소싱): 비공개 프레임 — 한국 소프트웨어·산업디자인 기업(KIDP 인증), 웹/서비스 개발·운영, Intern/Fresher/Junior, 연봉 협의. 컷=Web/Frontend/Backend/Fullstack 직군 × 경력 5y 이하. 근무지 HCM·HN·ĐN(지역 하드게이트 없음).',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp (KIDP chứng nhận) — đang tuyển <b>Web Developer (Intern/Fresher/Junior)</b> qua FYI. Công việc: phát triển & vận hành web/dịch vụ, tính năng mới & bảo trì, ứng dụng AI. Yêu cầu: kinh nghiệm web/app hoặc dự án liên quan, Git/GitHub, CV tiếng Anh. Lương thỏa thuận.',
+        ko: '한국 소프트웨어·산업디자인 기업 Lomen이 FYI를 통해 <b>웹 개발자(인턴~주니어)</b>를 채용 중. 웹/서비스 개발·운영, Git/GitHub, 영문 CV, 연봉 협의.',
+        en: 'LOMEN — Korean software & industrial design company (KIDP-certified) — is hiring a Web Developer (Intern/Fresher/Junior) via FYI. Web/app dev experience, Git/GitHub, English CV; salary negotiable.',
+      },
+      initial: 'L', company: 'Lomen', title: 'Web Developer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-web-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Lomen — Web Developer',
+      ko: '[FYI] Lomen 추천 명단에 선정되셨습니다 — 웹 개발자',
+      en: "[FYI] You've been nominated to Lomen — Web Developer",
+    },
+    desc: 'Lomen(R194) 웹 개발자 recommend (9/14): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp — đang tuyển <b>Web Developer (Intern/Fresher/Junior)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'Lomen 웹 개발자 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Lomen Web Developer — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'L', company: 'Lomen', title: 'Web Developer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-edt-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Editor (Video) tại Lomen',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Lomen 영상 에디터',
+      en: "[FYI] You've been nominated — Editor (Video) at Lomen",
+    },
+    desc: 'Lomen(R197) 영상 에디터 recommend (9/14): 비공개 프레임 — YouTube/TikTok/Instagram 영상 제작, 쇼트/롱폼 편집·후반작업, Intern/Fresher/Junior. 컷=영상편집 시그널(Premiere/AE/CapCut 등, Designer 코어 222명 완전 중복이라 스킬로 분리 배정) × 경력 5y 이하 × 비인접 직군 차단.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp (KIDP chứng nhận) — đang tuyển <b>Editor (Video, Intern/Fresher/Junior)</b> qua FYI. Công việc: sản xuất video cho YouTube/TikTok/Instagram, biên tập short-form & long-form, hậu kỳ (phụ đề, BGM, hiệu ứng), ứng dụng công cụ AI. Yêu cầu: kinh nghiệm biên tập video, Premiere Pro/After Effects/CapCut, CV tiếng Anh & portfolio. Lương thỏa thuận.',
+        ko: 'Lomen <b>영상 에디터(인턴~주니어)</b> — YouTube/TikTok/Instagram 영상 제작·쇼트/롱폼 편집·후반작업, Premiere/AE/CapCut, 영문 CV+포트폴리오, 연봉 협의.',
+        en: 'LOMEN is hiring a Video Editor (Intern/Fresher/Junior) via FYI. YouTube/TikTok/Instagram content, short/long-form editing, post-production; Premiere/AE/CapCut, English CV & portfolio; salary negotiable.',
+      },
+      initial: 'L', company: 'Lomen', title: 'Editor', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-edt-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Lomen — Editor (Video)',
+      ko: '[FYI] Lomen 추천 명단에 선정되셨습니다 — 영상 에디터',
+      en: "[FYI] You've been nominated to Lomen — Editor (Video)",
+    },
+    desc: 'Lomen(R197) 영상 에디터 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp — đang tuyển <b>Editor (Video, Intern/Fresher/Junior)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'Lomen 영상 에디터 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Lomen Video Editor — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'L', company: 'Lomen', title: 'Editor', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-dsn-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Designer tại Lomen',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Lomen 디자이너',
+      en: "[FYI] You've been nominated — Designer at Lomen",
+    },
+    desc: 'Lomen(R196) 디자이너 recommend (9/14): 비공개 프레임 — 브랜딩·digital 콘텐츠·SNS/마케팅·UI/UX 디자인, Intern/Fresher/Junior. 컷=Design 직군(영상 시그널 있으면 Editor로 선배정) 또는 인접 직군+디자인 툴 시그널 × 경력 5y 이하.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp (KIDP chứng nhận) — đang tuyển <b>Designer (Intern/Fresher/Junior)</b> qua FYI. Công việc: thiết kế thương hiệu & nội dung digital, nội dung SNS/marketing, UI/UX web/mobile, sản xuất hình ảnh bằng công cụ AI. Yêu cầu: kinh nghiệm/dự án thiết kế, Figma/Photoshop/Illustrator, CV tiếng Anh & portfolio. Lương thỏa thuận.',
+        ko: 'Lomen <b>디자이너(인턴~주니어)</b> — 브랜딩·digital 콘텐츠·SNS/마케팅·UI/UX 디자인, Figma/PS/AI, 영문 CV+포트폴리오, 연봉 협의.',
+        en: 'LOMEN is hiring a Designer (Intern/Fresher/Junior) via FYI. Branding & digital content, SNS/marketing design, UI/UX; Figma/Photoshop/Illustrator, English CV & portfolio; salary negotiable.',
+      },
+      initial: 'L', company: 'Lomen', title: 'Designer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-dsn-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Lomen — Designer',
+      ko: '[FYI] Lomen 추천 명단에 선정되셨습니다 — 디자이너',
+      en: "[FYI] You've been nominated to Lomen — Designer",
+    },
+    desc: 'Lomen(R196) 디자이너 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp — đang tuyển <b>Designer (Intern/Fresher/Junior)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'Lomen 디자이너 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Lomen Designer — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'L', company: 'Lomen', title: 'Designer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-mkt-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Marketer tại Lomen',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Lomen 마케터',
+      en: "[FYI] You've been nominated — Marketer at Lomen",
+    },
+    desc: 'Lomen(R195) 마케터 recommend (9/14): 비공개 프레임 — 국내외 마케팅·콘텐츠, 시장/트렌드 리서치, SNS/digital 운영, 성과 분석, Intern/Fresher/Junior. 컷=Marketing 직군 또는 Sales/BD+마케팅 시그널 × 경력 5y 이하.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp (KIDP chứng nhận) — đang tuyển <b>Marketer (Intern/Fresher/Junior)</b> qua FYI. Công việc: marketing & content trong và ngoài nước, nghiên cứu thị trường & xu hướng, vận hành nội dung SNS/digital, phân tích hiệu quả, ứng dụng AI tạo sinh. Yêu cầu: kinh nghiệm marketing/quảng cáo/content, CV tiếng Anh. Lương thỏa thuận.',
+        ko: 'Lomen <b>마케터(인턴~주니어)</b> — 국내외 마케팅·콘텐츠, SNS/digital 운영, 성과 분석, 영문 CV, 연봉 협의.',
+        en: 'LOMEN is hiring a Marketer (Intern/Fresher/Junior) via FYI. Marketing & content, SNS/digital ops, performance analysis; English CV; salary negotiable.',
+      },
+      initial: 'L', company: 'Lomen', title: 'Marketer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^lomen-recommend1-mkt-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Lomen — Marketer',
+      ko: '[FYI] Lomen 추천 명단에 선정되셨습니다 — 마케터',
+      en: "[FYI] You've been nominated to Lomen — Marketer",
+    },
+    desc: 'Lomen(R195) 마케터 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/lomen0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>LOMEN</b> — công ty Hàn Quốc chuyên phát triển phần mềm & thiết kế công nghiệp tổng hợp — đang tuyển <b>Marketer (Intern/Fresher/Junior)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'Lomen 마케터 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Lomen Marketer — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'L', company: 'Lomen', title: 'Marketer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
