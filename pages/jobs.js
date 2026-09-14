@@ -1142,7 +1142,6 @@ export default function JobsPage() {
         .jd-divider { height: 1px; background: #f0f0f0; margin: 24px 0; }
         .jd-section-title { font-size: 18px; font-weight: 800; color: #111; letter-spacing: -0.02em; margin-bottom: 14px; }
         .jd-co-head { display: flex; align-items: center; gap: 8px; }
-        .jd-ai-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: #7c3aed; background: #f5f3ff; border: 1px solid #e9e5ff; padding: 2px 8px; border-radius: 999px; letter-spacing: 0; }
         .jd-desc { font-size: 14px; color: #444; line-height: 1.8; margin-bottom: 24px; white-space: pre-line; }
         .jd-list { font-size: 14px; color: #444; line-height: 1.8; margin: 0 0 24px; padding-left: 20px; }
         .jd-list li { margin-bottom: 4px; }
@@ -1529,24 +1528,17 @@ export default function JobsPage() {
               </div>
               )}
 
+              {/* Company Information — 수기 프로필(COMPANY_PROFILES) 있는 회사만. AI 생성 소개는 노출 중단 */}
+              {COMPANY_PROFILES[detailJob.company] && (<>
               <div className="jd-divider" />
 
-              {/* Company Information */}
               <div className="jd-section-title jd-co-head">
                 <span>{t('jobs.companyOverview')}</span>
-                {!COMPANY_PROFILES[detailJob.company] && detailJob.ai_overview && (
-                  <span className="jd-ai-badge">✨ {t('jobs.aiGenerated')}</span>
-                )}
               </div>
               <div className="jd-company-overview">
-                <div className="jd-co-overview-text">
-                  {COMPANY_PROFILES[detailJob.company]
-                    ? generateCompanyDescription(detailJob)
-                    : (detailJob.ai_overview || generateCompanyDescription(detailJob))}
-                </div>
+                <div className="jd-co-overview-text">{generateCompanyDescription(detailJob)}</div>
                 {(() => {
                   const p = COMPANY_PROFILES[detailJob.company]
-                  if (!p) return null   // 수기 프로필 없는 회사는 '–'만 뜨는 통계 그리드 숨김
                   return (
                     <div className="jd-co-overview-stats">
                       <div className="jd-co-stat">
@@ -1569,6 +1561,7 @@ export default function JobsPage() {
                   )
                 })()}
               </div>
+              </>)}
 
               <div className="jd-divider" />
 

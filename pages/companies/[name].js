@@ -97,16 +97,7 @@ export async function getServerSideProps({ params }) {
     .limit(1)
   if (!krErr && kr && kr.length) krStats = kr[0]
 
-  // AI 생성 회사 소개 (jobs 상세와 같은 소스) — 원티드식 인트로 문단으로 사용
-  let overview = null
-  const { data: ov, error: ovErr } = await supabaseServer
-    .from('company_overviews')
-    .select('overview')
-    .eq('company', companyName)
-    .maybeSingle()
-  if (!ovErr && ov?.overview) overview = ov.overview
-
-  return { props: { companyName, domain: domain || null, krStats, overview } }
+  return { props: { companyName, domain: domain || null, krStats } }
 }
 
 function timeAgo(iso) {
@@ -128,11 +119,10 @@ function fmtKrw(v, lang) {
   return `₩${Math.round(v / 1e6).toLocaleString()}M`
 }
 
-export default function CompanyPage({ companyName, domain, krStats, overview }) {
+export default function CompanyPage({ companyName, domain, krStats }) {
   const { t, lang } = useT()
   const router = useRouter()
   const [roleFilter, setRoleFilter] = useState('all')
-  const [introOpen, setIntroOpen] = useState(false)
   const [jobsOpen, setJobsOpen] = useState(false)
 
   const [posts, setPosts] = useState([])
@@ -258,9 +248,6 @@ export default function CompanyPage({ companyName, domain, krStats, overview }) 
         .cpg-jobs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .cpg-jobs .cpg-card { margin-bottom: 0; }
         @media (max-width: 640px) { .cpg-jobs { grid-template-columns: 1fr; } }
-        .cpg-intro { font-size: 14px; color: var(--sm-gray-800); line-height: 1.7; white-space: pre-line; }
-        .cpg-intro.clamp { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
-        .cpg-more { margin-top: 8px; background: none; border: none; padding: 0; color: var(--sm-gray-500); font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
         .cpg-empty { text-align: center; color: #999; padding: 48px 0; font-size: 14px; }
         .cpg-card { display: block; padding: 16px 18px; border: 1px solid #ececec; border-radius: 14px; margin-bottom: 10px; background: #fff; text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s; }
         .cpg-card:hover { border-color: #ddd; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
@@ -333,16 +320,6 @@ export default function CompanyPage({ companyName, domain, krStats, overview }) 
         </div>
 
         {/* 원티드식 단일 스크롤 구성 — 데이터가 있는 섹션만 렌더 */}
-        {overview && (
-          <section>
-            <div className="cpg-sec">{t('cpage.secIntro')}</div>
-            <div className="cpg-panel">
-              <div className={`cpg-intro${introOpen ? '' : ' clamp'}`}>{overview}</div>
-              <button className="cpg-more" onClick={() => setIntroOpen(o => !o)}>{introOpen ? t('cpage.introLess') : t('cpage.introMore')}</button>
-            </div>
-          </section>
-        )}
-
         {jobs.length > 0 && (
           <section>
             <div className="cpg-sec">{t('cpage.secJobs')} <span className="n">{jobs.length}</span></div>
