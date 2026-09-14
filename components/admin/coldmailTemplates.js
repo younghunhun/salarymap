@@ -2988,6 +2988,186 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'J', company: 'Jinosys', title: 'AI, IoT, and Robotics Integrated Mobile App & Web Service Intern', meta: 'Thực tập · Onsite Đà Nẵng · Trợ cấp 3.000.000 ₫/tháng', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^thexanh-recommend1-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Export & Sourcing Executive tại The Xanh',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — The Xanh 수출·소싱 담당',
+      en: "[FYI] You've been nominated — Export & Sourcing Executive at The Xanh",
+    },
+    desc: 'The Xanh(V87) 한국시장 수출·소싱 담당 recommend (9/14, 보드 전수감사 미착수 공고 일괄): 비공개 프레임 — 베트남 농산물 대한국 수출(건조과일·꿀·견과·향신료·수산·OEM), 공급사 발굴·PO→선적·수출 서류(C/O 등)·QC. 컷=수출입/물류/소싱 시그널 × 2-5y × HCMC × 비인접 직군(개발·디자인 등) 차단.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>THE XANH HOLDINGS</b> — công ty sourcing & xuất khẩu nông sản Việt Nam sang thị trường Hàn Quốc — đang tuyển <b>Export & Sourcing Executive (Korea Market)</b> qua FYI. Công việc: tìm kiếm & đánh giá nhà cung cấp, quản lý PO→shipment, chứng từ xuất khẩu, QC trước xuất hàng, làm việc với khách hàng Hàn Quốc. Yêu cầu 2–5 năm kinh nghiệm XNK/logistics/sourcing. Lương 13–20 triệu ₫/tháng.',
+        ko: '베트남 농산물 대한국 수출·소싱 기업 <b>THE XANH HOLDINGS</b>가 FYI를 통해 <b>수출·소싱 담당</b>을 채용 중. 공급사 발굴·PO/선적 관리·수출 서류·QC·한국 바이어 커뮤니케이션, 2-5년 경력, 13-20M VND.',
+        en: 'THE XANH HOLDINGS — Vietnamese agri-product sourcing & export company for the Korean market — is hiring an Export & Sourcing Executive via FYI. Supplier sourcing, PO→shipment, export docs, QC; 2–5 yrs; 13–20M VND.',
+      },
+      initial: 'T', company: 'The Xanh', title: 'Export & Sourcing Executive (Korea Market)', meta: 'Onsite · TP.HCM · 13–20 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^thexanh-recommend1-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi The Xanh — Export & Sourcing Executive',
+      ko: '[FYI] The Xanh 추천 명단에 선정되셨습니다 — 수출·소싱 담당',
+      en: "[FYI] You've been nominated to The Xanh — Export & Sourcing Executive",
+    },
+    desc: 'The Xanh(V87) 수출·소싱 recommend (9/14): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>THE XANH HOLDINGS</b> — công ty sourcing & xuất khẩu nông sản Việt Nam sang thị trường Hàn Quốc — đang tuyển <b>Export & Sourcing Executive (Korea Market)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'The Xanh 수출·소싱 담당 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "The Xanh Export & Sourcing Executive — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'T', company: 'The Xanh', title: 'Export & Sourcing Executive (Korea Market)', meta: 'Onsite · TP.HCM · 13–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^yellowdr-recommend1-mgr-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Showroom Manager / CEO Assistant tại Yellow Dr.',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Yellow Dr. 쇼룸 매니저/CEO 어시스턴트',
+      en: "[FYI] You've been nominated — Showroom Manager / CEO Assistant at Yellow Dr.",
+    },
+    desc: 'Yellow Dr.(YD1904) 쇼룸 매니저/CEO 어시스턴트 recommend (9/14): 비공개 프레임 — 한국 풋케어 브랜드, 사무실·쇼룸 운영/신제품 런칭/비용·증빙 관리. 컷=한국어 회화(JD 하드) × 3y+ × 운영/관리 시그널 × HCMC. 뷰티·헬스케어 가점. 풀 7명 실측(한국어×운영 교집합 상한).',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yellow Dr.</b> — thương hiệu chăm sóc sức khỏe bàn chân đến từ Hàn Quốc — đang tuyển <b>Showroom Manager / CEO Assistant</b> qua FYI. Quản lý & vận hành văn phòng/showroom, chuẩn bị ra mắt sản phẩm mới, quản lý chi phí & chứng từ. Yêu cầu kinh nghiệm quản lý beauty/healthcare, <b>giao tiếp được bằng tiếng Hàn</b>. Lương 20–25 triệu ₫, deal theo năng lực & tiếng Hàn, không mức trần.',
+        ko: '한국 풋케어 브랜드 <b>Yellow Dr.</b>가 FYI를 통해 <b>쇼룸 매니저/CEO 어시스턴트</b> 채용 중. 사무실·쇼룸 운영, 신제품 런칭, 비용 관리. 뷰티/헬스케어 관리 경력·<b>한국어 회화 필수</b>, 20-25M VND(상한 없음 협의).',
+        en: 'Yellow Dr. — Korean foot-care brand — is hiring a Showroom Manager / CEO Assistant via FYI. Office/showroom ops, new product launch, cost management. Beauty/healthcare management experience, conversational Korean required; 20–25M VND, negotiable.',
+      },
+      initial: 'Y', company: 'Yellow Dr.', title: 'Showroom Manager / CEO Assistant', meta: 'Onsite · Bình Thạnh, TP.HCM · 20–25 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^yellowdr-recommend1-mgr-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Yellow Dr. — Showroom Manager / CEO Assistant',
+      ko: '[FYI] Yellow Dr. 추천 명단에 선정되셨습니다 — 쇼룸 매니저/CEO 어시스턴트',
+      en: "[FYI] You've been nominated to Yellow Dr. — Showroom Manager / CEO Assistant",
+    },
+    desc: 'Yellow Dr.(YD1904) 쇼룸 매니저 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yellow Dr.</b> — thương hiệu chăm sóc sức khỏe bàn chân đến từ Hàn Quốc — đang tuyển <b>Showroom Manager / CEO Assistant</b> (yêu cầu giao tiếp tiếng Hàn, kinh nghiệm quản lý beauty/healthcare) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách trong tuần này.',
+        ko: 'Yellow Dr. 쇼룸 매니저/CEO 어시스턴트 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Yellow Dr. Showroom Manager / CEO Assistant — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'Y', company: 'Yellow Dr.', title: 'Showroom Manager / CEO Assistant', meta: 'Onsite · Bình Thạnh, TP.HCM · 20–25 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^yellowdr-recommend1-sales-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Sales & Showroom Operations tại Yellow Dr.',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Yellow Dr. 세일즈·쇼룸 운영',
+      en: "[FYI] You've been nominated — Sales & Showroom Operations at Yellow Dr.",
+    },
+    desc: 'Yellow Dr.(YD1903) 세일즈·쇼룸 운영 recommend (9/14): 비공개 프레임 — 쇼룸 운영·재고, Zalo/웹 CS, 약국·대리점·의료기관 B2B 개척. 컷=세일즈 직군(인접 직군은 세일즈 시그널 필수, Motive 확장룰) × 1y+ × ≤10y(급여 10-18M 미스매치 컷) × HCMC. 헬스케어·뷰티·제약 도메인 가점.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yellow Dr.</b> — thương hiệu chăm sóc sức khỏe bàn chân đến từ Hàn Quốc — đang tuyển <b>Sales & Showroom Operations Executive</b> qua FYI. Vận hành showroom & tồn kho, CSKH qua Zalo/website/hotline, phát triển khách hàng <b>B2B</b> (nhà thuốc, đại lý, cơ sở y tế). Yêu cầu tối thiểu 1 năm kinh nghiệm sales (siêu thị/healthcare/mỹ phẩm/dược/thiết bị y tế). Lương 10–18 triệu ₫/tháng.',
+        ko: '한국 풋케어 브랜드 <b>Yellow Dr.</b>가 FYI를 통해 <b>세일즈·쇼룸 운영 담당</b> 채용 중. 쇼룸·재고 운영, 온라인 CS, 약국·대리점 B2B 개척. 세일즈 1년+ 경력, 10-18M VND.',
+        en: 'Yellow Dr. — Korean foot-care brand — is hiring a Sales & Showroom Operations Executive via FYI. Showroom/inventory ops, online CS, B2B development (pharmacies, agencies, clinics). 1+ yr sales experience; 10–18M VND.',
+      },
+      initial: 'Y', company: 'Yellow Dr.', title: 'Sales & Showroom Operations Executive', meta: 'Onsite · Bình Thạnh, TP.HCM · 10–18 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^yellowdr-recommend1-sales-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Yellow Dr. — Sales & Showroom Operations',
+      ko: '[FYI] Yellow Dr. 추천 명단에 선정되셨습니다 — 세일즈·쇼룸 운영',
+      en: "[FYI] You've been nominated to Yellow Dr. — Sales & Showroom Operations",
+    },
+    desc: 'Yellow Dr.(YD1903) 세일즈·쇼룸 운영 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yellow Dr.</b> — thương hiệu chăm sóc sức khỏe bàn chân đến từ Hàn Quốc — đang tuyển <b>Sales & Showroom Operations Executive</b> (B2B nhà thuốc/đại lý/cơ sở y tế, tối thiểu 1 năm sales) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách trong tuần này.',
+        ko: 'Yellow Dr. 세일즈·쇼룸 운영 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Yellow Dr. Sales & Showroom Operations — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'Y', company: 'Yellow Dr.', title: 'Sales & Showroom Operations Executive', meta: 'Onsite · Bình Thạnh, TP.HCM · 10–18 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^wellpod-recommend2-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Thực tập sinh Vận hành Quảng cáo TikTok Shop tại Wellpod',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Wellpod TikTok Shop 광고 운영 인턴',
+      en: "[FYI] You've been nominated — TikTok Shop Ads Operations Intern at Wellpod",
+    },
+    desc: 'Wellpod(R192) TikTok Shop 미국 광고 운영 인턴 recommend (9/14): 비공개 프레임 — 광고 운영·성과 추적, 미국 이커머스 트렌드 리서치, 한-베 커뮤니케이션 지원. 지원금 3-4M VND. 컷=인턴 적합(≤1y) × 마케팅/이커머스(직군 or 시그널) × HCMC. TikTok·한국어/영어 가점. (인플루언서 모집 아님 — JD 명시 그대로 카피에 반영)',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Wellpod</b> — công ty Hàn Quốc vận hành quảng cáo TikTok Shop thị trường Mỹ — đang tuyển <b>Thực tập sinh Vận hành Quảng cáo TikTok Shop</b> qua FYI. Hỗ trợ vận hành & theo dõi hiệu quả quảng cáo, nghiên cứu xu hướng e-commerce Mỹ, hỗ trợ giao tiếp Hàn–Việt. Ưu tiên tiếng Hàn hoặc tiếng Anh tốt, chuyên ngành marketing, biết Excel/Google Sheets & AI tạo sinh. Hỗ trợ 3–4 triệu ₫/tháng.',
+        ko: '한국 기업 <b>Wellpod</b>(TikTok Shop 미국 광고 운영)가 FYI를 통해 <b>광고 운영 인턴</b> 채용 중. 광고 운영·성과 추적, 미국 이커머스 리서치, 한-베 커뮤니케이션. 한국어/영어 우대, 지원금 3-4M VND.',
+        en: 'Wellpod — Korean company running TikTok Shop US ads — is hiring a TikTok Shop Ads Operations Intern via FYI. Ad ops & performance tracking, US e-commerce research, KR–VN communication support. Korean or English preferred; 3–4M VND stipend.',
+      },
+      initial: 'W', company: 'Wellpod', title: 'Thực tập sinh Vận hành Quảng cáo TikTok Shop Mỹ', meta: 'Thực tập · TP.HCM · Hỗ trợ 3–4 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^wellpod-recommend2-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Wellpod — Thực tập sinh Vận hành Quảng cáo TikTok Shop',
+      ko: '[FYI] Wellpod 추천 명단에 선정되셨습니다 — TikTok Shop 광고 운영 인턴',
+      en: "[FYI] You've been nominated to Wellpod — TikTok Shop Ads Operations Intern",
+    },
+    desc: 'Wellpod(R192) TikTok Shop 광고 운영 인턴 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Wellpod</b> — công ty Hàn Quốc vận hành quảng cáo TikTok Shop thị trường Mỹ — đang tuyển <b>Thực tập sinh Vận hành Quảng cáo TikTok Shop</b> (hỗ trợ 3–4 triệu ₫/tháng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'Wellpod TikTok Shop 광고 운영 인턴 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Wellpod TikTok Shop Ads Operations Intern — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'W', company: 'Wellpod', title: 'Thực tập sinh Vận hành Quảng cáo TikTok Shop Mỹ', meta: 'Thực tập · TP.HCM · Hỗ trợ 3–4 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^becuai-recommend1-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Xử lý Dữ liệu (tiếng Hàn) tại BECUAI',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — BECUAI 데이터 처리(한국어)',
+      en: "[FYI] You've been nominated — Data Processing Staff (Korean) at BECUAI",
+    },
+    desc: 'BECUAI(V22) 한국어 뉴스 데이터 처리 recommend (9/14): 비공개 프레임 — AI용 한국 뉴스 데이터 입력·관리(교육 제공, 무경력 가능), gross 12M+야간수당, 기숙사. 컷=한국어 인증/TOPIK 명시(하드 — 넓은 korean 매칭 금지, MISA 오탐 교훈) × ≤3y × HCMC. 야간(15~24시)·주6일(일~금)은 카피에 명시해 자기선별.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên Xử lý Dữ liệu (Data Labels)</b> qua FYI — nhập liệu & quản lý dữ liệu báo chí Hàn Quốc cho AI (được đào tạo, <b>không yêu cầu kinh nghiệm</b>). Yêu cầu: tốt nghiệp ĐH, <b>tiếng Hàn đọc hiểu khá (TOPIK 3–4)</b>, phỏng vấn tiếng Hàn + test đánh máy. Giờ làm: <b>15:00–00:00 (phụ cấp đêm), CN–T6</b>. Gross 12 triệu ₫, có KTX gần công ty.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>데이터 처리 직원</b> 채용 중. AI용 한국 뉴스 데이터 입력·관리(교육 제공, 무경력 가능). 대졸·TOPIK 3-4, 한국어 면접+타이핑 테스트, 근무 15~24시(야간수당)·일~금, gross 12M VND, 기숙사 제공.',
+        en: 'BECUAI VIETNAM is hiring Data Processing Staff via FYI — Korean news data entry & management for AI (training provided, no experience required). University degree, TOPIK 3–4, Korean interview + typing test. Hours 15:00–00:00 (night allowance), Sun–Fri; gross 12M VND; dorm available.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'Nhân viên Xử lý Dữ liệu (Data Labels)', meta: 'Onsite · Q.3, TP.HCM · Gross 12 triệu ₫ + phụ cấp đêm', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^becuai-recommend1-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi BECUAI — Nhân viên Xử lý Dữ liệu (tiếng Hàn)',
+      ko: '[FYI] BECUAI 추천 명단에 선정되셨습니다 — 데이터 처리(한국어)',
+      en: "[FYI] You've been nominated to BECUAI — Data Processing Staff (Korean)",
+    },
+    desc: 'BECUAI(V22) 데이터 처리 recommend (9/14): 공개 프레임. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/ktc0914-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên Xử lý Dữ liệu (Data Labels)</b> — nhập liệu dữ liệu báo chí Hàn Quốc cho AI, yêu cầu TOPIK 3–4, giờ làm 15:00–00:00 CN–T6, gross 12 triệu ₫ — qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách trong tuần này.',
+        ko: 'BECUAI 데이터 처리(한국어) — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "BECUAI Data Processing Staff (Korean) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'Nhân viên Xử lý Dữ liệu (Data Labels)', meta: 'Onsite · Q.3, TP.HCM · Gross 12 triệu ₫ + phụ cấp đêm', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
