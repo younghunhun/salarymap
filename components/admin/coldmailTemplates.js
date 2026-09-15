@@ -3312,6 +3312,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'L', company: 'Lomen', title: 'Marketer', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Intern/Fresher/Junior · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^cosmos0915-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Full-stack Developer (Junior) tại Cosmos Soft (Hàn Quốc)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Cosmos Soft 풀스택 주니어(한국 근무)',
+      en: "[FYI] You've been nominated — Full-stack Developer (Junior) at Cosmos Soft (Korea)",
+    },
+    desc: '코스모스소프트(K22) Full-stack Junior recommend 2차 (9/15, 한국어→영어 완화): 비공개 프레임 — 면접 영어 진행(한국어 우대)·영문 CV, 연 23~25M KRW. 컷=FS/BE/FE 직군 × 영어 시그널 × ≤3y. core=영어 인증×Java/Spring 215 / ext=나머지 영어 개발자 263. 1차(cosmos0911, 한국어 게이트 15명) 기수신 제외.',
+    source: 'scripts/outreach/cosmos0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Cosmos Soft</b> — công ty IT Hàn Quốc chuyên SI/SM, xây dựng hệ thống TM, GA, CS, QA cho các công ty bảo hiểm dựa trên giải pháp CRM riêng — đang tuyển <b>Full-stack Developer (Junior)</b> <b>làm việc tại Hàn Quốc</b> qua FYI. Yêu cầu: Java/Spring, HTML/JS/React, SQL (Oracle, MySQL), quản lý version, hiểu biết cloud. <b>Phỏng vấn bằng tiếng Anh</b> (biết tiếng Hàn là lợi thế, không bắt buộc). Lương 23–25 triệu KRW/năm. Nộp CV bằng tiếng Anh.',
+        ko: '한국 IT기업 <b>Cosmos Soft</b>(보험사 SI/SM, 자사 CRM 솔루션)가 FYI를 통해 <b>풀스택 주니어(한국 근무)</b>를 채용 중. Java/Spring+React+SQL, 면접 영어 진행(한국어 우대), 영문 CV, 연 23~25M KRW.',
+        en: 'Cosmos Soft — Korean IT company (insurance SI/SM on its own CRM) — is hiring a Full-stack Developer (Junior) to work in Korea via FYI. Java/Spring, React, SQL; interview in English (Korean a plus); CV in English; 23–25M KRW/yr.',
+      },
+      initial: 'C', company: 'Cosmos Soft', title: 'Full-stack - Junior', meta: 'Onsite · Seoul, Hàn Quốc · 23–25 triệu KRW/năm', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^cosmos0915-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Cosmos Soft — Full-stack Developer (Junior), làm việc tại Hàn Quốc',
+      ko: '[FYI] Cosmos Soft 추천 명단에 선정되셨습니다 — 풀스택 주니어(한국 근무)',
+      en: "[FYI] You've been nominated to Cosmos Soft — Full-stack Developer (Junior), work in Korea",
+    },
+    desc: '코스모스소프트(K22) recommend 2차 (9/15, 영어 완화): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/cosmos0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Cosmos Soft</b> — công ty IT Hàn Quốc chuyên SI/SM cho các công ty bảo hiểm — đang tuyển <b>Full-stack Developer (Junior)</b> làm việc tại Hàn Quốc qua FYI, <b>phỏng vấn bằng tiếng Anh</b>. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '한국 IT기업 <b>Cosmos Soft</b>의 풀스택 주니어(한국 근무, 영어 면접) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Cosmos Soft Full-stack Developer (Junior, Korea, English interview) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'C', company: 'Cosmos Soft', title: 'Full-stack - Junior', meta: 'Onsite · Seoul, Hàn Quốc · 23–25 triệu KRW/năm', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
