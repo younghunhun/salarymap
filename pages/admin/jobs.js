@@ -24,6 +24,7 @@ const EMPTY_JOB = {
   image_url: '', logo_url: '', images: [],
   tech_stack: [], benefits: [], company_size: '', hiring_process: '',
   deadline: '', headcount: '', apply_url: '', is_featured: false, source: 'manual',
+  source_id: '',
 }
 
 // 어드민에서 고를 수 있는 공고 구분(jobs.source). ktc는 /ktc 랜딩·KTC 지표의 기준값이고,
@@ -112,6 +113,8 @@ export default function AdminJobs() {
       deadline: form.deadline || null,
       headcount: form.headcount ? Number(form.headcount) : null,
       apply_url: form.apply_url || null,
+      // JD 코드 — 빈 문자열로 저장하면 (source, source_id) 유니크 제약에 서로 걸린다
+      source_id: (form.source_id || '').trim() || null,
     }
     const res = editing
       ? await fetch('/api/admin/jobs', { method: 'PUT', headers: await headers(), body: JSON.stringify({ id: editing.id, ...payload }) })
@@ -297,9 +300,19 @@ export default function AdminJobs() {
                     ...(form.source && !ADMIN_SOURCES.includes(form.source) ? [{ value: form.source, label: form.source }] : []),
                   ]} />
                 {form.source === 'ktc' && (
-                  <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 8 }}>
-                    {L('/jobs 와 /ktc 페이지에 함께 노출됩니다.', 'Shown on both /jobs and the /ktc page.')}
-                  </div>
+                  <>
+                    <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 8 }}>
+                      {L('/jobs 와 /ktc 페이지에 함께 노출됩니다.', 'Shown on both /jobs and the /ktc page.')}
+                    </div>
+                    <div style={{ marginTop: 12 }}>
+                      <label style={S.lbl}>{L('JD 코드', 'JD code')}</label>
+                      <input value={form.source_id || ''} onChange={e => setForm({ ...form, source_id: e.target.value.trim() })} style={S.inp} placeholder="V173" />
+                      <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 6 }}>
+                        {L('ops 시트 JD EXECUTION의 Job ID와 대조해 입력. 비워두면 크론이 제목·회사 매칭으로 자동 입력하지만, 매칭 실패 시 공란으로 남아 지원 귀속이 깨집니다. 재게시는 V173#2 형식.',
+                           'Match the Job ID in the ops JD EXECUTION sheet. If left empty, the nightly cron fills it by title/company match — a failed match stays empty and breaks application attribution. Reposts use V173#2.')}
+                      </div>
+                    </div>
+                  </>
                 )}
               </div>
 
