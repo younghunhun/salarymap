@@ -3348,6 +3348,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'C', company: 'Cosmos Soft', title: 'Full-stack - Junior', meta: 'Onsite · Seoul, Hàn Quốc · 23–25 triệu KRW/năm', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^tv0915-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Market & IT Business Research Intern tại TechValley',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — TechValley 리서치 인턴',
+      en: "[FYI] You've been nominated — Market & IT Business Research Intern at TechValley",
+    },
+    desc: '테크밸리 리서치 인턴(V173) recommend (9/15 신규 게재): 비공개 프레임 — HN/HCMC 하이브리드(리모트 협의)·인턴 2개월·월 400만 동·영어 필수·영문 CV. 컷=인턴 연령대 × 영어 시그널 × HN/HCMC/미기재 × (경영/경제/IS 전공 or BA·리서치 직군) 코어 202명, 확장 미발송.',
+    source: 'scripts/outreach/tv0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>TechValley</b> — công ty công nghệ Hàn Quốc trong lĩnh vực IT & AI tại Việt Nam — đang tuyển <b>Market & IT Business Research Intern</b> (thực tập 2 tháng, Hà Nội / TP.HCM, Hybrid — có thể thỏa thuận remote) qua FYI. Công việc: nghiên cứu thị trường IT/AI, phân tích đối thủ, viết báo cáo & slide. Yêu cầu: tiếng Việt & tiếng Anh tốt, Excel & PowerPoint, ngành Quản trị Kinh doanh/Kinh tế/Hệ thống thông tin hoặc liên quan. Trợ cấp 4.000.000 ₫/tháng. Nộp CV bằng tiếng Anh.',
+        ko: '한국계 IT·AI 기업 <b>TechValley</b>가 FYI를 통해 <b>Market & IT Business Research Intern</b>(2개월, HN/HCMC 하이브리드·리모트 협의)을 채용 중. IT/AI 시장 리서치·경쟁사 분석·보고서 작성, 영어 필수·영문 CV, 경영/경제/정보시스템 계열, 월 400만 동.',
+        en: 'TechValley — Korean IT & AI company in Vietnam — is hiring a Market & IT Business Research Intern (2 months, Hanoi/HCMC, hybrid/remote negotiable) via FYI. Market research, competitor analysis, report writing; English required, CV in English; Business/Economics/IS majors; 4M VND/month.',
+      },
+      initial: 'T', company: 'TechValley', title: 'Market & IT Business Research Intern', meta: 'Hybrid · Hà Nội / TP.HCM · Thực tập 2 tháng · 4tr ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^tv0915-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi TechValley — Market & IT Business Research Intern',
+      ko: '[FYI] TechValley 추천 명단에 선정되셨습니다 — 리서치 인턴',
+      en: "[FYI] You've been nominated to TechValley — Market & IT Business Research Intern",
+    },
+    desc: '테크밸리 리서치 인턴(V173) recommend (9/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/tv0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>TechValley</b> — công ty công nghệ Hàn Quốc trong lĩnh vực IT & AI — đang tuyển <b>Market & IT Business Research Intern</b> (2 tháng, Hà Nội / TP.HCM, Hybrid) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '한국계 IT·AI 기업 <b>TechValley</b>의 리서치 인턴(2개월, HN/HCMC 하이브리드) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "TechValley Market & IT Business Research Intern (2 months, Hanoi/HCMC, hybrid) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'T', company: 'TechValley', title: 'Market & IT Business Research Intern', meta: 'Hybrid · Hà Nội / TP.HCM · Thực tập 2 tháng · 4tr ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
