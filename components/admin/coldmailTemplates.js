@@ -3384,6 +3384,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'T', company: 'TechValley', title: 'Market & IT Business Research Intern', meta: 'Hybrid · Hà Nội / TP.HCM · Thực tập 2 tháng · 4tr ₫/tháng', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^nalda0915-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — UI/UX Intern tại NALDA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NALDA UI/UX 인턴',
+      en: "[FYI] You've been nominated — UI/UX Intern at NALDA",
+    },
+    desc: 'NALDA UI/UX 인턴(R201) recommend (9/15 신규 게재, Len 게재→호현님 소싱 요청): 비공개 프레임 — 다낭(리모트 가능)·인턴·월 300~400만 동·Figma 필수·포트폴리오 필수. 컷=Design 직군 코어(poolEstimator 코어 228과 동일), 경력 컷 없음·확장 미발송(유저 "코어만" 지시).',
+    source: 'scripts/outreach/nalda0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NALDA</b> — công ty công nghệ Hàn Quốc vận hành ứng dụng quản lý thời gian <b>Timing</b> — đang tuyển <b>UI/UX Intern</b> (Đà Nẵng, có thể remote) qua FYI. Công việc: thiết kế UI/UX cho web/app, UI & prototype bằng Figma, responsive mobile/tablet/PC, cải thiện usability. Yêu cầu: dùng được Figma, năng lực UI/UX cơ bản, nộp kèm portfolio. Trợ cấp 3–4 triệu ₫/tháng.',
+        ko: '시간관리 앱 Timing을 운영하는 한국 테크기업 <b>NALDA</b>가 FYI를 통해 <b>UI/UX 인턴</b>(다낭, 리모트 가능)을 채용 중. web/app UI/UX 설계·Figma 프로토타입·반응형 화면·usability 개선, Figma 필수·포트폴리오 필수, 월 300~400만 동.',
+        en: 'NALDA — Korean tech company behind the time-management app Timing — is hiring a UI/UX Intern (Da Nang, remote OK) via FYI. Web/app UI/UX, Figma prototyping, responsive screens, usability; Figma and portfolio required; 3–4M VND/month.',
+      },
+      initial: 'N', company: 'NALDA', title: 'UI/UX Intern', meta: 'Đà Nẵng · Có thể remote · Thực tập · 3–4tr ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nalda0915-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NALDA — UI/UX Intern',
+      ko: '[FYI] NALDA 추천 명단에 선정되셨습니다 — UI/UX 인턴',
+      en: "[FYI] You've been nominated to NALDA — UI/UX Intern",
+    },
+    desc: 'NALDA UI/UX 인턴(R201) recommend (9/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nalda0915-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NALDA</b> — công ty công nghệ Hàn Quốc vận hành ứng dụng quản lý thời gian <b>Timing</b> — đang tuyển <b>UI/UX Intern</b> (Đà Nẵng, có thể remote) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '시간관리 앱 Timing을 운영하는 한국 테크기업 <b>NALDA</b>의 UI/UX 인턴(다낭, 리모트 가능) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NALDA UI/UX Intern (Da Nang, remote OK) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NALDA', title: 'UI/UX Intern', meta: 'Đà Nẵng · Có thể remote · Thực tập · 3–4tr ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
