@@ -3456,6 +3456,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'W', company: 'Wise Edu', title: 'Admin manager - Tiếng Hàn', meta: 'Onsite · Phú Mỹ Hưng, Q.7, TP.HCM · 18–26tr ₫/tháng · T2–T6 14:00–21:00', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^youlchon0916-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Kinh doanh Phát triển Thị trường tại YOUL CHON VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — YOUL CHON VINA 시장개척 영업',
+      en: "[FYI] You've been nominated — Market Development Sales at YOUL CHON VINA",
+    },
+    desc: 'YOUL CHON VINA 시장개척 영업(V177) recommend (9/16 신규 게재, Emma 접수→Len 게재): 비공개 프레임 — 빈탄 온사이트·월~금 08-17시·10-14M(커미션 별도)·남성 22~40세·전문대 이상·경력 1년 초과. 컷=영업 직무 명시 × 경력 12개월+ × HCMC권 실거주(위치 미기재 제외) 48명. 마케팅 단독 직무 169명은 오더 클로징 중심 JD라 제외. 성별·나이는 DB에 없어(birthdate 기재 0명) 본문 하드조건 명시로 자기선별.',
+    source: 'scripts/outreach/youlchon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>YOUL CHON VINA</b> — công ty Hàn Quốc tại TP.HCM — đang tuyển <b>Nhân viên Kinh doanh Phát triển Thị trường</b> qua FYI. Công việc: nghiên cứu & xây dựng chiến lược phát triển thị trường, tư vấn sản phẩm, đàm phán và chốt đơn hàng, chăm sóc khách hàng cũ & tìm khách hàng mới, báo cáo định kỳ. Yêu cầu: nam giới 22–40 tuổi, Cao đẳng trở lên ngành Kinh doanh/Marketing/QTKD hoặc liên quan, trên 01 năm kinh nghiệm vị trí tương đương. T2–T6 08:00–17:00, onsite 362/1 Ung Văn Khiêm, P. Thạnh Mỹ Tây (Q. Bình Thạnh cũ). Lương 10–14 triệu ₫/tháng chưa gồm hoa hồng, thưởng tháng 13, tăng lương hằng năm, trợ cấp cơm trưa & gửi xe.',
+        ko: '호치민 한국계 기업 <b>YOUL CHON VINA</b>가 FYI를 통해 <b>시장개척 영업사원</b>을 채용 중. 시장 전략 수립·제품 상담·협상 및 수주·기존/신규 고객 관리, 남성 22~40세·전문대 이상(경영/마케팅 계열)·동일 직무 경력 1년 초과, 월~금 08-17시 빈탄 온사이트, 월 1,000만~1,400만 동(커미션 별도)·13개월차 상여.',
+        en: 'YOUL CHON VINA — Korean company in HCMC — is hiring a Market Development Sales rep via FYI. Market strategy, product consulting, negotiation and closing, existing/new client care; male 22–40, college degree+ in business/marketing, 1+ year in a similar role; Mon–Fri 8am–5pm onsite in Binh Thanh; 10–14M VND/month excluding commission.',
+      },
+      initial: 'Y', company: 'YOUL CHON VINA', title: 'NV KINH DOANH PHÁT TRIỂN THỊ TRƯỜNG', meta: 'Onsite · Bình Thạnh, TP.HCM · 10–14tr ₫/tháng + hoa hồng · T2–T6 08:00–17:00', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^youlchon0916-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi YOUL CHON VINA — Nhân viên Kinh doanh Phát triển Thị trường',
+      ko: '[FYI] YOUL CHON VINA 추천 명단에 선정되셨습니다 — 시장개척 영업',
+      en: "[FYI] You've been nominated to YOUL CHON VINA — Market Development Sales",
+    },
+    desc: 'YOUL CHON VINA 시장개척 영업(V177) recommend (9/16): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/youlchon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>YOUL CHON VINA</b> — công ty Hàn Quốc tại TP.HCM — đang tuyển <b>Nhân viên Kinh doanh Phát triển Thị trường</b> (onsite Bình Thạnh, 10–14 triệu ₫ + hoa hồng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '호치민 한국계 기업 <b>YOUL CHON VINA</b>의 시장개척 영업(빈탄 온사이트, 월 1,000만~1,400만 동+커미션) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "YOUL CHON VINA Market Development Sales (onsite Binh Thanh, 10–14M VND + commission) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'Y', company: 'YOUL CHON VINA', title: 'NV KINH DOANH PHÁT TRIỂN THỊ TRƯỜNG', meta: 'Onsite · Bình Thạnh, TP.HCM · 10–14tr ₫/tháng + hoa hồng · T2–T6 08:00–17:00', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
@@ -3465,6 +3501,8 @@ export const DRAFT_CAMPAIGNS = [
   { campaign: 'wellpod-recommend1', group: 'recommend' },
   { campaign: 'mnf-recommend1-public', group: 'recommend' },
   { campaign: 'mnf-recommend1-private', group: 'recommend' },
+  { campaign: 'youlchon0916-recommend-sales-public', group: 'recommend' },
+  { campaign: 'youlchon0916-recommend-sales-private', group: 'recommend' },
 ]
 
 export const templateFor = (name) => COLDMAIL_TEMPLATES.find((t) => t.match.test(name || '')) || null
