@@ -3457,6 +3457,186 @@ export const COLDMAIL_TEMPLATES = [
     }),
   },
   {
+    match: /^nexon0916-recommend-rig-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — 3D Rigger tại NEXON DEV VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NEXON DEV VINA 3D 리거',
+      en: "[FYI] You've been nominated — 3D Rigger at NEXON DEV VINA",
+    },
+    desc: 'NEXON DEV VINA 3D 리거(V179) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 비공개 프레임 — TP.HCM 온사이트·포트폴리오 필수·연차/급여 미기재. 컷=rigging·skinning 명시 또는 Maya/3ds Max+캐릭터 애니메이션. 5공고 1인1통 캐스케이드(rig→pix→env→cpt→ua), 해외 거주자 제외.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>3D Rigger</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Công việc & yêu cầu: rigging & skinning trên 3ds Max/Maya, IK retargeting & simulation trên Unreal Engine, chuẩn asset character AAA. Bắt buộc nộp kèm Portfolio.',
+        ko: '넥슨 그룹 계열 <b>NEXON DEV VINA</b>가 FYI를 통해 <b>3D 리거</b>(호치민 온사이트)를 채용 중. 포트폴리오 필수.',
+        en: 'NEXON DEV VINA (Nexon Group) is hiring a 3D Rigger (HCMC, onsite) via FYI. Portfolio required.',
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '3D Rigger', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-rig-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NEXON DEV VINA — 3D Rigger',
+      ko: '[FYI] NEXON DEV VINA 추천 명단에 선정되셨습니다 — 3D 리거',
+      en: "[FYI] You've been nominated to NEXON DEV VINA — 3D Rigger",
+    },
+    desc: 'NEXON DEV VINA 3D 리거(V179) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>3D Rigger</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'NEXON DEV VINA 3D 리거 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NEXON DEV VINA 3D Rigger — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '3D Rigger', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-pix-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — 2D Pixel Artist (Background/ Character/ Monster) tại NEXON DEV VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NEXON DEV VINA 2D 픽셀 아티스트',
+      en: "[FYI] You've been nominated — 2D Pixel Artist (Background/ Character/ Monster) at NEXON DEV VINA",
+    },
+    desc: 'NEXON DEV VINA 2D 픽셀 아티스트(V180) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 비공개 프레임 — TP.HCM 온사이트·포트폴리오 필수·연차/급여 미기재. 컷=pixel art·Aseprite·Pro Motion·sprite·Spine·game art. 5공고 1인1통 캐스케이드(rig→pix→env→cpt→ua), 해외 거주자 제외.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>2D Pixel Artist (Background/ Character/ Monster)</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Công việc & yêu cầu: pixel sprite & animation cho character/background/monster/item, Photoshop/Pro Motion; ưu tiên pixel art trong game, Unity, 2D Spine. Bắt buộc nộp kèm Portfolio.',
+        ko: '넥슨 그룹 계열 <b>NEXON DEV VINA</b>가 FYI를 통해 <b>2D 픽셀 아티스트</b>(호치민 온사이트)를 채용 중. 포트폴리오 필수.',
+        en: 'NEXON DEV VINA (Nexon Group) is hiring a 2D Pixel Artist (Background/ Character/ Monster) (HCMC, onsite) via FYI. Portfolio required.',
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '2D Pixel Artist (Background/ Character/ Monster)', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-pix-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NEXON DEV VINA — 2D Pixel Artist (Background/ Character/ Monster)',
+      ko: '[FYI] NEXON DEV VINA 추천 명단에 선정되셨습니다 — 2D 픽셀 아티스트',
+      en: "[FYI] You've been nominated to NEXON DEV VINA — 2D Pixel Artist (Background/ Character/ Monster)",
+    },
+    desc: 'NEXON DEV VINA 2D 픽셀 아티스트(V180) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>2D Pixel Artist (Background/ Character/ Monster)</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'NEXON DEV VINA 2D 픽셀 아티스트 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NEXON DEV VINA 2D Pixel Artist (Background/ Character/ Monster) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '2D Pixel Artist (Background/ Character/ Monster)', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-env-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — 3D Environment Modeler tại NEXON DEV VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NEXON DEV VINA 3D 환경 모델러',
+      en: "[FYI] You've been nominated — 3D Environment Modeler at NEXON DEV VINA",
+    },
+    desc: 'NEXON DEV VINA 3D 환경 모델러(V178) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 비공개 프레임 — TP.HCM 온사이트·포트폴리오 필수·연차/급여 미기재. 컷=Maya·3ds Max·ZBrush·Substance + 게임/환경/모델링 문맥(건축·인테리어 제외). 5공고 1인1통 캐스케이드(rig→pix→env→cpt→ua), 해외 거주자 제외.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>3D Environment Modeler</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Công việc & yêu cầu: modeling background/môi trường & asset 3D, level/scene & lighting trong engine, Maya/3Ds Max/ZBrush/Substance Painter; ưu tiên Unity/Unreal. Bắt buộc nộp kèm Portfolio.',
+        ko: '넥슨 그룹 계열 <b>NEXON DEV VINA</b>가 FYI를 통해 <b>3D 환경 모델러</b>(호치민 온사이트)를 채용 중. 포트폴리오 필수.',
+        en: 'NEXON DEV VINA (Nexon Group) is hiring a 3D Environment Modeler (HCMC, onsite) via FYI. Portfolio required.',
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '3D Environment Modeler', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-env-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NEXON DEV VINA — 3D Environment Modeler',
+      ko: '[FYI] NEXON DEV VINA 추천 명단에 선정되셨습니다 — 3D 환경 모델러',
+      en: "[FYI] You've been nominated to NEXON DEV VINA — 3D Environment Modeler",
+    },
+    desc: 'NEXON DEV VINA 3D 환경 모델러(V178) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>3D Environment Modeler</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'NEXON DEV VINA 3D 환경 모델러 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NEXON DEV VINA 3D Environment Modeler — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: '3D Environment Modeler', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-cpt-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Concept Artist tại NEXON DEV VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NEXON DEV VINA 컨셉 아티스트',
+      en: "[FYI] You've been nominated — Concept Artist at NEXON DEV VINA",
+    },
+    desc: 'NEXON DEV VINA 컨셉 아티스트(V182) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 비공개 프레임 — TP.HCM 온사이트·포트폴리오 필수·연차/급여 미기재. 컷=concept art·character design·digital painting·illustration·2D/game artist (Adobe Illustrator 툴명 오탐 제외). 5공고 1인1통 캐스케이드(rig→pix→env→cpt→ua), 해외 거주자 제외.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>Concept Artist</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Công việc & yêu cầu: concept character/costume/monster/NPC & background cho Mabinogi Mobile, vẽ concept 3 mặt cho dựng 3D, drawing/painting, Photoshop; ưu tiên MMORPG. Bắt buộc nộp kèm Portfolio.',
+        ko: '넥슨 그룹 계열 <b>NEXON DEV VINA</b>가 FYI를 통해 <b>컨셉 아티스트</b>(호치민 온사이트)를 채용 중. 포트폴리오 필수.',
+        en: 'NEXON DEV VINA (Nexon Group) is hiring a Concept Artist (HCMC, onsite) via FYI. Portfolio required.',
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: 'Concept Artist', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-cpt-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NEXON DEV VINA — Concept Artist',
+      ko: '[FYI] NEXON DEV VINA 추천 명단에 선정되셨습니다 — 컨셉 아티스트',
+      en: "[FYI] You've been nominated to NEXON DEV VINA — Concept Artist",
+    },
+    desc: 'NEXON DEV VINA 컨셉 아티스트(V182) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>Concept Artist</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'NEXON DEV VINA 컨셉 아티스트 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NEXON DEV VINA Concept Artist — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: 'Concept Artist', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-ua-.*private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — UA Media Creator tại NEXON DEV VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NEXON DEV VINA UA 미디어 크리에이터',
+      en: "[FYI] You've been nominated — UA Media Creator at NEXON DEV VINA",
+    },
+    desc: 'NEXON DEV VINA UA 미디어 크리에이터(V181) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 비공개 프레임 — TP.HCM 온사이트·포트폴리오 필수·연차/급여 미기재. 컷=After Effects/Premiere + 영상·모션 문맥. 5공고 1인1통 캐스케이드(rig→pix→env→cpt→ua), 해외 거주자 제외.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>UA Media Creator</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Công việc & yêu cầu: sản xuất & biên tập video quảng cáo game cho UA marketing, After Effects/Premiere Pro & Photoshop/Illustrator; ưu tiên agency quảng cáo, UA, game toàn cầu. Bắt buộc nộp kèm Portfolio.',
+        ko: '넥슨 그룹 계열 <b>NEXON DEV VINA</b>가 FYI를 통해 <b>UA 미디어 크리에이터</b>(호치민 온사이트)를 채용 중. 포트폴리오 필수.',
+        en: 'NEXON DEV VINA (Nexon Group) is hiring a UA Media Creator (HCMC, onsite) via FYI. Portfolio required.',
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: 'UA Media Creator', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nexon0916-recommend-ua-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NEXON DEV VINA — UA Media Creator',
+      ko: '[FYI] NEXON DEV VINA 추천 명단에 선정되셨습니다 — UA 미디어 크리에이터',
+      en: "[FYI] You've been nominated to NEXON DEV VINA — UA Media Creator",
+    },
+    desc: 'NEXON DEV VINA UA 미디어 크리에이터(V181) recommend (9/16 재게시, KTC 라인 Slack 게시 당일 소싱): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nexon0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NEXON DEV VINA</b> — thành viên Nexon Group (MapleStory, KartRider, Blue Archive, DAVE THE DIVER…) — đang tuyển <b>UA Media Creator</b> (TP.HCM, làm việc tại văn phòng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'NEXON DEV VINA UA 미디어 크리에이터 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NEXON DEV VINA UA Media Creator — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NEXON DEV VINA', title: 'UA Media Creator', meta: 'TP.HCM · Làm việc tại văn phòng · Bắt buộc nộp Portfolio', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
     match: /^wiseedu0916-.*-private/,
     subject: {
       vi: '[FYI] Bạn được chọn vào danh sách đề cử — Admin Manager (tiếng Hàn) tại Wise Edu',
