@@ -3420,6 +3420,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'N', company: 'NALDA', title: 'UI/UX Intern', meta: 'Đà Nẵng · Có thể remote · Thực tập · 3–4tr ₫/tháng', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^wiseedu0916-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Admin Manager (tiếng Hàn) tại Wise Edu',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Wise Edu 행정 매니저(한국어)',
+      en: "[FYI] You've been nominated — Admin Manager (Korean) at Wise Edu",
+    },
+    desc: 'Wise Edu 행정 매니저(V171) recommend (9/16, 지원 0 공고 전수진단 후 발송): 비공개 프레임 — 꽝7 푸미흥 온사이트·월~금 14-21시·18-26M·TOPIK 6 동급·40세 이하·4년제·Excel 중급. 컷=한국어 인증 상급(TOPIK 5·6) 22 + TOPIK 4·한국어 전공 35 × HCMC권·미기재.',
+    source: 'scripts/outreach/wiseedu0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Wise Edu</b> — trung tâm giáo dục Hàn Quốc tại Phú Mỹ Hưng (Quận 7, TP.HCM) — đang tuyển <b>Admin Manager (tiếng Hàn)</b> qua FYI. Công việc: quản lý lịch xe đưa đón học sinh bằng Excel, trao đổi với phụ huynh & giáo viên người Hàn, chấm bài Toán theo đáp án (không giảng dạy), hỗ trợ hành chính. Yêu cầu: TOPIK 6 hoặc tương đương, tốt nghiệp/sắp tốt nghiệp ĐH hệ 4 năm, ≤40 tuổi, Excel trung cấp. T2–T6 14:00–21:00, lương 18–26 triệu ₫, đầy đủ BHXH. CV tiếng Việt hoặc tiếng Hàn.',
+        ko: '꽝7 푸미흥의 한국계 교육센터 <b>Wise Edu</b>가 FYI를 통해 <b>행정 매니저(한국어)</b>를 채용 중. 셔틀 스케줄 관리(Excel)·학부모/한국인 교사 소통·수학 채점(비강의)·행정 지원, TOPIK 6 동급·40세 이하·4년제·Excel 중급, 월~금 14-21시, 월 1,800만~2,600만 동.',
+        en: 'Wise Edu — Korean education center in Phu My Hung (D7, HCMC) — is hiring an Admin Manager (Korean) via FYI. Shuttle scheduling in Excel, communication with Korean parents/teachers, math grading (no teaching), admin support; TOPIK 6 or equivalent, ≤40, 4-year degree, intermediate Excel; Mon–Fri 2–9pm; 18–26M VND.',
+      },
+      initial: 'W', company: 'Wise Edu', title: 'Admin manager - Tiếng Hàn', meta: 'Onsite · Phú Mỹ Hưng, Q.7, TP.HCM · 18–26tr ₫/tháng · T2–T6 14:00–21:00', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^wiseedu0916-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Wise Edu — Admin Manager (tiếng Hàn)',
+      ko: '[FYI] Wise Edu 추천 명단에 선정되셨습니다 — 행정 매니저(한국어)',
+      en: "[FYI] You've been nominated to Wise Edu — Admin Manager (Korean)",
+    },
+    desc: 'Wise Edu 행정 매니저(V171) recommend (9/16): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/wiseedu0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Wise Edu</b> — trung tâm giáo dục Hàn Quốc tại Phú Mỹ Hưng (Quận 7, TP.HCM) — đang tuyển <b>Admin Manager (tiếng Hàn)</b> qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '꽝7 푸미흥의 한국계 교육센터 <b>Wise Edu</b>의 행정 매니저(한국어) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Wise Edu Admin Manager (Korean, D7 HCMC) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'W', company: 'Wise Edu', title: 'Admin manager - Tiếng Hàn', meta: 'Onsite · Phú Mỹ Hưng, Q.7, TP.HCM · 18–26tr ₫/tháng · T2–T6 14:00–21:00', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
