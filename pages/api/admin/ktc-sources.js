@@ -150,7 +150,7 @@ export default async function handler(req, res) {
       }
       if (c.applied_job) {
         r._labels[c.applied_job] = (r._labels[c.applied_job] || 0) + 1
-        r._normTitles.add(normTitle(c.applied_job.replace(/^[A-Z]{2,6}\d{3,4}\s*[-:._]*\s*/, '')))
+        r._normTitles.add(normTitle(c.applied_job.replace(/^(?:[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4})\s*[-:._]*\s*/, '')))
       }
       if (c.position) {
         r._positions[c.position] = (r._positions[c.position] || 0) + 1
@@ -165,7 +165,7 @@ export default async function handler(req, res) {
     for (const r of Object.values(jobRows)) {
       // 제목: applied_job 최빈값에서 코드 접두 제거 → 비면 position 최빈값 → 최후에 코드
       const top = Object.entries(r._labels).sort((a, b) => b[1] - a[1])[0]
-      const cleaned = top ? top[0].replace(/^[A-Z]{2,6}\d{3,4}\s*[-:._]*\s*/, '').trim() : ''
+      const cleaned = top ? top[0].replace(/^(?:[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4})\s*[-:._]*\s*/, '').trim() : ''
       const topPos = Object.entries(r._positions).sort((a, b) => b[1] - a[1])[0]
       r.label = cleaned || (topPos ? topPos[0] : r.code)
       // 지배적 회사만 채택 — 소수 오입력(다른 회사 1~2건)이 매칭을 오염시키지 않도록

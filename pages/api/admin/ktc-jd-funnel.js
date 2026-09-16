@@ -22,7 +22,7 @@ const parseKrw = (s) => {
   const n = parseFloat(String(s || '').replace(/[^0-9.-]/g, ''))
   return Number.isFinite(n) ? n : null
 }
-const CODE_RE = /[A-Z]{2,6}\d{3,4}/g
+const CODE_RE = /[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4}/g
 // VN(UTC+7) 기준 월 버킷
 const toVNMonth = (iso) => new Date(new Date(iso).getTime() + 7 * 3600000).toISOString().slice(0, 7)
 
@@ -271,7 +271,7 @@ export default async function handler(req, res) {
           let ktcVnd = 0
           const liCodes = new Set()
           for (const r of liRows.slice(liH + 1)) {
-            const code = ((r[codeCol] || '').trim().match(/^[A-Z]{2,6}\d{3,4}/) || [])[0]
+            const code = ((r[codeCol] || '').trim().match(/^(?:[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4})/) || [])[0]
             if (!code) continue // 코드 없음 = 자사 채용 또는 합계 행
             const cost = parseKrw(r[costCol])
             if (cost != null) { ktcVnd += cost; liCodes.add(code) }
