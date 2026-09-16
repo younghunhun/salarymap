@@ -3421,6 +3421,42 @@ export const COLDMAIL_TEMPLATES = [
     }),
   },
   {
+    match: /^nalda0916-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Full-stack Developer Intern tại NALDA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — NALDA 풀스택 개발 인턴',
+      en: "[FYI] You've been nominated — Full-stack Developer Intern at NALDA",
+    },
+    desc: 'NALDA 풀스택 개발 인턴(R199) recommend (9/16 재게재, Len 재발송 요청): 비공개 프레임 — HCM/HN/ĐN·onsite·인턴·월 300~400만 동·React/TypeScript 필수·Firebase 경험·Git. 컷=개발 직군(Fullstack/Frontend/Backend) + 이력서 React&TS + 경력 12개월 미만(실측 220명). Firebase는 인턴 풀에 13.6%뿐이라 게이트에서 빼고 정렬 가점으로만 사용(유저 지시 "인턴급으로").',
+    source: 'scripts/outreach/nalda0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NALDA</b> — công ty công nghệ Hàn Quốc vận hành ứng dụng quản lý thời gian <b>Timing</b> — đang tuyển <b>Full-stack Developer Intern</b> (TP.HCM / Hà Nội / Đà Nẵng) qua FYI. Công việc: phát triển tính năng mới, refactoring, tối ưu hiệu năng và bộ nhớ, xử lý bug. Yêu cầu: thành thạo React, TypeScript, có kinh nghiệm Firebase, dùng thành thạo Git. Ưu tiên: Swift/Kotlin, web app, native app dựa trên webview. Trợ cấp 3–4 triệu ₫/tháng.',
+        ko: '시간관리 앱 Timing을 운영하는 한국 테크기업 <b>NALDA</b>가 FYI를 통해 <b>풀스택 개발 인턴</b>(HCM/하노이/다낭)을 채용 중. 신규 기능 개발·리팩토링·메모리 최적화·버그 대응, React/TypeScript 필수·Firebase 경험·Git, 월 300~400만 동.',
+        en: 'NALDA — Korean tech company behind the time-management app Timing — is hiring a Full-stack Developer Intern (HCMC/Hanoi/Da Nang) via FYI. New features, refactoring, memory optimization, bug fixing; React/TypeScript required, Firebase experience, Git; 3–4M VND/month.',
+      },
+      initial: 'N', company: 'NALDA', title: 'Full-stack Developer Intern', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Thực tập · 3–4tr ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nalda0916-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi NALDA — Full-stack Developer Intern',
+      ko: '[FYI] NALDA 추천 명단에 선정되셨습니다 — 풀스택 개발 인턴',
+      en: "[FYI] You've been nominated to NALDA — Full-stack Developer Intern",
+    },
+    desc: 'NALDA 풀스택 개발 인턴(R199) recommend (9/16): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nalda0916-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>NALDA</b> — công ty công nghệ Hàn Quốc vận hành ứng dụng quản lý thời gian <b>Timing</b> — đang tuyển <b>Full-stack Developer Intern</b> (TP.HCM / Hà Nội / Đà Nẵng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '시간관리 앱 Timing을 운영하는 한국 테크기업 <b>NALDA</b>의 풀스택 개발 인턴(HCM/하노이/다낭) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "NALDA Full-stack Developer Intern (HCMC/Hanoi/Da Nang) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'N', company: 'NALDA', title: 'Full-stack Developer Intern', meta: 'TP.HCM · Hà Nội · Đà Nẵng · Thực tập · 3–4tr ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
     match: /^wiseedu0916-.*-private/,
     subject: {
       vi: '[FYI] Bạn được chọn vào danh sách đề cử — Admin Manager (tiếng Hàn) tại Wise Edu',
