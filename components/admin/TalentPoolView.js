@@ -215,11 +215,9 @@ export default function TalentPoolView({ token, lang }) {
   // AI 전체 채우기 — 미파싱 인재를 동시 3개씩 순회 파싱.
   // 서버 배치 대신 클라이언트 순회인 이유: 파싱 1건당 5~15초라 서버리스 타임아웃에 걸린다.
   // 실패자는 API가 resume_summary.parse_failed 로 마킹 → 다음 배치/카드 버튼에서 제외.
-  // 판정은 요약 불릿 유무만 — 경력회사 유무를 섞으면 신입(무경력) CV가 영원히 재파싱 대상이 된다.
-  const needsParse = (r) => {
-    const bullets = r.resume_summary?.bullets
-    return !Array.isArray(bullets) || bullets.length === 0
-  }
+  // 판정은 불릿 배열의 존재 여부 — 파싱은 항상 bullets 배열을 쓰므로 배열이 있으면 파싱된 것.
+  // 길이(>0)를 보면 신입 등 얇은 CV(GPT가 요약 0개 반환, 43명)가 영원히 재파싱 대상이 된다.
+  const needsParse = (r) => !Array.isArray(r.resume_summary?.bullets)
   const parseTargets = pool.filter(r => needsParse(r) && !r.resume_summary?.parse_failed)
 
   async function runBatchParse() {
@@ -253,6 +251,9 @@ export default function TalentPoolView({ token, lang }) {
       }
     }
     await Promise.all(Array.from({ length: Math.min(3, targets.length) }, worker))
+    // 서버가 타임아웃 등으로 죽으면 실패 마킹이 DB에 안 남는다 — 화면에서만 뺀 상태를
+    // 믿지 말고 목록을 다시 받아 실제 DB 기준으로 남은 대상을 보여준다.
+    await mutate()
     setBatch(null)
   }
 

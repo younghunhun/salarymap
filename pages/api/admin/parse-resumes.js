@@ -7,6 +7,10 @@ const supabase = createClient(
   (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim(),
 )
 
+// 파싱 1건 5~15초 + 사진 vision 검증 — 기본 타임아웃에 걸려 함수가 죽으면 아래
+// parse_failed 마킹도 못 돌아 클라이언트 화면과 DB가 어긋난다(9/16 인재풀 숫자 되돌아옴).
+export const config = { maxDuration: 60 }
+
 export default async function handler(req, res) {
   const admin = await verifyAdmin(req)
   if (!admin) return res.status(401).json({ error: 'Unauthorized' })
