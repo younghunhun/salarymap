@@ -466,13 +466,7 @@ export default function AdminDashboard() {
             <div className="adm-realtime-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8 }}>
               {[
                 { label: t.metrics.sessions, value: ga4?.today?.sessions ?? '-', color: '#2563EB' },
-                { label: t.metrics.submissions, value: realtime.submissions, color: '#e2e8f0' },
-                { label: t.metrics.ad, value: realtime.ad, color: '#818cf8' },
-                { label: t.metrics.organic, value: realtime.organic, color: '#34d399' },
                 { label: t.metrics.signups, value: realtime.signups, color: '#fbbf24' },
-                { label: t.pageViews, value: realtime.landings, color: '#a78bfa' },
-                { label: t.metrics.jobClicks, value: realtime.jobClicks, color: '#fb923c' },
-                { label: t.metrics.cardClicks, value: realtime.cardClicks, color: '#f472b6' },
                 { label: t.metrics.resumeUploads, value: realtime.resumeUploads, color: '#14B8A6' },
                 { label: t.metrics.jobApps, value: realtime.jobApps, color: '#f87171' },
               ].map(item => (
