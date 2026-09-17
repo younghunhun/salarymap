@@ -333,8 +333,7 @@ async function getSubmissions(dateStr: string) {
 }
 
 // realtime / daily / weekly 가 공통으로 쓰는 한 기간의 모든 메트릭 bundle.
-// resumes 는 events count (admin/realtime overlay 식). daily 에선 호출 후
-// admin daily row 식(user_profiles) 으로 따로 overwrite.
+// resumes 는 resume_registered events count (admin daily row / realtime 과 동일).
 // 🟠 기업 지표 — /api/admin/company-metrics 와 동일 정의로 DB 직접 집계.
 //   가입 기업 = recruiter_companies (그날 생성)
 //   올라온 공고 = jobs 중 company_id 있는 것(기업 자체등록, 그날 생성)
@@ -514,15 +513,13 @@ async function getJobApps(dateStr: string): Promise<number> {
   return n;
 }
 
-// 이력서 등록 — admin 의 두 화면이 정의를 다르게 쓴다. 슬랙봇도 그에
-// 맞춰 분리한다.
+// 이력서 등록 — admin 과 동일 정의.
 //
 // 누적 (전체 기간) = /admin/dashboard 의 resumeUploads 와 동일 ⇒
 //   user_profiles 의 resume_url 보유 사용자 수 (사람 기준, dedupe).
-// 오늘 = /api/admin/realtime 의 resumeUploads 와 동일 ⇒
-//   events.cv_register_success + resume_upload 의 raw count.
-//
-// 정의가 한쪽으로 통일 안 된 건 admin 측 결정이라 봇이 그대로 따라간다.
+// 일별 = admin daily row / realtime 의 resumeUploads 와 동일 ⇒
+//   events.resume_registered count (DB 트리거 20260917, 인재풀 진입 시 유저당 1건.
+//   과거분은 scripts/backfill-resume-registered.js 가 유저당 1건 채움 → 합 = 누적).
 //
 // 누적 정의 추가 주의 — admin/dashboard.js (API) line 102-106 의
 // resumeUsers 는 시간 필터 없이 user_profiles 의 resume_url 보유자 전체를
@@ -540,8 +537,7 @@ async function getResumeUploadsCumulative(): Promise<number> {
 
 // ─ Web/App split helpers ─
 // 6/17 마이그레이션의 source-of-truth 컬럼을 직접 사용 (job_applications.platform
-// / user_profiles.resume_platform). events.meta.platform 은 fire-and-forget
-// 분석용 근사치라 누락 가능 — 이력서 등록 events 식만 어쩔 수 없이 사용.
+// / user_profiles.resume_platform — resume_registered 트리거가 meta.platform 에 그대로 싣는다).
 // 셋 다 null = web 으로 default (앱은 명시적 헤더가 있을 때만 'app' 기록).
 type Split = { total: number; web: number; app: number };
 
@@ -552,7 +548,7 @@ async function getResumeEventsSplit(startUtc: string, endUtc: string): Promise<S
     const { data, error } = await supabase
       .from("events")
       .select("meta")
-      .in("event", ["cv_register_success", "resume_upload"])
+      .eq("event", "resume_registered")
       .gte("created_at", startUtc)
       .lte("created_at", endUtc)
       .order("created_at", { ascending: true })
@@ -560,30 +556,6 @@ async function getResumeEventsSplit(startUtc: string, endUtc: string): Promise<S
     if (error) { console.error("Resume events split error:", JSON.stringify(error)); break; }
     for (const r of data || []) {
       if (r.meta?.platform === "app") app++; else web++;
-    }
-    if (!data || data.length < PAGE) break;
-    from += PAGE;
-  }
-  return { total: app + web, web, app };
-}
-
-async function getResumeProfilesSplit(startUtc: string, endUtc: string): Promise<Split> {
-  const PAGE = 1000;
-  let from = 0, app = 0, web = 0;
-  while (true) {
-    // created_at 버킷 — updated_at은 프로필을 스치는 모든 갱신(연봉 입력 등)에 부풀어
-    // 8/13 +706% 착시를 만들었다(유저 확정 8/14: 이력서풀=파일 등록한 사람 수).
-    // admin dashboard.js resumeUploads 와 동일 기준.
-    const { data, error } = await supabase
-      .from("user_profiles")
-      .select("resume_platform")
-      .not("resume_url", "is", null)
-      .gte("created_at", startUtc)
-      .lte("created_at", endUtc)
-      .range(from, from + PAGE - 1);
-    if (error) { console.error("Resume profiles split error:", JSON.stringify(error)); break; }
-    for (const r of data || []) {
-      if (r.resume_platform === "app") app++; else web++;
     }
     if (!data || data.length < PAGE) break;
     from += PAGE;
@@ -612,19 +584,10 @@ async function getJobAppsSplit(startUtc: string, endUtc: string): Promise<Split>
   return { total: app + web, web, app };
 }
 
-// admin UI 의 *일별 행* 정의 — dashboard.js:199-217 의 todayData 로직이
-// "그 시점의 오늘 행" 만 realtime(events count) 으로 덮어쓴다. 호출 시점이
-// 그 날짜와 같으면 events 식, 어제 이전이면 user_profiles 식.
+// admin UI 의 *일별 행* 정의 — 과거 행(dashboard.js API)과 오늘 행(realtime overlay)
+// 모두 resume_registered events 식이라 날짜에 관계없이 같은 계산이다.
 async function getResumeUploadsForDateAdminUI(dateStr: string): Promise<Split> {
-  const startTz = `${dateStr}T00:00:00+07:00`;
-  const endTz = `${dateStr}T23:59:59+07:00`;
-  if (dateStr === getVietnamDate(0)) {
-    return getResumeEventsSplit(startTz, endTz); // events (admin todayData overlay)
-  }
-  return getResumeProfilesSplit(
-    new Date(startTz).toISOString(),
-    new Date(endTz).toISOString()
-  ); // user_profiles (admin daily row)
+  return getResumeEventsSplit(`${dateStr}T00:00:00+07:00`, `${dateStr}T23:59:59+07:00`);
 }
 
 async function getCumulative(startDate: string, endDate: string) {

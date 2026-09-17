@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   const EVENT_NAMES = ['click_jobs_cta', 'click_job_card', 'view_jobs_page', 'click_apply_button', 'save_job', 'click_for_companies', 'click_contact_owner', 'click_post_job', 'landing']
 
   // 모든 쿼리 병렬 실행. 이벤트는 DB에서 집계(RPC)해 수만 행 전송을 없앰. (직렬 await → Promise.all)
-  const [submissionsRaw, signups, jobApps, eventDaily, utmPv, resumeUsers, companySignups, pendingJobs] = await Promise.all([
+  const [submissionsRaw, signups, jobApps, eventDaily, utmPv, resumeUsers, resumeRegs, companySignups, pendingJobs] = await Promise.all([
     // submissions (페이지네이션)
     fetchAll(
       supabase.from('submissions')
@@ -100,7 +100,7 @@ export default async function handler(req, res) {
         return Object.values(m).map(x => ({ d: x.d, utm_source: x.s, utm_campaign: x.c, utm_content: x.ct, cnt: x.n }))
       }
     })(),
-    // resume users (이력서 보유)
+    // resume users (이력서 보유) — 누적 총계와 공개 스냅샷용
     //  · fetchAll 필수 — 보유자가 1000명을 넘어(2026-08 기준 1,139) 그냥 select 하면 조용히 잘린다.
     //    잘리는 쪽이 하필 최근 갱신 행이라 최근일 이력서 등록이 실제의 1/4로 찍히고 있었다.
     //  · 페이지네이션 중에도 updated_at 은 계속 바뀌므로 정렬 키는 불변인 id 로 고정한다.
@@ -112,6 +112,10 @@ export default async function handler(req, res) {
         return rows.filter(r => r.updated_at)
       } catch (e) { return [] }
     })(),
+    // 이력서 등록 시각 — DB 트리거 resume_registered(20260917, 과거분은 backfill-resume-registered.js).
+    // 종전엔 가입일로 근사해서 공고 지원으로 들어온 이력서가 지원일이 아니라 가입일에 소급됐다.
+    fetchAll(supabase.from('events').select('created_at').eq('event', 'resume_registered')
+      .gte('created_at', startISO).lte('created_at', endISO)).catch(() => []),
     // company (recruiter) signups — 기업 가입자 (likelion/내부 도메인 제외)
     fetchAll(supabase.from('recruiter_users').select('id, created_at, email')
       .gte('created_at', startISO).lte('created_at', endISO))
@@ -176,14 +180,16 @@ export default async function handler(req, res) {
     dailyMap[date].companySignups++
   }
 
+  // 이력서풀 등록 = resume_registered 이벤트(인재풀 진입, 유저당 1건). updated_at 버킷은 프로필을
+  // 스치는 모든 갱신(연봉 입력, 콜드메일 전환 등)에 부풀어 8/13 +706%·7/14 +294% 착시를 만들었고
+  // (유저 확정 8/14: "이력서 파일을 등록한 사람 수"가 의도), 가입일 버킷은 지원 경로 등록을 놓쳤다.
+  for (const e of resumeRegs) {
+    const date = toVN(e.created_at)
+    if (!dailyMap[date]) dailyMap[date] = { ...newDay(), date }
+    dailyMap[date].resumeUploads++
+  }
+
   for (const ru of resumeUsers) {
-    // 이력서풀 등록은 created_at 버킷 — updated_at은 프로필을 스치는 모든 갱신(연봉 입력,
-    // 콜드메일 전환 등)에 부풀어 8/13 +706%·7/14 +294% 착시를 만들었다(유저 확정 8/14:
-    // "이력서 파일을 등록한 사람 수"가 의도). 업로드 시각은 따로 없어 프로필 생성일이 근사값 —
-    // 가입 후 나중에 올린 사람은 가입일로 소급 집계된다.
-    const regDate = toVN(ru.created_at || ru.updated_at)
-    if (!dailyMap[regDate]) dailyMap[regDate] = { ...newDay(), date: regDate }
-    dailyMap[regDate].resumeUploads++
     const date = toVN(ru.updated_at)
     if (!dailyMap[date]) dailyMap[date] = { ...newDay(), date }
     // 이력서 공개(is_resume_public) — 그중 플랫폼(resume_platform)별. 공개는 updated_at으로
