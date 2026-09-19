@@ -3708,6 +3708,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'Y', company: 'YOUL CHON VINA', title: 'NV KINH DOANH PHÁT TRIỂN THỊ TRƯỜNG', meta: 'Onsite · Bình Thạnh, TP.HCM · 10–14tr ₫/tháng + hoa hồng · T2–T6 08:00–17:00', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^posco0919-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Java Developer tại POSCO DX VIETNAM (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — POSCO DX VIETNAM Java Developer',
+      en: "[FYI] You've been nominated — Java Developer at POSCO DX VIETNAM",
+    },
+    desc: 'POSCO DX VIETNAM Java Developer(V187) recommend (9/19): 비공개 프레임 — onsite 7군(Cobi Tower I)·T2–T6·급여 협의·Java+Spring(Boot) 2년+ 필수·React/Vue·REST·MySQL/PostgreSQL·영어 or 한국어 기본 소통. 컷=이력서 Java/Spring 시그널 × 경력 24개월+ × HCMC권/위치 미기재(실측 113명, 7일 3통+ 지친 풀 1명 제외하고 112명 발송). 언어는 게이트에서 제외 — english_cert 는 자기기입 수준값(기준 풀 64%만 기입)이라 미기입=불가가 아니고 JD도 인증이 아닌 "기본 소통"만 요구.',
+    source: 'scripts/outreach/posco0919-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Java Developer</b> qua FYI. Công việc: phát triển, kiểm thử và sửa lỗi ứng dụng doanh nghiệp theo tài liệu thiết kế từ HQ Hàn Quốc; phối hợp với PM phía Hàn Quốc và Team Leader tại Việt Nam; dùng GitHub Copilot và Jira. Yêu cầu: tối thiểu 2 năm kinh nghiệm Java &amp; Spring Framework (Spring Boot), HTML5/CSS3/JavaScript (ES6+), React.js hoặc Vue.js, REST API, MySQL/PostgreSQL, Git·Jira·Confluence, giao tiếp cơ bản bằng tiếng Anh hoặc tiếng Hàn. Phúc lợi: thưởng tháng 13, 12 ngày phép, bảo hiểm tai nạn PTI 24/7, cơ hội đào tạo tại Hàn Quốc.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 오프쇼어 개발센터(ODC) <b>POSCO DX VIETNAM</b>이 FYI를 통해 <b>Java Developer</b>를 채용 중. 한국 본사 설계 문서 기반 개발·테스트·버그 수정, 한국 PM/현지 팀리더와 협업, GitHub Copilot·Jira 활용. Java+Spring(Boot) 2년+ 필수, HTML5/CSS3/JS(ES6+), React 또는 Vue, REST API, MySQL/PostgreSQL, 영어 또는 한국어 기본 소통. 7군 Cobi Tower I 온사이트, 급여 협의, 13개월차 보너스·연차 12일·한국 연수 기회.',
+        en: 'POSCO DX VIETNAM — the POSCO group offshore development center (ODC) working directly with Korea HQ — is hiring a Java Developer via FYI. Develop/test/fix enterprise applications from Korea HQ design docs, work with the Korea PM and local team leader, use GitHub Copilot and Jira. Requires 2+ years of Java & Spring Boot, HTML5/CSS3/JS (ES6+), React or Vue, REST API, MySQL/PostgreSQL, and basic working English or Korean. Onsite District 7, salary negotiable, 13th-month bonus, Korea training program.',
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Java Developer', meta: 'Onsite · Quận 7, TP.HCM · T2–T6 · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^posco0919-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi POSCO DX VIETNAM — Java Developer (TP.HCM)',
+      ko: '[FYI] POSCO DX VIETNAM 추천 명단에 선정되셨습니다 — Java Developer',
+      en: "[FYI] You've been nominated to POSCO DX VIETNAM — Java Developer",
+    },
+    desc: 'POSCO DX VIETNAM Java Developer(V187) recommend (9/19): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/posco0919-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Java Developer</b> (onsite Quận 7, TP.HCM) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 ODC <b>POSCO DX VIETNAM</b>의 Java Developer(7군 온사이트) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "POSCO DX VIETNAM Java Developer (onsite District 7, HCMC) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Java Developer', meta: 'Onsite · Quận 7, TP.HCM · T2–T6 · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
