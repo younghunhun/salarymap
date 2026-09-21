@@ -3744,6 +3744,294 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'P', company: 'POSCO DX VIETNAM', title: 'Java Developer', meta: 'Onsite · Quận 7, TP.HCM · T2–T6 · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^burningbros0917-recommend-fe-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Frontend Developer tại Burning Bros (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Burning Bros Frontend Developer',
+      en: "[FYI] You've been nominated — Frontend Developer at Burning Bros",
+    },
+    desc: 'Burning Bros Frontend Developer(V184) recommend (9/17 Len 등록 당일): 직군 exact 매치 Frontend × 경력 12개월+ × english_cert 보유(JD Upper-Intermediate) = 92명 발송(공개 32/비공개 60). 풀봇 코어 94 대비 차이는 당일 발송 겹침·1인1통 캐스케이드(BA→QA→FE). onsite HCM이지만 지역 하드게이트 없이 카피에 명시해 자기선별. 비공개 프레임.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>Frontend Developer</b> qua FYI. Công việc: phát triển &amp; bảo trì service theo yêu cầu khách hàng, phối hợp với PM/designer/developer, giao tiếp trực tiếp với khách hàng toàn cầu. Yêu cầu: <b>1+ năm kinh nghiệm production Web Development</b>, quen OOP &amp; design pattern, viết code sạch, <b>tiếng Anh Upper-Intermediate</b>, nắm cơ bản HTML/CSS/JavaScript. Onsite TP.HCM, lương <b>10–20 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '베트남 소프트웨어 개발사 <b>Burning Bros</b>가 FYI를 통해 <b>Frontend Developer</b>를 채용 중. 글로벌 고객사 서비스 개발·유지보수, 웹 개발 실무 1년+·OOP/디자인패턴·영어 Upper-Intermediate 필수. 호치민 온사이트, 월 1,000만~2,000만 동.',
+        en: "Burning Bros — a Vietnam-based software company serving global clients — is hiring a Frontend Developer via FYI. 1+ year of production web development, OOP &amp; design patterns, upper-intermediate English. Onsite HCMC, 10–20M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'Frontend Developer', meta: 'Onsite · TP.HCM · 10–20 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^burningbros0917-recommend-fe-public/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Burning Bros — Frontend Developer (TP.HCM)',
+      ko: '[FYI] Burning Bros 추천 명단에 선정되셨습니다 — Frontend Developer',
+      en: "[FYI] You've been nominated to Burning Bros — Frontend Developer",
+    },
+    desc: 'Burning Bros Frontend Developer(9/17) recommend: 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>Frontend Developer</b> qua FYI. Công việc: phát triển &amp; bảo trì service theo yêu cầu khách hàng, phối hợp với PM/designer/developer, giao tiếp trực tiếp với khách hàng toàn cầu. Yêu cầu: <b>1+ năm kinh nghiệm production Web Development</b>, quen OOP &amp; design pattern, viết code sạch, <b>tiếng Anh Upper-Intermediate</b>, nắm cơ bản HTML/CSS/JavaScript. Onsite TP.HCM, lương <b>10–20 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '베트남 소프트웨어 개발사 <b>Burning Bros</b>가 FYI를 통해 <b>Frontend Developer</b>를 채용 중. 글로벌 고객사 서비스 개발·유지보수, 웹 개발 실무 1년+·OOP/디자인패턴·영어 Upper-Intermediate 필수. 호치민 온사이트, 월 1,000만~2,000만 동.',
+        en: "Burning Bros — a Vietnam-based software company serving global clients — is hiring a Frontend Developer via FYI. 1+ year of production web development, OOP &amp; design patterns, upper-intermediate English. Onsite HCMC, 10–20M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'Frontend Developer', meta: 'Onsite · TP.HCM · 10–20 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^burningbros0917-recommend-qa-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — QA/QC Engineer tại Burning Bros (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Burning Bros QA/QC Engineer',
+      en: "[FYI] You've been nominated — QA/QC Engineer at Burning Bros",
+    },
+    desc: 'Burning Bros QA/QC Engineer(V185) recommend (9/17): 직군 exact 매치 QA × 경력 12개월+ = 57명 발송(공개 31/비공개 26). 인접 직군 확장 여지 없음(확장해도 60). 코어에 5y+ 26명이 섞여 JD(1–2y) 대비 오버스펙 — 이후 캠페인부터 "요구 연차 +2y" 상한 검토 과제로 남김. 비공개 프레임.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>QA/QC Engineer</b> qua FYI. Công việc: xây dựng &amp; thực thi test plan/test case/test script, functional–regression–performance testing, báo cáo kết quả &amp; theo dõi issue. Yêu cầu: <b>1–2 năm kinh nghiệm software testing (manual/automated)</b>, thành thạo công cụ testing, chú ý chi tiết. Ưu tiên ISTQB, tiếng Anh Intermediate, Selenium/JIRA. Onsite TP.HCM, lương <b>8–15 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '<b>Burning Bros</b>가 FYI를 통해 <b>QA/QC Engineer</b>를 채용 중. 테스트 계획·케이스 설계 및 실행, 기능/회귀/성능 테스트, 이슈 추적. 소프트웨어 테스팅 1~2년 경력 필수, ISTQB·Selenium·JIRA 우대. 호치민 온사이트, 월 800만~1,500만 동.',
+        en: "Burning Bros is hiring a QA/QC Engineer via FYI. Test planning and execution, functional/regression/performance testing, issue tracking. 1–2 years of software testing required; ISTQB, Selenium, JIRA preferred. Onsite HCMC, 8–15M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'QA/QC Engineer', meta: 'Onsite · TP.HCM · 8–15 triệu ₫/tháng · 1–2 năm kinh nghiệm', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^burningbros0917-recommend-qa-public/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Burning Bros — QA/QC Engineer (TP.HCM)',
+      ko: '[FYI] Burning Bros 추천 명단에 선정되셨습니다 — QA/QC Engineer',
+      en: "[FYI] You've been nominated to Burning Bros — QA/QC Engineer",
+    },
+    desc: 'Burning Bros QA/QC Engineer(9/17) recommend: 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>QA/QC Engineer</b> qua FYI. Công việc: xây dựng &amp; thực thi test plan/test case/test script, functional–regression–performance testing, báo cáo kết quả &amp; theo dõi issue. Yêu cầu: <b>1–2 năm kinh nghiệm software testing (manual/automated)</b>, thành thạo công cụ testing, chú ý chi tiết. Ưu tiên ISTQB, tiếng Anh Intermediate, Selenium/JIRA. Onsite TP.HCM, lương <b>8–15 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '<b>Burning Bros</b>가 FYI를 통해 <b>QA/QC Engineer</b>를 채용 중. 테스트 계획·케이스 설계 및 실행, 기능/회귀/성능 테스트, 이슈 추적. 소프트웨어 테스팅 1~2년 경력 필수, ISTQB·Selenium·JIRA 우대. 호치민 온사이트, 월 800만~1,500만 동.',
+        en: "Burning Bros is hiring a QA/QC Engineer via FYI. Test planning and execution, functional/regression/performance testing, issue tracking. 1–2 years of software testing required; ISTQB, Selenium, JIRA preferred. Onsite HCMC, 8–15M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'QA/QC Engineer', meta: 'Onsite · TP.HCM · 8–15 triệu ₫/tháng · 1–2 năm kinh nghiệm', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^burningbros0917-recommend-ba-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Business Analyst tại Burning Bros (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Burning Bros Business Analyst',
+      en: "[FYI] You've been nominated — Business Analyst at Burning Bros",
+    },
+    desc: 'Burning Bros Business Analyst(V183) recommend (9/17): 직군 exact 매치 Business Analyst × english_cert 보유(JD 영어 필수) = 44명 발송(공개 22/비공개 22). 세 공고 중 가장 작은 풀(코어 46). Fresher/Junior 공고라 1y 미만 21명이 주축, 한국어는 우대라 게이트 제외. 비공개 프레임.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>Business Analyst</b> qua FYI. Công việc: hỗ trợ Product Manager lên kế hoạch &amp; triển khai product roadmap, tạo wireframe từ yêu cầu, phối hợp với developer để làm rõ requirement &amp; theo dõi tiến độ. Yêu cầu: <b>tiếng Anh xuất sắc (nghe–nói–đọc–viết)</b>, nắm vững business analysis, hiểu quy trình phát triển phần mềm. Ưu tiên tiếng Hàn, Agile. <b>Phù hợp fresher/junior</b>. Onsite TP.HCM, lương <b>8–15 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '<b>Burning Bros</b>가 FYI를 통해 <b>Business Analyst</b>를 채용 중. PM 로드맵 지원·와이어프레임 작성·개발자와 요구사항 정합. 영어 우수 필수(4스킬), 한국어·Agile 우대, 신입~주니어 대상. 호치민 온사이트, 월 800만~1,500만 동.',
+        en: "Burning Bros is hiring a Business Analyst via FYI. Support PM roadmaps, create wireframes, align requirements with developers. Excellent English required; Korean and Agile preferred; open to fresher/junior. Onsite HCMC, 8–15M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'Business Analyst', meta: 'Onsite · TP.HCM · 8–15 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^burningbros0917-recommend-ba-public/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Burning Bros — Business Analyst (TP.HCM)',
+      ko: '[FYI] Burning Bros 추천 명단에 선정되셨습니다 — Business Analyst',
+      en: "[FYI] You've been nominated to Burning Bros — Business Analyst",
+    },
+    desc: 'Burning Bros Business Analyst(9/17) recommend: 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/burningbros0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: 'Burning Bros đang tuyển <b>Business Analyst</b> qua FYI. Công việc: hỗ trợ Product Manager lên kế hoạch &amp; triển khai product roadmap, tạo wireframe từ yêu cầu, phối hợp với developer để làm rõ requirement &amp; theo dõi tiến độ. Yêu cầu: <b>tiếng Anh xuất sắc (nghe–nói–đọc–viết)</b>, nắm vững business analysis, hiểu quy trình phát triển phần mềm. Ưu tiên tiếng Hàn, Agile. <b>Phù hợp fresher/junior</b>. Onsite TP.HCM, lương <b>8–15 triệu ₫/tháng</b>. <b>Burning Bros</b> là công ty phát triển phần mềm tại Việt Nam làm việc với nhiều khách hàng toàn cầu — các thành viên cùng làm việc tại một văn phòng chung (không outsource nhân sự sang công ty khác).',
+        ko: '<b>Burning Bros</b>가 FYI를 통해 <b>Business Analyst</b>를 채용 중. PM 로드맵 지원·와이어프레임 작성·개발자와 요구사항 정합. 영어 우수 필수(4스킬), 한국어·Agile 우대, 신입~주니어 대상. 호치민 온사이트, 월 800만~1,500만 동.',
+        en: "Burning Bros is hiring a Business Analyst via FYI. Support PM roadmaps, create wireframes, align requirements with developers. Excellent English required; Korean and Agile preferred; open to fresher/junior. Onsite HCMC, 8–15M VND/month.",
+      },
+      initial: 'B', company: 'Burning Bros', title: 'Business Analyst', meta: 'Onsite · TP.HCM · 8–15 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^hyperstar0917-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Global Influencer Marketing Assistant tại Hyperstar (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Hyperstar Global Influencer Marketing Assistant',
+      en: "[FYI] You've been nominated — Global Influencer Marketing Assistant at Hyperstar",
+    },
+    desc: 'Hyperstar(R203) Global Influencer Marketing Assistant recommend (9/17 등록 당일~9/21, 누적 151명): 비공개 프레임 — HCM 거주 명시 × 0~2y × 비개발 하드게이트 위에 티어링. 1차 T1 인플루언서 경험×상급언어 9 · T2 인플루언서×기타언어 5 · T3 SNS텍스트×마케팅직군×상급언어 94. 2차 T5 40 = SNS 텍스트 게이트 제거(SNS 상시 사용은 개인 생활이라 이력서 미기재가 정상 → T3가 인증 상위자를 걸러냄). 3차 잔여 13. 1차 부진 원인 실측: T3 수신자 96%가 최근 7일 recommend 기수신(인당 평균 7.4통)이라 클릭 자체가 안 나옴 — 이후 캠페인에 신선도 게이트 도입 계기.',
+    source: 'scripts/outreach/hyperstar0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch; tổng hợp dữ liệu &amp; báo cáo. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets. <b>Không yêu cầu kinh nghiệm</b>. Full-time (T2–T6) tại văn phòng LikeLion TP.HCM, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b>, đóng BHXH đầy đủ.',
+        ko: '생성형 AI 기반 글로벌 인플루언서 마케팅 자동화 플랫폼을 만드는 한국 스타트업 <b>Hyperstar</b>가 FYI를 통해 <b>Global Influencer Marketing Assistant</b>를 채용 중. TikTok/Instagram/YouTube 크리에이터 리스트업·아웃리치·캠페인 진행 관리·데이터 리포트. 경력 무관, 영어 또는 한국어 소통 가능·엑셀 필수. 멋사 HCM 사무실 출근 + 한국팀 원격 협업, 월 600만~1,000만 동.',
+        en: "Hyperstar — a Korean startup building a generative-AI platform for global influencer marketing — is hiring a Global Influencer Marketing Assistant via FYI. Creator list-up and outreach across TikTok/Instagram/YouTube, campaign tracking, reporting. No experience required; working English or Korean and Excel needed. Based at the LikeLion HCMC office with remote collaboration with the Korea team; 6–10M VND/month.",
+      },
+      initial: 'H', company: 'Hyperstar', title: 'Global Influencer Marketing Assistant', meta: 'Văn phòng LikeLion TP.HCM · Remote với team Hàn Quốc · 6–10 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^hyperstar0917-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Hyperstar — Global Influencer Marketing Assistant (TP.HCM)',
+      ko: '[FYI] Hyperstar 추천 명단에 선정되셨습니다 — Global Influencer Marketing Assistant',
+      en: "[FYI] You've been nominated to Hyperstar — Global Influencer Marketing Assistant",
+    },
+    desc: 'Hyperstar(R203) recommend (9/17~9/21): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/hyperstar0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch; tổng hợp dữ liệu &amp; báo cáo. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets. <b>Không yêu cầu kinh nghiệm</b>. Full-time (T2–T6) tại văn phòng LikeLion TP.HCM, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b>, đóng BHXH đầy đủ.',
+        ko: '생성형 AI 기반 글로벌 인플루언서 마케팅 자동화 플랫폼을 만드는 한국 스타트업 <b>Hyperstar</b>가 FYI를 통해 <b>Global Influencer Marketing Assistant</b>를 채용 중. TikTok/Instagram/YouTube 크리에이터 리스트업·아웃리치·캠페인 진행 관리·데이터 리포트. 경력 무관, 영어 또는 한국어 소통 가능·엑셀 필수. 멋사 HCM 사무실 출근 + 한국팀 원격 협업, 월 600만~1,000만 동.',
+        en: "Hyperstar — a Korean startup building a generative-AI platform for global influencer marketing — is hiring a Global Influencer Marketing Assistant via FYI. Creator list-up and outreach across TikTok/Instagram/YouTube, campaign tracking, reporting. No experience required; working English or Korean and Excel needed. Based at the LikeLion HCMC office with remote collaboration with the Korea team; 6–10M VND/month.",
+      },
+      initial: 'H', company: 'Hyperstar', title: 'Global Influencer Marketing Assistant', meta: 'Văn phòng LikeLion TP.HCM · Remote với team Hàn Quốc · 6–10 triệu ₫/tháng · Fresher/Junior', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^wefun0917-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Product Manager Curation tại Wefun (Remote)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Wefun Product Manager Curation',
+      en: "[FYI] You've been nominated — Product Manager Curation at Wefun",
+    },
+    desc: 'Wefun(R204) Product Manager Curation / 스낵24 간식 큐레이션 recommend (9/17~9/18, 누적 214명): 비공개 프레임 — 호현 확인(9/17) 리모트 가능 포지션이라 지역 게이트 없이 전국(DB엔 onsite로 등록돼 있어 Len에게 수정 요청 필요). 컷=경력 6m+ × 비개발 × (PM 직군 | MD·큐레이션·소싱 텍스트). 1차 150명(PM 35 + MD 115, TO 1이라 목표 지원 10건 역산) · 2차 잔여 64명. F&amp;B·이커머스 도메인 가점순 발송. 신선도 하드게이트(최근 7일 recommend 3통+ 제외) 첫 적용 캠페인.',
+    source: 'scripts/outreach/wefun0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>WEFUN</b> — công ty công nghệ B2B Hàn Quốc cung cấp giải pháp vận hành văn phòng &amp; phúc lợi nhân viên (snack, cà phê, bữa sáng văn phòng, quà tặng doanh nghiệp theo mô hình subscription) — đang tuyển <b>Product Manager Curation</b> cho dịch vụ Snack24 qua FYI. Công việc: xây dựng &amp; đề xuất curation sản phẩm phù hợp nhu cầu khách hàng B2B; quản lý quyết toán sản phẩm chính xác (Excel); xây dựng quan hệ với khách hàng doanh nghiệp; sourcing sản phẩm. Phù hợp nếu bạn có kinh nghiệm <b>customer service / MD / curation / thu mua</b>, đặc biệt MD ngành thực phẩm tại công ty phân phối. Ưu tiên giao tiếp được tiếng Anh. <b>Làm việc remote</b>, lương <b>12–20 triệu ₫/tháng</b>.',
+        ko: '오피스 운영·임직원 복지 솔루션(간식·커피·조식·기업 선물 구독)을 제공하는 한국 B2B 테크 기업 <b>WEFUN</b>이 FYI를 통해 스낵24 <b>간식 큐레이션 PM</b>을 채용 중. B2B 고객사 맞춤 상품 큐레이션·정산 관리(엑셀)·고객 라포·소싱. CS/MD/큐레이션/구매 경험자 적합(식품 유통 MD 우대), 영어 가능자 우대. 리모트 근무, 월 1,200만~2,000만 동.',
+        en: "WEFUN — a Korean B2B tech company providing office operations and employee benefit subscriptions (snacks, coffee, office breakfast, corporate gifts) — is hiring a Product Manager Curation for Snack24 via FYI. Product curation for B2B clients, settlement management in Excel, client rapport, product sourcing. Suits customer service / MD / curation / purchasing backgrounds; English a plus. Remote, 12–20M VND/month.",
+      },
+      initial: 'W', company: 'Wefun', title: 'Product Manager Curation', meta: 'Remote (làm việc từ xa) · 12–20 triệu ₫/tháng · Junior trở lên', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^wefun0917-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Wefun — Product Manager Curation (Remote)',
+      ko: '[FYI] Wefun 추천 명단에 선정되셨습니다 — Product Manager Curation',
+      en: "[FYI] You've been nominated to Wefun — Product Manager Curation",
+    },
+    desc: 'Wefun(R204) PM Curation recommend (9/17~9/18): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/wefun0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>WEFUN</b> — công ty công nghệ B2B Hàn Quốc cung cấp giải pháp vận hành văn phòng &amp; phúc lợi nhân viên (snack, cà phê, bữa sáng văn phòng, quà tặng doanh nghiệp theo mô hình subscription) — đang tuyển <b>Product Manager Curation</b> cho dịch vụ Snack24 qua FYI. Công việc: xây dựng &amp; đề xuất curation sản phẩm phù hợp nhu cầu khách hàng B2B; quản lý quyết toán sản phẩm chính xác (Excel); xây dựng quan hệ với khách hàng doanh nghiệp; sourcing sản phẩm. Phù hợp nếu bạn có kinh nghiệm <b>customer service / MD / curation / thu mua</b>, đặc biệt MD ngành thực phẩm tại công ty phân phối. Ưu tiên giao tiếp được tiếng Anh. <b>Làm việc remote</b>, lương <b>12–20 triệu ₫/tháng</b>.',
+        ko: '오피스 운영·임직원 복지 솔루션(간식·커피·조식·기업 선물 구독)을 제공하는 한국 B2B 테크 기업 <b>WEFUN</b>이 FYI를 통해 스낵24 <b>간식 큐레이션 PM</b>을 채용 중. B2B 고객사 맞춤 상품 큐레이션·정산 관리(엑셀)·고객 라포·소싱. CS/MD/큐레이션/구매 경험자 적합(식품 유통 MD 우대), 영어 가능자 우대. 리모트 근무, 월 1,200만~2,000만 동.',
+        en: "WEFUN — a Korean B2B tech company providing office operations and employee benefit subscriptions (snacks, coffee, office breakfast, corporate gifts) — is hiring a Product Manager Curation for Snack24 via FYI. Product curation for B2B clients, settlement management in Excel, client rapport, product sourcing. Suits customer service / MD / curation / purchasing backgrounds; English a plus. Remote, 12–20M VND/month.",
+      },
+      initial: 'W', company: 'Wefun', title: 'Product Manager Curation', meta: 'Remote (làm việc từ xa) · 12–20 triệu ₫/tháng · Junior trở lên', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^nxai0917-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — AI Native Marketer tại Nexacode (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Nexacode AI Native Marketer',
+      en: "[FYI] You've been nominated — AI Native Marketer at Nexacode",
+    },
+    desc: 'Nexacode(R205) AI Native Marketer recommend (9/17~9/21, 누적 46명): 비공개 프레임 — 컷=HCM 명시 × 마케팅 직군 × 6m+ × <b>유료광고 운영 텍스트 필수</b>(Meta/Google Ads·media buy·ROAS 등). T1 광고운영×AI툴 / T2 광고운영(AI툴 이력서 미기재 — 위펀 SNS 게이트 교훈으로 포함). 풀봇 코어는 마케팅 직군 전체 694명이지만 JD 필수요건 반영하면 실핏 43명이라 그 안에서만 발송. T3(마케팅×AI툴만·광고경험 無) 39명은 필수요건 미달로 미발송 — TO 3 미충원 시 요건 완화를 Nexacode에 확인하는 것이 다음 순서.',
+    source: 'scripts/outreach/nxai0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Nexacode</b> — công ty phần mềm xây dựng sản phẩm SaaS, ERP và giải pháp chuyển đổi số — đang tuyển <b>AI Native Marketer</b> qua FYI. Công việc: lên chiến lược marketing &amp; ý tưởng quảng cáo ứng dụng AI; sản xuất creative (video, hình ảnh, copy) bằng công cụ AI; <b>vận hành quảng cáo trả phí Meta/Google</b> và test theo creative, target; vận hành nội dung SNS/cộng đồng; phân tích dữ liệu quảng cáo &amp; người dùng. Yêu cầu: <b>có kinh nghiệm vận hành quảng cáo trả phí (Meta, Google Ads)</b>, từng dùng công cụ AI cho nội dung quảng cáo, phân tích được dữ liệu hiệu quả, tư duy test &amp; learn. Ưu tiên: startup/growth, vận hành SNS, thành thạo ChatGPT·Midjourney. Onsite TP.HCM, lương <b>12–20 triệu ₫/tháng</b>.',
+        ko: 'SaaS·ERP·DX 소프트웨어 기업 <b>Nexacode</b>가 FYI를 통해 <b>AI Native Marketer</b>를 채용 중. AI 활용 마케팅 전략·광고 크리에이티브(영상/이미지/카피) 제작, <b>Meta·Google 유료광고 운영</b> 및 크리에이티브·타겟 테스트, SNS 콘텐츠 운영, 광고·유저 데이터 분석. 유료광고 운영 경험 필수, ChatGPT·미드저니 등 생성형 AI 툴 숙련 우대. 호치민 온사이트, 월 1,200만~2,000만 동.',
+        en: "Nexacode — a SaaS/ERP/DX software company — is hiring an AI Native Marketer via FYI. AI-assisted marketing strategy, ad creative production (video/image/copy), paid Meta/Google ads operation with creative and target testing, SNS content, ad and user data analysis. Paid ads experience required; ChatGPT/Midjourney fluency preferred. Onsite HCMC, 12–20M VND/month.",
+      },
+      initial: 'N', company: 'Nexacode', title: 'AI Native Marketer', meta: 'Onsite · TP.HCM · 12–20 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nxai0917-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Nexacode — AI Native Marketer (TP.HCM)',
+      ko: '[FYI] Nexacode 추천 명단에 선정되셨습니다 — AI Native Marketer',
+      en: "[FYI] You've been nominated to Nexacode — AI Native Marketer",
+    },
+    desc: 'Nexacode(R205) AI Native Marketer recommend (9/17~9/21): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nxai0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Nexacode</b> — công ty phần mềm xây dựng sản phẩm SaaS, ERP và giải pháp chuyển đổi số — đang tuyển <b>AI Native Marketer</b> qua FYI. Công việc: lên chiến lược marketing &amp; ý tưởng quảng cáo ứng dụng AI; sản xuất creative (video, hình ảnh, copy) bằng công cụ AI; <b>vận hành quảng cáo trả phí Meta/Google</b> và test theo creative, target; vận hành nội dung SNS/cộng đồng; phân tích dữ liệu quảng cáo &amp; người dùng. Yêu cầu: <b>có kinh nghiệm vận hành quảng cáo trả phí (Meta, Google Ads)</b>, từng dùng công cụ AI cho nội dung quảng cáo, phân tích được dữ liệu hiệu quả, tư duy test &amp; learn. Ưu tiên: startup/growth, vận hành SNS, thành thạo ChatGPT·Midjourney. Onsite TP.HCM, lương <b>12–20 triệu ₫/tháng</b>.',
+        ko: 'SaaS·ERP·DX 소프트웨어 기업 <b>Nexacode</b>가 FYI를 통해 <b>AI Native Marketer</b>를 채용 중. AI 활용 마케팅 전략·광고 크리에이티브(영상/이미지/카피) 제작, <b>Meta·Google 유료광고 운영</b> 및 크리에이티브·타겟 테스트, SNS 콘텐츠 운영, 광고·유저 데이터 분석. 유료광고 운영 경험 필수, ChatGPT·미드저니 등 생성형 AI 툴 숙련 우대. 호치민 온사이트, 월 1,200만~2,000만 동.',
+        en: "Nexacode — a SaaS/ERP/DX software company — is hiring an AI Native Marketer via FYI. AI-assisted marketing strategy, ad creative production (video/image/copy), paid Meta/Google ads operation with creative and target testing, SNS content, ad and user data analysis. Paid ads experience required; ChatGPT/Midjourney fluency preferred. Onsite HCMC, 12–20M VND/month.",
+      },
+      initial: 'N', company: 'Nexacode', title: 'AI Native Marketer', meta: 'Onsite · TP.HCM · 12–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^datest0917-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán tại DAT EST (Q.7, chỉ tuyển nữ)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — DAT EST Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán',
+      en: "[FYI] You've been nominated — Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán at DAT EST",
+    },
+    desc: 'DAT EST(V186) 사무직/회계지원 recommend (9/17, 97명): 비공개 프레임 — 전기안전기술 한국계 기업, Q7 온사이트·TO 1·급여 협의. 컷=HCM 명시 × 행정·회계 매치(지노시스 admin 동일 필터) × 신선도 게이트. 전체 매치 242명 중 당일 지노시스 등 기수신 144명 제외하고 97명 발송, 회계·세무 텍스트 > 한국계 시그널 > 직군 정합 > 영어 가점순. <b>JD가 여성 전용(Nữ)</b>인데 프로필에 성별 필드가 없어 타겟 불가 → 제목·본문·훅 3곳에 "chỉ tuyển ứng viên nữ" 명시해 자기선별(유저 결정 9/17). 급여 미기재라 급여 훅 대신 근무시간(T2–T6 08–16시, 격주 토 오전) 명시.',
+    source: 'scripts/outreach/datest0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>DAT EST</b> — công ty Hàn Quốc về Kỹ thuật An toàn Điện, cung cấp dịch vụ quản lý an toàn điện &amp; kiểm tra hệ thống điện cho các nhà máy tại Việt Nam — đang tuyển <b>Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán</b> qua FYI (<b>theo yêu cầu của công ty, vị trí này chỉ tuyển ứng viên nữ</b> · TO 1 người). Công việc: hành chính – văn phòng, soạn thảo &amp; quản lý hồ sơ, hỗ trợ báo giá/hợp đồng/báo cáo, hỗ trợ hóa đơn &amp; kế toán, liên hệ khách hàng – đối tác. Yêu cầu: Excel/Word cơ bản, cẩn thận – trung thực – có trách nhiệm. Ưu tiên: kế toán/thuế cơ bản, từng làm tại công ty Hàn Quốc, biết tiếng Anh hoặc tiếng Hàn. T2–T6 08:00–16:00, T7 cách tuần 08:00–12:00. Lương <b>thỏa thuận</b>.',
+        ko: '전기안전기술 한국계 기업 <b>DAT EST</b>가 FYI를 통해 <b>사무·행정 / 회계지원 직원</b> 1명을 채용 중(<b>회사 요청으로 여성 한정</b>). 행정·문서 관리, 견적·계약·점검보고서 지원, 세금계산서·회계 보조, 고객·파트너 응대. 엑셀·워드 기본, 회계/세무 기초·한국계 근무 경험·영어 또는 한국어 우대. 7군 온사이트, 월~금 08–16시·격주 토 오전, 급여 협의.',
+        en: "DAT EST — a Korean electrical-safety engineering company serving factories in Vietnam — is hiring an Office Administration / Accounting Support staff via FYI (the company specifies female applicants only; 1 opening). Office administration, document management, quotation/contract/report support, invoicing and accounting assistance, client contact. Basic Excel/Word required; accounting or tax basics, Korean-company experience, English or Korean preferred. Onsite District 7, negotiable salary.",
+      },
+      initial: 'D', company: 'DAT EST', title: 'Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán', meta: 'Onsite · Quận 7, TP.HCM · Lương thỏa thuận · Chỉ tuyển nữ (theo yêu cầu công ty)', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^datest0917-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi DAT EST — Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán (Q.7, chỉ tuyển nữ)',
+      ko: '[FYI] DAT EST 추천 명단에 선정되셨습니다 — Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán',
+      en: "[FYI] You've been nominated to DAT EST — Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán",
+    },
+    desc: 'DAT EST(V186) 사무직/회계지원 recommend (9/17): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일(여성 전용 명시 포함).',
+    source: 'scripts/outreach/datest0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>DAT EST</b> — công ty Hàn Quốc về Kỹ thuật An toàn Điện, cung cấp dịch vụ quản lý an toàn điện &amp; kiểm tra hệ thống điện cho các nhà máy tại Việt Nam — đang tuyển <b>Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán</b> qua FYI (<b>theo yêu cầu của công ty, vị trí này chỉ tuyển ứng viên nữ</b> · TO 1 người). Công việc: hành chính – văn phòng, soạn thảo &amp; quản lý hồ sơ, hỗ trợ báo giá/hợp đồng/báo cáo, hỗ trợ hóa đơn &amp; kế toán, liên hệ khách hàng – đối tác. Yêu cầu: Excel/Word cơ bản, cẩn thận – trung thực – có trách nhiệm. Ưu tiên: kế toán/thuế cơ bản, từng làm tại công ty Hàn Quốc, biết tiếng Anh hoặc tiếng Hàn. T2–T6 08:00–16:00, T7 cách tuần 08:00–12:00. Lương <b>thỏa thuận</b>.',
+        ko: '전기안전기술 한국계 기업 <b>DAT EST</b>가 FYI를 통해 <b>사무·행정 / 회계지원 직원</b> 1명을 채용 중(<b>회사 요청으로 여성 한정</b>). 행정·문서 관리, 견적·계약·점검보고서 지원, 세금계산서·회계 보조, 고객·파트너 응대. 엑셀·워드 기본, 회계/세무 기초·한국계 근무 경험·영어 또는 한국어 우대. 7군 온사이트, 월~금 08–16시·격주 토 오전, 급여 협의.',
+        en: "DAT EST — a Korean electrical-safety engineering company serving factories in Vietnam — is hiring an Office Administration / Accounting Support staff via FYI (the company specifies female applicants only; 1 opening). Office administration, document management, quotation/contract/report support, invoicing and accounting assistance, client contact. Basic Excel/Word required; accounting or tax basics, Korean-company experience, English or Korean preferred. Onsite District 7, negotiable salary.",
+      },
+      initial: 'D', company: 'DAT EST', title: 'Nhân viên Hành chính – Văn phòng / Hỗ trợ Kế toán', meta: 'Onsite · Quận 7, TP.HCM · Lương thỏa thuận · Chỉ tuyển nữ (theo yêu cầu công ty)', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^jinosys0917-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Hành chính - Quản trị (Junior) tại Jinosys (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Jinosys Nhân viên Hành chính - Quản trị (Junior)',
+      en: "[FYI] You've been nominated — Nhân viên Hành chính - Quản trị (Junior) at Jinosys",
+    },
+    desc: 'Jinosys(R202) 경영지원·행정 Junior recommend (9/17, 113명): 비공개 프레임 — 호현 지시(9/16) "인턴 아님, 1년 안팎 경력, 호치민 거주자, 70명 다 보내주시지요" → 6개월~3년 밴드 전부 발송(exp 1y~3y 69 · junior 6m~1y 44). 컷=HCM권 명시(거주지 미기재 제외, JD 하드조건) × 행정 매치(직군 HR/Admin/Operations/Finance/Sales Admin/Interpreter | 행정 직무 텍스트) × 개발직군 단독 제외. 카피에 "1년 이상" 명시해 6개월대 자기선별.',
+    source: 'scripts/outreach/jinosys0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Jinosys</b> — công ty Hàn Quốc chuyên về nền tảng IoT an toàn dựa trên AI (18 bằng sáng chế, đối tác an toàn của Samsung Electronics) — đang tuyển <b>Nhân viên Hành chính - Quản trị (Junior)</b> tại TP.HCM qua FYI. Công việc: hỗ trợ quản trị &amp; hành chính văn phòng, soạn thảo văn bản và quản lý tài liệu, xử lý chi phí và quyết toán, quản lý hợp đồng &amp; giấy tờ, hỗ trợ lịch họp. Yêu cầu: <b>từ 1 năm kinh nghiệm</b> hành chính / tổng vụ / văn phòng, MS Office cơ bản, <b>có thể sử dụng tiếng Anh</b>, <b>đang sinh sống tại TP.HCM</b>. Ưu tiên: kinh nghiệm startup / công ty IT, kế toán / quyết toán. Lương <b>12–15 triệu ₫/tháng</b>.',
+        ko: 'AI 기반 안전 IoT 플랫폼 한국 기업 <b>Jinosys</b>(특허 18건, 삼성전자 안전 협력사)가 FYI를 통해 호치민 <b>경영지원·행정 주니어</b>를 채용 중. 사무 행정 지원·문서 작성 및 관리·비용 정산·계약 서류 관리·회의 일정 지원. 행정/총무 1년+ 경력, MS Office, 영어 사용 가능, HCM 거주 필수. 스타트업·IT 경험 및 회계/정산 우대. 월 1,200만~1,500만 동.',
+        en: "Jinosys — a Korean AI-based safety IoT platform company (18 patents, a Samsung Electronics safety partner) — is hiring a Junior Administration staff in HCMC via FYI. Office administration, document drafting and management, expense settlement, contract paperwork, meeting scheduling. 1+ year of admin/general affairs experience, MS Office, working English, and HCMC residency required. 12–15M VND/month.",
+      },
+      initial: 'J', company: 'Jinosys', title: 'Nhân viên Hành chính - Quản trị (Junior)', meta: 'Onsite TP.HCM · 12–15 triệu ₫/tháng · Kinh nghiệm từ 1 năm', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^jinosys0917-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Jinosys — Nhân viên Hành chính - Quản trị (Junior) (TP.HCM)',
+      ko: '[FYI] Jinosys 추천 명단에 선정되셨습니다 — Nhân viên Hành chính - Quản trị (Junior)',
+      en: "[FYI] You've been nominated to Jinosys — Nhân viên Hành chính - Quản trị (Junior)",
+    },
+    desc: 'Jinosys(R202) 경영지원·행정 Junior recommend (9/17): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/jinosys0917-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Jinosys</b> — công ty Hàn Quốc chuyên về nền tảng IoT an toàn dựa trên AI (18 bằng sáng chế, đối tác an toàn của Samsung Electronics) — đang tuyển <b>Nhân viên Hành chính - Quản trị (Junior)</b> tại TP.HCM qua FYI. Công việc: hỗ trợ quản trị &amp; hành chính văn phòng, soạn thảo văn bản và quản lý tài liệu, xử lý chi phí và quyết toán, quản lý hợp đồng &amp; giấy tờ, hỗ trợ lịch họp. Yêu cầu: <b>từ 1 năm kinh nghiệm</b> hành chính / tổng vụ / văn phòng, MS Office cơ bản, <b>có thể sử dụng tiếng Anh</b>, <b>đang sinh sống tại TP.HCM</b>. Ưu tiên: kinh nghiệm startup / công ty IT, kế toán / quyết toán. Lương <b>12–15 triệu ₫/tháng</b>.',
+        ko: 'AI 기반 안전 IoT 플랫폼 한국 기업 <b>Jinosys</b>(특허 18건, 삼성전자 안전 협력사)가 FYI를 통해 호치민 <b>경영지원·행정 주니어</b>를 채용 중. 사무 행정 지원·문서 작성 및 관리·비용 정산·계약 서류 관리·회의 일정 지원. 행정/총무 1년+ 경력, MS Office, 영어 사용 가능, HCM 거주 필수. 스타트업·IT 경험 및 회계/정산 우대. 월 1,200만~1,500만 동.',
+        en: "Jinosys — a Korean AI-based safety IoT platform company (18 patents, a Samsung Electronics safety partner) — is hiring a Junior Administration staff in HCMC via FYI. Office administration, document drafting and management, expense settlement, contract paperwork, meeting scheduling. 1+ year of admin/general affairs experience, MS Office, working English, and HCMC residency required. 12–15M VND/month.",
+      },
+      initial: 'J', company: 'Jinosys', title: 'Nhân viên Hành chính - Quản trị (Junior)', meta: 'Onsite TP.HCM · 12–15 triệu ₫/tháng · Kinh nghiệm từ 1 năm', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
