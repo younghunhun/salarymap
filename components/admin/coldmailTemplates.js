@@ -4032,6 +4032,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'J', company: 'Jinosys', title: 'Nhân viên Hành chính - Quản trị (Junior)', meta: 'Onsite TP.HCM · 12–15 triệu ₫/tháng · Kinh nghiệm từ 1 năm', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^yooha0921-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Off-line Sales tại Yooha (Q.7, TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Yooha 오프라인 영업',
+      en: "[FYI] You've been nominated — Off-line Sales at Yooha",
+    },
+    desc: 'Yooha(V188) 오프라인 영업 recommend (9/21 Len 등록 당일, 100명): 비공개 프레임 — 한국 수입 소비재 유통, Q7(SECC 인근) onsite·9-13M gross+커미션 3~30%. 컷=HCM권 × 경력 1y~10y × 비개발 × 영업(직군 | 인접직군×영업텍스트). T1 영업×온라인·이커머스 28(JD 필수 2개 충족) + T2 영업만 72(점수순 상위). 풀봇 코어 95는 온라인 마케팅 필수요건 미반영 수치라 실핏 재산정: T1 30 · T2 117 · T3 5. T2 포함 근거=온라인 판매 경험은 영업 이력서에 미기재가 흔함(하이퍼스타 SNS·위펀 MD 교훈) → 카피에 필수요건 명시해 자기선별. 10y 초과 23명은 급여 밴드 미스매치로 하드 제외. 가점=식품·화장품 도메인 > 온라인 > Q7 근거리 > 영업 직군. t2 상한컷 예비 23명은 2차용 보존.',
+    source: 'scripts/outreach/yooha0921-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yooha</b> — công ty kinh doanh hàng tiêu dùng nhập khẩu từ Hàn Quốc (mỹ phẩm, đồ uống, sản phẩm nhân sâm, dầu gội, nông sản…) — đang tuyển <b>Nhân viên Off-line Sales</b> qua FYI. Công việc: phát triển nhà phân phối bán lẻ lớn (WinMart, Co.opmart…), siêu thị quy mô nhỏ tại TP.HCM, hệ thống bán buôn &amp; kênh online; hỗ trợ marketing/bán hàng online, quản lý doanh số &amp; tồn kho. Bắt buộc: <b>1 năm kinh nghiệm kinh doanh</b> + <b>kinh nghiệm marketing / bán hàng online</b>. Ưu tiên: ngành thực phẩm hoặc mỹ phẩm, sinh sống trong bán kính 20 phút tới Quận 7. Không yêu cầu ngoại ngữ. T2–T6 08:00–17:00 tại văn phòng gần SECC, Quận 7. Lương <b>9–13 triệu ₫ gross</b> + <b>hoa hồng 3–30%</b>, thử việc nhận 100% lương.',
+        ko: '한국 수입 소비재(화장품·음료·홍삼·샴푸·농산물) 유통사 <b>Yooha</b>가 FYI를 통해 <b>오프라인 영업 담당</b>을 채용 중. WinMart·Co.opmart 등 대형 리테일과 개인 슈퍼 개척, 도매·온라인 채널 발굴, 온라인 마케팅·재고/매출 관리. 필수는 영업 경력 1년+ 와 온라인 판매·이커머스 경험, 식품·화장품 도메인 및 7군 20분 거리 거주 우대, 외국어 요건 없음. 7군 SECC 인근 온사이트, 월~금 08–17시, 월 900만~1,300만 동(gross) + 판매 커미션 3~30%.',
+        en: "Yooha — a distributor of Korean imported consumer goods (cosmetics, beverages, ginseng products, shampoo, produce) — is hiring an Off-line Sales rep via FYI. Develop large retail distributors (WinMart, Co.opmart), small supermarkets in HCMC, wholesale and online channels; support online marketing, inventory and sales management. Requires 1+ year of sales experience and online marketing/e-commerce selling experience; food or cosmetics background and living within 20 minutes of District 7 preferred; no foreign language required. Onsite near SECC, District 7, Mon–Fri 8–5, 9–13M VND gross plus 3–30% commission.",
+      },
+      initial: 'Y', company: 'Yooha', title: 'Nhân viên Off-line Sales', meta: 'Onsite · Quận 7 (gần SECC), TP.HCM · 9–13 triệu ₫ gross + hoa hồng 3–30%', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^yooha0921-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Yooha — Nhân viên Off-line Sales (Q.7, TP.HCM)',
+      ko: '[FYI] Yooha 추천 명단에 선정되셨습니다 — 오프라인 영업',
+      en: "[FYI] You've been nominated to Yooha — Off-line Sales",
+    },
+    desc: 'Yooha(V188) 오프라인 영업 recommend (9/21): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/yooha0921-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Yooha</b> — công ty kinh doanh hàng tiêu dùng nhập khẩu từ Hàn Quốc (mỹ phẩm, đồ uống, sản phẩm nhân sâm, dầu gội, nông sản…) — đang tuyển <b>Nhân viên Off-line Sales</b> qua FYI. Công việc: phát triển nhà phân phối bán lẻ lớn (WinMart, Co.opmart…), siêu thị quy mô nhỏ tại TP.HCM, hệ thống bán buôn &amp; kênh online; hỗ trợ marketing/bán hàng online, quản lý doanh số &amp; tồn kho. Bắt buộc: <b>1 năm kinh nghiệm kinh doanh</b> + <b>kinh nghiệm marketing / bán hàng online</b>. Ưu tiên: ngành thực phẩm hoặc mỹ phẩm, sinh sống trong bán kính 20 phút tới Quận 7. Không yêu cầu ngoại ngữ. T2–T6 08:00–17:00 tại văn phòng gần SECC, Quận 7. Lương <b>9–13 triệu ₫ gross</b> + <b>hoa hồng 3–30%</b>, thử việc nhận 100% lương.',
+        ko: '한국 수입 소비재(화장품·음료·홍삼·샴푸·농산물) 유통사 <b>Yooha</b>가 FYI를 통해 <b>오프라인 영업 담당</b>을 채용 중. WinMart·Co.opmart 등 대형 리테일과 개인 슈퍼 개척, 도매·온라인 채널 발굴, 온라인 마케팅·재고/매출 관리. 필수는 영업 경력 1년+ 와 온라인 판매·이커머스 경험, 식품·화장품 도메인 및 7군 20분 거리 거주 우대, 외국어 요건 없음. 7군 SECC 인근 온사이트, 월~금 08–17시, 월 900만~1,300만 동(gross) + 판매 커미션 3~30%.',
+        en: "Yooha — a distributor of Korean imported consumer goods (cosmetics, beverages, ginseng products, shampoo, produce) — is hiring an Off-line Sales rep via FYI. Develop large retail distributors (WinMart, Co.opmart), small supermarkets in HCMC, wholesale and online channels; support online marketing, inventory and sales management. Requires 1+ year of sales experience and online marketing/e-commerce selling experience; food or cosmetics background and living within 20 minutes of District 7 preferred; no foreign language required. Onsite near SECC, District 7, Mon–Fri 8–5, 9–13M VND gross plus 3–30% commission.",
+      },
+      initial: 'Y', company: 'Yooha', title: 'Nhân viên Off-line Sales', meta: 'Onsite · Quận 7 (gần SECC), TP.HCM · 9–13 triệu ₫ gross + hoa hồng 3–30%', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
