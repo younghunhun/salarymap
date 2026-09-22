@@ -4068,6 +4068,78 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'Y', company: 'Yooha', title: 'Nhân viên Off-line Sales', meta: 'Onsite · Quận 7 (gần SECC), TP.HCM · 9–13 triệu ₫ gross + hoa hồng 3–30%', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^becuai0921-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Xử lý Dữ liệu (tiếng Hàn) tại BECUAI VIETNAM',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — BECUAI 데이터 처리(한국어)',
+      en: "[FYI] You've been nominated — Data Processing Staff (Korean) at BECUAI",
+    },
+    desc: 'BECUAI(V189) 한국어 뉴스 데이터 처리 recommend (9/21 재등록 당일, 신규만 25명): 비공개 프레임 — V22(9/14, 29명 발송·지원 18)와 동일 포지션 재등록이라 V22 기수신·지원자 전원 제외. 컷=HCM(명시+빈값) × korean_cert TOPIK 3+/중급 이상(9/14 컷은 Basic·Beginner·TOPIK1 까지 통과 → JD 최소 TOPIK 3-4 에 맞춰 등급 판별) × ≤10y(12M 밴드 미스매치 컷). 실측 47(신규 30/기수신 17) → Pre-Intermediate 오탐 1·10y 초과 2·동일인 2계정 2 제외 = 25. 야간(15~24시)·주6일(일~금)·한국어 면접+타이핑 테스트는 카피에 명시해 자기선별. V189 JD 에서 빠진 CV 언어 요건은 카피에서 삭제.',
+    source: 'scripts/outreach/becuai0921-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên Xử lý Dữ liệu (Data Labels)</b> qua FYI — nhập liệu, lưu trữ &amp; quản lý dữ liệu báo chí/tin tức Hàn Quốc cho AI (được hướng dẫn &amp; đào tạo, <b>không yêu cầu kinh nghiệm</b>). Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn đọc hiểu, giao tiếp khá (tối thiểu TOPIK 3–4)</b> — phỏng vấn bằng tiếng Hàn &amp; có test đánh máy tiếng Hàn. Lưu ý giờ làm: <b>15:00–00:00 (làm đêm, có phụ cấp), Chủ Nhật đến Thứ 6</b>. Lương gross 12 triệu ₫ (chưa gồm phụ cấp làm đêm; thử việc 2 tháng 85%), sau thử việc đóng BHXH/BHYT/BHTN trên 100% lương. Công ty có phòng ăn &amp; phòng nghỉ riêng, ký túc xá cách công ty 3 phút đi bộ, hỗ trợ mộc thực tập.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>데이터 처리 직원(Data Labels)</b> 채용 중. AI용 한국 뉴스·기사 데이터 입력·저장·관리(교육 제공, 무경력 가능). 대졸·한국어 독해/회화(최소 TOPIK 3-4), 한국어 면접+타이핑 테스트. 근무 15~24시(야간수당)·일~금, gross 12M VND(야간수당 별도, 수습 2개월 85%), 수습 후 급여 100% 기준 4대보험, 식당·휴게실, 도보 3분 기숙사, 인턴 확인 도장 지원.',
+        en: 'BECUAI VIETNAM is hiring Data Processing Staff (Data Labels) via FYI — entering, storing and managing Korean news data for AI (training provided, no experience required). University degree, Korean reading and conversation (TOPIK 3–4 minimum), Korean interview + typing test. Hours 15:00–00:00 (night allowance), Sun–Fri; gross 12M VND excluding night allowance (85% during 2-month probation), full insurance after probation, canteen and rest room, dorm 3 minutes away, internship stamp supported.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'NHÂN VIÊN XỬ LÝ DỮ LIỆU (Data Labels)', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · Gross 12 triệu ₫/tháng + phụ cấp đêm', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^becuai0921-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi BECUAI VIETNAM — Nhân viên Xử lý Dữ liệu (tiếng Hàn)',
+      ko: '[FYI] BECUAI 추천 명단에 선정되셨습니다 — 데이터 처리(한국어)',
+      en: "[FYI] You've been nominated to BECUAI — Data Processing Staff (Korean)",
+    },
+    desc: 'BECUAI(V189) 데이터 처리 recommend (9/21): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/becuai0921-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên Xử lý Dữ liệu (Data Labels)</b> qua FYI — nhập liệu, lưu trữ &amp; quản lý dữ liệu báo chí/tin tức Hàn Quốc cho AI (được hướng dẫn &amp; đào tạo, <b>không yêu cầu kinh nghiệm</b>). Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn đọc hiểu, giao tiếp khá (tối thiểu TOPIK 3–4)</b> — phỏng vấn bằng tiếng Hàn &amp; có test đánh máy tiếng Hàn. Lưu ý giờ làm: <b>15:00–00:00 (làm đêm, có phụ cấp), Chủ Nhật đến Thứ 6</b>. Lương gross 12 triệu ₫ (chưa gồm phụ cấp làm đêm; thử việc 2 tháng 85%), sau thử việc đóng BHXH/BHYT/BHTN trên 100% lương. Công ty có phòng ăn &amp; phòng nghỉ riêng, ký túc xá cách công ty 3 phút đi bộ, hỗ trợ mộc thực tập.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>데이터 처리 직원(Data Labels)</b> 채용 중. AI용 한국 뉴스·기사 데이터 입력·저장·관리(교육 제공, 무경력 가능). 대졸·한국어 독해/회화(최소 TOPIK 3-4), 한국어 면접+타이핑 테스트. 근무 15~24시(야간수당)·일~금, gross 12M VND(야간수당 별도, 수습 2개월 85%), 수습 후 급여 100% 기준 4대보험, 식당·휴게실, 도보 3분 기숙사, 인턴 확인 도장 지원.',
+        en: 'BECUAI VIETNAM is hiring Data Processing Staff (Data Labels) via FYI — entering, storing and managing Korean news data for AI (training provided, no experience required). University degree, Korean reading and conversation (TOPIK 3–4 minimum), Korean interview + typing test. Hours 15:00–00:00 (night allowance), Sun–Fri; gross 12M VND excluding night allowance (85% during 2-month probation), full insurance after probation, canteen and rest room, dorm 3 minutes away, internship stamp supported.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'NHÂN VIÊN XỬ LÝ DỮ LIỆU (Data Labels)', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · Gross 12 triệu ₫/tháng + phụ cấp đêm', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^becuai0922-hr-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — HR Operation (tiếng Hàn) tại BECUAI VIETNAM',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — BECUAI HR Operation(한국어)',
+      en: "[FYI] You've been nominated — HR Operation (Korean) at BECUAI",
+    },
+    desc: 'BECUAI(V190) HR Operation recommend (9/22 Len 등록 당일, 70명): 비공개 프레임 — HR Admin+총무+내부 재무, 대졸 무경력, TOPIK 4+, 20~35세(여성 우대), Q3 onsite 월~금 09-18시, 급여 협의. 컷=korean_cert TOPIK 4+/고급 × ≤10y(나이 20~35 대체). hcm 그룹(HCM 명시+빈값, 한글 표기 호찌민 포함) 35 먼저 → remote 그룹(타지역: 하노이·다낭·한국 등, 온사이트는 카피로 자기선별) 35. HCM 한국어 인증 풀 소진(어제 V189 Data Labels 25통·9/14 V22 29통 겹침, 7일 3통+ 9명 제외)이라 유저 결정으로 D(지역 무관)까지 확장. BECUAI 3공고 지원자 11 제외, V189/V22 기수신은 다른 공고이므로 포함. 가점=HR/사무 시그널 > ≤3y > HCM 명시 > TOPIK 5-6.',
+    source: 'scripts/outreach/becuai0922-hr-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>HR Operation</b> (HR Admin + Tổng vụ + Tài chính nội bộ) qua FYI — <b>không yêu cầu kinh nghiệm</b>. Công việc: quản lý lương &amp; nghỉ phép năm, khai báo BHXH, lập phiếu lương; thu thập hóa đơn/chứng từ, tổng hợp &amp; báo cáo chi tiêu; soạn thảo &amp; lưu trữ hợp đồng, tiếp nhận yêu cầu nội bộ. Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn đọc hiểu, giao tiếp khá (tối thiểu TOPIK 4)</b>, tin học văn phòng, tính cách hướng nội &amp; làm việc độc lập; 20–35 tuổi (ưu tiên nữ). <b>Thứ 2–Thứ 6, 09:00–18:00</b> tại Quận 3 (P. Bàn Cờ), nghỉ lễ Hàn Quốc. Lương thỏa thuận khi phỏng vấn.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>HR Operation</b>(HR 행정+총무+내부 재무) 채용 중, 무경력 가능. 급여·연차 관리, 사회보험 신고, 급여명세 작성, 비용 증빙 수집·지출 보고, 계약서 작성·관리, 내부 요청 접수. 대졸·한국어 독해/회화(최소 TOPIK 4)·사무 SW, 내향적·독립 근무 성향, 20~35세(여성 우대). 3군 온사이트 월~금 09–18시, 한국 공휴일 휴무, 급여 면접 시 협의.',
+        en: 'BECUAI VIETNAM is hiring HR Operation (HR admin + general affairs + internal finance) via FYI — no experience required. Payroll and annual leave, social insurance filing, payslips, expense documentation and reporting, contract drafting and filing, internal requests. University degree, Korean reading and conversation (TOPIK 4 minimum), office software, introverted and independent working style, age 20–35 (female preferred). Onsite District 3, Mon–Fri 9–6, Korean holidays off, salary negotiable at interview.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'HR Operation', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · T2–T6 09:00–18:00 · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^becuai0922-hr-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi BECUAI VIETNAM — HR Operation (tiếng Hàn)',
+      ko: '[FYI] BECUAI 추천 명단에 선정되셨습니다 — HR Operation(한국어)',
+      en: "[FYI] You've been nominated to BECUAI — HR Operation (Korean)",
+    },
+    desc: 'BECUAI(V190) HR Operation recommend (9/22): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/becuai0922-hr-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>HR Operation</b> (HR Admin + Tổng vụ + Tài chính nội bộ) qua FYI — <b>không yêu cầu kinh nghiệm</b>. Công việc: quản lý lương &amp; nghỉ phép năm, khai báo BHXH, lập phiếu lương; thu thập hóa đơn/chứng từ, tổng hợp &amp; báo cáo chi tiêu; soạn thảo &amp; lưu trữ hợp đồng, tiếp nhận yêu cầu nội bộ. Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn đọc hiểu, giao tiếp khá (tối thiểu TOPIK 4)</b>, tin học văn phòng, tính cách hướng nội &amp; làm việc độc lập; 20–35 tuổi (ưu tiên nữ). <b>Thứ 2–Thứ 6, 09:00–18:00</b> tại Quận 3 (P. Bàn Cờ), nghỉ lễ Hàn Quốc. Lương thỏa thuận khi phỏng vấn.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>HR Operation</b>(HR 행정+총무+내부 재무) 채용 중, 무경력 가능. 급여·연차 관리, 사회보험 신고, 급여명세 작성, 비용 증빙 수집·지출 보고, 계약서 작성·관리, 내부 요청 접수. 대졸·한국어 독해/회화(최소 TOPIK 4)·사무 SW, 내향적·독립 근무 성향, 20~35세(여성 우대). 3군 온사이트 월~금 09–18시, 한국 공휴일 휴무, 급여 면접 시 협의.',
+        en: 'BECUAI VIETNAM is hiring HR Operation (HR admin + general affairs + internal finance) via FYI — no experience required. Payroll and annual leave, social insurance filing, payslips, expense documentation and reporting, contract drafting and filing, internal requests. University degree, Korean reading and conversation (TOPIK 4 minimum), office software, introverted and independent working style, age 20–35 (female preferred). Onsite District 3, Mon–Fri 9–6, Korean holidays off, salary negotiable at interview.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'HR Operation', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · T2–T6 09:00–18:00 · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
