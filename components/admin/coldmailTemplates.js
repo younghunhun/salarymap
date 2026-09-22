@@ -4248,6 +4248,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'B', company: 'BECUAI VIETNAM', title: 'HR Operation', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · T2–T6 09:00–18:00 · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^labtobottle0922-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — AI Digital Marketing Developer tại Labtobottle',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Labtobottle AI 디지털 마케팅 개발자',
+      en: "[FYI] You've been nominated — AI Digital Marketing Developer at Labtobottle",
+    },
+    desc: 'Labtobottle(R206) AI Digital Marketing Developer recommend (9/22 등록 당일, 456명): 비공개 프레임 — 한국 하이테크 양조 스타트업(KAIST), 생성형 AI API 기반 마케팅 자동화·SNS 운영·웹/SEO·콘텐츠 디자인·베트남 로컬 마케팅. 영어 or 한국어, API/LLM 경험, 풀스택 프로젝트. HCM/HN/ĐN onsite 15-20M. 다음 주 다낭 방문 결정이 걸려 당일 발송(호현). 컷=3개 도시+미기재 × ≤6y. hybrid 그룹(마케팅×AI×코드 ∪ 마케팅직군×AI 도구 ∪ 개발직군×마케팅 텍스트) 우선 → mkt 그룹(마케팅 직군 × 디지털/SNS 텍스트 × 영어or한국어 cert). 유저 결정 "영어 혹은 한국어 정도로 가서 464". 개발자×LLM(마케팅 무관) 271은 15-20M·마케팅 비중 미스매치라 제외. 당일 겹침 89(야오하 2차 마케터 중복)·동일인 2계정 8 제외, 7일 게이트 미적용. 가점=마케팅·AI·코드 3축 > 언어 cert > 다낭 거주. 이벤트 meta.city 로 도시별 반응 추적.',
+    source: 'scripts/outreach/labtobottle0922-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Labtobottle</b> — startup công nghệ rượu cao cấp (Hi-tech K-Brewery) của Hàn Quốc, thành lập bởi đội ngũ Kỹ thuật Hóa học KAIST — đang tuyển <b>AI Digital Marketing Developer</b> qua FYI. Công việc: xây dựng hệ thống marketing dựa trên AI (tự động hóa nội dung SNS, copy quảng cáo, hình ảnh &amp; video bằng Generative AI API), vận hành &amp; phân tích SNS (Facebook, Instagram, TikTok, YouTube), website/landing page, SEO &amp; GA, nội dung digital (Photoshop, Canva, Figma, CapCut, AI Tool), localize marketing cho Việt Nam. Yêu cầu: SNS marketing &amp; AI, <b>tiếng Anh hoặc tiếng Hàn</b>, tích hợp API &amp; xử lý dữ liệu, đã dùng AI API/LLM &amp; ChatGPT/Claude/Gemini, dự án full-stack, network marketing/sales. Onsite <b>TP.HCM, Hà Nội hoặc Đà Nẵng</b>. Lương <b>15–20 triệu ₫/tháng</b>.',
+        ko: 'KAIST 화공 출신이 세운 한국 하이테크 양조 스타트업 <b>Labtobottle</b>이 FYI를 통해 <b>AI 디지털 마케팅 개발자</b>를 채용 중. 생성형 AI API로 SNS 콘텐츠·광고 카피·이미지·영상 제작 자동화, SNS 채널 운영·분석, 웹/랜딩·SEO·GA, 디지털 콘텐츠 디자인, 베트남 로컬 마케팅·인플루언서 협업. 요건은 SNS·AI 마케팅, 영어 또는 한국어, API 연동·데이터 처리, AI API/LLM·ChatGPT 등 활용 경험, 풀스택 프로젝트, 마케팅·영업 네트워크. HCM/하노이/다낭 온사이트, 월 1,500만~2,000만 동.',
+        en: 'Labtobottle — a Korean hi-tech K-brewery startup founded by KAIST chemical engineers — is hiring an AI Digital Marketing Developer via FYI. Build AI-driven marketing automation (SNS content, ad copy, image and video via generative AI APIs), run and analyze SNS channels, manage web/landing pages, SEO and GA, produce digital content, and localize marketing for Vietnam. Requires SNS and AI marketing skills, English or Korean, API integration and data handling, hands-on AI API/LLM and ChatGPT/Claude/Gemini use, full-stack project experience, marketing/sales network. Onsite in HCMC, Hanoi or Da Nang, 15–20M VND/month.',
+      },
+      initial: 'L', company: 'Labtobottle', title: 'AI Digital Marketing Developer', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 15–20 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^labtobottle0922-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Labtobottle — AI Digital Marketing Developer',
+      ko: '[FYI] Labtobottle 추천 명단에 선정되셨습니다 — AI 디지털 마케팅 개발자',
+      en: "[FYI] You've been nominated to Labtobottle — AI Digital Marketing Developer",
+    },
+    desc: 'Labtobottle(R206) AI Digital Marketing Developer recommend (9/22): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/labtobottle0922-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Labtobottle</b> — startup công nghệ rượu cao cấp (Hi-tech K-Brewery) của Hàn Quốc, thành lập bởi đội ngũ Kỹ thuật Hóa học KAIST — đang tuyển <b>AI Digital Marketing Developer</b> qua FYI. Công việc: xây dựng hệ thống marketing dựa trên AI (tự động hóa nội dung SNS, copy quảng cáo, hình ảnh &amp; video bằng Generative AI API), vận hành &amp; phân tích SNS (Facebook, Instagram, TikTok, YouTube), website/landing page, SEO &amp; GA, nội dung digital (Photoshop, Canva, Figma, CapCut, AI Tool), localize marketing cho Việt Nam. Yêu cầu: SNS marketing &amp; AI, <b>tiếng Anh hoặc tiếng Hàn</b>, tích hợp API &amp; xử lý dữ liệu, đã dùng AI API/LLM &amp; ChatGPT/Claude/Gemini, dự án full-stack, network marketing/sales. Onsite <b>TP.HCM, Hà Nội hoặc Đà Nẵng</b>. Lương <b>15–20 triệu ₫/tháng</b>.',
+        ko: 'KAIST 화공 출신이 세운 한국 하이테크 양조 스타트업 <b>Labtobottle</b>이 FYI를 통해 <b>AI 디지털 마케팅 개발자</b>를 채용 중. 생성형 AI API로 SNS 콘텐츠·광고 카피·이미지·영상 제작 자동화, SNS 채널 운영·분석, 웹/랜딩·SEO·GA, 디지털 콘텐츠 디자인, 베트남 로컬 마케팅·인플루언서 협업. 요건은 SNS·AI 마케팅, 영어 또는 한국어, API 연동·데이터 처리, AI API/LLM·ChatGPT 등 활용 경험, 풀스택 프로젝트, 마케팅·영업 네트워크. HCM/하노이/다낭 온사이트, 월 1,500만~2,000만 동.',
+        en: 'Labtobottle — a Korean hi-tech K-brewery startup founded by KAIST chemical engineers — is hiring an AI Digital Marketing Developer via FYI. Build AI-driven marketing automation (SNS content, ad copy, image and video via generative AI APIs), run and analyze SNS channels, manage web/landing pages, SEO and GA, produce digital content, and localize marketing for Vietnam. Requires SNS and AI marketing skills, English or Korean, API integration and data handling, hands-on AI API/LLM and ChatGPT/Claude/Gemini use, full-stack project experience, marketing/sales network. Onsite in HCMC, Hanoi or Da Nang, 15–20M VND/month.',
+      },
+      initial: 'L', company: 'Labtobottle', title: 'AI Digital Marketing Developer', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 15–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
