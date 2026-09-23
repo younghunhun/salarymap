@@ -27,6 +27,7 @@ function buildNav(lang) {
         // /admin/lang-scores URL 은 살아 있다(명단이 길어 전체 화면으로 볼 때).
         { label: L('인재 공급', 'Supply', 'Cung ứng viên'), pathname: '/admin/dashboard', tab: 'supply' },
         { label: L('광고메일', 'Recommend', 'Email đề xuất'), pathname: '/admin/dashboard', tab: 'recommend' },
+        { label: L('블랙리스트', 'Blacklist', 'Danh sách đen'), pathname: '/admin/dashboard', tab: 'blacklist' },
         { label: L('연봉 인증', 'Verifications', 'Xác minh lương'), pathname: '/admin/dashboard', tab: 'verifications' },
         { label: L('커뮤니티', 'Community', 'Cộng đồng'), pathname: '/admin/dashboard', tab: 'community' },
       ],

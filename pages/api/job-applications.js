@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { isBlacklisted } from '../../lib/blacklist'
 import { notifyTeamNewApplication } from '../../lib/notifyTeamNewApplication'
 
 const supabase = createClient(
@@ -44,6 +45,12 @@ export default async function handler(req, res) {
   if (token) {
     const { data: { user } } = await supabase.auth.getUser(token)
     if (user) userId = user.id
+  }
+
+  // 블랙리스트(면접 노쇼 등) — user_id 또는 지원 이메일이 candidate_blacklist 에 있으면 접수하지 않는다.
+  // 사유는 응답에 싣지 않는다(중립 문구만). 클라이언트는 error 문자열을 그대로 alert 하므로 사람이 읽을 문장으로 준다.
+  if (await isBlacklisted(supabase, { userId, email: applicantEmail })) {
+    return res.status(403).json({ error: 'not_eligible', message: 'Hiện tại bạn không thể ứng tuyển qua FYI. Vui lòng liên hệ đội ngũ FYI nếu cần hỗ trợ.' })
   }
 
   // 유입 플랫폼: 앱(salary-fyi)은 모든 요청에 X-Client-Platform: app 헤더를 붙인다.

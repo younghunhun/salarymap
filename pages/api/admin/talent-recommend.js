@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { isBlacklisted } from '../../../lib/blacklist'
 import { verifyAdminOrDevStub } from './check'
 import { sendPush } from '../../../lib/push'
 
@@ -172,6 +173,8 @@ export default async function handler(req, res) {
 
   const { data: { user }, error: userErr } = await supabase.auth.admin.getUserById(userId)
   if (userErr || !user?.email) return res.status(404).json({ error: 'User email not found' })
+  // 블랙리스트(면접 노쇼 등)는 추천하지 않는다 — 인재풀 목록에서는 이미 빠지지만 URL 직접 호출도 막는다.
+  if (await isBlacklisted(supabase, { userId, email: user.email })) return res.status(403).json({ error: 'blacklisted' })
 
   const { data: prof } = await supabase
     .from('user_profiles').select('full_name').eq('id', userId).maybeSingle()

@@ -815,7 +815,8 @@ export default function JobsPage() {
         return
       }
       const err = await applyRes.json().catch(() => ({}))
-      alert(t('jobs.applyError', { error: err.error || 'unknown error' }))
+      // 403 not_eligible = 블랙리스트(면접 노쇼 등) — 사유는 안 보여주고 안내만
+      alert(err.error === 'not_eligible' ? t('jobs.notEligible') : t('jobs.applyError', { error: err.error || 'unknown error' }))
       return
     }
     setApplying(false)

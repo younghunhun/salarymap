@@ -29,6 +29,16 @@ export const openai = new OpenAI({ apiKey: env.OPENAI_API_KEY })
 
 // PostgREST 는 한 번에 최대 1000행만 준다 — 인재풀(1,700+)처럼 1000행을 넘는 테이블을
 // 그냥 select 하면 뒷부분이 조용히 잘린다. 대상 산정은 반드시 이걸로 전부 읽을 것.
+// 후보자 블랙리스트(면접 노쇼 등, candidate_blacklist) — recommend 콜드메일 대상 산정에서 unsub 과 같이 전역 제외한다.
+//   const bl = await fetchBlacklist(); ... if (bl.has(p)) continue
+export async function fetchBlacklist() {
+  const { data, error } = await sb.from('candidate_blacklist').select('user_id, email').range(0, 9999)
+  if (error) console.error('blacklist fetch:', error.message)
+  const ids = new Set(), emails = new Set()
+  for (const r of data || []) { if (r.user_id) ids.add(r.user_id); if (r.email) emails.add(String(r.email).toLowerCase()) }
+  return { ids, emails, has: (p) => ids.has(p.id) || emails.has(String(p.email || '').toLowerCase()) }
+}
+
 export async function fetchAll(build) {
   const PAGE = 1000
   let all = [], from = 0

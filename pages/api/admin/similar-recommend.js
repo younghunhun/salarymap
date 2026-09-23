@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { fetchBlacklist } from '../../../lib/blacklist'
 import { verifyAdminOrDevStub } from './check'
 import { sendPush } from '../../../lib/push'
 
@@ -180,8 +181,9 @@ export async function computeMatches(days, { maxJobCreatedAt } = {}) {
     ;(jobsByRole[j.role] = jobsByRole[j.role] || []).push(j)
   }
 
-  // 3) 이미 발송한 (사람, 공고) — 중복 제외용
+  // 3) 이미 발송한 (사람, 공고) — 중복 제외용 + 블랙리스트(면접 노쇼 등)
   const sentKeys = await fetchSentKeys()
+  const blacklist = await fetchBlacklist(supabase)
 
   // 4) 지원자별 집계 (key = user_id || email)
   const byApplicant = new Map()
@@ -206,6 +208,7 @@ export async function computeMatches(days, { maxJobCreatedAt } = {}) {
   const result = []
   for (const [key, g] of byApplicant) {
     if (!g.email) continue // 발송할 이메일 없으면 스킵
+    if (blacklist.has(g)) continue // 블랙리스트는 추천 안 함
     const seen = new Set()
     const jobs = []
     for (const role of g.roles) {

@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { verifyAdminOrDevStub } from './check'
 import { isExcludedEmail } from '../../../lib/admin-metrics'
+import { fetchBlacklist } from '../../../lib/blacklist'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -51,6 +52,10 @@ export default async function handler(req, res) {
     }
 
     if (error) return res.status(500).json({ error: error.message })
+
+    // 블랙리스트(면접 노쇼 등)는 인재풀에서 뺀다 — 여기서 담당자 추천이 나가므로. 명단은 ?tab=blacklist 에서 관리.
+    const bl = await fetchBlacklist(supabase)
+    data = data.filter((p) => !bl.has(p))
 
     // 연봉 뱃지 인증(salary_verifications approved)으로도 연봉을 안다 — 프로필 미기입자 폴백.
     // 연봉위저드 제출(submissions)은 폴백에서 뺐다(8/13 유저 지시) — 익명 통계용 자기신고라

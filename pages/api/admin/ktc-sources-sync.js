@@ -1,5 +1,5 @@
 import { verifyAdminOrDevStub } from './check'
-import { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, syncFyiRejections } from '../../../lib/ktcCandidatesSync'
+import { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, syncFyiRejections, syncBlacklist } from '../../../lib/ktcCandidatesSync'
 
 // KTC 소싱 탭의 "동기화" 버튼 — 클릭 한 번으로 세 단계를 순서대로 실행:
 //  ① ktc-support 시트→DB 동기화 트리거 (완료까지 대기)
@@ -31,7 +31,12 @@ export default async function handler(req, res) {
       // 입사자(ktc_hires)는 마이그레이션 전일 수 있으니 실패해도 나머지는 유지
       try { hires = await syncKtcHires() } catch (e) { console.error('syncKtcHires:', e.message) }
     }
-    res.json({ ok: true, sheet, ...stats, applications: apps ? apps.total : null, hires: hires ? hires.total : null, fyiPushed: push.pushed })
+    // 면접 노쇼 블랙리스트(ops 시트 'Blacklist' 탭) — 실패해도 나머지는 유지
+    let blacklist = null
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
+      try { blacklist = await syncBlacklist() } catch (e) { console.error('syncBlacklist:', e.message) }
+    }
+    res.json({ ok: true, sheet, ...stats, applications: apps ? apps.total : null, hires: hires ? hires.total : null, fyiPushed: push.pushed, blacklist: blacklist ? blacklist.total : null })
   } catch (e) {
     console.error('ktc-sources-sync:', e)
     res.status(500).json({ error: e.message })
