@@ -22,14 +22,15 @@ const vnDay = (iso) => new Date(new Date(iso).getTime() + ICT_OFFSET_MS).toISOSt
 //   recommend — 기가입 회원 → 특정 공고 지원
 //   photo     — 이력서 보유·사진 없는 회원 → 프로필 사진 등록(원클릭 랜딩)
 //   salary    — 이력서 보유·경력 1년+ 회원 → 현/직전 월급 입력(무로그인 랜딩)
-const GROUP_ORDER = ['signup', 'register', 'resume', 'recommend', 'photo', 'salary']
+const GROUP_ORDER = ['signup', 'register', 'resume', 'recommend', 'photo', 'salary', 'screen']
 const groupOf = (name) =>
   /^coldmail-ktc/.test(name) ? 'signup'
     : /^resume-register/.test(name) ? 'register'
       : /recommend/.test(name) || /^kyndof/.test(name) ? 'recommend'
         : /^photo/.test(name) ? 'photo'
           : /^salary/.test(name) ? 'salary'
-            : 'resume'
+            : /^screen/.test(name) ? 'screen'
+              : 'resume'
 
 async function fetchAll(build) {
   const PAGE = 1000
@@ -53,7 +54,7 @@ export default async function handler(req, res) {
     const [evts, targetHead] = await Promise.all([
       fetchAll(() => supabase.from('events')
         .select('event, user_id, created_at, meta')
-        .in('event', ['coldmail_public_sent', 'coldmail_public_click', 'coldmail_public_convert', 'coldmail_job_apply', 'recommend_sent', 'recommend_click', 'coldmail_resume_sent', 'coldmail_resume_click', 'coldmail_resume_upload', 'coldmail_photo_sent', 'photo_claim_view', 'photo_claim_done', 'coldmail_salary_sent', 'coldmail_salary_click', 'coldmail_salary_fill'])
+        .in('event', ['coldmail_public_sent', 'coldmail_public_click', 'coldmail_public_convert', 'coldmail_job_apply', 'recommend_sent', 'recommend_click', 'coldmail_resume_sent', 'coldmail_resume_click', 'coldmail_resume_upload', 'coldmail_photo_sent', 'photo_claim_view', 'photo_claim_done', 'coldmail_salary_sent', 'coldmail_salary_click', 'coldmail_salary_fill', 'coldmail_screen_sent', 'coldmail_screen_click', 'coldmail_screen_answer'])
         .order('created_at')),
       // 아직 비공개인(= 앞으로 보낼 수 있는) 이력서 보유자 수 — 라이브 참고값
       supabase.from('user_profiles').select('id', { count: 'exact', head: true })
@@ -147,6 +148,17 @@ export default async function handler(req, res) {
       } else if (e.event === 'coldmail_salary_click') {
         if (uid) c.click.add(uid)
       } else if (e.event === 'coldmail_salary_fill') {
+        if (uid) c.convert.add(uid)
+      } else if (e.event === 'coldmail_screen_sent') {
+        // 원탭 스크리닝(/screen, 드론 조립 경험 등) — 전환 = 답변. 예 답 뒤 원탭 지원은 quick-apply 가
+        // 같은 캠페인명으로 coldmail_job_apply 를 남기므로 지원 건수 컬럼에 자동으로 잡힌다.
+        if (uid) c.sent.add(uid)
+        const day = vnDay(e.created_at)
+        if (!c.firstSentDay || day < c.firstSentDay) c.firstSentDay = day
+        if (!c.lastSentDay || day > c.lastSentDay) c.lastSentDay = day
+      } else if (e.event === 'coldmail_screen_click') {
+        if (uid) c.click.add(uid)
+      } else if (e.event === 'coldmail_screen_answer') {
         if (uid) c.convert.add(uid)
       }
     }

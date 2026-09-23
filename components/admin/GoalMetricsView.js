@@ -857,6 +857,12 @@ const CAMPAIGN_GROUPS = [
     enDesc: 'Members with a resume and 1+ yr experience · convert = entered current/last salary (no-login landing)',
     convKo: '입력', convEn: 'Filled',
   },
+  {
+    key: 'screen', ko: '⑦ 원탭 스크리닝', en: '(7) One-tap screening',
+    koDesc: '이력서에 없는 경험(드론 조립 등)을 추천 전에 한 번 묻는 메일 · 클릭 = 랜딩 조회 · 전환 = 답변 · 지원 건수 = "예" 뒤 원탭 지원',
+    enDesc: 'Asks one question a CV cannot answer before nominating · click = landing view · convert = answered · applies = one-tap apply after "yes"',
+    convKo: '응답', convEn: 'Answered',
+  },
 ]
 
 // 그룹이 정한 소스에서 전환 인원을 꺼낸다(공개전환 = converted / 추천 = 지원자 수).
