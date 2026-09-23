@@ -48,9 +48,9 @@ export default async function handler(req, res) {
   }
 
   // 블랙리스트(면접 노쇼 등) — user_id 또는 지원 이메일이 candidate_blacklist 에 있으면 접수하지 않는다.
-  // 사유는 응답에 싣지 않는다(중립 문구만). 클라이언트는 error 문자열을 그대로 alert 하므로 사람이 읽을 문장으로 준다.
+  // 문구는 '노쇼·직전취소로 영구 제한, 번복 없음'을 명시한다(유저 결정 9/23) — 얼버무리면 문의만 늘어난다.
   if (await isBlacklisted(supabase, { userId, email: applicantEmail })) {
-    return res.status(403).json({ error: 'not_eligible', message: 'Hiện tại bạn không thể ứng tuyển qua FYI. Vui lòng liên hệ đội ngũ FYI nếu cần hỗ trợ.' })
+    return res.status(403).json({ error: 'not_eligible', message: 'Tài khoản của bạn đã bị khóa ứng tuyển trên FYI vì hủy phỏng vấn vào phút chót hoặc không đến buổi phỏng vấn đã hẹn. Quyết định này không thể thay đổi.' })
   }
 
   // 유입 플랫폼: 앱(salary-fyi)은 모든 요청에 X-Client-Platform: app 헤더를 붙인다.
