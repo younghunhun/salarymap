@@ -2,7 +2,8 @@
 // K23 필수요건 "드론 조립 경력 2년+"를 이력서에 적은 사람은 풀 4,358명 중 0명(9/23 실측). 드론 조립은 이력서에
 // 잘 안 쓰는 경험이라(취미·자작·군복무·전 직장 부업무), 인접 풀에 "해봤나"만 한 번 묻고 yes 에게 recommend 를 보낸다.
 // 대상: 메카트로닉스·로봇·임베디드·전자·조립/납땜 텍스트 시그널 (174 + 조립 13 + 드론 인접 7, 중복 제거) − likelion − unsub − 기발송.
-// 메일 버튼 3개(yes2/yes/no) → /screen?q=drone 랜딩에서 확인 1탭 → events(coldmail_screen_answer). 프로필 컬럼 없음.
+// 메일 버튼 3개(yes2/yes/no) → /screen?q=drone&j=<K23> 랜딩에서 확인 1탭 → events(coldmail_screen_answer). 프로필 컬럼 없음.
+// 9/23 K23 공고 등록됨 → 랜딩에 j= 를 실어 "예" 답 직후 원탭 지원 버튼을 띄운다(유저 결정: 답만 받고 끝내지 않는다). 급여는 "최소 199만원 이상".
 // 퍼널: coldmail_screen_sent → coldmail_screen_click → coldmail_screen_answer. 집계는 scripts/outreach/screen-results.mjs.
 // 카피는 포지션(한국 근무·한국 기준 급여 ≈ 36M ₫/월)을 앞세운다 — 답할 이유가 있어야 누른다.
 //
@@ -20,6 +21,7 @@ const testTo = flag('test', null)
 const doSend = args.includes('--send')
 const maxN = flag('max', null) ? parseInt(flag('max'), 10) : null
 const Q = 'drone'
+const JOB_ID = '450912ea-0858-4e29-b8e6-38e4edacec42' // Argosdyne Kỹ thuật viên sản xuất Drone (K23, 한국)
 const CAMPAIGN = String(flag('campaign', 'screen-drone0923'))
 const SITE = String(flag('site', env.NEXT_PUBLIC_SITE_URL || 'https://salary-fyi.com')).replace(/\/$/, '')
 const FROM = env.RESEND_FROM || 'FYI <hello@salary-fyi.com>'
@@ -43,13 +45,14 @@ const COPY = {
   },
   hi: { vi: (n) => `Chào ${n},`, ko: (n) => `안녕하세요 ${n}님,` },
   p1: {
-    vi: 'FYI đang cân nhắc <b>đề cử bạn</b> cho vị trí <b>Nhân viên dây chuyền sản xuất drone</b> tại <b>Argosdyne</b> — công ty Hàn Quốc phát triển nền tảng drone vận hành tự động bằng Edge AI (drone · trạm · GCS), đối tác Qualcomm duy nhất tại Hàn Quốc, khách hàng là quốc phòng · cảnh sát · cứu hỏa. Công việc: lắp ráp drone, nạp firmware, bay thử, kiểm tra; quản lý chất lượng vật tư và đồ gá trên dây chuyền. <b>Làm việc tại Hàn Quốc, nhân viên chính thức, lương theo mặt bằng Hàn Quốc</b> (khoảng <b>1.990.000 KRW ≈ 36 triệu ₫/tháng</b>). Yêu cầu: tốt nghiệp THPT trở lên, <b>kinh nghiệm lắp ráp drone từ 2 năm</b>. Ưu tiên: biết hàn linh kiện, có chứng chỉ bay drone, dùng được ERP.',
-    ko: 'FYI가 회원님을 <b>Argosdyne</b>의 <b>드론 생산라인 팀원</b> 포지션에 <b>추천하려고 검토 중</b>입니다. Argosdyne은 Edge AI 기반 드론 무인 운영 플랫폼(드론·스테이션·GCS)을 개발하는 한국 기업으로 국내 유일 Qualcomm 파트너이며, 국방·경찰·소방이 고객입니다. 업무는 드론 조립·펌웨어·비행·검사와 라인 자재·치공구 품질관리. <b>한국 근무, 정규직, 한국 기준 급여</b>(약 <b>199만원 ≈ 36M ₫/월</b>). 요건은 고졸 이상, <b>드론 조립 경력 2년 이상</b>. 우대는 납땜, 드론 비행자격증, ERP.',
+    vi: 'FYI đang cân nhắc <b>đề cử bạn</b> cho vị trí <b>Nhân viên dây chuyền sản xuất drone</b> tại <b>Argosdyne</b> — công ty Hàn Quốc phát triển nền tảng drone vận hành tự động bằng Edge AI (drone · trạm · GCS), đối tác Qualcomm duy nhất tại Hàn Quốc, khách hàng là quốc phòng · cảnh sát · cứu hỏa. Công việc: lắp ráp drone, nạp firmware, bay thử, kiểm tra; quản lý chất lượng vật tư và đồ gá trên dây chuyền. <b>Làm việc tại Hàn Quốc, nhân viên chính thức, lương theo mặt bằng Hàn Quốc</b> (<b>tối thiểu 1.990.000 KRW/tháng, tương đương từ 36 triệu ₫ trở lên</b> — có thể cao hơn theo kinh nghiệm). Yêu cầu: tốt nghiệp THPT trở lên, <b>kinh nghiệm lắp ráp drone từ 2 năm</b>. Ưu tiên: biết hàn linh kiện, có chứng chỉ bay drone, dùng được ERP.',
+    ko: 'FYI가 회원님을 <b>Argosdyne</b>의 <b>드론 생산라인 팀원</b> 포지션에 <b>추천하려고 검토 중</b>입니다. Argosdyne은 Edge AI 기반 드론 무인 운영 플랫폼(드론·스테이션·GCS)을 개발하는 한국 기업으로 국내 유일 Qualcomm 파트너이며, 국방·경찰·소방이 고객입니다. 업무는 드론 조립·펌웨어·비행·검사와 라인 자재·치공구 품질관리. <b>한국 근무, 정규직, 한국 기준 급여</b>(<b>최소 199만원/월 이상, 약 36M ₫부터</b> — 경력에 따라 상향). 요건은 고졸 이상, <b>드론 조립 경력 2년 이상</b>. 우대는 납땜, 드론 비행자격증, ERP.',
   },
   p2: {
     vi: 'CV của bạn có nền tảng kỹ thuật phù hợp, nhưng <b>chưa nói rõ bạn đã từng lắp ráp drone hay chưa</b> — và đây là điều kiện bắt buộc của công ty. Chỉ cần bấm <b>một nút bên dưới</b> — không cần đăng nhập, 10 giây. Nếu phù hợp, FYI sẽ gửi link ứng tuyển 1 chạm ngay.',
     ko: '회원님 이력서는 기술 배경은 맞는데 <b>드론을 조립해 보셨는지가 없어서요</b> — 회사의 필수 조건입니다. <b>아래 버튼 하나만</b> 눌러주세요 — 로그인 없이 10초. 맞으면 원탭 지원 링크를 바로 보내드립니다.',
   },
+  jd: { vi: 'Xem mô tả công việc đầy đủ →', ko: '공고 전체 보기 →' },
   thanks: { vi: 'Cảm ơn bạn!<br>— Đội ngũ FYI', ko: '감사합니다!<br>— FYI 팀 드림' },
   footer: { vi: 'Bạn nhận được email này vì đã đăng ký hồ sơ trên FYI.', ko: 'FYI에 이력서를 등록하셔서 이 메일을 받으셨습니다.' },
   unsub: { vi: 'Hủy nhận email', ko: '수신 거부' },
@@ -71,6 +74,7 @@ function emailHtml(name, urlFor, unsubUrl, lang) {
   <tr><td style="font-size:14px;line-height:1.65;color:#4a443c;padding-bottom:6px">${L(COPY.p2)}</td></tr>
   <tr><td style="font-size:13px;font-weight:700;color:#4a443c;padding:10px 0 2px">${SCREEN_QUESTIONS[Q].title[lang] || SCREEN_QUESTIONS[Q].title.vi}</td></tr>
   <tr><td style="padding:6px 0 6px"><table width="100%" cellpadding="0" cellspacing="0">${btns}</table></td></tr>
+  <tr><td align="center" style="font-size:12.5px;padding-top:6px"><a href="${SITE}/ktc/jobs/${JOB_ID}" style="color:#8a8073">${L(COPY.jd)}</a></td></tr>
   <tr><td style="font-size:14px;line-height:1.65;color:#4a443c;padding-top:14px">${L(COPY.thanks)}</td></tr>
   <tr><td style="font-size:11.5px;color:#a89f92;text-align:center;line-height:1.5;padding-top:20px">
     ${L(COPY.footer)}<br>— FYI · <a href="https://salary-fyi.com" style="color:#a89f92">salary-fyi.com</a>
@@ -92,6 +96,8 @@ ${strip(L(COPY.p2))}
 ${SCREEN_QUESTIONS[Q].title[lang] || SCREEN_QUESTIONS[Q].title.vi}
 ${btns}
 
+${strip(L(COPY.jd))} ${SITE}/ktc/jobs/${JOB_ID}
+
 ${strip(L(COPY.thanks))}
 
 ${strip(L(COPY.footer))}
@@ -100,7 +106,7 @@ ${strip(L(COPY.unsub))}: ${unsubUrl}`
 
 async function main() {
   const resend = new Resend(env.RESEND_API_KEY)
-  const landingUrl = (userId, cta) => `${SITE}/screen?t=${makeToken(userId, CAMPAIGN)}&q=${Q}&cta=${cta}`
+  const landingUrl = (userId, cta) => `${SITE}/screen?t=${makeToken(userId, CAMPAIGN)}&q=${Q}&cta=${cta}&j=${JOB_ID}`
   const unsubFor = (userId) => `${SITE}/api/coldmail/unsub?t=${makeToken(userId, CAMPAIGN)}`
 
   if (testTo) {

@@ -5,7 +5,10 @@ import { verifyToken } from '../lib/campaignToken'
 import { SCREEN_QUESTIONS } from '../lib/screenQuestions'
 
 /* 원탭 스크리닝 콜드메일 착지 페이지 — 로그인 없이 한 번 눌러 답한다.
-   /screen?t=<token(user_id)>&q=<질문 키>&cta=<답 값>
+   /screen?t=<token(user_id)>&q=<질문 키>&cta=<답 값>[&j=<공고 id>]
+
+   j 가 있으면 "예" 계열 답 뒤에 그 공고의 원탭 지원(/api/resume/recommend?t=&j=) 버튼을 바로 띄운다 —
+   스크리닝과 지원을 한 흐름으로 잇는다(드론 K23 교훈: 공고가 이미 열려 있으면 답만 받고 끝낼 이유가 없다).
 
    /worktype 와 같은 설계: cta 는 메일에서 누른 버튼이고 화면만 미리 맞춰준다. 저장은 반드시
    이 화면의 확인 버튼을 거친다 — 메일 보안 스캐너의 링크 프리페치를 사람의 답으로 세지 않기 위해.
@@ -31,11 +34,13 @@ export async function getServerSideProps({ query }) {
   } catch {}
 
   const values = def.answers.map((a) => a.value)
+  const j = /^[0-9a-f-]{36}$/i.test(String(query.j || '')) ? String(query.j) : null
   return {
     props: {
       valid: true,
       token: query.t,
       q,
+      j,
       cta: values.includes(String(query.cta)) ? String(query.cta) : null,
       uiLang: normLang(query.lang),
       name: prof.full_name || '',
@@ -59,6 +64,9 @@ const T = {
     fine: 'Câu trả lời chỉ dùng để quyết định có đề cử bạn cho vị trí này hay không.',
     doneHead: (n) => (n ? `Cảm ơn ${n}!` : 'Cảm ơn bạn!'),
     doneYes: 'Nếu bạn phù hợp, FYI sẽ gửi thông tin vị trí và link ứng tuyển 1 chạm trong 1–2 ngày tới.',
+    doneYesJob: 'Vị trí đang mở. CV đã đăng ký của bạn sẽ được gửi kèm — chỉ cần 1 chạm nữa.',
+    applyCta: 'Ứng tuyển 1 chạm →',
+    jdLink: 'Xem mô tả công việc đầy đủ',
     doneNo: 'Đã ghi nhận. Chúng tôi sẽ chỉ đề cử bạn cho những vị trí phù hợp.',
     doneCta: 'Xem vị trí có thể ứng tuyển ngay',
     errSave: 'Lưu không thành công. Vui lòng thử lại sau.',
@@ -75,6 +83,9 @@ const T = {
     fine: '답변은 이 포지션 추천 여부를 정하는 데만 사용됩니다.',
     doneHead: (n) => (n ? `감사합니다, ${n}님` : '감사합니다'),
     doneYes: '조건이 맞으면 1~2일 안에 포지션 정보와 원탭 지원 링크를 보내드릴게요.',
+    doneYesJob: '포지션이 열려 있어요. 등록된 이력서가 함께 전달됩니다 — 한 번만 더 누르면 지원 완료.',
+    applyCta: '원탭 지원하기 →',
+    jdLink: '공고 전체 보기',
     doneNo: '확인했습니다. 조건이 맞는 포지션에만 추천해 드릴게요.',
     doneCta: '지금 지원할 수 있는 공고 보기',
     errSave: '저장에 실패했어요. 잠시 후 다시 시도해 주세요.',
@@ -91,13 +102,16 @@ const T = {
     fine: 'Your answer is only used to decide whether to nominate you for this position.',
     doneHead: (n) => (n ? `Thanks, ${n}!` : 'Thank you!'),
     doneYes: 'If you fit, FYI will send the position details and a one-tap apply link within 1–2 days.',
+    doneYesJob: 'The position is open. Your registered CV goes with it — one more tap to apply.',
+    applyCta: 'Apply in one tap →',
+    jdLink: 'See the full job description',
     doneNo: 'Noted. We will only put you forward for positions that fit.',
     doneCta: 'See jobs you can apply to now',
     errSave: 'Could not save. Please try again in a moment.',
   },
 }
 
-export default function ScreenLanding({ valid, token, q, cta, uiLang, name }) {
+export default function ScreenLanding({ valid, token, q, j, cta, uiLang, name }) {
   const t = T[uiLang] || T.vi
   const def = SCREEN_QUESTIONS[q]
   const [answer, setAnswer] = useState(cta || null)
@@ -133,12 +147,20 @@ export default function ScreenLanding({ valid, token, q, cta, uiLang, name }) {
   }
 
   if (done) {
+    const yesJob = answer !== 'no' && j
     return (
       <Shell t={t}>
         <div className="wt-check">✓</div>
         <h1 className="wt-h">{t.doneHead(name)}</h1>
-        <p className="wt-sub">{answer === 'no' ? t.doneNo : t.doneYes}</p>
-        <a className="wt-btn" href="/jobs">{t.doneCta}</a>
+        <p className="wt-sub">{answer === 'no' ? t.doneNo : yesJob ? t.doneYesJob : t.doneYes}</p>
+        {yesJob ? (
+          <>
+            <a className="wt-btn" href={`/api/resume/recommend?t=${encodeURIComponent(token)}&j=${j}`}>{t.applyCta}</a>
+            <a className="wt-link" href={`/ktc/jobs/${j}`}>{t.jdLink}</a>
+          </>
+        ) : (
+          <a className="wt-btn" href="/jobs">{t.doneCta}</a>
+        )}
       </Shell>
     )
   }
