@@ -4284,6 +4284,78 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'L', company: 'Labtobottle', title: 'AI Digital Marketing Developer', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 15–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^becuai0923-hr-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên bộ phận Operation (tiếng Hàn) tại BECUAI VIETNAM',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — BECUAI 운영부서(한국어)',
+      en: "[FYI] You've been nominated — Operation staff (Korean) at BECUAI",
+    },
+    desc: 'BECUAI(V190) HR Operation recommend 2차 (9/23 JD 개정 반영, 70명): 비공개 프레임 — 개정 JD "한국어 4기술·회화 가능, TOPIK 불요" → 컷을 TOPIK 3급 수준 이상으로 완화. cert TOPIK3/중급 + 등급불명 표기 + cert 없음×한국어 전공/통번역 직군 + 1차에서 7일 게이트로 빠진 TOPIK4+. hcm 42 → remote 28. 초급 cert 22·텍스트 오탐 4 제외. 1차 수신 64·BECUAI 지원자 21·블랙리스트 제외. 카피는 개정 JD(한베 면접, 외부 서비스 처리→진도 관리·보고, 기본 회계·VAT·구매, Excel·AI, 한국어 수당)로 재작성.',
+    source: 'scripts/outreach/becuai0923-hr-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên bộ phận Operation</b> (HR Operation) qua FYI — <b>không yêu cầu kinh nghiệm</b>, phỏng vấn bằng tiếng Hàn và tiếng Việt. Công việc: theo dõi tiến độ &amp; báo cáo Recruitment, C&amp;B, Payroll, PIT, BHXH, Training, hành chính (công ty dùng dịch vụ riêng xử lý nghiệp vụ); kế toán cơ bản &amp; quản lý quỹ/thu chi; mua sắm thiết bị, văn phòng phẩm; xuất hóa đơn VAT; hỗ trợ Giám đốc; trao đổi với quản lý người Hàn. Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn tốt 4 kỹ năng, giao tiếp được (không yêu cầu TOPIK)</b>, trầm tĩnh, cẩn thận, làm việc độc lập &amp; báo cáo rõ ràng, thành thạo Excel &amp; công cụ AI. <b>Thứ 2–Thứ 6, 09:00–18:00</b> tại Quận 3. Lương thỏa thuận, thử việc 2 tháng 85%, <b>phụ cấp theo năng lực tiếng Hàn</b>.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>운영부서 직원(HR Operation)</b> 채용 중, 무경력 가능, 한국어·베트남어 면접. 채용·C&B·급여·PIT·사회보험·교육·행정은 외부 서비스가 처리하고 진도 관리·보고 위주, 기본 회계·자금 관리, 비품 구매, VAT 발행, 이사 지원, 한국인 관리자와 소통. 대졸·한국어 4기술 회화 가능(TOPIK 불요)·차분하고 독립적인 성향·Excel·AI 도구. 3군 온사이트 월~금 09–18시, 급여 협의, 수습 2개월 85%, 한국어 실력에 따른 수당.',
+        en: 'BECUAI VIETNAM is hiring an Operation staff (HR Operation) via FYI — no experience required, interview in Korean and Vietnamese. Track and report recruitment, C&B, payroll, PIT, social insurance, training and admin (an outside service handles the work), basic accounting and cash management, purchasing, VAT invoicing, support the director, communicate with Korean managers. University degree, good Korean in all four skills (no TOPIK required), calm and independent, Excel and AI tools. Onsite District 3, Mon–Fri 9–6, salary negotiable, 2-month probation at 85%, allowance by Korean level.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'Nhân viên bộ phận Operation (HR Operation)', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · T2–T6 09:00–18:00 · Lương thỏa thuận + phụ cấp tiếng Hàn', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^becuai0923-hr-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi BECUAI VIETNAM — Nhân viên bộ phận Operation (tiếng Hàn)',
+      ko: '[FYI] BECUAI 추천 명단에 선정되셨습니다 — 운영부서(한국어)',
+      en: "[FYI] You've been nominated to BECUAI — Operation staff (Korean)",
+    },
+    desc: 'BECUAI(V190) HR Operation recommend 2차 (9/23): 공개 프레임 — 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/becuai0923-hr-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>BECUAI VIETNAM</b> đang tuyển <b>Nhân viên bộ phận Operation</b> (HR Operation) qua FYI — <b>không yêu cầu kinh nghiệm</b>, phỏng vấn bằng tiếng Hàn và tiếng Việt. Công việc: theo dõi tiến độ &amp; báo cáo Recruitment, C&amp;B, Payroll, PIT, BHXH, Training, hành chính (công ty dùng dịch vụ riêng xử lý nghiệp vụ); kế toán cơ bản &amp; quản lý quỹ/thu chi; mua sắm thiết bị, văn phòng phẩm; xuất hóa đơn VAT; hỗ trợ Giám đốc; trao đổi với quản lý người Hàn. Yêu cầu: tốt nghiệp đại học, <b>tiếng Hàn tốt 4 kỹ năng, giao tiếp được (không yêu cầu TOPIK)</b>, trầm tĩnh, cẩn thận, làm việc độc lập &amp; báo cáo rõ ràng, thành thạo Excel &amp; công cụ AI. <b>Thứ 2–Thứ 6, 09:00–18:00</b> tại Quận 3. Lương thỏa thuận, thử việc 2 tháng 85%, <b>phụ cấp theo năng lực tiếng Hàn</b>.',
+        ko: '<b>BECUAI VIETNAM</b>이 FYI를 통해 <b>운영부서 직원(HR Operation)</b> 채용 중, 무경력 가능, 한국어·베트남어 면접. 채용·C&B·급여·PIT·사회보험·교육·행정은 외부 서비스가 처리하고 진도 관리·보고 위주, 기본 회계·자금 관리, 비품 구매, VAT 발행, 이사 지원, 한국인 관리자와 소통. 대졸·한국어 4기술 회화 가능(TOPIK 불요)·차분하고 독립적인 성향·Excel·AI 도구. 3군 온사이트 월~금 09–18시, 급여 협의, 수습 2개월 85%, 한국어 실력에 따른 수당.',
+        en: 'BECUAI VIETNAM is hiring an Operation staff (HR Operation) via FYI — no experience required, interview in Korean and Vietnamese. Track and report recruitment, C&B, payroll, PIT, social insurance, training and admin (an outside service handles the work), basic accounting and cash management, purchasing, VAT invoicing, support the director, communicate with Korean managers. University degree, good Korean in all four skills (no TOPIK required), calm and independent, Excel and AI tools. Onsite District 3, Mon–Fri 9–6, salary negotiable, 2-month probation at 85%, allowance by Korean level.',
+      },
+      initial: 'B', company: 'BECUAI VIETNAM', title: 'Nhân viên bộ phận Operation (HR Operation)', meta: 'Onsite · Q.3 (P. Bàn Cờ), TP.HCM · T2–T6 09:00–18:00 · Lương thỏa thuận + phụ cấp tiếng Hàn', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^sunrise0923-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Chuyên viên Sales tại Sunrise Vina',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Sunrise Vina B2B 영업',
+      en: "[FYI] You've been nominated — Sales Executive at Sunrise Vina",
+    },
+    desc: 'Sunrise Vina(V71) B2B 영업 recommend 2차 (9/23, 133명): 비공개 프레임 — 9/23 면접 당일 후보자 취소(타사 오퍼)로 기업이 CV 추가 요청. 1차 9/7 45 + 9/14 5 → 지원 4. 컷=HCM/HN/BD+미기재 × 1~8y(15-20M 밴드) × 영업(직군 필드 core 23 → 경력 텍스트 영업 직함 txt 110). 야오하 2차(9/22)와 58명 겹치나 다른 공고·급여대라 포함(7일 게이트 미적용). 인쇄·포장 도메인은 풀에 거의 없어 가점만. V71 기수신·지원자·블랙리스트·당일 겹침 5 제외. 가점=인쇄·포장·산업재 > 영어 cert > 지역 명시 > 1~3y.',
+    source: 'scripts/outreach/sunrise0923-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Sunrise Vina</b> — doanh nghiệp sản xuất Hàn Quốc — đang tuyển <b>Chuyên viên Sales (B2B)</b> qua FYI. Công việc: đi thị trường &amp; quảng bá sản phẩm tới khách hàng khu vực phụ trách, thiết lập &amp; duy trì quan hệ với khách hàng chính và người ra quyết định, cập nhật xu hướng thị trường &amp; đối thủ, thu thập phản hồi khách hàng. Yêu cầu: <b>kinh nghiệm sales 1–2 năm</b>, tiếng Anh căn bản; ưu tiên hiểu biết &amp; quan hệ trong <b>ngành in ấn bao bì</b>. <b>TP.HCM / Hà Nội / Bình Dương</b>, Thứ 2 đến trưa Thứ 7, chỉ đến nhà máy khi được yêu cầu, <b>có xe đưa đón</b>. Lương <b>15–20 triệu ₫</b>, deal theo năng lực, tăng lương hàng năm.',
+        ko: '한국계 제조사 <b>Sunrise Vina</b>가 FYI를 통해 <b>B2B 영업 담당</b>을 채용 중. 담당 지역 시장 방문·제품 홍보, 핵심 고객 및 의사결정자 관계 구축, 시장·경쟁사 동향 파악, 고객 피드백 수집. 영업 경력 1~2년, 기본 영어 회화, 인쇄·포장 업계 이해와 인맥 우대. HCM/하노이/빈즈엉, 월~토 오전, 공장은 요청 시만 방문, 통근 셔틀 제공. 월 1,500만~2,000만 동, 능력에 따라 협의, 연 1회 인상.',
+        en: 'Sunrise Vina — a Korean manufacturer — is hiring a B2B Sales Executive via FYI. Visit the market and promote products in your territory, build relationships with key accounts and decision makers, track market and competitor trends, collect customer feedback. Requires 1–2 years of sales experience and basic English; printing and packaging industry knowledge and network preferred. HCMC / Hanoi / Binh Duong, Mon to Sat noon, factory visits only on request, shuttle provided. 15–20M VND, negotiable, annual raise.',
+      },
+      initial: 'S', company: 'Sunrise Vina', title: 'Chuyên viên Sales', meta: 'Onsite · TP.HCM / Hà Nội / Bình Dương · 15–20 triệu ₫/tháng · Có xe đưa đón', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^sunrise0923-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Sunrise Vina — Chuyên viên Sales',
+      ko: '[FYI] Sunrise Vina 추천 명단에 선정되셨습니다 — B2B 영업',
+      en: "[FYI] You've been nominated to Sunrise Vina — Sales Executive",
+    },
+    desc: 'Sunrise Vina(V71) B2B 영업 recommend 2차 (9/23): 공개 프레임 — 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/sunrise0923-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Sunrise Vina</b> — doanh nghiệp sản xuất Hàn Quốc — đang tuyển <b>Chuyên viên Sales (B2B)</b> qua FYI. Công việc: đi thị trường &amp; quảng bá sản phẩm tới khách hàng khu vực phụ trách, thiết lập &amp; duy trì quan hệ với khách hàng chính và người ra quyết định, cập nhật xu hướng thị trường &amp; đối thủ, thu thập phản hồi khách hàng. Yêu cầu: <b>kinh nghiệm sales 1–2 năm</b>, tiếng Anh căn bản; ưu tiên hiểu biết &amp; quan hệ trong <b>ngành in ấn bao bì</b>. <b>TP.HCM / Hà Nội / Bình Dương</b>, Thứ 2 đến trưa Thứ 7, chỉ đến nhà máy khi được yêu cầu, <b>có xe đưa đón</b>. Lương <b>15–20 triệu ₫</b>, deal theo năng lực, tăng lương hàng năm.',
+        ko: '한국계 제조사 <b>Sunrise Vina</b>가 FYI를 통해 <b>B2B 영업 담당</b>을 채용 중. 담당 지역 시장 방문·제품 홍보, 핵심 고객 및 의사결정자 관계 구축, 시장·경쟁사 동향 파악, 고객 피드백 수집. 영업 경력 1~2년, 기본 영어 회화, 인쇄·포장 업계 이해와 인맥 우대. HCM/하노이/빈즈엉, 월~토 오전, 공장은 요청 시만 방문, 통근 셔틀 제공. 월 1,500만~2,000만 동, 능력에 따라 협의, 연 1회 인상.',
+        en: 'Sunrise Vina — a Korean manufacturer — is hiring a B2B Sales Executive via FYI. Visit the market and promote products in your territory, build relationships with key accounts and decision makers, track market and competitor trends, collect customer feedback. Requires 1–2 years of sales experience and basic English; printing and packaging industry knowledge and network preferred. HCMC / Hanoi / Binh Duong, Mon to Sat noon, factory visits only on request, shuttle provided. 15–20M VND, negotiable, annual raise.',
+      },
+      initial: 'S', company: 'Sunrise Vina', title: 'Chuyên viên Sales', meta: 'Onsite · TP.HCM / Hà Nội / Bình Dương · 15–20 triệu ₫/tháng · Có xe đưa đón', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
