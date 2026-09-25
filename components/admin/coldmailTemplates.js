@@ -4356,6 +4356,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'S', company: 'Sunrise Vina', title: 'Chuyên viên Sales', meta: 'Onsite · TP.HCM / Hà Nội / Bình Dương · 15–20 triệu ₫/tháng · Có xe đưa đón', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^poscoui0925-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Senior UI Designer tại POSCO DX VIETNAM (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — POSCO DX VIETNAM Senior UI Designer',
+      en: "[FYI] You've been nominated — Senior UI Designer at POSCO DX VIETNAM",
+    },
+    desc: 'POSCO DX VIETNAM Senior UI Designer(V195) recommend (9/25): 비공개 프레임 — onsite 7군(Cobi Tower I)·급여 협의·UI/UX 디자인 5년+ 필수·Figma/XD/Sketch·와이어프레임/프로토타입·HTML/CSS 친숙·디자인시스템 우대·영어 소통(한국어 우대). 컷=(Design 직군 or UI/UX 텍스트) × 경력 60개월+ × HCMC권/위치 미기재 × (UI/UX 텍스트 or Figma/XD/Sketch 명시) — 실측 33명(그래픽/영상만 16·타지역 22·3~5y 25는 제외). 언어는 게이트 제외(V187 교훈), 정렬 가점만.',
+    source: 'scripts/outreach/poscoui0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Senior UI Designer</b> qua FYI. Công việc: phối hợp với PM và đội phát triển để xác định chiến lược UI/UX; thiết kế wireframe, user flow, mockup, prototype và giao diện high-fidelity cho web &amp; mobile; xây dựng Design System, style guide, thư viện UI component; nghiên cứu UX, cải thiện usability. Yêu cầu: tối thiểu 5 năm kinh nghiệm UI/UX, thành thạo Figma/Adobe XD/Sketch, quen HTML/CSS/JS, làm việc Agile với đội phát triển. Ưu tiên: Design System, dùng AI trong thiết kế, dự án enterprise/ERP/MES, tiếng Anh tốt (tiếng Hàn là lợi thế). Phúc lợi: lương thưởng cạnh tranh, bảo hiểm PVI 24/7, cơ hội sang trụ sở POSCO DX Hàn Quốc, hỗ trợ học tiếng Hàn.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 ODC <b>POSCO DX VIETNAM</b>이 FYI를 통해 <b>Senior UI Designer</b>를 채용 중. PM·개발팀과 UI/UX 전략 수립, 웹·모바일 와이어프레임/유저플로우/프로토타입/하이파이 UI 설계, 디자인시스템·스타일가이드·컴포넌트 라이브러리 구축, UX 리서치. UI/UX 5년+ 필수, Figma/XD/Sketch, HTML/CSS/JS 친숙, Agile 협업. 디자인시스템·AI 활용·엔터프라이즈/ERP/MES 경험 우대, 영어 소통(한국어 우대). 7군 Cobi Tower I 온사이트, 급여 협의, PVI 상해보험·한국 본사 방문 기회·한국어 학습 지원.',
+        en: 'POSCO DX VIETNAM — the POSCO group offshore development center (ODC) working directly with Korea HQ — is hiring a Senior UI Designer via FYI. Define UI/UX strategy with PMs and developers, design wireframes/user flows/prototypes/high-fidelity UI for web & mobile, build and maintain design systems and component libraries, run UX research. Requires 5+ years of UI/UX, Figma/Adobe XD/Sketch, HTML/CSS/JS familiarity, Agile collaboration. Design systems, AI-assisted workflows, enterprise/ERP/MES projects and strong English (Korean a plus) preferred. Onsite District 7, salary negotiable, PVI insurance, Korea HQ visits, Korean lessons.',
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior UI Designer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^poscoui0925-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi POSCO DX VIETNAM — Senior UI Designer (TP.HCM)',
+      ko: '[FYI] POSCO DX VIETNAM 추천 명단에 선정되셨습니다 — Senior UI Designer',
+      en: "[FYI] You've been nominated to POSCO DX VIETNAM — Senior UI Designer",
+    },
+    desc: 'POSCO DX VIETNAM Senior UI Designer(V195) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/poscoui0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Senior UI Designer</b> (onsite Quận 7, TP.HCM, 5 năm+ UI/UX) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 ODC <b>POSCO DX VIETNAM</b>의 Senior UI Designer(7군 온사이트, UI/UX 5년+) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "POSCO DX VIETNAM Senior UI Designer (onsite District 7, HCMC, 5+ years UI/UX) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior UI Designer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
