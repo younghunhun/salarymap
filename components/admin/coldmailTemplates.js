@@ -4392,6 +4392,222 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior UI Designer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^systeel0925-recommend-sm-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Sales Manager tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 영업 관리자',
+      en: "[FYI] You've been nominated — Sales Manager at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Sales Manager(V200) recommend (9/25 Len 게재 당일): 비공개 프레임 — 하노이 Mễ Trì 온사이트·영업 3년+·철강/판넬/건자재 업계 우대·영어 회화·KPI 보너스. 컷=영업 직군/경력 × 경력 36개월+ × 하노이권/미기재(캐스케이드 1순위, 실측 62). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Sales Manager</b> (văn phòng Mễ Trì, Hà Nội) qua FYI. Yêu cầu: đại học ngành Kinh doanh/Marketing, từ 3 năm kinh nghiệm vị trí tương đương, ưu tiên ngành tôn thép/panel/VLXD/cửa/thiết bị công nghiệp, tiếng Anh giao tiếp. Lương &amp; thưởng KPI cạnh tranh, cơ hội thăng tiến nhanh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 하노이 사무소 <b>Sales Manager</b> — 경영/마케팅 대졸, 동일 직무 3년+, 철강/판넬/건자재 업계 우대, 영어 회화. 경쟁력 있는 급여·KPI 보너스, 빠른 승진.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Sales Manager (Me Tri, Hanoi). Business/Marketing degree, 3+ years in a similar role, steel/panel/construction-materials industry preferred, conversational English. Competitive salary and KPI bonus.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Sales Manager', meta: 'Onsite · Mễ Trì, Hà Nội · 3 năm+ · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-sm-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Sales Manager',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 영업 관리자',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Sales Manager",
+    },
+    desc: 'SY STEEL VINA Sales Manager(V200) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Sales Manager</b> (văn phòng Mễ Trì, Hà Nội) qua FYI. Yêu cầu: đại học ngành Kinh doanh/Marketing, từ 3 năm kinh nghiệm vị trí tương đương, ưu tiên ngành tôn thép/panel/VLXD/cửa/thiết bị công nghiệp, tiếng Anh giao tiếp. Lương &amp; thưởng KPI cạnh tranh, cơ hội thăng tiến nhanh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 하노이 사무소 <b>Sales Manager</b> — 경영/마케팅 대졸, 동일 직무 3년+, 철강/판넬/건자재 업계 우대, 영어 회화. 경쟁력 있는 급여·KPI 보너스, 빠른 승진.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Sales Manager (Me Tri, Hanoi). Business/Marketing degree, 3+ years in a similar role, steel/panel/construction-materials industry preferred, conversational English. Competitive salary and KPI bonus.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Sales Manager', meta: 'Onsite · Mễ Trì, Hà Nội · 3 năm+ · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-sales-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Salesman tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 영업(신입 가능)',
+      en: "[FYI] You've been nominated — Salesman at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Salesman(V199) recommend (9/25 Len 게재 당일): 비공개 프레임 — 하노이 Mễ Trì 온사이트·대졸·경제/무역/마케팅/경영 우대·신입 OK(교육 제공)·영어 회화. 컷=영업 직군/경력 × 하노이권/미기재(SM 배정 후 잔여, 실측 54). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Salesman</b> (văn phòng Mễ Trì, Hà Nội) qua FYI. Yêu cầu: tốt nghiệp đại học, ưu tiên kinh tế/ngoại thương/marketing/QTKD, tiếng Anh giao tiếp; chấp nhận sinh viên mới ra trường, sẽ được đào tạo. Lương thỏa thuận.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 하노이 사무소 <b>Salesman</b> — 대졸, 경제/무역/마케팅/경영 우대, 영어 회화, 신입 가능(교육 제공). 급여 협의.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Salesman (Me Tri, Hanoi). University degree, economics/trade/marketing/business preferred, conversational English; fresh graduates accepted and trained. Salary negotiable.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Salesman', meta: 'Onsite · Mễ Trì, Hà Nội · Chấp nhận mới ra trường · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-sales-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Salesman',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 영업(신입 가능)',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Salesman",
+    },
+    desc: 'SY STEEL VINA Salesman(V199) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Salesman</b> (văn phòng Mễ Trì, Hà Nội) qua FYI. Yêu cầu: tốt nghiệp đại học, ưu tiên kinh tế/ngoại thương/marketing/QTKD, tiếng Anh giao tiếp; chấp nhận sinh viên mới ra trường, sẽ được đào tạo. Lương thỏa thuận.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 하노이 사무소 <b>Salesman</b> — 대졸, 경제/무역/마케팅/경영 우대, 영어 회화, 신입 가능(교육 제공). 급여 협의.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Salesman (Me Tri, Hanoi). University degree, economics/trade/marketing/business preferred, conversational English; fresh graduates accepted and trained. Salary negotiable.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Salesman', meta: 'Onsite · Mễ Trì, Hà Nội · Chấp nhận mới ra trường · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-acct-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Kế toán thanh toán tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 회계(지급)',
+      en: "[FYI] You've been nominated — Kế toán thanh toán at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Kế toán thanh toán(V196) recommend (9/25 Len 게재 당일): 비공개 프레임 — 동나이 Nhơn Trạch 5공단 온사이트·회계 전공 대졸·Excel/회계 SW·영어 기본·무경력 교육·13개월차. 컷=(Finance 직군 or 회계 텍스트/전공) × 회계 전공 or 회계 직무경력 × 남부권(HCMC/동나이/빈즈엉/BR-VT/롱안)/미기재 × 비개발(실측 80). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Kế toán thanh toán</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI. Công việc: chi/thu tiền, đối chiếu công nợ, lập chứng từ thanh toán, theo dõi công nợ NCC &amp; khách hàng. Yêu cầu: đại học chuyên ngành Kế toán, thành thạo Excel &amp; phần mềm kế toán, tiếng Anh cơ bản, không có kinh nghiệm được đào tạo. Lương thỏa thuận, thưởng lễ Tết &amp; tháng 13, BHXH đầy đủ. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>지급 회계</b> — 지급/수금·채권채무 대사·증빙 작성. 회계 전공 대졸, Excel·회계 SW, 영어 기본, 무경력 교육 제공. 급여 협의, 명절 보너스·13개월차, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Payment Accountant (Nhon Trach 5 IZ, Dong Nai). Payments/receipts, AP/AR reconciliation, vouchers. Accounting degree, Excel and accounting software, basic English, no experience required (training provided). 13th-month bonus, full insurance.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Kế toán thanh toán', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Không cần kinh nghiệm · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-acct-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Kế toán thanh toán',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 회계(지급)',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Kế toán thanh toán",
+    },
+    desc: 'SY STEEL VINA Kế toán thanh toán(V196) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Kế toán thanh toán</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI. Công việc: chi/thu tiền, đối chiếu công nợ, lập chứng từ thanh toán, theo dõi công nợ NCC &amp; khách hàng. Yêu cầu: đại học chuyên ngành Kế toán, thành thạo Excel &amp; phần mềm kế toán, tiếng Anh cơ bản, không có kinh nghiệm được đào tạo. Lương thỏa thuận, thưởng lễ Tết &amp; tháng 13, BHXH đầy đủ. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>지급 회계</b> — 지급/수금·채권채무 대사·증빙 작성. 회계 전공 대졸, Excel·회계 SW, 영어 기본, 무경력 교육 제공. 급여 협의, 명절 보너스·13개월차, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Payment Accountant (Nhon Trach 5 IZ, Dong Nai). Payments/receipts, AP/AR reconciliation, vouchers. Accounting degree, Excel and accounting software, basic English, no experience required (training provided). 13th-month bonus, full insurance.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Kế toán thanh toán', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Không cần kinh nghiệm · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-wh-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên kho tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 창고 담당',
+      en: "[FYI] You've been nominated — Nhân viên kho at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Nhân viên kho(V197) recommend (9/25 Len 게재 당일): 비공개 프레임 — 동나이 Nhơn Trạch 5공단 온사이트·원자재 입출고/재고관리 경험·영어 기본. 컷=(Warehouse 직군 or 창고/재고/물류 직무경력 텍스트) × 남부권/미기재 × 비개발(실측 52, 회계 배정 후 잔여). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên kho</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI. Yêu cầu: có kinh nghiệm quản lý xuất – nhập – tồn kho nguyên vật liệu, tiếng Anh cơ bản. Lương thỏa thuận.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>창고 담당</b> — 원자재 입출고·재고관리 경험, 영어 기본. 급여 협의.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Warehouse Staff (Nhon Trach 5 IZ, Dong Nai). Raw-material inbound/outbound and inventory management experience, basic English. Salary negotiable.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên kho', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-wh-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Nhân viên kho',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 창고 담당',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Nhân viên kho",
+    },
+    desc: 'SY STEEL VINA Nhân viên kho(V197) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên kho</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI. Yêu cầu: có kinh nghiệm quản lý xuất – nhập – tồn kho nguyên vật liệu, tiếng Anh cơ bản. Lương thỏa thuận.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>창고 담당</b> — 원자재 입출고·재고관리 경험, 영어 기본. 급여 협의.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring a Warehouse Staff (Nhon Trach 5 IZ, Dong Nai). Raw-material inbound/outbound and inventory management experience, basic English. Salary negotiable.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên kho', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-qc-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên QC tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 품질관리(QC)',
+      en: "[FYI] You've been nominated — Nhân viên QC at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Nhân viên QC(V201) recommend (9/25 Len 게재 당일): 비공개 프레임 — 동나이 Nhơn Trạch 5공단 온사이트·전문대+·무경력 OK(A-Z 교육)·영어 기본·조식/중식 제공. 컷=(QC 직군 or 제조 QC 텍스트[직무경력/헤드라인, 소프트웨어 QA 제외]) × 남부권/미기재 × 비개발(실측 14). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên QC</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI — cơ hội cho fresher, đào tạo A-Z. Công việc: kiểm tra chất lượng nguyên vật liệu &amp; sản phẩm, theo dõi chất lượng sản xuất, xử lý vấn đề chất lượng. Yêu cầu: Cao đẳng trở lên, tiếng Anh cơ bản, tỉ mỉ – chính xác. Lương thỏa thuận cao, 2 bữa ăn, BHXH, khám sức khỏe. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>QC</b> — 신입 가능(A-Z 교육), 원자재·제품 품질검사, 생산 품질 모니터링. 전문대+, 영어 기본. 급여 협의, 식사 2식, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring QC Staff (Nhon Trach 5 IZ, Dong Nai), fresher-friendly with A-Z training. Inspect materials and products, monitor production quality. College degree+, basic English. 2 meals, insurance, health checks.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên QC', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Fresher · Đào tạo A-Z', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-qc-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Nhân viên QC',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 품질관리(QC)',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Nhân viên QC",
+    },
+    desc: 'SY STEEL VINA Nhân viên QC(V201) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên QC</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI — cơ hội cho fresher, đào tạo A-Z. Công việc: kiểm tra chất lượng nguyên vật liệu &amp; sản phẩm, theo dõi chất lượng sản xuất, xử lý vấn đề chất lượng. Yêu cầu: Cao đẳng trở lên, tiếng Anh cơ bản, tỉ mỉ – chính xác. Lương thỏa thuận cao, 2 bữa ăn, BHXH, khám sức khỏe. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>QC</b> — 신입 가능(A-Z 교육), 원자재·제품 품질검사, 생산 품질 모니터링. 전문대+, 영어 기본. 급여 협의, 식사 2식, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring QC Staff (Nhon Trach 5 IZ, Dong Nai), fresher-friendly with A-Z training. Inspect materials and products, monitor production quality. College degree+, basic English. 2 meals, insurance, health checks.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên QC', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Fresher · Đào tạo A-Z', tail: BENEFIT_PUBLIC,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-rd-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên R&D tại SY STEEL VINA',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — SY STEEL VINA 연구개발(R&D)',
+      en: "[FYI] You've been nominated — Nhân viên R&D at SY STEEL VINA",
+    },
+    desc: 'SY STEEL VINA Nhân viên R&D(V202) recommend (9/25 Len 게재 당일): 비공개 프레임 — 동나이 Nhơn Trạch 5공단 온사이트·전문대+·무경력 OK(A-Z 교육)·영어 기본·조식/중식 제공. 컷=R&D/연구/실험실 텍스트(직무경력/헤드라인/전공) × 남부권/미기재 × 비개발(실측 9). 언어 게이트 없음(가점만), 6공고 1인1통 캐스케이드 SM→Salesman→회계→창고→QC→R&D.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên R&amp;D</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI — cơ hội cho fresher, đào tạo A-Z. Công việc: nghiên cứu, phân tích &amp; đánh giá nguyên vật liệu và sản phẩm, thử nghiệm &amp; cải tiến, xử lý vấn đề phát sinh. Yêu cầu: Cao đẳng trở lên, tiếng Anh cơ bản, tỉ mỉ – tư duy logic. Lương thỏa thuận cao, 2 bữa ăn, BHXH, khám sức khỏe. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>R&amp;D</b> — 신입 가능(A-Z 교육), 원자재·제품 연구/분석/평가, 시험·개선. 전문대+, 영어 기본. 급여 협의, 식사 2식, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring R&D Staff (Nhon Trach 5 IZ, Dong Nai), fresher-friendly with A-Z training. Research, analyze and evaluate materials and products, run tests and improvements. College degree+, basic English. 2 meals, insurance, health checks.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên R&D', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Fresher · Đào tạo A-Z', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^systeel0925-recommend-rd-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi SY STEEL VINA — Nhân viên R&D',
+      ko: '[FYI] SY STEEL VINA 추천 명단에 선정되셨습니다 — 연구개발(R&D)',
+      en: "[FYI] You've been nominated to SY STEEL VINA — Nhân viên R&D",
+    },
+    desc: 'SY STEEL VINA Nhân viên R&D(V202) recommend (9/25): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/systeel0925-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>SY STEEL VINA</b> — doanh nghiệp sản xuất tôn thép Hàn Quốc — đang tuyển <b>Nhân viên R&amp;D</b> (KCN Nhơn Trạch 5, Đồng Nai) qua FYI — cơ hội cho fresher, đào tạo A-Z. Công việc: nghiên cứu, phân tích &amp; đánh giá nguyên vật liệu và sản phẩm, thử nghiệm &amp; cải tiến, xử lý vấn đề phát sinh. Yêu cầu: Cao đẳng trở lên, tiếng Anh cơ bản, tỉ mỉ – tư duy logic. Lương thỏa thuận cao, 2 bữa ăn, BHXH, khám sức khỏe. Nộp CV tiếng Anh.',
+        ko: '한국계 철강 제조사 <b>SY STEEL VINA</b> 동나이 Nhơn Trạch 공장 <b>R&amp;D</b> — 신입 가능(A-Z 교육), 원자재·제품 연구/분석/평가, 시험·개선. 전문대+, 영어 기본. 급여 협의, 식사 2식, 4대보험.',
+        en: 'SY STEEL VINA — a Korean steel manufacturer — is hiring R&D Staff (Nhon Trach 5 IZ, Dong Nai), fresher-friendly with A-Z training. Research, analyze and evaluate materials and products, run tests and improvements. College degree+, basic English. 2 meals, insurance, health checks.',
+      },
+      initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên R&D', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Fresher · Đào tạo A-Z', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
