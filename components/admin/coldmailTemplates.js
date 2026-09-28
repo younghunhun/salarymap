@@ -4608,6 +4608,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'S', company: 'SY STEEL VINA', title: 'Nhân viên R&D', meta: 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · Fresher · Đào tạo A-Z', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^hellosci0928-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Thực Tập Sinh Marketing tại Hello Science (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Hello Science 마케팅 인턴',
+      en: "[FYI] You've been nominated — Marketing Intern at Hello Science",
+    },
+    desc: 'Hello Science Thực Tập Sinh Marketing(V204) recommend (9/28): 비공개 프레임 — onsite 1군 Diamond Plaza·월 3,000,000đ·졸업예정/신입·마케팅/커뮤니케이션/경영/디자인 전공·LinkedIn/FB/IG 콘텐츠·Canva/CapCut·SNS 운영·영어 우대. 컷=(Marketing 직군 or 마케팅/콘텐츠/SNS 텍스트, 비개발) × 경력 12개월 이하 × HCMC권/위치 미기재 × (Marketing/Design 직군 or 마케팅·커뮤니케이션·디자인·경영 전공) × (Canva/CapCut/Figma/Adobe 명시 or SNS 운영 텍스트) — 실측 397, 7일 3통+ 10 제외 후 387 발송(공개 82/비공개 305). 하노이 158은 Q1 온사이트라 제외.',
+    source: 'scripts/outreach/hellosci0928-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Hello Science</b> — công ty EdTech Hàn Quốc đang xây dựng nền tảng giáo dục số thông minh AI (AI Smart Classroom) cho các trường học tại Việt Nam, với các dự án đã được Sở GD&amp;ĐT phê duyệt — đang tuyển <b>Thực Tập Sinh Marketing</b> qua FYI. Công việc: sáng tạo nội dung đa kênh trên LinkedIn, Facebook, Instagram; thiết kế ấn phẩm bằng Canva, CapCut; theo dõi chỉ số marketing cơ bản và hỗ trợ báo cáo; soạn tài liệu giới thiệu công ty, profile sản phẩm; hỗ trợ tổ chức sự kiện, hội thảo, chuyến thăm trường học và follow-up. Yêu cầu: sinh viên năm cuối hoặc mới tốt nghiệp ngành Marketing, Truyền thông, Kinh doanh, Thiết kế hoặc liên quan; viết và giao tiếp tiếng Việt tốt; quan tâm AI, EdTech, startup. Ưu tiên: Canva/CapCut/Figma, từng quản lý kênh social, tiếng Anh tốt. Quyền lợi: trợ cấp 3.000.000đ/tháng, xác nhận hồ sơ thực tập, đào tạo trực tiếp từ đội ngũ quản lý, cơ hội lên nhân viên chính thức. Văn phòng: Diamond Plaza, 34 Lê Duẩn, Quận 1.',
+        ko: '베트남 학교 대상 AI 스마트 교실 플랫폼을 만드는 한국 EdTech <b>Hello Science</b>가 FYI를 통해 <b>마케팅 인턴</b>을 채용 중. LinkedIn/Facebook/Instagram 멀티채널 콘텐츠 기획·제작, Canva/CapCut 홍보물 제작, 기본 마케팅 지표 추적·보고, 회사 소개서·제품 프로필 작성, 온라인 이벤트·세미나·학교 방문 지원 및 사후 팔로업. 졸업예정/신입, 마케팅·커뮤니케이션·경영·디자인 전공, 베트남어 글쓰기, AI·EdTech 관심. Canva/CapCut/Figma·SNS 채널 운영·영어 우대. 1군 Diamond Plaza 온사이트, 월 300만동, 인턴 확인서 발급, 정규직 전환 기회.',
+        en: 'Hello Science — a Korean EdTech building an AI smart-classroom platform for schools in Vietnam — is hiring a Marketing Intern via FYI. Create multi-channel content for LinkedIn/Facebook/Instagram, design collateral in Canva/CapCut, track basic marketing metrics and reports, draft company/product profiles, support online events, seminars and school visits with follow-up. Final-year students or fresh grads in Marketing, Communications, Business or Design; strong Vietnamese writing; interest in AI/EdTech. Canva/CapCut/Figma, social channel management and English preferred. Onsite District 1 (Diamond Plaza), 3,000,000 VND/month stipend, internship paperwork support, path to full-time.',
+      },
+      initial: 'H', company: 'Hello Science', title: 'Thực Tập Sinh Marketing', meta: 'Onsite · Quận 1, TP.HCM · Thực tập sinh · Trợ cấp 3.000.000đ/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^hellosci0928-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Hello Science — Thực Tập Sinh Marketing (TP.HCM)',
+      ko: '[FYI] Hello Science 추천 명단에 선정되셨습니다 — 마케팅 인턴',
+      en: "[FYI] You've been nominated to Hello Science — Marketing Intern",
+    },
+    desc: 'Hello Science Thực Tập Sinh Marketing(V204) recommend (9/28): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/hellosci0928-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Hello Science</b> — công ty EdTech Hàn Quốc đang xây dựng nền tảng giáo dục số thông minh AI cho các trường học tại Việt Nam — đang tuyển <b>Thực Tập Sinh Marketing</b> (onsite Quận 1, TP.HCM, trợ cấp 3.000.000đ/tháng) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '베트남 학교 대상 AI 스마트 교실 플랫폼을 만드는 한국 EdTech <b>Hello Science</b>의 마케팅 인턴(1군 온사이트, 월 300만동) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Hello Science Marketing Intern (onsite District 1, HCMC, 3,000,000 VND/month stipend) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'H', company: 'Hello Science', title: 'Thực Tập Sinh Marketing', meta: 'Onsite · Quận 1, TP.HCM · Thực tập sinh · Trợ cấp 3.000.000đ/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
