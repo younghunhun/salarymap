@@ -4644,6 +4644,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'H', company: 'Hello Science', title: 'Thực Tập Sinh Marketing', meta: 'Onsite · Quận 1, TP.HCM · Thực tập sinh · Trợ cấp 3.000.000đ/tháng', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^labtobottle0928-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Nhân viên Kinh doanh tại Labtobottle (HCM/HN/ĐN)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Labtobottle 영업직원',
+      en: "[FYI] You've been nominated — Sales Executive at Labtobottle",
+    },
+    desc: 'Labtobottle Nhân viên Kinh doanh recommend (9/28): 비공개 프레임 — onsite HCM/HN/ĐN·18–20M·베트남 시장 영업·유통 경험 필수·식품/음료/소비재 업계 경험 필수·한국 F&B 수출입·식품 인허가 우대. 컷=(Sales/BizDev 직군 or 영업 경력 텍스트, 비개발) × 경력 12개월 이상 × HCM/HN/ĐN권/위치 미기재 × (F&B·FMCG or 유통/리테일 or 수출입/인허가 텍스트) — 실측 72, 당일 겹침 1·7일 3통+ 4 제외 후 67 발송(공개 45/비공개 22). 0~1y 영업 90은 JD 경력 요건·급여 밴드 상 보류.',
+    source: 'scripts/outreach/labtobottle0928-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Labtobottle</b> — startup Hàn Quốc về nông nghiệp và công nghệ đồ uống có cồn cao cấp (Hi-tech K-Brewery), thành lập 2022 bởi đội ngũ xuất thân từ Kỹ thuật Hóa học KAIST — đang tuyển <b>Nhân viên Kinh doanh</b> qua FYI để phát triển thị trường Việt Nam cho thực phẩm và đồ uống Hàn Quốc. Công việc: tìm kiếm và phát triển đối tác/khách hàng; quản lý khách hàng doanh nghiệp mới và kênh phân phối hiện có; xây dựng chiến lược kinh doanh và kế hoạch phát triển thị trường; theo dõi và báo cáo doanh thu. Yêu cầu bắt buộc: kinh nghiệm kinh doanh và phân phối tại Việt Nam trong ngành thực phẩm, đồ uống, hàng tiêu dùng hoặc tương tự. Ưu tiên: nhập khẩu/xuất khẩu thực phẩm, đồ uống Hàn Quốc; xử lý thủ tục giấy phép thực phẩm, đồ uống. Onsite TP.HCM / Hà Nội / Đà Nẵng. Lương 18–20 triệu ₫.',
+        ko: 'KAIST 화학공학 출신이 2022년 설립한 한국 프리미엄 주류 테크 스타트업 <b>Labtobottle</b>이 FYI를 통해 <b>영업직원</b>을 채용 중. 한국 식품·음료의 베트남 시장 개척: 파트너/고객 발굴, 신규 B2B 고객 및 기존 유통 채널 관리, 영업 전략·시장 개발 계획 수립, 매출 관리·보고. 베트남 시장 영업·유통 경험 및 식품/음료/소비재 업계 경험 필수. 한국 식품·음료 수출입, 식품 인허가 처리 경험 우대. HCM/하노이/다낭 온사이트, 월 1,800만~2,000만동.',
+        en: 'Labtobottle — a Korean hi-tech K-Brewery startup founded in 2022 by KAIST chemical engineering alumni — is hiring a Sales Executive via FYI to develop the Vietnam market for Korean food and beverages. Find and grow partners/customers, manage new B2B accounts and existing distribution channels, build sales strategy and market development plans, track and report revenue. Required: sales and distribution experience in Vietnam in food, beverage, consumer goods or similar. Preferred: import/export of Korean F&B, food and beverage licensing. Onsite HCMC / Hanoi / Da Nang, 18–20M VND.',
+      },
+      initial: 'L', company: 'Labtobottle', title: 'Nhân viên Kinh doanh', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 18–20 triệu ₫', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^labtobottle0928-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Labtobottle — Nhân viên Kinh doanh (HCM/HN/ĐN)',
+      ko: '[FYI] Labtobottle 추천 명단에 선정되셨습니다 — 영업직원',
+      en: "[FYI] You've been nominated to Labtobottle — Sales Executive",
+    },
+    desc: 'Labtobottle Nhân viên Kinh doanh recommend (9/28): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/labtobottle0928-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Labtobottle</b> — startup Hàn Quốc về công nghệ đồ uống có cồn cao cấp (K-Brewery) — đang tuyển <b>Nhân viên Kinh doanh</b> (onsite TP.HCM / Hà Nội / Đà Nẵng, 18–20 triệu ₫) để phát triển thị trường Việt Nam cho thực phẩm và đồ uống Hàn Quốc. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: '한국 프리미엄 주류 테크 스타트업 <b>Labtobottle</b>의 영업직원(HCM/하노이/다낭 온사이트, 월 1,800만~2,000만동) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "Labtobottle Sales Executive (onsite HCMC / Hanoi / Da Nang, 18–20M VND) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'L', company: 'Labtobottle', title: 'Nhân viên Kinh doanh', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 18–20 triệu ₫', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
