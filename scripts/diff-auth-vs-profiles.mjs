@@ -11,7 +11,7 @@ const admin = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_RO
 
 // --- auth.users (paginate; max perPage 1000) --------------------------------
 let page = 1, authUsers = [];
-for (;;) {
+for (; ;) {
   const { data, error } = await admin.auth.admin.listUsers({ page, perPage: 1000 });
   if (error) { console.error('✗ listUsers failed:', error.message); process.exit(1); }
   authUsers.push(...data.users);
@@ -22,7 +22,7 @@ for (;;) {
 // --- user_profiles ids/emails -----------------------------------------------
 const PAGE = 1000;
 let from = 0, profiles = [];
-for (;;) {
+for (; ;) {
   const { data, error } = await admin.from('user_profiles').select('id, email').range(from, from + PAGE - 1);
   if (error) { console.error('✗ profiles failed:', error.message); process.exit(1); }
   profiles.push(...data);
