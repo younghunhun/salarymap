@@ -12,7 +12,13 @@ for (const line of readFileSync(new URL('../.env.local', import.meta.url), 'utf8
   }
 }
 
-const { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, appendFyiToSheet } = await import('../lib/ktcCandidatesSync.js');
+const { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, appendFyiToSheet, syncKtcJobCodes } = await import('../lib/ktcCandidatesSync.js');
+
+// 새 공고에 코드부터 붙인다 — 코드 없이 유입된 지원 건은 ktc-support 가 JD 매칭을 못 한다 (크론과 동일 순서)
+if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
+  const codes = await syncKtcJobCodes();
+  console.log(`✓ 공고코드 백필: 신규 ${codes.set}건 (모호 ${codes.ambiguous.length}, 충돌 ${codes.conflicts.length})`);
+}
 
 // FYI 지원 건을 ktc-support 파이프라인에 직접 밀어넣고 (지원건 단위), 그다음 당겨온다
 const push = await pushFyiToKtc();
@@ -21,7 +27,7 @@ console.log(`✓ FYI→파이프라인: 신규 ${push.pushed}건 유입 (기존�
 // Candidate Data 시트 FYI 탭 보충 (기록 보존용 — DB에만 있고 시트에 없는 지원 건 append)
 if (process.env.GOOGLE_SHEET_ID && process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
   const fyiSheet = await appendFyiToSheet();
-  console.log(`✓ FYI 탭 append: 누락 ${fyiSheet.appended}건 추가 (시트 기존 ${fyiSheet.sheetRows}건)`);
+  console.log(`✓ FYI 탭 append: 누락 ${fyiSheet.appended}건 추가, 빈 JD Code 채움 ${fyiSheet.codeFilled}건 (시트 기존 ${fyiSheet.sheetRows}건)`);
 }
 
 if (process.argv.includes('--sheets')) {

@@ -1,5 +1,5 @@
 import { verifyAdminOrDevStub } from './check'
-import { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, syncFyiRejections, syncBlacklist } from '../../../lib/ktcCandidatesSync'
+import { triggerSheetSync, syncKtcCandidates, syncKtcApplications, syncKtcHires, pushFyiToKtc, syncFyiRejections, syncBlacklist, syncKtcJobCodes } from '../../../lib/ktcCandidatesSync'
 
 // KTC 소싱 탭의 "동기화" 버튼 — 클릭 한 번으로 세 단계를 순서대로 실행:
 //  ① ktc-support 시트→DB 동기화 트리거 (완료까지 대기)
@@ -14,6 +14,10 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
   try {
+    // 새 공고에 코드부터 붙인다 — 코드 없이 유입된 지원 건은 ktc-support 가 JD 매칭을 못 한다 (크론과 동일 순서)
+    if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
+      try { await syncKtcJobCodes() } catch (e) { console.error('syncKtcJobCodes:', e.message) }
+    }
     // FYI 지원자를 ktc-support 파이프라인에 먼저 유입시킨 뒤 (신규만) 나머지를 당겨온다
     const push = await pushFyiToKtc()
     const sheet = await triggerSheetSync()

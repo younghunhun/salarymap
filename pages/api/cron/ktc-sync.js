@@ -13,6 +13,12 @@ export default async function handler(req, res) {
   }
 
   try {
+    // FYI 의 KTC 공고에 원장 공고코드(jobs.source_id) 백필 — 지원자 유입보다 먼저 돌아야 한다.
+    // 맨 뒤에서 돌리면 게재 당일 지원 건이 코드 없이 파이프라인·시트에 들어가고, 이후엔
+    // 두 경로 모두 기존 행을 건너뛰어 영영 코드가 안 붙는다 (2026-09-28 Labtobottle R215 영업직
+    // 7건: ktc-support 에서 JD 매칭 불가 → 스크리닝 스킵).
+    let jobCodes = null
+    try { jobCodes = await syncKtcJobCodes() } catch (e) { console.error('syncKtcJobCodes:', e.message) }
     // FYI 지원 건을 ktc-support 파이프라인에 직접 유입 + Candidate Data 시트 FYI 탭 보충
     // (시트 append 는 기록 보존용 보강 레이어 — 실패해도 파이프라인은 계속)
     const push = await pushFyiToKtc()
@@ -35,9 +41,6 @@ export default async function handler(req, res) {
       // 입사자(ktc_hires)는 실패해도 나머지는 유지
       try { hires = await syncKtcHires() } catch (e) { console.error('syncKtcHires:', e.message) }
     }
-    // FYI 의 KTC 공고에 원장 공고코드(jobs.source_id) 백필 — 새 공고가 게재되면 다음 날 자동 매칭
-    let jobCodes = null
-    try { jobCodes = await syncKtcJobCodes() } catch (e) { console.error('syncKtcJobCodes:', e.message) }
     // 면접 노쇼 블랙리스트(ops 시트 'Blacklist' 탭) → candidate_blacklist — 실패해도 나머지는 유지
     let blacklist = null
     if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
@@ -50,6 +53,7 @@ export default async function handler(req, res) {
       fyiPushed: push.pushed,
       fyiRejections: rejections ? rejections.updated : null,
       fyiSheetAppended: fyiSheet ? fyiSheet.appended : null,
+      fyiSheetCodeFilled: fyiSheet ? fyiSheet.codeFilled : null,
       jobCodes: jobCodes ? { set: jobCodes.set, ambiguous: jobCodes.ambiguous.length, conflicts: jobCodes.conflicts.length } : null,
       blacklist: blacklist ? blacklist.total : null,
     })
