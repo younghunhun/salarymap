@@ -1162,6 +1162,13 @@ export const COLDMAIL_TEMPLATES = [
     html: ktcClaimHtml,
   },
   {
+    match: /^coldmail-ktc-cv-vku1001/,
+    subject: KTC_CLAIM_SUBJECT,
+    desc: 'VKU K-Tech College Job Matching Weekend(9/30 다낭) 현장 면접 신청자 72명 → CV 클레임 (10/1). 양식은 KTC 4차 클레임과 동일, 지원 경로 문구만 "Job Matching Weekend tại VKU"로 교체. Drive CV를 resumes 버킷(ktc-claim/vku0930)으로 옮겨 파싱(ktc_claim_profiles) 후 발송 — 캠페인명이 coldmail-ktc-cv 로 시작해야 가입 콜백 CV 임포트가 동작.',
+    source: 'scripts/outreach/vku1001-claim-coldmail.mjs + scripts/ktc-claim-coldmail-vi.html',
+    html: ktcClaimHtml,
+  },
+  {
     match: /^coldmail-ktc-cv/,
     subject: KTC_CLAIM_SUBJECT,
     desc: 'KTC 4차 · CV 클레임 (8/3~): "KTC 지원 때 낸 CV로 네 프로필을 미리 만들어뒀다" 소유 프레임. 카드에 본인 실데이터(실명·대학·직무) 표시, 랜딩 /ktc/claim 리치카드 → 가입 즉시 CV 자동 임포트.',

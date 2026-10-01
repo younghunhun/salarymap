@@ -341,8 +341,9 @@ export async function getServerSideProps({ query }) {
       tokenValid: true,
       token: query.t,
       email: tok.email,
-      name: c.full_name || '',
-      ten: tenOf(c.full_name),
+      // 시트 미러에 없는 리드(VKU 박람회 등)는 파싱본 실명으로 호칭을 만든다
+      name: c.full_name || claim?.summary?.full_name || '',
+      ten: tenOf(c.full_name || claim?.summary?.full_name),
       university: c.university || '',
       position: c.position || '',
       yoe: c.yoe || '',
