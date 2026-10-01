@@ -821,6 +821,12 @@ function AugustGoalPanel({ g, ko, onRefresh, generatedAt, lang }) {
 // 숫자를 세로로 비교할 수 없다. 그룹 판정은 API(groupOf)가 하고 여기선 라벨만 붙인다.
 const CAMPAIGN_GROUPS = [
   {
+    key: 'vku', ko: '⭐ VKU Job Matching Weekend (9/30 다낭)', en: '⭐ VKU Job Matching Weekend (Sep 30, Da Nang)',
+    koDesc: '행사 면접 신청자 CV 클레임(coldmail-ktc-cv-vku1001) + 박람회 참가자 가입 유도(coldmail-vku-signup-1001) · 전환 = FYI 가입',
+    enDesc: 'Event interview applicants (CV claim) + fair attendees (signup) · convert = FYI signup',
+    convKo: '가입', convEn: 'Signups',
+  },
+  {
     key: 'signup', ko: '① 회원 가입 유도', en: '(1) Signup',
     koDesc: 'FYI 계정이 없는 KTC 지원자 대상 · 전환 = FYI 가입',
     enDesc: 'KTC applicants without an FYI account · convert = signup',

@@ -22,9 +22,10 @@ const vnDay = (iso) => new Date(new Date(iso).getTime() + ICT_OFFSET_MS).toISOSt
 //   recommend — 기가입 회원 → 특정 공고 지원
 //   photo     — 이력서 보유·사진 없는 회원 → 프로필 사진 등록(원클릭 랜딩)
 //   salary    — 이력서 보유·경력 1년+ 회원 → 현/직전 월급 입력(무로그인 랜딩)
-const GROUP_ORDER = ['signup', 'register', 'resume', 'recommend', 'photo', 'salary', 'screen']
+const GROUP_ORDER = ['vku', 'signup', 'register', 'resume', 'recommend', 'photo', 'salary', 'screen']
 const groupOf = (name) =>
-  /^coldmail-ktc/.test(name) ? 'signup'
+  /vku/.test(name) ? 'vku' // VKU Job Matching Weekend(9/30) 계열 — 클레임·가입 유도 모두 전환=가입, 맨 위 별도 섹션
+    : /^coldmail-ktc/.test(name) ? 'signup'
     : /^resume-register/.test(name) ? 'register'
       : /recommend/.test(name) || /^kyndof/.test(name) ? 'recommend'
         : /^photo/.test(name) ? 'photo'
