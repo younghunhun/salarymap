@@ -9,6 +9,7 @@
 // 9/17 오후 2차(유저 결정 "52명 보내"): T5 마케팅 직군 × 상급 인증 = 52. SNS 텍스트 요건 제거 —
 //   SNS 상시 사용은 개인 생활이라 이력서에 미기재가 정상, T3의 sns() 게이트가 과했음(인증 상위자들이 걸러짐).
 //   1차 실측 교훈: 지원자 3명 전부 이 스펙 밴드. 발송은 --group t5 로 한정(1~3차 기수신은 recSet으로 자동 제외).
+// 10/1 3차(유저 결정 "t6만 더"): T6 마케팅 직군 × 기타 언어 시그널(상급 인증 아님). 10/1 실측 잔여 105 (누적 발송 151 · 지원 27).
 // 개발직군만 있는 프로필 제외. 1인1통 · 공개/비공개 프레임. 급여 6~10M은 낮은 편 → 카피에 명시해 자기선별 유도.
 //
 //   node scripts/outreach/hyperstar0917-recommend-coldmail.mjs                       # dry-run
@@ -75,6 +76,11 @@ const GROUPS = [
     gkey: 't5', camp: 'hyperstar0917-recommend-t5',
     label: { vi: 'Global Influencer Marketing Assistant', ko: 'T5 마케팅 직군 × 상급 인증 (SNS 텍스트 불요, 2차)' },
     pick: (p) => (base(p) && mktRole(p) && langHi(p) ? score(p) : null),
+  },
+  {
+    gkey: 't6', camp: 'hyperstar0917-recommend-t6',
+    label: { vi: 'Global Influencer Marketing Assistant', ko: 'T6 마케팅 직군 × 기타 언어 시그널 (상급 인증 아님, 3차 10/1)' },
+    pick: (p) => (base(p) && mktRole(p) && langAny(p) ? score(p) : null),
   },
 ]
 
