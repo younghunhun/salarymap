@@ -1,0 +1,82 @@
+<!--
+  [VKU 가입 유도] K-Tech College Job Matching Weekend(9/30, VKU) 참가자 중 CV 미제출자 → FYI 가입 콜드메일 — 베트남어판
+  훅: "VKU 학생에게 한국 기업 오퍼를 우선 발송" (유저 10/1 톤 확정: VKU 캠퍼스 사무실·재학생 원격근무 실재, 행사 참여 감사, 초기 경력 기회)
+  개인화: {{name}}=호칭(tên) · {{dayWord}}=Hôm qua/Hôm 30/9 · {{boothLine}}=우리 부스 체크인자만 한 문장(없으면 빈 값)
+         {{email}}=수신 이메일(VKU 구글 계정 안내) · {{ctaUrl}}=/api/ktc/r → 구글 로그인(login_hint) · {{unsubscribeUrl}}
+  ※ 수치 없음(유저 확정 사실만). CV 클레임과 달리 "프로필 준비됨" 약속 없음 — 가입 후 /profile 에서 CV 등록 유도.
+-->
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>FYI — Dành cho sinh viên VKU</title></head>
+<body style="margin:0;padding:24px 0;background:#f2f4f6;">
+
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
+
+  <div style="padding:22px 32px;border-bottom:1px solid #F2F4F6;">
+    <span style="font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#ff6000;">FYI</span>
+    <span style="font-size:11px;font-weight:700;color:#8B95A1;letter-spacing:0.5px;margin-left:8px;">Nền tảng tuyển dụng do K-Tech College xây dựng</span>
+  </div>
+
+  <div style="padding:32px;">
+
+    <h1 style="margin:0 0 18px;font-size:26px;line-height:1.4;font-weight:800;color:#191F28;letter-spacing:-0.4px;">
+      Sinh viên VKU được <span style="color:#ff6000;">ưu tiên</span><br />
+      nhận lời mời việc làm từ doanh nghiệp Hàn Quốc
+    </h1>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      Chào <b style="color:#191F28;">{{name}}</b>,<br />
+      {{dayWord}}, cảm ơn bạn đã tham gia <b>K-Tech College Job Matching Weekend</b> tại VKU.{{boothLine}}
+    </p>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      <b>FYI</b> là nền tảng tuyển dụng do K-Tech College xây dựng. Chúng tôi có <b style="color:#191F28;">văn phòng ngay trong khuôn viên VKU</b>,
+      nơi các bạn sinh viên VKU đang làm việc từ xa cho các doanh nghiệp Hàn Quốc.
+    </p>
+
+    <p style="margin:0 0 20px;font-size:15px;line-height:1.75;color:#4E5968;">
+      Sự tham gia và năng lực của các bạn sinh viên VKU trong sự kiện vừa rồi đã để lại ấn tượng rất tốt, nên sắp tới chúng tôi sẽ
+      <b style="color:#191F28;">ưu tiên mở các cơ hội tuyển dụng từ doanh nghiệp Hàn Quốc cho sinh viên VKU</b> —
+      để các bạn có thể tích lũy kinh nghiệm ngay từ khi còn đi học.
+    </p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      <tr>
+        <td style="background:#FFF7F3;border:1px solid #FFD9C7;border-radius:12px;padding:20px 22px;">
+          <div style="font-size:11px;font-weight:800;color:#ff6000;letter-spacing:0.6px;margin-bottom:10px;">DÀNH RIÊNG CHO SINH VIÊN VKU</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.8;">✓ Lời mời việc làm từ doanh nghiệp Hàn Quốc được <b style="color:#191F28;">gửi ưu tiên</b> cho sinh viên VKU</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.8;">✓ Cơ hội <b style="color:#191F28;">làm việc từ xa, thực tập</b> để tích lũy kinh nghiệm sớm</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.8;">✓ Đăng ký chỉ bằng <b style="color:#191F28;">một lần đăng nhập</b> với tài khoản Google VKU</div>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      Hãy đăng ký ngay hôm nay — khi có vị trí phù hợp với chuyên ngành của bạn, <b style="color:#191F28;">lời mời sẽ được gửi đến email của bạn</b>.
+      Nếu bạn đăng ký thêm CV, hồ sơ sẽ được gửi trực tiếp đến nhà tuyển dụng.
+    </p>
+
+    <div style="text-align:center;margin:28px 0 12px;">
+      <a href="{{ctaUrl}}"
+         style="display:inline-block;background:#ff6000;color:#ffffff;font-size:16px;font-weight:800;text-decoration:none;padding:15px 30px;border-radius:12px;letter-spacing:-0.2px;">
+        Đăng ký bằng tài khoản VKU và nhận lời mời →
+      </a>
+    </div>
+    <p style="margin:0;font-size:12px;line-height:1.6;color:#8B95A1;text-align:center;">Bạn sẽ đăng nhập bằng <b style="color:#4E5968;">{{email}}</b>.</p>
+
+  </div>
+
+  <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;">
+    <p style="margin:0 0 6px;font-size:12px;line-height:1.65;color:#8B95A1;">
+      Email này được gửi đến bạn vì bạn đã tham gia K-Tech College Job Matching Weekend (VKU), nhằm giới thiệu dịch vụ FYI.
+    </p>
+    <p style="margin:0;font-size:12px;line-height:1.65;color:#8B95A1;">
+      Nếu không muốn nhận email này nữa, vui lòng nhấn <a href="{{unsubscribeUrl}}" style="color:#8B95A1;text-decoration:underline;">Hủy đăng ký</a>.
+      &nbsp;·&nbsp; FYI · salary-fyi.com
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
