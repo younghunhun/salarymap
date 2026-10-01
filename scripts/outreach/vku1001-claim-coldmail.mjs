@@ -21,7 +21,6 @@ const CAMPAIGN = 'coldmail-ktc-cv-vku1001'
 const SITE = (env.NEXT_PUBLIC_SITE_URL || 'https://salary-fyi.com').replace(/\/$/, '')
 const RESEND_FROM = env.RESEND_FROM || 'FYI <hello@salary-fyi.com>'
 const LEADS = new URL('../../data/vku0930-interview.csv', import.meta.url)
-const TEMPLATE = new URL('../ktc-claim-coldmail-vi.html', import.meta.url)
 const BUCKET = 'resumes', PREFIX = 'ktc-claim/vku0930'
 const IMPORTABLE = /^https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\//
 
@@ -31,6 +30,8 @@ const doPrepare = args.includes('--prepare')
 const doSend = args.includes('--send')
 const testTo = flag('test', null)
 const max = parseInt(flag('max', '0')) || 0
+const lang = flag('lang', 'vi') === 'ko' ? 'ko' : 'vi' // ko 는 문구 검토용 테스트 발송 전용(실발송은 vi)
+const TEMPLATE = new URL(`../ktc-claim-coldmail-${lang}.html`, import.meta.url)
 const sleep = (ms) => new Promise(r => setTimeout(r, ms))
 const esc = (s) => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 const csvCell = (v) => { const s = String(v ?? ''); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s }
@@ -67,13 +68,31 @@ const swap = (tpl, pairs) => pairs.reduce((t, [a, b]) => {
   if (!t.includes(a)) throw new Error(`템플릿 치환 실패(원문 변경됨?): ${a.slice(0, 40)}…`)
   return t.replace(a, b)
 }, tpl)
-const template = swap(readFileSync(TEMPLATE, 'utf8'), [
+// 행사 시점 — 9/30 다음날 발송이면 "어제", 늦어지면 날짜 명시(거짓 "어제" 방지)
+const dayWord = new Date().toISOString().slice(0, 10) === '2026-10-01'
+  ? { vi: 'Hôm qua', ko: '어제' } : { vi: 'Hôm 30/9', ko: '지난 9월 30일' }
+const template = swap(readFileSync(TEMPLATE, 'utf8'), lang === 'ko' ? [
+  ['{{month}}K-Tech College를 통해 <b>{{jobTitle}}</b>{{atCompany}} 포지션에 지원해 주셨죠.',
+   `${dayWord.ko} VKU에서 열린 <b>K-Tech College Job Matching Weekend</b>에 참여해 주셔서 감사합니다. {{atCompany}} <b>{{jobTitle}}</b> 포지션에 관심을 보여주셨죠.`],
+  ['그때 제출하신 이력서로, <b>K-Tech College가 만든 채용 플랫폼 FYI</b>에\n      <b style="color:#191F28;">회원님의 프로필을 미리 만들어 두었습니다</b>.',
+   '행사에서 제출하신 이력서로, <b>K-Tech College가 만든 채용 플랫폼 FYI</b>에\n      <b style="color:#191F28;">회원님의 프로필을 미리 만들어 두었습니다</b>.'],
+  ['그리고 회원님께 맞는 포지션이 열리면, 저희가 <b style="color:#191F28;">기업 채용 담당자에게 프로필을 바로 전달</b>해\n      드립니다 — 담당자의 연락은 이메일로 받아보실 수 있습니다.',
+   '이번 행사에서 만난 VKU 학생분들의 역량이 인상적이어서, 앞으로 <b style="color:#191F28;">행사 참여자분들께 한국 기업 오퍼를 우선적으로, 더 자주 보내드리려고</b> 합니다.\n      맞는 포지션이 열리면 저희가 기업 채용 담당자에게 프로필을 바로 전달하고, 오퍼는 이메일로 받아보실 수 있습니다.'],
+  ['이 메일은 K-Tech College에 지원하신 분께 FYI 서비스를 안내하기 위해 발송되었습니다.',
+   '이 메일은 K-Tech College Job Matching Weekend(VKU)에 참여하신 분께 FYI 서비스를 안내하기 위해 발송되었습니다.'],
+] : [
   ['{{month}}bạn đã ứng tuyển vị trí <b>{{jobTitle}}</b>{{atCompany}} qua <b>K-Tech College</b>.',
-   '{{month}}bạn đã đăng ký phỏng vấn vị trí <b>{{jobTitle}}</b>{{atCompany}} tại <b>K-Tech College Job Matching Weekend</b> ở VKU.'],
+   `${dayWord.vi}, cảm ơn bạn đã tham gia <b>K-Tech College Job Matching Weekend</b> tại VKU và quan tâm đến vị trí <b>{{jobTitle}}</b>{{atCompany}}.`],
+  ['Với CV bạn đã nộp khi đó, chúng tôi đã <b style="color:#191F28;">chuẩn bị sẵn hồ sơ của bạn</b> trên\n      <b>FYI</b> — nền tảng tuyển dụng do K-Tech College xây dựng.',
+   'Với CV bạn đã nộp tại sự kiện, chúng tôi đã <b style="color:#191F28;">chuẩn bị sẵn hồ sơ của bạn</b> trên\n      <b>FYI</b> — nền tảng tuyển dụng do K-Tech College xây dựng.'],
+  ['Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn <b style="color:#191F28;">trực tiếp đến nhà tuyển dụng</b>\n      — và bạn sẽ nhận được liên hệ qua email.',
+   'Chúng tôi rất ấn tượng với các bạn sinh viên VKU trong sự kiện lần này, nên sắp tới sẽ <b style="color:#191F28;">ưu tiên gửi lời mời việc làm từ các doanh nghiệp Hàn Quốc thường xuyên hơn cho những bạn đã tham gia</b>.\n      Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn trực tiếp đến nhà tuyển dụng — và bạn sẽ nhận được lời mời qua email.'],
   ['Email này được gửi đến bạn vì bạn đã ứng tuyển K-Tech College, nhằm giới thiệu dịch vụ FYI.',
-   'Email này được gửi đến bạn vì bạn đã đăng ký phỏng vấn tại K-Tech College Job Matching Weekend (VKU), nhằm giới thiệu dịch vụ FYI.'],
+   'Email này được gửi đến bạn vì bạn đã tham gia K-Tech College Job Matching Weekend (VKU), nhằm giới thiệu dịch vụ FYI.'],
 ])
-const subject = (l) => `${l.ten} ơi, hồ sơ ${l.position} của bạn đã sẵn sàng trên FYI`
+const subject = (l) => lang === 'ko'
+  ? `${l.ten}님, 회원님의 ${l.position} 프로필이 FYI에 준비되어 있습니다`
+  : `${l.ten} ơi, hồ sơ ${l.position} của bạn đã sẵn sàng trên FYI`
 const cardRowStyle = 'font-size:14px;color:#4E5968;line-height:1.7;'
 const cardRows = (l) => {
   const rows = []
@@ -85,22 +104,36 @@ const cardRows = (l) => {
 const render = (l, cta, unsub) => template
   .replace(/\{\{name\}\}/g, esc(l.ten))
   .replace(/\{\{fullName\}\}/g, esc(l.name))
-  .replace(/\{\{month\}\}/g, 'Hồi cuối tháng 9, ')
+  .replace(/\{\{month\}\}/g, lang === 'ko' ? '지난 9월 말, ' : 'Hồi cuối tháng 9, ')
   .replace(/\{\{jobTitle\}\}/g, esc(l.job))
-  .replace(/\{\{atCompany\}\}/g, ` của <b>${esc(l.company)}</b>`)
+  .replace(/\{\{atCompany\}\}/g, lang === 'ko' ? `<b>${esc(l.company)}</b>` : ` của <b>${esc(l.company)}</b>`)
   .replace(/\{\{position\}\}/g, esc(l.position))
   .replace(/\{\{cardRows\}\}/g, cardRows(l))
   .replace(/\{\{ctaUrl\}\}/g, cta)
   .replace(/\{\{unsubscribeUrl\}\}/g, unsub)
-const text = (l, cta, unsub) => `Chào ${l.ten},
+const text = (l, cta, unsub) => lang === 'ko' ? `안녕하세요 ${l.ten}님,
 
-Hồi cuối tháng 9, bạn đã đăng ký phỏng vấn vị trí ${l.job} của ${l.company} tại K-Tech College Job Matching Weekend ở VKU.
+${dayWord.ko} VKU에서 열린 K-Tech College Job Matching Weekend에 참여해 주셔서 감사합니다. ${l.company} ${l.job} 포지션에 관심을 보여주셨죠.
 
-Với CV bạn đã nộp khi đó, chúng tôi đã chuẩn bị sẵn hồ sơ của bạn trên FYI — nền tảng tuyển dụng do K-Tech College xây dựng.
+행사에서 제출하신 이력서로, K-Tech College가 만든 채용 플랫폼 FYI에 회원님의 프로필을 미리 만들어 두었습니다.
+
+이력서를 다시 작성하실 필요 없습니다. 구글 로그인 한 번이면 프로필이 바로 등록되고, 새로운 공고에 원클릭으로 지원할 수 있습니다.
+
+이번 행사에서 만난 VKU 학생분들의 역량이 인상적이어서, 앞으로 행사 참여자분들께 한국 기업 오퍼를 우선적으로, 더 자주 보내드리려고 합니다. 맞는 포지션이 열리면 저희가 기업 채용 담당자에게 프로필을 바로 전달하고, 오퍼는 이메일로 받아보실 수 있습니다.
+
+내 프로필 확인하기:
+${cta}
+
+— FYI 팀 · salary-fyi.com
+수신 거부: ${unsub}` : `Chào ${l.ten},
+
+${dayWord.vi}, cảm ơn bạn đã tham gia K-Tech College Job Matching Weekend tại VKU và quan tâm đến vị trí ${l.job} của ${l.company}.
+
+Với CV bạn đã nộp tại sự kiện, chúng tôi đã chuẩn bị sẵn hồ sơ của bạn trên FYI — nền tảng tuyển dụng do K-Tech College xây dựng.
 
 Bạn không cần viết lại CV. Chỉ cần đăng nhập Google một lần, hồ sơ sẽ được đăng ký ngay và bạn có thể ứng tuyển các vị trí mới chỉ với một chạm.
 
-Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn trực tiếp đến nhà tuyển dụng — và bạn sẽ nhận được liên hệ qua email.
+Chúng tôi rất ấn tượng với các bạn sinh viên VKU trong sự kiện lần này, nên sắp tới sẽ ưu tiên gửi lời mời việc làm từ các doanh nghiệp Hàn Quốc thường xuyên hơn cho những bạn đã tham gia. Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn trực tiếp đến nhà tuyển dụng — và bạn sẽ nhận được lời mời qua email.
 
 Nhận hồ sơ của tôi:
 ${cta}
@@ -201,6 +234,7 @@ async function prepare(leads, claimBy) {
   console.log(`샘플: ${s.email} / ${s.ten} / ${s.position} / ${s.university || '(대학 없음)'} / 스킬 ${s.skills.slice(0, 3).join(',')}`)
   console.log(`제목: ${subject(s)}\nCTA: ${ctaFor(s)}`)
   if (!doSend) { console.log('\n[dry-run] --send 로 실발송.'); return }
+  if (lang !== 'vi') throw new Error('실발송은 vi 고정 — --lang ko 는 --test 전용')
 
   const { Resend } = await import('resend'); const resend = new Resend(env.RESEND_API_KEY)
   const log = [['email', 'ten', 'company', 'position', 'lead', 'resend_id', 'error'].join(',')]
