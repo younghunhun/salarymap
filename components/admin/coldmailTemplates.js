@@ -108,6 +108,52 @@ const KTC_CLAIM_I18N = {
     foot2: 'If you no longer wish to receive these emails, click <u>Unsubscribe</u>. · FYI · salary-fyi.com',
   },
 }
+// ── VKU 가입 유도 (scripts/vku-signup-coldmail-vi.html) — CV 미제출 행사 참가자, "VKU 학생 오퍼 우선" 훅 ──
+const VKU_SIGNUP_I18N = {
+  vi: {
+    h1: 'Sinh viên VKU được <span style="color:#ff6000;">ưu tiên</span><br />nhận lời mời việc làm từ doanh nghiệp Hàn Quốc',
+    p1: 'Chào <b style="color:#191F28;">{{name}}</b>,<br />Hôm qua, cảm ơn bạn đã tham gia <b>K-Tech College Job Matching Weekend</b> tại VKU. <i>(부스 체크인자: Chúng tôi cũng nhớ bạn đã ghé gian hàng <b>{{booth}}</b>.)</i>',
+    p2: '<b>FYI</b> là nền tảng tuyển dụng do K-Tech College xây dựng. Chúng tôi có <b style="color:#191F28;">văn phòng ngay trong khuôn viên VKU</b>, nơi các bạn sinh viên VKU đang làm việc từ xa cho các doanh nghiệp Hàn Quốc.',
+    p3: 'Sự tham gia và năng lực của các bạn sinh viên VKU trong sự kiện vừa rồi đã để lại ấn tượng rất tốt, nên sắp tới chúng tôi sẽ <b style="color:#191F28;">ưu tiên mở các cơ hội tuyển dụng từ doanh nghiệp Hàn Quốc cho sinh viên VKU</b> — để các bạn có thể tích lũy kinh nghiệm ngay từ khi còn đi học.',
+    boxLabel: 'DÀNH RIÊNG CHO SINH VIÊN VKU',
+    box: ['✓ Lời mời việc làm từ doanh nghiệp Hàn Quốc được <b>gửi ưu tiên</b> cho sinh viên VKU', '✓ Cơ hội <b>làm việc từ xa, thực tập</b> để tích lũy kinh nghiệm sớm', '✓ Đăng ký chỉ bằng <b>một lần đăng nhập</b> với tài khoản Google VKU'],
+    p4: 'Hãy đăng ký ngay hôm nay — khi có vị trí phù hợp với chuyên ngành của bạn, <b style="color:#191F28;">lời mời sẽ được gửi đến email của bạn</b>. Nếu bạn đăng ký thêm CV, hồ sơ sẽ được gửi trực tiếp đến nhà tuyển dụng.',
+    cta: 'Đăng ký bằng tài khoản VKU và nhận lời mời →',
+    foot: 'Email này được gửi đến bạn vì bạn đã tham gia K-Tech College Job Matching Weekend (VKU), nhằm giới thiệu dịch vụ FYI. · <u>Hủy đăng ký</u> · FYI · salary-fyi.com',
+  },
+  ko: {
+    h1: 'VKU 학생에게<br />한국 기업 오퍼를 <span style="color:#ff6000;">우선적으로</span> 보내드립니다',
+    p1: '안녕하세요 <b style="color:#191F28;">{{name}}</b>님,<br />어제 VKU에서 열린 <b>K-Tech College Job Matching Weekend</b>에 참여해 주셔서 감사합니다. <i>(부스 체크인자: <b>{{booth}}</b> 부스에 들러주신 것도 기억하고 있습니다.)</i>',
+    p2: '<b>FYI</b>는 K-Tech College가 만든 채용 플랫폼입니다. 저희는 <b style="color:#191F28;">VKU 캠퍼스 안에 사무실</b>을 두고 있고, 그곳에서 VKU 재학생들이 한국 기업의 업무를 원격으로 수행하고 있습니다.',
+    p3: '이번 행사에서 VKU 학생분들의 참여와 역량이 인상적이어서, 앞으로 <b style="color:#191F28;">VKU 학생을 대상으로 한국 기업 채용 기회를 우선적으로 열어</b> 재학 중에 초기 경력을 쌓을 수 있는 자리를 먼저 안내드리려고 합니다.',
+    boxLabel: 'VKU 학생 우선 혜택',
+    box: ['✓ 한국 기업 오퍼를 VKU 학생에게 <b>우선 발송</b>', '✓ 재학 중 <b>원격근무·인턴</b>으로 초기 경력 기회', '✓ 가입은 VKU 구글 계정으로 <b>로그인 한 번</b>'],
+    p4: '지금 가입해 두시면, 전공과 맞는 포지션이 열릴 때 <b style="color:#191F28;">오퍼를 이메일로 받아보실 수 있습니다</b>. 이력서까지 등록해 두시면 기업 채용 담당자에게 바로 전달됩니다.',
+    cta: 'VKU 계정으로 가입하고 오퍼 받기 →',
+    foot: '이 메일은 K-Tech College Job Matching Weekend(VKU)에 참여하신 분께 FYI 서비스를 안내하기 위해 발송되었습니다. · <u>수신 거부</u> · FYI · salary-fyi.com',
+  },
+}
+const vkuSignupHtml = (lang) => {
+  const s = pickLang(VKU_SIGNUP_I18N, lang)
+  const p = (t) => `<p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">${t}</p>`
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:24px 0;background:#f2f4f6;">
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
+  <div style="padding:22px 32px;border-bottom:1px solid #F2F4F6;"><span style="font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#ff6000;">FYI</span></div>
+  <div style="padding:32px;">
+    <h1 style="margin:0 0 18px;font-size:26px;line-height:1.4;font-weight:800;letter-spacing:-0.4px;">${s.h1}</h1>
+    ${p(s.p1)}${p(s.p2)}${p(s.p3)}
+    <div style="background:#FFF7F3;border:1px solid #FFD9C7;border-radius:12px;padding:20px 22px;margin:0 0 20px;">
+      <div style="font-size:11px;font-weight:800;color:#ff6000;letter-spacing:0.6px;margin-bottom:10px;">${s.boxLabel}</div>
+      ${s.box.map(b => `<div style="font-size:14px;color:#4E5968;line-height:1.8;">${b}</div>`).join('')}
+    </div>
+    ${p(s.p4)}
+    <div style="text-align:center;margin:28px 0;"><span style="display:inline-block;background:#ff6000;color:#fff;font-size:16px;font-weight:800;padding:15px 30px;border-radius:12px;">${s.cta}</span></div>
+  </div>
+  <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;font-size:12px;line-height:1.65;color:#8B95A1;">${s.foot}</div>
+</div></body></html>`
+}
+
 const ktcClaimHtml = (lang) => {
   const s = pickLang(KTC_CLAIM_I18N, lang)
   return `<!doctype html><html lang="vi"><head><meta charset="utf-8"></head>
@@ -1160,6 +1206,17 @@ export const COLDMAIL_TEMPLATES = [
     desc: 'KTC 4차(CV 클레임)와 완전히 같은 양식의 재발송 — 1~3차(구 앵글) 수신 후 무반응이었던 리드 대상 (8/4). "이미 한 번 무시한 풀에도 클레임 앵글이 먹히는지" 분리 측정용.',
     source: 'scripts/outreach/ktc-claim-coldmail.mjs --revive',
     html: ktcClaimHtml,
+  },
+  {
+    match: /^coldmail-vku-signup-1001/,
+    subject: {
+      vi: '{{name}} ơi, cơ hội ưu tiên nhận lời mời việc làm từ doanh nghiệp Hàn Quốc dành cho sinh viên VKU',
+      ko: '{{name}}님, VKU 학생을 위한 한국 기업 채용 우선 기회를 안내드립니다',
+      en: '{{name}}, priority access to Korean company job offers for VKU students',
+    },
+    desc: 'VKU Job Matching Weekend(9/30) QR 출석자 중 CV 미제출 1,498명(우리 부스 체크인 81 + 박람회 전체 1,417, 면접 신청자·이름매칭 불확실 제외) → 가입 유도 (10/1). 훅: VKU 캠퍼스 사무실·재학생 원격근무 실재 + 행사 참여 감사 + VKU 학생에게 한국 기업 오퍼 우선·초기 경력 기회. CTA는 메일에서 바로 구글 로그인(login_hint=수신 메일, return=/profile). CV 클레임 아님(프로필 준비 약속 없음).',
+    source: 'scripts/outreach/vku1001-signup-coldmail.mjs + scripts/vku-signup-coldmail-vi.html',
+    html: vkuSignupHtml,
   },
   {
     match: /^coldmail-ktc-cv-vku1001/,

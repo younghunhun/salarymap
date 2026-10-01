@@ -1,7 +1,7 @@
 <!--
   [VKU 가입 유도] K-Tech College Job Matching Weekend(9/30, VKU) 참가자 중 CV 미제출자 → FYI 가입 콜드메일 — 베트남어판
   훅: "VKU 학생에게 한국 기업 오퍼를 우선 발송" (유저 10/1 톤 확정: VKU 캠퍼스 사무실·재학생 원격근무 실재, 행사 참여 감사, 초기 경력 기회)
-  개인화: {{name}}=호칭(tên) · {{dayWord}}=Hôm qua/Hôm 30/9 · {{boothLine}}=우리 부스 체크인자만 한 문장(없으면 빈 값)
+  개인화: {{name}}=호칭(tên) · {{dayWord}}=Hôm qua/Hôm 30/9 · {{introLine}}=첫 문장(부스 체크인자=행사 참여 감사+부스 기억 / 미체크인자=박람회 참여 감사+메인 스폰서 K-Tech College(LIKELION) 소개) · {{footReason}}=푸터 발송 사유(동일 분기)
          {{email}}=수신 이메일(VKU 구글 계정 안내) · {{ctaUrl}}=/api/ktc/r → 구글 로그인(login_hint) · {{unsubscribeUrl}}
   ※ 수치 없음(유저 확정 사실만). CV 클레임과 달리 "프로필 준비됨" 약속 없음 — 가입 후 /profile 에서 CV 등록 유도.
 -->
@@ -26,7 +26,7 @@
 
     <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
       Chào <b style="color:#191F28;">{{name}}</b>,<br />
-      {{dayWord}}, cảm ơn bạn đã tham gia <b>K-Tech College Job Matching Weekend</b> tại VKU.{{boothLine}}
+      {{introLine}}
     </p>
 
     <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
@@ -68,7 +68,7 @@
 
   <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;">
     <p style="margin:0 0 6px;font-size:12px;line-height:1.65;color:#8B95A1;">
-      Email này được gửi đến bạn vì bạn đã tham gia K-Tech College Job Matching Weekend (VKU), nhằm giới thiệu dịch vụ FYI.
+      {{footReason}}
     </p>
     <p style="margin:0;font-size:12px;line-height:1.65;color:#8B95A1;">
       Nếu không muốn nhận email này nữa, vui lòng nhấn <a href="{{unsubscribeUrl}}" style="color:#8B95A1;text-decoration:underline;">Hủy đăng ký</a>.
