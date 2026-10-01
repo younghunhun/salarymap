@@ -423,6 +423,7 @@ function SignupPathsTab({ data, loading, error, ko }) {
                   <th style={th}>{ko ? '플랫폼' : 'Platform'}</th>
                   <th style={th}>{ko ? '경로' : 'Channel'}</th>
                   <th style={th}>{ko ? '캠페인' : 'Campaign'}</th>
+                  <th style={th}>{ko ? '게시글(content)' : 'Content'}</th>
                   <th style={th}>referrer</th>
                   <th style={th}>{ko ? '첫 페이지' : 'First page'}</th>
                 </tr></thead>
@@ -438,6 +439,7 @@ function SignupPathsTab({ data, loading, error, ko }) {
                       </td>
                       <td style={td}><Chip name={s.channel} /></td>
                       <td style={{ ...td, maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', color: s.campaign ? '#1F2937' : '#C0C4CC' }} title={s.campaign || ''}>{s.campaign || '—'}</td>
+                      <td style={{ ...td, maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', color: s.content ? '#1F2937' : '#C0C4CC' }} title={s.content || ''}>{s.content || '—'}</td>
                       <td style={{ ...td, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', color: s.referrer ? '#4B5563' : '#C0C4CC' }} title={s.referrer || ''}>{s.referrer || '—'}</td>
                       <td style={{ ...td, maxWidth: 160, overflow: 'hidden', textOverflow: 'ellipsis', color: s.firstPage ? '#4B5563' : '#C0C4CC' }} title={s.firstPage || ''}>{s.firstPage || '—'}</td>
                     </tr>

@@ -11,26 +11,42 @@ const FREE_MAIL_DOMAINS = new Set([
 async function saveProfile(user) {
   if (process.env.NODE_ENV === 'development') return;
   try {
-    const utm_source = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('utm_source') : null;
-    const utm_medium = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('utm_medium') : null;
-    const utm_campaign = typeof sessionStorage !== 'undefined' ? sessionStorage.getItem('utm_campaign') : null;
     // Don't clobber a name the user edited (web or app). Seed full_name from the
     // Google identity only when the profile doesn't have one yet.
     const { data: existing } = await supabase
-      .from('user_profiles').select('full_name').eq('id', user.id).maybeSingle();
+      .from('user_profiles').select('id, full_name, utm_source').eq('id', user.id).maybeSingle();
     const payload = {
       id: user.id,
       email: user.email,
       provider: user.app_metadata?.provider || null,
-      utm_source: utm_source || null,
-      utm_medium: utm_medium || null,
-      utm_campaign: utm_campaign || null,
       updated_at: new Date().toISOString(),
     };
+    // 가입 시점 utm 은 첫 로그인(프로필 없음)에서만 쓴다. 재로그인마다 덮어쓰면
+    // sessionStorage 가 비어 있어 null 로 지워진다(기존 가입자 utm 97% null 의 원인).
+    // 값은 _app.js 가 랜딩 시 보관한 sessionStorage > 30일 쿠키 순으로 읽는다.
+    // 프로필 행은 DB 트리거가 먼저 만들 수 있어 existing 유무로는 신규를 못 가르므로
+    // auth 계정 생성 1시간 이내 + utm 미기록을 '가입 시점' 으로 본다.
+    const isFreshSignup = Date.now() - new Date(user.created_at).getTime() < 60 * 60 * 1000;
+    if (!existing || (isFreshSignup && !existing.utm_source)) {
+      const read = (k) => {
+        try { const s = sessionStorage.getItem(k); if (s) return s; } catch {}
+        const m = document.cookie.match(new RegExp('(?:^|; )' + k + '=([^;]*)'));
+        return m ? decodeURIComponent(m[1]) : null;
+      };
+      payload.utm_source = read('utm_source');
+      payload.utm_medium = read('utm_medium');
+      payload.utm_campaign = read('utm_campaign');
+      payload.utm_content = read('utm_content');
+    }
     if (!existing?.full_name) {
       payload.full_name = user.user_metadata?.full_name || user.user_metadata?.name || null;
     }
-    const { error } = await supabase.from('user_profiles').upsert(payload, { onConflict: 'id' })
+    let { error } = await supabase.from('user_profiles').upsert(payload, { onConflict: 'id' })
+    // utm_content 컬럼 마이그레이션(20261001) 적용 전이면 그 키만 빼고 재시도
+    if (error && 'utm_content' in payload && /utm_content/.test(error.message || '')) {
+      delete payload.utm_content
+      ;({ error } = await supabase.from('user_profiles').upsert(payload, { onConflict: 'id' }))
+    }
   } catch(e) {
     // silent fail
   }

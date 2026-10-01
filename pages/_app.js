@@ -9,6 +9,7 @@ import AppDownloadModal from '../components/AppDownloadModal';
 import GlobalNav from '../components/GlobalNav';
 import GoogleOneTap from '../components/GoogleOneTap';
 import { track } from '../lib/track';
+import { persistUtmFromUrl } from '../lib/utm';
 
 /* pathname → GlobalNav activePage key. The set determines whether GlobalNav
    renders at all (company/admin/standalone pages have their own headers). */
@@ -130,6 +131,8 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     if (router.pathname.startsWith('/admin')) return; // 내부 어드민 뷰 제외
+    // 어느 페이지로 들어왔든 utm·referrer 를 보관 — 가입 콜백·지원 API 가 이 값을 읽는다.
+    persistUtmFromUrl();
     try {
       if (sessionStorage.getItem('sm_session_started')) return;
       sessionStorage.setItem('sm_session_started', '1');
@@ -143,6 +146,7 @@ export default function App({ Component, pageProps }) {
         utm_source: p.get('utm_source'),
         utm_medium: p.get('utm_medium'),
         utm_campaign: p.get('utm_campaign'),
+        utm_content: p.get('utm_content'),
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

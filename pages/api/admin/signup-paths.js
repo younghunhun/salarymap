@@ -79,11 +79,14 @@ export default async function handler(req, res) {
 
     // 가입 시점 utm (auth/callback이 user_profiles에 upsert)
     const profiles = {}
+    // utm_content 컬럼(20261001 마이그) 적용 전이면 그 컬럼 없이 재조회
+    let profileCols = 'id, utm_source, utm_medium, utm_campaign, utm_content'
     for (let i = 0; i < ids.length; i += 200) {
-      const { data } = await supabase
-        .from('user_profiles')
-        .select('id, utm_source, utm_medium, utm_campaign')
-        .in('id', ids.slice(i, i + 200))
+      let { data, error } = await supabase.from('user_profiles').select(profileCols).in('id', ids.slice(i, i + 200))
+      if (error && /utm_content/.test(error.message || '')) {
+        profileCols = 'id, utm_source, utm_medium, utm_campaign'
+        ;({ data } = await supabase.from('user_profiles').select(profileCols).in('id', ids.slice(i, i + 200)))
+      }
       for (const p of data || []) profiles[p.id] = p
     }
 
@@ -104,6 +107,7 @@ export default async function handler(req, res) {
         channel: ev ? classify(source, referrer) : (source ? classify(source, null) : 'no_event'),
         source,
         campaign,
+        content: p?.utm_content || m?.utm_content || null,
         medium: p?.utm_medium || m?.utm_medium || null,
         referrer: refHost(referrer),
         firstPage: ev?.page || null,
