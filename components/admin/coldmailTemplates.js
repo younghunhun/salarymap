@@ -154,8 +154,15 @@ const vkuSignupHtml = (lang) => {
 </div></body></html>`
 }
 
-const ktcClaimHtml = (lang) => {
-  const s = pickLang(KTC_CLAIM_I18N, lang)
+// 10/2 시트 전체 클레임(sheet1002·sheet2025): p4 만 "가입자 주 평균 오퍼 3.2건 + 이력서 기등록자 우선 추천"으로 교체(유저 확정).
+// 발송 스크립트(ktc-sheet-claim-coldmail.mjs)가 HTML 파일에서 같은 문단을 치환해 보내므로 모달도 동일하게 보여준다.
+const KTC_SHEET_CLAIM_P4 = {
+  vi: 'Thành viên FYI nhận trung bình <b style="color:#191F28;">3,2 lời mời mỗi tuần</b>. Vì hồ sơ của bạn đã được đăng ký sẵn, khi có vị trí phù hợp với hồ sơ và có khả năng trúng tuyển cao, chúng tôi sẽ ưu tiên chọn và gợi ý cho bạn trước — bạn sẽ nhận được gợi ý qua email.',
+  ko: 'FYI에 가입한 분들은 <b style="color:#191F28;">1주일 평균 3.2건의 오퍼</b>를 받고 있습니다. 회원님은 이력서가 이미 등록되어 있어, 프로필과 잘 맞아 합격 가능성이 높은 공고가 올라오면 저희가 먼저 골라 추천해 드립니다 — 추천은 이메일로 받아보실 수 있습니다.',
+  en: 'FYI members receive <b style="color:#191F28;">3.2 offers a week on average</b>. Since your resume is already registered, when a posting matches your profile with a strong chance of success, we pick it out and recommend it to you first — recommendations arrive by email.',
+}
+const ktcClaimHtml = (lang, override) => {
+  const s = { ...pickLang(KTC_CLAIM_I18N, lang), ...(override ? pickLang(override, lang) : {}) }
   return `<!doctype html><html lang="vi"><head><meta charset="utf-8"></head>
 <body style="margin:0;padding:24px 0;background:#f2f4f6;">
 <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
@@ -1223,14 +1230,14 @@ export const COLDMAIL_TEMPLATES = [
     subject: KTC_CLAIM_SUBJECT,
     desc: 'KTC WORKER 2025 마스터시트(2025.5~10 지원자) 기준 CV 클레임: 미가입·미접촉 중 Drive/직링크 CV 보유자. 지원 시점은 "2025년 X월"로 연도 명시. 본문 2문단=가입자 주 평균 오퍼 3.2건 + 이력서 기등록자 우선 추천(sheet1002 와 동일 카피). CV는 Drive API로 받아 resumes 버킷(ktc-claim/sheet2025)으로 이동 후 파싱.',
     source: 'scripts/outreach/ktc-sheet-claim-coldmail.mjs --source 2025 + scripts/ktc-claim-coldmail-vi.html',
-    html: ktcClaimHtml,
+    html: (lang) => ktcClaimHtml(lang, { vi: { p4: KTC_SHEET_CLAIM_P4.vi }, ko: { p4: KTC_SHEET_CLAIM_P4.ko }, en: { p4: KTC_SHEET_CLAIM_P4.en } }),
   },
   {
     match: /^coldmail-ktc-cv-sheet1002/,
     subject: KTC_CLAIM_SUBJECT,
     desc: 'KTC CANDIDATE DATA 시트 전체 기준 CV 클레임 (10/2~): 7/28 CSV 리스트 밖 미가입·미접촉 지원자까지 확장. CV가 Drive 링크(recruitment@likelion.net 소유)인 2,300명+는 Drive API로 받아 resumes 버킷(ktc-claim/sheet1002)으로 옮겨 파싱(ktc_claim_profiles) 후 발송. 양식·랜딩·콜백 임포트는 KTC 4차 클레임과 동일.',
     source: 'scripts/outreach/ktc-sheet-claim-coldmail.mjs + scripts/ktc-claim-coldmail-vi.html',
-    html: ktcClaimHtml,
+    html: (lang) => ktcClaimHtml(lang, { vi: { p4: KTC_SHEET_CLAIM_P4.vi }, ko: { p4: KTC_SHEET_CLAIM_P4.ko }, en: { p4: KTC_SHEET_CLAIM_P4.en } }),
   },
   {
     match: /^coldmail-ktc-cv-vku1001/,
