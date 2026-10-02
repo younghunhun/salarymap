@@ -1,0 +1,88 @@
+<!--
+  [연차 대비 최고 연봉 공고 추천] 옛 KTC 캠페인 미가입자 재발송 — 베트남어판 (10/2 유저 확정 카피)
+  훅: "네 연차에서 지금 가장 높은 연봉 공고 하나를 골라뒀다 — 가입하고 지원하면 우리가 먼저 검토해서 기업에 직접 밀어준다"
+  제목: {{name}} ơi, vị trí {{position}} lương cao nhất cho {{expShort}} hiện nay: {{salaryShort}}/tháng
+  개인화 변수:
+    {{name}} = 호칭(tên) · {{position}} = 본인 직무 · {{expFrag}} = "2 năm kinh nghiệm" / "mới ra trường" · {{cityFrag}} = ", TP.HCM"(없으면 빈 값)
+    {{company}} {{jobTitle}} {{salary}} {{jobLocation}} {{jobExp}} = 배정 공고 카드
+    {{ctaUrl}} = 클릭 추적 → 구글 로그인(login_hint) → /jobs/<id> · {{unsubscribeUrl}} = 수신거부
+  ※ 유저 결정(10/2): "3영업일 내 결과 안내" 문장 제외(한국 공휴일 변수) · "현재 지원자 N명" 표시 안 함.
+  ※ 폰트: 시스템 폰트만(베트남어 성조 + 메일 클라이언트 웹폰트 차단).
+-->
+<!doctype html>
+<html lang="vi">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>FYI — Vị trí dành cho bạn</title></head>
+<body style="margin:0;padding:24px 0;background:#f2f4f6;">
+
+<!-- [본문 시작] -->
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
+
+  <div style="padding:22px 32px;border-bottom:1px solid #F2F4F6;">
+    <span style="font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#ff6000;">FYI</span>
+    <span style="font-size:11px;font-weight:700;color:#8B95A1;letter-spacing:0.5px;margin-left:8px;">Nền tảng tuyển dụng do K-Tech College xây dựng</span>
+  </div>
+
+  <div style="padding:32px;">
+
+    <h1 style="margin:0 0 18px;font-size:26px;line-height:1.4;font-weight:800;color:#191F28;letter-spacing:-0.4px;">
+      Vị trí <span style="color:#ff6000;">lương cao nhất</span><br />
+      phù hợp với kinh nghiệm của bạn
+    </h1>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      Chào <b style="color:#191F28;">{{name}}</b>, FYI đây.<br />
+      Dựa trên CV bạn đã nộp khi ứng tuyển qua <b>K-Tech College</b>, trong số các vị trí đang mở tại doanh nghiệp Hàn Quốc,
+      chúng tôi đã chọn ra <b style="color:#191F28;">một vị trí có mức lương cao nhất</b> phù hợp với kinh nghiệm của bạn
+      (<b>{{position}}</b>, {{expFrag}}{{cityFrag}}).
+    </p>
+
+    <!-- 배정 공고 카드 -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      <tr>
+        <td style="background:#FFF7F3;border:1px solid #FFD9C7;border-radius:12px;padding:20px 22px;">
+          <div style="font-size:11px;font-weight:800;color:#ff6000;letter-spacing:0.6px;margin-bottom:8px;">VỊ TRÍ DÀNH CHO BẠN</div>
+          <div style="font-size:14px;font-weight:700;color:#4E5968;margin-bottom:4px;">{{company}}</div>
+          <div style="font-size:18px;font-weight:800;color:#191F28;letter-spacing:-0.2px;margin-bottom:10px;">{{jobTitle}}</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.7;">💰 {{salary}}</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.7;">📍 {{jobLocation}} · {{jobExp}}</div>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      Vị trí này do <b style="color:#191F28;">FYI trực tiếp phụ trách tuyển dụng</b>. Khi bạn đăng ký FYI và ứng tuyển,
+      chúng tôi sẽ <b style="color:#191F28;">xem xét hồ sơ của bạn trước</b> và chuyển thẳng đến người phụ trách tuyển dụng của doanh nghiệp
+      — không phải chờ trên trang tuyển dụng, mà là chúng tôi chủ động đẩy hồ sơ của bạn.
+    </p>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      <b style="color:#191F28;">Hồ sơ của bạn đã sẵn sàng.</b> CV bạn nộp trước đây đã được đưa lên hồ sơ FYI,
+      chỉ cần đăng ký bằng tài khoản Google là có thể ứng tuyển ngay.
+    </p>
+
+    <div style="text-align:center;margin:28px 0;">
+      <a href="{{ctaUrl}}"
+         style="display:inline-block;background:#ff6000;color:#ffffff;font-size:16px;font-weight:800;text-decoration:none;padding:15px 30px;border-radius:12px;letter-spacing:-0.2px;">
+        Đăng ký bằng Google và ứng tuyển →
+      </a>
+    </div>
+
+    <p style="margin:0;font-size:14px;line-height:1.7;color:#8B95A1;">Thân mến,<br />Đội ngũ FYI</p>
+
+  </div>
+
+  <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;">
+    <p style="margin:0 0 6px;font-size:12px;line-height:1.65;color:#8B95A1;">
+      Email này được gửi một lần dựa trên hồ sơ ứng tuyển K-Tech College của bạn.
+    </p>
+    <p style="margin:0;font-size:12px;line-height:1.65;color:#8B95A1;">
+      Nếu không muốn nhận email này nữa, vui lòng nhấn <a href="{{unsubscribeUrl}}" style="color:#8B95A1;text-decoration:underline;">Hủy đăng ký</a>.
+      &nbsp;·&nbsp; FYI · salary-fyi.com
+    </p>
+  </div>
+
+</div>
+<!-- [본문 끝] -->
+
+</body>
+</html>

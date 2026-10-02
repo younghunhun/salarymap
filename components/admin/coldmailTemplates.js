@@ -154,6 +154,62 @@ const vkuSignupHtml = (lang) => {
 </div></body></html>`
 }
 
+// 10/2 연차 대비 최고 연봉 공고 추천(coldmail-ktc-cv-topjob1002): 옛 KTC 캠페인 미가입자에게 본인 연차·직군·지역에 맞는 공고 중
+// 연봉 최고 1건을 카드로. 발송 스크립트(ktc-topjob-rerun1002-coldmail.mjs)가 scripts/ktc-topjob-coldmail-vi.html 을 치환해 보낸다.
+// 유저 결정: "3영업일 내 결과 안내"·"현재 지원자 N명" 문구 없음. 카드 값은 예시(배정 공고별로 달라짐).
+const TOPJOB_I18N = {
+  vi: {
+    h1: 'Vị trí <span style="color:#ff6000;">lương cao nhất</span><br />phù hợp với kinh nghiệm của bạn',
+    p1: 'Chào <b style="color:#191F28;">{{name}}</b>, FYI đây.<br />Dựa trên CV bạn đã nộp khi ứng tuyển qua <b>K-Tech College</b>, trong số các vị trí đang mở tại doanh nghiệp Hàn Quốc, chúng tôi đã chọn ra <b style="color:#191F28;">một vị trí có mức lương cao nhất</b> phù hợp với kinh nghiệm của bạn (<b>{{position}}</b>, {{expFrag}}{{cityFrag}}).',
+    boxLabel: 'VỊ TRÍ DÀNH CHO BẠN',
+    box: ['<b style="font-size:14px;">Global Beauty Star</b>', '<b style="font-size:18px;color:#191F28;">Senior Backend Developer (Python / Node.js)</b>', '💰 35.000.000 VND/tháng (≈ $1.378)', '📍 HCM · Kinh nghiệm từ 2 năm'],
+    p2: 'Vị trí này do <b style="color:#191F28;">FYI trực tiếp phụ trách tuyển dụng</b>. Khi bạn đăng ký FYI và ứng tuyển, chúng tôi sẽ <b style="color:#191F28;">xem xét hồ sơ của bạn trước</b> và chuyển thẳng đến người phụ trách tuyển dụng của doanh nghiệp — không phải chờ trên trang tuyển dụng, mà là chúng tôi chủ động đẩy hồ sơ của bạn.',
+    p3: '<b style="color:#191F28;">Hồ sơ của bạn đã sẵn sàng.</b> CV bạn nộp trước đây đã được đưa lên hồ sơ FYI, chỉ cần đăng ký bằng tài khoản Google là có thể ứng tuyển ngay.',
+    cta: 'Đăng ký bằng Google và ứng tuyển →',
+    foot: 'Email này được gửi một lần dựa trên hồ sơ ứng tuyển K-Tech College của bạn. Nếu không muốn nhận email này nữa, vui lòng nhấn <u>Hủy đăng ký</u>. · FYI · salary-fyi.com',
+  },
+  ko: {
+    h1: '회원님의 경력에서<br /><span style="color:#ff6000;">가장 높은 연봉</span> 공고',
+    p1: '<b style="color:#191F28;">{{name}}</b>님, 안녕하세요. FYI입니다.<br />K-Tech College 지원 때 남겨주신 이력서를 기준으로, 지금 열려 있는 한국 기업 공고 중 회원님의 경력(<b>{{position}}</b>, {{expFrag}}{{cityFrag}})에서 <b style="color:#191F28;">가장 높은 연봉 공고 하나</b>를 골랐습니다.',
+    boxLabel: '회원님을 위한 공고',
+    box: ['<b style="font-size:14px;">Global Beauty Star</b>', '<b style="font-size:18px;color:#191F28;">Senior Backend Developer (Python / Node.js)</b>', '💰 월 35,000,000 VND (약 $1,378)', '📍 HCM · 경력 2년 이상'],
+    p2: '이 공고는 <b style="color:#191F28;">FYI가 채용을 직접 진행</b>합니다. 회원님이 FYI에 가입하고 이 공고에 지원하면, 저희가 <b style="color:#191F28;">지원서를 먼저 검토</b>해서 기업 담당자에게 직접 전달합니다 — 공고 페이지에서 기다리는 것이 아니라 저희가 밀어드리는 방식입니다.',
+    p3: '<b style="color:#191F28;">이력서는 이미 준비되어 있습니다.</b> 지원 때 제출하신 CV가 프로필에 올라가 있어서, 구글 계정으로 가입만 하면 바로 지원할 수 있습니다.',
+    cta: '구글 계정으로 가입하고 지원하기 →',
+    foot: '이 메일은 K-Tech College 지원 기록을 바탕으로 1회 발송되었습니다. 더 받고 싶지 않으시면 <u>수신 거부</u>를 눌러 주세요. · FYI · salary-fyi.com',
+  },
+  en: {
+    h1: 'The <span style="color:#ff6000;">highest-paying</span> opening<br />that fits your experience',
+    p1: 'Hi <b style="color:#191F28;">{{name}}</b>, this is FYI.<br />Based on the CV you submitted through <b>K-Tech College</b>, we picked <b style="color:#191F28;">the single highest-paying opening</b> among live Korean-company roles that fits your experience (<b>{{position}}</b>, {{expFrag}}{{cityFrag}}).',
+    boxLabel: 'PICKED FOR YOU',
+    box: ['<b style="font-size:14px;">Global Beauty Star</b>', '<b style="font-size:18px;color:#191F28;">Senior Backend Developer (Python / Node.js)</b>', '💰 35,000,000 VND/month (≈ $1,378)', '📍 HCM · 2+ years'],
+    p2: '<b style="color:#191F28;">FYI runs the hiring for this role directly.</b> Sign up and apply, and we <b style="color:#191F28;">review your application first</b> and hand it straight to the company\'s hiring manager — we push it for you instead of leaving it waiting on a job board.',
+    p3: '<b style="color:#191F28;">Your profile is already prepared.</b> The CV you submitted is on your FYI profile, so one Google sign-up is all it takes to apply.',
+    cta: 'Sign up with Google and apply →',
+    foot: 'Sent once based on your K-Tech College application record. To stop receiving these, click <u>Unsubscribe</u>. · FYI · salary-fyi.com',
+  },
+}
+const topJobHtml = (lang) => {
+  const s = pickLang(TOPJOB_I18N, lang)
+  const p = (t) => `<p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">${t}</p>`
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:24px 0;background:#f2f4f6;">
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
+  <div style="padding:22px 32px;border-bottom:1px solid #F2F4F6;"><span style="font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#ff6000;">FYI</span></div>
+  <div style="padding:32px;">
+    <h1 style="margin:0 0 18px;font-size:26px;line-height:1.4;font-weight:800;letter-spacing:-0.4px;">${s.h1}</h1>
+    ${p(s.p1)}
+    <div style="background:#FFF7F3;border:1px solid #FFD9C7;border-radius:12px;padding:20px 22px;margin:0 0 20px;">
+      <div style="font-size:11px;font-weight:800;color:#ff6000;letter-spacing:0.6px;margin-bottom:10px;">${s.boxLabel}</div>
+      ${s.box.map(b => `<div style="font-size:14px;color:#4E5968;line-height:1.8;">${b}</div>`).join('')}
+    </div>
+    ${p(s.p2)}${p(s.p3)}
+    <div style="text-align:center;margin:28px 0;"><span style="display:inline-block;background:#ff6000;color:#fff;font-size:16px;font-weight:800;padding:15px 30px;border-radius:12px;">${s.cta}</span></div>
+  </div>
+  <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;font-size:12px;line-height:1.65;color:#8B95A1;">${s.foot}</div>
+</div></body></html>`
+}
+
 // 10/2 시트 전체 클레임(sheet1002·sheet2025): p4 만 "가입자 주 평균 오퍼 3.2건 + 이력서 기등록자 우선 추천"으로 교체(유저 확정).
 // 발송 스크립트(ktc-sheet-claim-coldmail.mjs)가 HTML 파일에서 같은 문단을 치환해 보내므로 모달도 동일하게 보여준다.
 const KTC_SHEET_CLAIM_P4 = {
@@ -1224,6 +1280,17 @@ export const COLDMAIL_TEMPLATES = [
     desc: 'VKU Job Matching Weekend(9/30) QR 출석자 중 CV 미제출 1,498명(우리 부스 체크인 81 + 박람회 전체 1,417, 면접 신청자·이름매칭 불확실 제외) → 가입 유도 (10/1). 훅: VKU 캠퍼스 사무실·재학생 원격근무 실재 + 행사 참여 감사 + VKU 학생에게 한국 기업 오퍼 우선·초기 경력 기회. CTA는 메일에서 바로 구글 로그인(login_hint=수신 메일, return=/profile). CV 클레임 아님(프로필 준비 약속 없음).',
     source: 'scripts/outreach/vku1001-signup-coldmail.mjs + scripts/vku-signup-coldmail-vi.html',
     html: vkuSignupHtml,
+  },
+  {
+    match: /^coldmail-ktc-cv-topjob1002/,
+    subject: {
+      vi: '{{name}} ơi, vị trí {{position}} lương cao nhất cho {{expShort}} hiện nay: ${{usd}}/tháng',
+      ko: '{{name}}님, {{expShort}} {{position}} 중 지금 가장 높은 월 ${{usd}} 공고를 골라두었습니다',
+      en: '{{name}}, the highest-paying {{position}} opening for {{expShort}} right now: ${{usd}}/month',
+    },
+    desc: '옛 KTC 캠페인(7/28~9/4) 수신자 중 미가입자 재발송 (10/2): 파싱 CV의 직군·연차·지역에 맞는 공고 중 연봉 최고 1건을 카드로 추천. 공고는 Ops Matching Status 진행중 + 연봉 있는 건만(한국 근무·LIKELION VN 자체 공고 포함, 기업 자체 검토 공고 제외). 약속 = 가입+지원하면 우선 검토 후 기업 담당자에게 직접 전달. "3영업일 내 안내"·"현재 지원자 N명" 문구는 유저 결정으로 제외. 단일 캠페인(직군별 분리 없음). CTA = 클릭 기록 → 구글 로그인(login_hint) → 해당 공고 페이지. 캠페인명 coldmail-ktc-cv 접두어로 가입 시 CV 임포트.',
+    source: 'scripts/outreach/ktc-topjob-rerun1002-coldmail.mjs + scripts/ktc-topjob-coldmail-vi.html',
+    html: topJobHtml,
   },
   {
     match: /^coldmail-ktc-cv-sheet2025/,

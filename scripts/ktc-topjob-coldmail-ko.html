@@ -1,0 +1,79 @@
+<!--
+  [연차 대비 최고 연봉 공고 추천] 한국어판 — --test --lang ko 문구 검토 전용(실발송은 vi).
+  변수는 vi 판과 동일.
+-->
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>FYI — 회원님을 위한 공고</title></head>
+<body style="margin:0;padding:24px 0;background:#f2f4f6;">
+
+<!-- [본문 시작] -->
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;color:#191F28;max-width:560px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #E5E8EB;">
+
+  <div style="padding:22px 32px;border-bottom:1px solid #F2F4F6;">
+    <span style="font-size:22px;font-weight:900;letter-spacing:-0.5px;color:#ff6000;">FYI</span>
+    <span style="font-size:11px;font-weight:700;color:#8B95A1;letter-spacing:0.5px;margin-left:8px;">K-Tech College가 만든 채용 플랫폼</span>
+  </div>
+
+  <div style="padding:32px;">
+
+    <h1 style="margin:0 0 18px;font-size:26px;line-height:1.4;font-weight:800;color:#191F28;letter-spacing:-0.4px;">
+      회원님의 경력에서<br />
+      <span style="color:#ff6000;">가장 높은 연봉</span> 공고
+    </h1>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      <b style="color:#191F28;">{{name}}</b>님, 안녕하세요. FYI입니다.<br />
+      K-Tech College 지원 때 남겨주신 이력서를 기준으로, 지금 열려 있는 한국 기업 공고 중
+      회원님의 경력(<b>{{position}}</b>, {{expFrag}}{{cityFrag}})에서 <b style="color:#191F28;">가장 높은 연봉 공고 하나</b>를 골랐습니다.
+    </p>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+      <tr>
+        <td style="background:#FFF7F3;border:1px solid #FFD9C7;border-radius:12px;padding:20px 22px;">
+          <div style="font-size:11px;font-weight:800;color:#ff6000;letter-spacing:0.6px;margin-bottom:8px;">회원님을 위한 공고</div>
+          <div style="font-size:14px;font-weight:700;color:#4E5968;margin-bottom:4px;">{{company}}</div>
+          <div style="font-size:18px;font-weight:800;color:#191F28;letter-spacing:-0.2px;margin-bottom:10px;">{{jobTitle}}</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.7;">💰 {{salary}}</div>
+          <div style="font-size:14px;color:#4E5968;line-height:1.7;">📍 {{jobLocation}} · {{jobExp}}</div>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      이 공고는 <b style="color:#191F28;">FYI가 채용을 직접 진행</b>합니다. 회원님이 FYI에 가입하고 이 공고에 지원하면,
+      저희가 <b style="color:#191F28;">지원서를 먼저 검토</b>해서 기업 담당자에게 직접 전달합니다
+      — 공고 페이지에서 기다리는 것이 아니라 저희가 밀어드리는 방식입니다.
+    </p>
+
+    <p style="margin:0 0 16px;font-size:15px;line-height:1.75;color:#4E5968;">
+      <b style="color:#191F28;">이력서는 이미 준비되어 있습니다.</b> 지원 때 제출하신 CV가 프로필에 올라가 있어서,
+      구글 계정으로 가입만 하면 바로 지원할 수 있습니다.
+    </p>
+
+    <div style="text-align:center;margin:28px 0;">
+      <a href="{{ctaUrl}}"
+         style="display:inline-block;background:#ff6000;color:#ffffff;font-size:16px;font-weight:800;text-decoration:none;padding:15px 30px;border-radius:12px;letter-spacing:-0.2px;">
+        구글 계정으로 가입하고 지원하기 →
+      </a>
+    </div>
+
+    <p style="margin:0;font-size:14px;line-height:1.7;color:#8B95A1;">FYI 드림</p>
+
+  </div>
+
+  <div style="padding:20px 32px 28px;border-top:1px solid #F2F4F6;">
+    <p style="margin:0 0 6px;font-size:12px;line-height:1.65;color:#8B95A1;">
+      이 메일은 K-Tech College 지원 기록을 바탕으로 1회 발송되었습니다.
+    </p>
+    <p style="margin:0;font-size:12px;line-height:1.65;color:#8B95A1;">
+      더 받고 싶지 않으시면 <a href="{{unsubscribeUrl}}" style="color:#8B95A1;text-decoration:underline;">수신 거부</a>를 눌러 주세요.
+      &nbsp;·&nbsp; FYI · salary-fyi.com
+    </p>
+  </div>
+
+</div>
+<!-- [본문 끝] -->
+
+</body>
+</html>
