@@ -33,16 +33,21 @@ const groupOf = (name) =>
             : /^screen/.test(name) ? 'screen'
               : 'resume'
 
+// 1000행 캡 페이징을 8페이지씩 병렬로 — 이 표의 이벤트가 5만 행(52페이지)을 넘어 순차로는 20초 가까이 걸렸다(10/2 실측).
+// build() 가 order('created_at') 를 걸어 두므로 페이지 경계는 안정적이다.
 async function fetchAll(build) {
-  const PAGE = 1000
+  const PAGE = 1000, WAVE = 8
   let all = [], from = 0
   while (true) {
-    const { data, error } = await build().range(from, from + PAGE - 1)
-    if (error) throw error
-    if (!data || !data.length) break
-    all = all.concat(data)
-    if (data.length < PAGE) break
-    from += PAGE
+    const pages = await Promise.all(Array.from({ length: WAVE }, (_, i) => build().range(from + i * PAGE, from + (i + 1) * PAGE - 1)))
+    let short = false
+    for (const { data, error } of pages) {
+      if (error) throw error
+      if (data?.length) all = all.concat(data)
+      if (!data || data.length < PAGE) { short = true; break }
+    }
+    if (short) break
+    from += WAVE * PAGE
   }
   return all
 }

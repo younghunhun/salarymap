@@ -4,6 +4,19 @@ import { templateFor, localizeTemplate, DRAFT_CAMPAIGNS } from './coldmailTempla
 import { ROLE_GROUPS } from '../../constants/jobs'
 import SurveyView from './SurveyView'
 import { KRW_PER_M_VND, vndMToKrwText } from '../../lib/fx'
+import { useAdmin } from '../../lib/adminSwr'
+
+// 콜드메일 캠페인표 — 대시보드 상위 탭(?tab=coldmail)으로 분리(10/2). useAdmin(SWR) 캐시라 탭을 오가도
+// 받은 표가 즉시 뜨고 30초 지나면 뒤에서만 갱신한다(작업실의 생 fetch+useState 는 unmount 마다 재요청했다).
+export function ColdmailView({ token, lang }) {
+  const ko = lang !== 'en'
+  const { data, error, isLoading } = useAdmin('/api/admin/campaign-resume-public-metrics', token)
+  return (
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 16px 48px' }}>
+      <ColdmailPublicTab data={data} loading={isLoading && !data} error={error ? (ko ? '불러오기 실패 ' : 'Load failed ') + error.message : ''} ko={ko} lang={lang} />
+    </div>
+  )
+}
 
 // "승주 작업실" — 어드민 인증으로만 접근(개인 비밀번호 게이트 제거).
 // 기본 탭은 목표지표인 [이력서 공개].
@@ -15,10 +28,6 @@ export default function GoalMetricsView({ token, lang }) {
   const [rpData, setRpData] = useState(null) // 이력서 공개 전환 (목표지표)
   const [rpError, setRpError] = useState('')
   const [rpLoading, setRpLoading] = useState(false)
-
-  const [cmData, setCmData] = useState(null) // 콜드메일 공개 전환
-  const [cmError, setCmError] = useState('')
-  const [cmLoading, setCmLoading] = useState(false)
 
   const [spData, setSpData] = useState(null) // 가입 경로 (가입자별 유입)
   const [spError, setSpError] = useState('')
@@ -52,21 +61,6 @@ export default function GoalMetricsView({ token, lang }) {
       setRpError((ko ? '불러오기 실패 ' : 'Load failed ') + e.message)
     } finally {
       setRpLoading(false)
-    }
-  }, [token, ko])
-
-  const loadCm = useCallback(async () => {
-    if (!token) return
-    setCmLoading(true)
-    setCmError('')
-    try {
-      const res = await fetch('/api/admin/campaign-resume-public-metrics', { headers: { Authorization: `Bearer ${token}` } })
-      if (!res.ok) throw new Error(`(${res.status})`)
-      setCmData(await res.json())
-    } catch (e) {
-      setCmError((ko ? '불러오기 실패 ' : 'Load failed ') + e.message)
-    } finally {
-      setCmLoading(false)
     }
   }, [token, ko])
 
@@ -170,11 +164,6 @@ export default function GoalMetricsView({ token, lang }) {
     if (view === 'resumePublic' && !rpData && !rpLoading) loadRp()
   }, [view, rpData, rpLoading, loadRp])
 
-  // 콜드메일 공개 전환 탭 최초 진입 시 lazy 로드
-  useEffect(() => {
-    if (view === 'coldmail' && !cmData && !cmLoading) loadCm()
-  }, [view, cmData, cmLoading, loadCm])
-
   // 가입 경로 탭 최초 진입 시 lazy 로드
   useEffect(() => {
     if (view === 'paths' && !spData && !spLoading) loadSp()
@@ -192,7 +181,6 @@ export default function GoalMetricsView({ token, lang }) {
       <div style={{ display: 'inline-flex', gap: 2, background: '#F1F1F4', borderRadius: 11, padding: 3, marginBottom: 18 }}>
         {tabBtn('resumePublic', ko ? '이력서 공개' : 'Resume public')}
         {tabBtn('roleExpansion', ko ? '전직군 개편' : 'Role expansion')}
-        {tabBtn('coldmail', ko ? '콜드메일' : 'Cold email')}
         {tabBtn('salary', ko ? '연봉 수집' : 'Salary collection')}
         {tabBtn('photos', ko ? '프로필 사진' : 'Profile photos')}
         {tabBtn('paths', ko ? '가입 경로' : 'Signup paths')}
@@ -204,7 +192,6 @@ export default function GoalMetricsView({ token, lang }) {
       {view === 'salary' && <SalaryStatsTab data={slData} loading={slLoading} error={slError} ko={ko} />}
       {view === 'paths' && <SignupPathsTab data={spData} loading={spLoading} error={spError} ko={ko} />}
       {view === 'resumePublic' && <ResumePublicTab data={rpData} loading={rpLoading} error={rpError} ko={ko} lang={lang} onRefresh={loadRp} />}
-      {view === 'coldmail' && <ColdmailPublicTab data={cmData} loading={cmLoading} error={cmError} ko={ko} lang={lang} />}
       {view === 'hongik' && <HongikTab data={hkData} loading={hkLoading} error={hkError} ko={ko} onRefresh={loadHk} />}
       {view === 'survey' && <SurveyView token={token} lang={lang} />}
     </div>

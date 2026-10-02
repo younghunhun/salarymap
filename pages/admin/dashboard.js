@@ -23,7 +23,7 @@ import RevenueView from '../../components/admin/RevenueView'
 import PikdiView from '../../components/admin/PikdiView'
 import RecommendView from '../../components/admin/RecommendView'
 import BlacklistView from '../../components/admin/BlacklistView'
-import GoalMetricsView from '../../components/admin/GoalMetricsView'
+import GoalMetricsView, { ColdmailView } from '../../components/admin/GoalMetricsView'
 import YujinLabView, { YujinLabTabs } from '../../components/admin/YujinLabView'
 import {
   T, METRICS_BASE, EXP_COLORS, COLORS,
@@ -1017,6 +1017,9 @@ export default function AdminDashboard() {
         )}
 
         {/* 광고메일 — 공고 추천 메일 발송/전환 현황 */}
+        {tab === 'coldmail' && (
+          <ColdmailView token={token} lang={lang} />
+        )}
         {tab === 'recommend' && (
           <RecommendView token={token} lang={lang} />
         )}
