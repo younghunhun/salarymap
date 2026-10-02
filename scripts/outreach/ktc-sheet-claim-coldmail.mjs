@@ -404,7 +404,9 @@ async function prepare(leads, claimBy) {
         meta: { campaign: CAMPAIGN, lead: l.lead, lang: 'vi', cv_url: l.cvUrl, resend_id: resp.data?.id || null } }])
       log.push([l.email, l.ten, l.company, l.position, l.lead, resp.data?.id || '', ''].map(csvCell).join(',')); ok++
     } catch (e) { fail++; log.push([l.email, l.ten, l.company, l.position, l.lead, '', e.message].map(csvCell).join(',')); console.error(`  ✗ ${l.email}: ${e.message}`) }
-    await sleep(600)
+    // Resend 제한 초당 2건 — API 왕복(~0.4s)+이벤트 기록(~0.2s)이 이미 간격을 벌려 주므로 짧게만 쉰다
+    // (0.6s 고정 대기는 분당 50통밖에 안 나왔다, 10/2 2026 발송 실측)
+    await sleep(150)
   }
   const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19)
   writeFileSync(new URL(`../../data/ktc-sheet-claim-sent-${stamp}.csv`, import.meta.url), log.join('\n'))
