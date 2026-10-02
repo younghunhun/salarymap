@@ -2743,13 +2743,13 @@ export const COLDMAIL_TEMPLATES = [
     html: registerBonusHtml,
   },
   {
-    match: /^resume-register-(apply2|all2|jobcard|rest)/,
+    match: /^resume-register-(apply2|all2|jobcard|rest|never)/,
     subject: {
       vi: '{{name}} ơi, người đăng ký CV nhận trung bình 3,2 lời mời mỗi tuần',
       ko: '{{name}}님, 이력서 등록자는 1주일 평균 3.2건의 오퍼를 받습니다',
       en: '{{name}}, CV registrants get 3.2 offers a week on average',
     },
-    desc: '이력서 등록 유도 v2 (8/5): 1차의 조작 수치(월7건·85%) 폐기 → 실측 "1주일 평균 오퍼 3.2건" 단일 스탯 + 이름 개인화 제목 + 연봉협상 앵글(당장 이직 안 해도 오퍼=협상 카드) + 수신거부 신설(/api/coldmail/unsub). apply2=지원버튼 이탈층(apply1 미등록 재접촉 포함) / jobcard1=공고카드 클릭층 / rest1=그 외 / all2(9/4)=미등록 전 세그먼트 통합 2차 — 본문을 "메일로 공고 알림 + 우선 검토 대상" 프레임으로 교체.',
+    desc: '이력서 등록 유도 v2 (8/5): 1차의 조작 수치(월7건·85%) 폐기 → 실측 "1주일 평균 오퍼 3.2건" 단일 스탯 + 이름 개인화 제목 + 연봉협상 앵글(당장 이직 안 해도 오퍼=협상 카드) + 수신거부 신설(/api/coldmail/unsub). apply2=지원버튼 이탈층(apply1 미등록 재접촉 포함) / jobcard1=공고카드 클릭층 / rest1=그 외 / all2(9/4)=미등록 전 세그먼트 통합 2차 — 본문을 "메일로 공고 알림 + 우선 검토 대상" 프레임으로 교체. never1(10/2)=가입 후 우리 메일을 한 번도 안 받은 미등록 회원(대부분 9월 가입) 605명, 동일 카피(3.2건 수치 외부 툴 재확인).',
     source: 'scripts/outreach/resume-register-coldmail.mjs',
     html: registerHtml2,
   },

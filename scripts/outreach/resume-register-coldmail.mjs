@@ -9,7 +9,8 @@
 //   node scripts/outreach/resume-register-coldmail.mjs --test wsj@likelion.net   # 한국어 테스트 1통
 //   node scripts/outreach/resume-register-coldmail.mjs                           # dry-run: 대상 목록
 //   node scripts/outreach/resume-register-coldmail.mjs --send [--max N]          # 실발송(베트남어)
-//   옵션: --segment all|apply|jobcard|rest · --campaign resume-register1 · --site http://localhost:3000
+//   옵션: --segment all|apply|jobcard|rest|never · --campaign resume-register1 · --site http://localhost:3000
+//   never(10/2) = 가입 후 우리 메일을 한 번도 안 받은 미등록 회원(발송 마커 *_sent(push 제외)·추천 메일·공개 콜드메일 전환 이력 전무). 3.2건 수치는 10/2 유저가 외부 툴로 재확인.
 import { Resend } from 'resend'
 import { sb, env } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
@@ -159,8 +160,18 @@ async function pickTargets() {
   const applyClickers = new Set(ev.filter((e) => e.event === 'click_apply_button').map((e) => e.user_id))
   const cardClickers = new Set(ev.filter((e) => e.event === 'click_job_card').map((e) => e.user_id))
 
+  // never: 메일 접촉 이력 0 — 발송 마커 이벤트(push_sent 제외) · 추천 메일 · 비회원 시절 공개 콜드메일→가입 전환
+  let mailed = null
+  if (segment === 'never') {
+    mailed = new Set()
+    for (const e of await fetchAll(() => sb.from('events').select('user_id').like('event', '%_sent').neq('event', 'push_sent').not('user_id', 'is', null).order('id'))) mailed.add(e.user_id)
+    for (const r of await fetchAll(() => sb.from('job_recommendations').select('user_id').not('user_id', 'is', null).order('id'))) mailed.add(r.user_id)
+    for (const c of await fetchAll(() => sb.from('events').select('meta').eq('event', 'coldmail_public_convert').order('id'))) if (c.meta?.converted_user) mailed.add(c.meta.converted_user)
+  }
+
   const inSegment = (p) => (
     segment === 'all' ? true
+      : segment === 'never' ? !mailed.has(p.id)
       : segment === 'apply' ? applyClickers.has(p.id)
         : segment === 'jobcard' ? cardClickers.has(p.id) && !applyClickers.has(p.id)
           : !cardClickers.has(p.id) && !applyClickers.has(p.id)
