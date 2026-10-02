@@ -137,10 +137,23 @@ export default async function handler(req, res) {
     const nowMs = Date.now()
     const weekAgoISO = new Date(nowMs - 7 * DAY).toISOString()
 
-    const [profilesRaw, idEvents, apps, excludedIds] = await Promise.all([
+    // 활성 판정용 유저별 방문 요약 — 로그인 식별 events 가 19만 행(1000행×193페이지 순차 = 수십 초)이라
+    // DB 집계 RPC(admin_user_activity, 20261002 마이그레이션)로 받는다. RPC 가 아직 없으면 옛 전량 스캔으로 폴백.
+    const loadActivity = async () => {
+      const { data, error } = await supabase.rpc('admin_user_activity', { p_since: weekAgoISO })
+      if (!error) return { rows: data || [], via: 'rpc' }
+      const idEvents = await fetchAll('events', 'user_id, created_at', q => q.not('user_id', 'is', null))
+      const byUser = {}
+      for (const e of idEvents) {
+        const u = byUser[e.user_id] || (byUser[e.user_id] = { user_id: e.user_id, recent: false, days: new Set() })
+        if (e.created_at >= weekAgoISO) u.recent = true
+        u.days.add(toVN(e.created_at))
+      }
+      return { rows: Object.values(byUser).map(u => ({ user_id: u.user_id, recent7d: u.recent, visit_days: u.days.size })), via: 'scan' }
+    }
+    const [profilesRaw, activity, apps, excludedIds] = await Promise.all([
       fetchAll('user_profiles', 'id, position, desired_roles, resume_url, is_resume_public, korean_cert, english_cert'),
-      // 로그인 식별 이벤트만(웹은 대부분 익명 client_id라 활성 판정은 로그인 유저 기준).
-      fetchAll('events', 'user_id, created_at', q => q.not('user_id', 'is', null)),
+      loadActivity(),
       fetchAll('job_applications', 'user_id', q => q.not('user_id', 'is', null)),
       fetchExcludedUserIds(supabase),
     ])
@@ -148,16 +161,15 @@ export default async function handler(req, res) {
     const profiles = profilesRaw.filter(p => !excludedIds.has(p.id))
 
     // ---- 활성 집합 계산 ----
-    // recent7d: 최근 7일 방문 / repeat: 서로 다른 2일+ 방문(반복) / applied: 채용 지원 이력
+    // recent7d: 최근 7일 방문 / repeat: 서로 다른 2일+ 방문(반복, VN 날짜 기준) / applied: 채용 지원 이력
     const recent7d = new Set()
-    const daysByUser = {}
-    for (const e of idEvents) {
-      if (e.created_at >= weekAgoISO) recent7d.add(e.user_id)
-      ;(daysByUser[e.user_id] || (daysByUser[e.user_id] = new Set())).add(toVN(e.created_at))
+    const repeat = new Set()
+    for (const r of activity.rows) {
+      if (r.recent7d) recent7d.add(r.user_id)
+      if (Number(r.visit_days) >= 2) repeat.add(r.user_id)
     }
     const applied = new Set(apps.map(a => a.user_id))
-    const isActive = (id) =>
-      recent7d.has(id) || applied.has(id) || (daysByUser[id] && daysByUser[id].size >= 2)
+    const isActive = (id) => recent7d.has(id) || applied.has(id) || repeat.has(id)
 
     // ---- 카테고리별 3단계 누적 ----
     const blank = () => ({ all: 0, resume: 0, resumePublic: 0, active: 0, korean: 0, english: 0 })

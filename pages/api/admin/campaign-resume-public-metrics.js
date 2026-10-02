@@ -58,10 +58,12 @@ export default async function handler(req, res) {
 
   try {
     const [evts, targetHead] = await Promise.all([
+      // meta 는 campaign·lead 두 키만 쓴다 — jsonb 통째로 받으면 페이로드가 1.6배(cv_url·resend_id 등)라 키만 뽑아 받는다(10/2 실측 0.9s→0.5s/8페이지).
       fetchAll(() => supabase.from('events')
-        .select('event, user_id, created_at, meta')
+        .select('event, user_id, created_at, campaign:meta->>campaign, lead:meta->>lead')
         .in('event', ['coldmail_public_sent', 'coldmail_public_click', 'coldmail_public_convert', 'coldmail_job_apply', 'recommend_sent', 'recommend_click', 'coldmail_resume_sent', 'coldmail_resume_click', 'coldmail_resume_upload', 'coldmail_photo_sent', 'photo_claim_view', 'photo_claim_done', 'coldmail_salary_sent', 'coldmail_salary_click', 'coldmail_salary_fill', 'coldmail_screen_sent', 'coldmail_screen_click', 'coldmail_screen_answer'])
-        .order('created_at')),
+        .order('created_at'))
+        .then(rows => rows.map(r => ({ event: r.event, user_id: r.user_id, created_at: r.created_at, meta: { campaign: r.campaign, lead: r.lead } }))),
       // 아직 비공개인(= 앞으로 보낼 수 있는) 이력서 보유자 수 — 라이브 참고값
       supabase.from('user_profiles').select('id', { count: 'exact', head: true })
         .not('resume_url', 'is', null).eq('is_resume_public', false),
