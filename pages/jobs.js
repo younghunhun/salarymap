@@ -230,7 +230,7 @@ export default function JobsPage() {
   }, [detailJob?.id])
 
   // Reset visible count when filters change
-  useEffect(() => { setVisibleCount(JOBS_PER_PAGE) }, [searchQuery, roleFilters, typeFilters, techFilters, expMin, expMax, sourceTab, sortBy, router.query.company])
+  useEffect(() => { setVisibleCount(JOBS_PER_PAGE) }, [searchQuery, roleFilters, typeFilters, techFilters, expMin, expMax, sourceTab, sortBy, router.query.company, router.query.ids])
 
   // 직무별 광고 딥링크: /jobs?role=Backend (또는 ?role=cat:software) 로 랜딩하면 해당 직무로
   // 바로 필터 → ATS(기업 직접등록) 공고가 최상단(companyFirst)에 떠서 우선 매칭·지원 유도.
@@ -450,6 +450,8 @@ export default function JobsPage() {
   }
 
   const companyQuery = router.query.company ? String(router.query.company).toLowerCase() : null
+  // 특정 공고 몇 건만 보여주는 딥링크 (?ids=uuid,uuid) — 메타 광고 착지용(회사 전체가 아닌 캠페인 JD만).
+  const idsQuery = router.query.ids ? new Set(String(router.query.ids).split(',').map(s => s.trim()).filter(Boolean)) : null
 
   // 검색·회사·마감 제외만 적용된 목록 — 본 목록과 필터 모달의 실시간 건수가 공유한다.
   const baseFilteredJobs = (() => {
@@ -458,7 +460,8 @@ export default function JobsPage() {
       // 출처 탭 — 본 목록과 필터 모달의 실시간 건수가 같이 줄어들도록 여기서 건다
       if (sourceTab === 'ktc' && job.source !== 'ktc') return false
       if (companyQuery && job.company?.toLowerCase() !== companyQuery) return false
-      if (q && !job.title?.toLowerCase().includes(q) && !job.company?.toLowerCase().includes(q)) return false
+      if (idsQuery && !idsQuery.has(job.id)) return false
+      if (q &&!job.title?.toLowerCase().includes(q) && !job.company?.toLowerCase().includes(q)) return false
       if (hideExpired && job.deadline && new Date(job.deadline) < new Date()) return false
       return true
     })
@@ -628,7 +631,7 @@ export default function JobsPage() {
   // 핫 섹션: 필터 없는 기본 뷰에서만. featured 우선, 부족하면 마감임박·고연봉으로 채움.
   // 핫에 노출된 공고는 아래 메인 그리드에서 제외해 같은 공고가 두 번 보이지 않게 한다.
   const hotJobs = (() => {
-    if (jobs.length === 0 || activeFilterCount > 0 || companyQuery || sortBy === 'saved') return []
+    if (jobs.length === 0 || activeFilterCount > 0 || companyQuery || idsQuery || sortBy === 'saved') return []
     const now = new Date()
     const hotScore = (j) => {
       let s = 0
@@ -649,7 +652,7 @@ export default function JobsPage() {
     const base = hotJobs.length ? filteredJobs.filter(j => !hotIds.has(j.id)) : filteredJobs
     if (roleFilters.includes('grp:ktc')) return pinPriority(base, KTC_PRIORITY_IDS)
     // 내 직군 부스팅 — 검색·필터·정렬을 안 건드린 기본 뷰에서만. 순서만 바꾸고 목록은 그대로.
-    if (boost && sortBy === 'spread' && roleFilters.length === 0 && !searchQuery && !companyQuery)
+    if (boost && sortBy === 'spread' && roleFilters.length === 0 && !searchQuery && !companyQuery && !idsQuery)
       return [...base.filter(j => roleGroupKey(j.role) === boost.group), ...base.filter(j => roleGroupKey(j.role) !== boost.group)]
     return base
   })()

@@ -48,7 +48,7 @@ const norm = (e) => String(e || '').trim().toLowerCase()
 const validEmail = (e) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(e)
 // 호칭(tên) — 시트 이름은 "Họ Tên"(기본)과 서양식 "Tên Họ"(ITviec 등)가 섞여 있다. 마지막 토큰이 흔한 성(姓)이고
 // 첫 토큰은 아니면 서양식으로 보고 첫 토큰을 쓴다. 괄호 영문명 제거, 전부 대문자면 첫 글자만 대문자로.
-const SURNAMES = new Set(['nguyen', 'nguyễn', 'tran', 'trần', 'le', 'lê', 'pham', 'phạm', 'hoang', 'hoàng', 'huynh', 'huỳnh', 'phan', 'vu', 'vũ', 'vo', 'võ', 'dang', 'đặng', 'bui', 'bùi', 'do', 'đỗ', 'ho', 'hồ', 'ngo', 'ngô', 'duong', 'dương', 'ly', 'lý', 'dinh', 'đinh', 'truong', 'trương', 'mai', 'cao', 'luu', 'lưu', 'ta', 'tạ', 'trinh', 'trịnh', 'lam', 'lâm', 'to', 'tô'])
+const SURNAMES = new Set(['nguyen', 'nguyễn', 'tran', 'trần', 'le', 'lê', 'pham', 'phạm', 'hoang', 'hoàng', 'huynh', 'huỳnh', 'phan', 'vu', 'vũ', 'vo', 'võ', 'dang', 'đặng', 'bui', 'bùi', 'do', 'đỗ', 'ho', 'hồ', 'ngo', 'ngô', 'duong', 'dương', 'ly', 'lý', 'dinh', 'đinh', 'truong', 'trương', 'mai', 'cao', 'luu', 'lưu', 'ta', 'tạ', 'trinh', 'trịnh', 'lam', 'lâm', 'to', 'tô', 'tong', 'tống'])
 const tenOf = (name) => {
   const toks = String(name || '').replace(/\(.*?\)/g, '').trim().split(/\s+/).filter(Boolean)
   if (!toks.length) return 'bạn'
@@ -59,7 +59,7 @@ const tenOf = (name) => {
   else if (isSur(toks[n - 1])) t = n >= 3 ? toks[n - 2] : toks[0] // "Phu Thinh Nguyen" → Thinh / "Quyen Nguyen" → Quyen
   else if (toks.slice(1, -1).some(isSur)) t = toks[0]            // "Linh Tran Khanh" → Linh (성이 가운데)
   else t = toks[n - 1]
-  return t === t.toUpperCase() ? t[0] + t.slice(1).toLowerCase() : t
+  return t === t.toUpperCase() ? t[0] + t.slice(1).toLowerCase() : t[0].toUpperCase() + t.slice(1)
 }
 // 시트 이름이 이메일 아이디·"Test …"·한 단어면 이름이 아니다 → 파싱본 full_name 으로 대체, 그래도 없으면 미발송
 const looksName = (s) => /^[\p{L}\s'’.-]+$/u.test(s) && s.trim().split(/\s+/).length >= 2 && !/^test\b/i.test(s)
