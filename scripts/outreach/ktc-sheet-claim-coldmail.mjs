@@ -40,7 +40,46 @@ const esc = (s) => String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<':
 const csvCell = (v) => { const s = String(v ?? ''); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s }
 const norm = (e) => String(e || '').trim().toLowerCase()
 const validEmail = (e) => /^[^@\s]+@[^@\s.]+\.[^@\s]+$/.test(e)
-const tenOf = (name) => String(name || '').trim().split(/\s+/).pop() || 'bạn'
+// 호칭(tên) — 시트 이름은 "Họ Tên"(기본)과 서양식 "Tên Họ"(ITviec 등)가 섞여 있다. 마지막 토큰이 흔한 성(姓)이고
+// 첫 토큰은 아니면 서양식으로 보고 첫 토큰을 쓴다. 괄호 영문명 제거, 전부 대문자면 첫 글자만 대문자로.
+const SURNAMES = new Set(['nguyen', 'nguyễn', 'tran', 'trần', 'le', 'lê', 'pham', 'phạm', 'hoang', 'hoàng', 'huynh', 'huỳnh', 'phan', 'vu', 'vũ', 'vo', 'võ', 'dang', 'đặng', 'bui', 'bùi', 'do', 'đỗ', 'ho', 'hồ', 'ngo', 'ngô', 'duong', 'dương', 'ly', 'lý', 'dinh', 'đinh', 'truong', 'trương', 'mai', 'cao', 'luu', 'lưu', 'ta', 'tạ', 'trinh', 'trịnh', 'lam', 'lâm', 'to', 'tô'])
+const tenOf = (name) => {
+  const toks = String(name || '').replace(/\(.*?\)/g, '').trim().split(/\s+/).filter(Boolean)
+  if (!toks.length) return 'bạn'
+  const isSur = (t) => SURNAMES.has(t.toLowerCase())
+  const n = toks.length
+  let t
+  if (n === 1 || isSur(toks[0])) t = toks[n - 1]                 // Họ Tên(기본) → 마지막
+  else if (isSur(toks[n - 1])) t = n >= 3 ? toks[n - 2] : toks[0] // "Phu Thinh Nguyen" → Thinh / "Quyen Nguyen" → Quyen
+  else if (toks.slice(1, -1).some(isSur)) t = toks[0]            // "Linh Tran Khanh" → Linh (성이 가운데)
+  else t = toks[n - 1]
+  return t === t.toUpperCase() ? t[0] + t.slice(1).toLowerCase() : t
+}
+// 시트 이름이 이메일 아이디·"Test …"·한 단어면 이름이 아니다 → 파싱본 full_name 으로 대체, 그래도 없으면 미발송
+const looksName = (s) => /^[\p{L}\s'’.-]+$/u.test(s) && s.trim().split(/\s+/).length >= 2 && !/^test\b/i.test(s)
+const cleanUni = (s) => { const u = String(s || '').replace(/^[-–\s]+/, '').trim(); return u.length >= 3 && u.length <= 60 ? u : '' }
+const titleIfCaps = (s) => s && s === s.toUpperCase() ? s.toLowerCase().replace(/(^|[\s/&-])(\p{L})/gu, (m, a, b) => a + b.toUpperCase()) : s
+// 시트 position/applied_job 은 "FPT401- Embedded Software Developer (Java, C++, Python)" 꼴 — 코드 접두어·괄호·#id 를 벗긴다.
+const stripCode = (s) => String(s || '').replace(/^(?:[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4})(#\d+)?\s*[-–:_]?\s*/, '').replace(/\s*\(#\d+\)\s*$/, '').trim()
+const shortPos = (s) => stripCode(s).replace(/\s*\(.*$/, '').trim()
+// applied_date 포맷 혼재: "dd-mm-yyyy HH:mm"(ITviec) · "dd/mm/yyyy HH:mm" · "mm/dd/yyyy"(시각 없음, JobsGO 등) · "d/m/yy" — 월만 쓴다.
+const appliedMonthOf = (raw, createdAt) => {
+  const s = String(raw || '')
+  let m = null, y = null
+  let x = s.match(/(\d{4})-(\d{2})-(\d{2})/)
+  if (x) { y = +x[1]; m = +x[2] }
+  else if ((x = s.match(/(\d{1,2})-(\d{1,2})-(\d{4})/))) { y = +x[3]; m = +x[2] }
+  else if ((x = s.match(/(\d{1,2})\/(\d{1,2})\/(\d{2,4})/))) {
+    const a = +x[1], b = +x[2]; y = +x[3] < 100 ? 2000 + +x[3] : +x[3]
+    const hasTime = /\d{1,2}:\d{2}/.test(s)
+    m = a > 12 ? b : b > 12 ? a : hasTime ? b : a // 시각 동반=dd/mm(시트 수기), 날짜만=mm/dd(잡보드 export)
+  }
+  if (!m && createdAt) { y = +createdAt.slice(0, 4); m = +createdAt.slice(5, 7) }
+  if (!m || m < 1 || m > 12) return null
+  const now = new Date()
+  if (y > now.getFullYear() || (y === now.getFullYear() && m > now.getMonth() + 1)) return null // 미래(오입력)
+  return m
+}
 
 // ── 메일(원본 클레임 양식 그대로 — ktc-claim-coldmail.mjs 와 동일 렌더) ──
 const template = readFileSync(TEMPLATE, 'utf8')
@@ -127,9 +166,10 @@ async function prepare(leads, claimBy) {
   const queue = max ? targets.slice(0, max) : targets
   let drive = null
   if (queue.some(l => !IMPORTABLE.test(l.cvUrl))) {
-    if (!env.GDRIVE_REFRESH_TOKEN) throw new Error('GDRIVE_REFRESH_TOKEN 없음 — node scripts/outreach/auth.mjs --drive 먼저')
+    const token = env.GDRIVE_REFRESH_TOKEN || process.env.GDRIVE_REFRESH_TOKEN
+    if (!token) throw new Error('GDRIVE_REFRESH_TOKEN 없음 — node scripts/outreach/auth.mjs --drive 먼저')
     const auth = new google.auth.OAuth2(env.GMAIL_CLIENT_ID, env.GMAIL_CLIENT_SECRET, OAUTH_REDIRECT)
-    auth.setCredentials({ refresh_token: env.GDRIVE_REFRESH_TOKEN })
+    auth.setCredentials({ refresh_token: token })
     drive = google.drive({ version: 'v3', auth })
   }
   console.log(`준비 대상 ${queue.length}명 (기준비 ${leads.length - targets.length}, 직링크 ${queue.filter(l => IMPORTABLE.test(l.cvUrl)).length} · Drive ${queue.filter(l => !IMPORTABLE.test(l.cvUrl)).length}) | 워커 ${workers}`)
@@ -200,16 +240,14 @@ async function prepare(leads, claimBy) {
     p.latest = r // created_at 오름차순이라 마지막이 최신
     people.set(email, p)
   }
-  const nowYm = new Date().toISOString().slice(0, 7)
   let leads = [...people.values()].map(p => {
     const r = p.latest
-    const ap = String(r.applied_date || r.created_at || '').slice(0, 10)
     return {
       email: p.email, lead: p.lead, cvUrl: p.cvDirect || p.cvDrive,
-      name: (r.full_name || '').trim(), ten: tenOf(r.full_name),
-      company: (r.applied_company || '').trim(), job: (r.applied_job || '').replace(/^(?:[A-Z]{2,6}\d{3,4}|[RVK]\d{1,4})(#\d+)?\s*[-–:]\s*/, '').trim(),
-      position: (r.position || '').trim(), university: (r.university || '').trim(), yoe: (r.yoe || '').toString().trim(),
-      appliedMonth: ap && ap.slice(0, 7) <= nowYm ? parseInt(ap.slice(5, 7), 10) : null,
+      name: (r.full_name || '').replace(/\(.*?\)/g, '').trim(),
+      company: (r.applied_company || '').trim(), job: stripCode(r.applied_job),
+      sheetPos: shortPos(r.position), university: cleanUni(r.university), yoe: (r.yoe || '').toString().trim(),
+      appliedMonth: appliedMonthOf(r.applied_date, r.created_at),
     }
   })
   const total = leads.length
@@ -245,16 +283,19 @@ async function prepare(leads, claimBy) {
   for (const l of leads) {
     const c = claimBy.get(l.email); const p = c?.summary || {}
     l.cvUrl = IMPORTABLE.test(c?.cv_url || '') ? c.cv_url : (IMPORTABLE.test(l.cvUrl) ? l.cvUrl : '')
-    l.name = l.name || (p.full_name || '').trim(); l.ten = tenOf(l.name)
-    l.university = l.university || (p.university || '').trim()
+    const parsedName = (p.full_name || '').replace(/\(.*?\)/g, '').trim()
+    l.name = looksName(l.name) ? l.name : (looksName(parsedName) ? parsedName : ''); l.ten = tenOf(l.name)
+    l.university = l.university || cleanUni(p.university)
     l.skills = Array.isArray(p.skills) ? p.skills : []
-    l.position = l.position || (p.headline || '').trim() || l.job
+    // 제목·카드용 직무: 시트 값(코드·괄호 제거)이 40자 이내면 그대로, 길면 파싱본 직무 → 짧은 공고명 순
+    const parsedPos = shortPos(p.position || p.headline || '')
+    l.position = titleIfCaps((l.sheetPos && l.sheetPos.length <= 40 ? l.sheetPos : '') || (parsedPos && parsedPos.length <= 40 ? parsedPos : '') || shortPos(l.job) || l.sheetPos || parsedPos)
     l.job = l.job || l.position
     l.parsed = !!p.full_name
   }
   const ready = leads.filter(l => l.cvUrl && l.name && l.position)
-  const unprepared = leads.length - ready.length
-  console.log(`발송 가능 ${ready.length} (파싱 완료 ${ready.filter(l => l.parsed).length} · 시트 카드만 ${ready.filter(l => !l.parsed).length}) | 미준비 ${unprepared} = --prepare 필요`)
+  const unprepared = leads.filter(l => !l.cvUrl).length
+  console.log(`발송 가능 ${ready.length} (파싱 완료 ${ready.filter(l => l.parsed).length} · 시트 카드만 ${ready.filter(l => !l.parsed).length}) | 미준비 ${unprepared} = --prepare 필요 | 이름/직무 없음 ${leads.length - ready.length - unprepared}`)
   const capped = max ? ready.slice(0, max) : ready
   if (!capped.length) { console.log('보낼 대상 없음.'); return }
 
@@ -268,7 +309,11 @@ async function prepare(leads, claimBy) {
   console.log(`\n이번 발송 ${queue.length}명 | 지원월 ${JSON.stringify(months)} | 대학 표기 ${queue.filter(l => l.university).length}`)
   console.log(`샘플: ${s.email} / ${s.ten} / ${s.position} / ${s.university || '(대학 없음)'} / ${s.company} · ${s.job} / 스킬 ${s.skills.slice(0, 3).join(',')}`)
   console.log(`제목: ${subject(s)}\nCTA: ${ctaFor(s)}`)
-  if (!doSend) { console.log('\n[dry-run] --send 로 실발송.'); return }
+  if (!doSend) {
+    const step = Math.max(1, Math.floor(queue.length / 12))
+    for (const l of queue.filter((_, i) => i % step === 0).slice(0, 12)) console.log(`  · ${l.name} → ${l.ten} | ${l.position} | ${l.appliedMonth ? l.appliedMonth + '월' : '월없음'} | ${l.company || '(회사없음)'} | ${l.university || '(대학없음)'}`)
+    console.log('\n[dry-run] --send 로 실발송.'); return
+  }
   if (lang !== 'vi') throw new Error('실발송은 vi 고정 — --lang ko 는 --test 전용')
 
   const { Resend } = await import('resend'); const resend = new Resend(env.RESEND_API_KEY)

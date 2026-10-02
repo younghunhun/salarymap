@@ -1219,6 +1219,13 @@ export const COLDMAIL_TEMPLATES = [
     html: vkuSignupHtml,
   },
   {
+    match: /^coldmail-ktc-cv-sheet1002/,
+    subject: KTC_CLAIM_SUBJECT,
+    desc: 'KTC CANDIDATE DATA 시트 전체 기준 CV 클레임 (10/2~): 7/28 CSV 리스트 밖 미가입·미접촉 지원자까지 확장. CV가 Drive 링크(recruitment@likelion.net 소유)인 2,300명+는 Drive API로 받아 resumes 버킷(ktc-claim/sheet1002)으로 옮겨 파싱(ktc_claim_profiles) 후 발송. 양식·랜딩·콜백 임포트는 KTC 4차 클레임과 동일.',
+    source: 'scripts/outreach/ktc-sheet-claim-coldmail.mjs + scripts/ktc-claim-coldmail-vi.html',
+    html: ktcClaimHtml,
+  },
+  {
     match: /^coldmail-ktc-cv-vku1001/,
     subject: KTC_CLAIM_SUBJECT,
     desc: 'VKU K-Tech College Job Matching Weekend(9/30 다낭) 현장 면접 신청자 72명 → CV 클레임 (10/1). 양식은 KTC 4차 클레임과 동일, 지원 경로 문구만 "Job Matching Weekend tại VKU"로 교체. Drive CV를 resumes 버킷(ktc-claim/vku0930)으로 옮겨 파싱(ktc_claim_profiles) 후 발송 — 캠페인명이 coldmail-ktc-cv 로 시작해야 가입 콜백 CV 임포트가 동작.',
@@ -3923,7 +3930,7 @@ export const COLDMAIL_TEMPLATES = [
       ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Hyperstar Global Influencer Marketing Assistant',
       en: "[FYI] You've been nominated — Global Influencer Marketing Assistant at Hyperstar",
     },
-    desc: 'Hyperstar(R203) Global Influencer Marketing Assistant recommend (9/17 등록 당일~9/21, 누적 151명): 비공개 프레임 — HCM 거주 명시 × 0~2y × 비개발 하드게이트 위에 티어링. 1차 T1 인플루언서 경험×상급언어 9 · T2 인플루언서×기타언어 5 · T3 SNS텍스트×마케팅직군×상급언어 94. 2차 T5 40 = SNS 텍스트 게이트 제거(SNS 상시 사용은 개인 생활이라 이력서 미기재가 정상 → T3가 인증 상위자를 걸러냄). 3차 잔여 13. 10/2 4차: 재학생 게이트(졸업 2027+ 또는 학생/인턴 헤드라인) 추가 + 카피에 풀타임 필수 명시 — 면접 피드백 "풀타임 불가"(공고 "인턴 적합" 문구에 학생 지원) 대응, 공고 본문도 수정. 1차 부진 원인 실측: T3 수신자 96%가 최근 7일 recommend 기수신(인당 평균 7.4통)이라 클릭 자체가 안 나옴 — 이후 캠페인에 신선도 게이트 도입 계기.',
+    desc: 'Hyperstar(R203) Global Influencer Marketing Assistant recommend (9/17 등록 당일~9/21, 누적 151명): 비공개 프레임 — HCM 거주 명시 × 0~2y × 비개발 하드게이트 위에 티어링. 1차 T1 인플루언서 경험×상급언어 9 · T2 인플루언서×기타언어 5 · T3 SNS텍스트×마케팅직군×상급언어 94. 2차 T5 40 = SNS 텍스트 게이트 제거(SNS 상시 사용은 개인 생활이라 이력서 미기재가 정상 → T3가 인증 상위자를 걸러냄). 3차 잔여 13. 10/2 4차: 재학생 게이트(졸업 2027+ 또는 학생/인턴 헤드라인) 추가 + 카피에 풀타임 필수 명시 — 면접 피드백 "풀타임 불가"(공고 "인턴 적합" 문구에 학생 지원) 대응, 공고 본문도 수정. 10/2 5차 t7-grad 70명: 호현·고객 피드백(면접 2명 모두 학생→불합, ★졸업생·풀타임·즉시근무 필수, 중요=인플루언서/SNS 감각·커뮤니케이션) → 졸업 ≤2025 × 인플루언서/SNS 시그널 × 언어, 경력 컷 없음, 카피 첫머리에 ★필수 3줄 강조. 1차 부진 원인 실측: T3 수신자 96%가 최근 7일 recommend 기수신(인당 평균 7.4통)이라 클릭 자체가 안 나옴 — 이후 캠페인에 신선도 게이트 도입 계기.',
     source: 'scripts/outreach/hyperstar0917-recommend-coldmail.mjs',
     html: (lang) => recommendShell(lang, {
       intro: {

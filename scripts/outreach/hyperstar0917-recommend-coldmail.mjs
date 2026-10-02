@@ -14,7 +14,7 @@
 // 개발직군만 있는 프로필 제외. 1인1통 · 공개/비공개 프레임. 급여 6~10M은 낮은 편 → 카피에 명시해 자기선별 유도.
 //
 //   node scripts/outreach/hyperstar0917-recommend-coldmail.mjs                       # dry-run
-//   node scripts/outreach/hyperstar0917-recommend-coldmail.mjs --send [--group t1|t2|t3|t5] [--max N] [--gap-hours N]
+//   node scripts/outreach/hyperstar0917-recommend-coldmail.mjs --send [--group t1|t2|t3|t5|t6|t7] [--max N] [--gap-hours N]
 import { Resend } from 'resend'
 import { sb, env, fetchAll } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
@@ -62,6 +62,11 @@ const base = (p) => inHcm(p) && y(p) <= 24 && !devOnly(p) && !student(p)
 // 가점: 인플루언서 직접 경험 > 언어 상급 > 마케팅 직군 > 뷰티/패션·이커머스(우대)
 const score = (p) => (inflStrong(p) ? 2 : 0) + (langHi(p) ? 1 : 0) + (mktRole(p) ? 1 : 0) + (beauty(p) ? 1 : 0) + (ecom(p) ? 1 : 0)
 
+// 10/2 5차(호현·고객 피드백 "면접 2명 모두 학생 → 불합"): ★졸업생 × 풀타임 × 즉시근무 필수, 중요=인플루언서/SNS 감각·커뮤니케이션.
+// T7 = 졸업연도 2025 이전(학생 헤드라인 없음) × HCM × 비개발 × (인플루언서 직접경험 or SNS 운영 텍스트) × 언어 시그널. 경력 컷 없음(급여 6~10M 카피로 자기선별).
+const grad25 = (p) => { const g = parseInt(p.graduation_year) || 0; return g >= 1990 && g <= 2025 && !/(student|sinh viên|đang học|final[- ]year|năm (nhất|hai|ba|tư|cuối))/i.test(String(p.headline || '')) }
+const snsWide = (p) => /(tiktok|instagram|youtube|facebook ads|social media|mạng xã hội|content creator|fanpage|reels|short video)/i.test(p.__t)
+const inflWide = (p) => /(influencer|kol|koc|seeding|booking|creator partnership|affiliate)/i.test(p.__t)
 const GROUPS = [
   {
     gkey: 't1', camp: 'hyperstar0917-recommend-t1',
@@ -88,13 +93,18 @@ const GROUPS = [
     label: { vi: 'Global Influencer Marketing Assistant', ko: 'T6 마케팅 직군 × 기타 언어 시그널 (상급 인증 아님, 3차 10/1)' },
     pick: (p) => (base(p) && mktRole(p) && langAny(p) ? score(p) : null),
   },
+  {
+    gkey: 't7', camp: 'hyperstar0917-recommend-t7-grad',
+    label: { vi: 'Global Influencer Marketing Assistant', ko: 'T7 졸업생(≤2025) × 인플루언서/SNS 시그널 × 언어 (5차 10/2, 경력 컷 없음)' },
+    pick: (p) => (inHcm(p) && !devOnly(p) && grad25(p) && (inflWide(p) || snsWide(p)) && langAny(p) ? score(p) + (inflWide(p) ? 2 : 0) + (mktRole(p) ? 1 : 0) : null),
+  },
 ]
 
 // ── 카피(vi 실발송) — 근무지(멋사 HCM 사무실·한국팀 원격 협업)·급여·언어·풀타임 명시해 자기선별 유도 ──
 const COMPANY = 'Hyperstar'
 const INITIAL = 'H'
 const META_VI = 'Văn phòng LikeLion TP.HCM · Remote với team Hàn Quốc · 6–10 triệu ₫/tháng · Fresher/Junior'
-const INTRO = '<b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI (B2B SaaS giúp thương hiệu tìm creator, đề xuất chiến dịch, quản lý outreach và phân tích ROI) — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch và kiểm tra nội dung đăng tải; tổng hợp dữ liệu &amp; báo cáo hiệu quả. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets, cẩn thận và theo dõi timeline tốt. <b>Không yêu cầu kinh nghiệm</b> — phù hợp fresher/junior. Ưu tiên: yêu thích K-Beauty/fashion/lifestyle, từng làm influencer list-up/outreach/seeding, quan tâm TikTok Shop/Amazon/Shopify. <b>Làm việc full-time (Thứ 2–6) tại văn phòng LikeLion TP.HCM</b>, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b> (có thể deal theo năng lực), đóng BHXH đầy đủ. <b>Lưu ý: bắt buộc làm full-time thứ 2–6 tại văn phòng</b> — không nhận part-time, không phù hợp với sinh viên còn đang đi học.'
+const INTRO = '<b style="color:#c2410c;">★ Vị trí này chỉ dành cho ứng viên ĐÃ TỐT NGHIỆP, có thể làm FULL-TIME (Thứ 2–6 tại văn phòng) và BẮT ĐẦU NGAY — không phù hợp với sinh viên còn đang đi học hoặc đang làm khóa luận.</b> Hyperstar đặc biệt coi trọng <b>cảm nhận về influencer/SNS</b> (kinh nghiệm, trải nghiệm hoặc sự quan tâm thực sự với công việc influencer) và <b>kỹ năng giao tiếp</b>. <b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI (B2B SaaS giúp thương hiệu tìm creator, đề xuất chiến dịch, quản lý outreach và phân tích ROI) — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch và kiểm tra nội dung đăng tải; tổng hợp dữ liệu &amp; báo cáo hiệu quả. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets, cẩn thận và theo dõi timeline tốt. <b>Không yêu cầu kinh nghiệm</b> — phù hợp fresher/junior. Ưu tiên: yêu thích K-Beauty/fashion/lifestyle, từng làm influencer list-up/outreach/seeding, quan tâm TikTok Shop/Amazon/Shopify. <b>Làm việc full-time (Thứ 2–6) tại văn phòng LikeLion TP.HCM</b>, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b> (có thể deal theo năng lực), đóng BHXH đầy đủ. <b>Lưu ý: bắt buộc làm full-time thứ 2–6 tại văn phòng</b> — không nhận part-time, không phù hợp với sinh viên còn đang đi học.'
 const SUBJECT = {
   public: (role) => `[FYI] Bạn được chọn vào danh sách đề cử gửi ${COMPANY} — ${role} (TP.HCM)`,
   private: (role) => `[FYI] Bạn được chọn vào danh sách đề cử — ${role} tại ${COMPANY} (TP.HCM)`,
