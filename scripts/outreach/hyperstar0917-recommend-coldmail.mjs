@@ -9,6 +9,7 @@
 // 9/17 오후 2차(유저 결정 "52명 보내"): T5 마케팅 직군 × 상급 인증 = 52. SNS 텍스트 요건 제거 —
 //   SNS 상시 사용은 개인 생활이라 이력서에 미기재가 정상, T3의 sns() 게이트가 과했음(인증 상위자들이 걸러짐).
 //   1차 실측 교훈: 지원자 3명 전부 이 스펙 밴드. 발송은 --group t5 로 한정(1~3차 기수신은 recSet으로 자동 제외).
+// 10/2 4차: 재학생 게이트 추가 + 카피에 풀타임 필수·재학생 불가 명시(면접 피드백 "풀타임 안 됨"). 공고 본문도 동일 수정(scripts/tmp/r203-jd-fulltime-fix.mjs).
 // 10/1 3차(유저 결정 "t6만 더"): T6 마케팅 직군 × 기타 언어 시그널(상급 인증 아님). 10/1 실측 잔여 105 (누적 발송 151 · 지원 27).
 // 개발직군만 있는 프로필 제외. 1인1통 · 공개/비공개 프레임. 급여 6~10M은 낮은 편 → 카피에 명시해 자기선별 유도.
 //
@@ -52,7 +53,10 @@ const langAny = (p) => !!p.english_cert || !!p.korean_cert || /(ielts|toeic|toef
 const beauty = (p) => /(beauty|mỹ phẩm|cosmetic|k-beauty|fashion|thời trang|lifestyle)/i.test(p.__t)
 const ecom = (p) => /(tiktok shop|amazon|shopify|shopee|lazada)/i.test(p.__t)
 const y = (p) => p.yoe_months ?? 0
-const base = (p) => inHcm(p) && y(p) <= 24 && !devOnly(p)
+// 10/2 추가: 재학생 제외 — 면접에서 "풀타임 불가"가 나온 원인(공고의 "인턴 적합" 문구에 학생이 지원). 졸업연도 2027+ 또는 학생/인턴 헤드라인×졸업 2026+.
+const student = (p) => (parseInt(p.graduation_year) || 0) >= 2027
+  || (/(student|sinh viên|intern|thực tập|năm (nhất|hai|ba|tư|[1-4])|year)/i.test(String(p.headline || '')) && (parseInt(p.graduation_year) || 0) >= 2026)
+const base = (p) => inHcm(p) && y(p) <= 24 && !devOnly(p) && !student(p)
 // 가점: 인플루언서 직접 경험 > 언어 상급 > 마케팅 직군 > 뷰티/패션·이커머스(우대)
 const score = (p) => (inflStrong(p) ? 2 : 0) + (langHi(p) ? 1 : 0) + (mktRole(p) ? 1 : 0) + (beauty(p) ? 1 : 0) + (ecom(p) ? 1 : 0)
 
@@ -88,7 +92,7 @@ const GROUPS = [
 const COMPANY = 'Hyperstar'
 const INITIAL = 'H'
 const META_VI = 'Văn phòng LikeLion TP.HCM · Remote với team Hàn Quốc · 6–10 triệu ₫/tháng · Fresher/Junior'
-const INTRO = '<b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI (B2B SaaS giúp thương hiệu tìm creator, đề xuất chiến dịch, quản lý outreach và phân tích ROI) — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch và kiểm tra nội dung đăng tải; tổng hợp dữ liệu &amp; báo cáo hiệu quả. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets, cẩn thận và theo dõi timeline tốt. <b>Không yêu cầu kinh nghiệm</b> — phù hợp fresher/junior. Ưu tiên: yêu thích K-Beauty/fashion/lifestyle, từng làm influencer list-up/outreach/seeding, quan tâm TikTok Shop/Amazon/Shopify. <b>Làm việc full-time (Thứ 2–6) tại văn phòng LikeLion TP.HCM</b>, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b> (có thể deal theo năng lực), đóng BHXH đầy đủ.'
+const INTRO = '<b>Hyperstar</b> — startup công nghệ Hàn Quốc phát triển nền tảng tự động hóa <b>Influencer Marketing toàn cầu</b> dựa trên Generative AI (B2B SaaS giúp thương hiệu tìm creator, đề xuất chiến dịch, quản lý outreach và phân tích ROI) — đang tuyển <b>Global Influencer Marketing Assistant</b> qua FYI. Công việc: tìm kiếm &amp; list-up creator trên TikTok/Instagram/YouTube cho thị trường Việt Nam, Đông Nam Á, Mỹ; outreach qua email/DM; theo dõi tiến độ chiến dịch và kiểm tra nội dung đăng tải; tổng hợp dữ liệu &amp; báo cáo hiệu quả. Yêu cầu: <b>giao tiếp được bằng tiếng Anh hoặc tiếng Hàn</b>, thường xuyên dùng TikTok/Instagram/YouTube, thành thạo Excel/Google Sheets, cẩn thận và theo dõi timeline tốt. <b>Không yêu cầu kinh nghiệm</b> — phù hợp fresher/junior. Ưu tiên: yêu thích K-Beauty/fashion/lifestyle, từng làm influencer list-up/outreach/seeding, quan tâm TikTok Shop/Amazon/Shopify. <b>Làm việc full-time (Thứ 2–6) tại văn phòng LikeLion TP.HCM</b>, phối hợp remote với team Hyperstar tại Hàn Quốc. Lương <b>6–10 triệu ₫/tháng</b> (có thể deal theo năng lực), đóng BHXH đầy đủ. <b>Lưu ý: bắt buộc làm full-time thứ 2–6 tại văn phòng</b> — không nhận part-time, không phù hợp với sinh viên còn đang đi học.'
 const SUBJECT = {
   public: (role) => `[FYI] Bạn được chọn vào danh sách đề cử gửi ${COMPANY} — ${role} (TP.HCM)`,
   private: (role) => `[FYI] Bạn được chọn vào danh sách đề cử — ${role} tại ${COMPANY} (TP.HCM)`,
@@ -165,7 +169,7 @@ async function main() {
 
   const [pool, unsubs, recs, apps, todays] = await Promise.all([
     fetchAll(() => sb.from('user_profiles')
-      .select('id,email,full_name,position,desired_roles,yoe_months,location,english_cert,korean_cert,is_resume_public,skills,resume_summary,experiences,major')
+      .select('id,email,full_name,position,desired_roles,yoe_months,location,english_cert,korean_cert,is_resume_public,skills,resume_summary,experiences,major,graduation_year,headline')
       .not('email', 'is', null).not('resume_url', 'is', null).order('created_at', { ascending: false })),
     fetchAll(() => sb.from('events').select('user_id').eq('event', 'coldmail_unsub').not('user_id', 'is', null).order('id')),
     fetchAll(() => sb.from('job_recommendations').select('user_id').eq('job_id', JOB_ID).order('id')),
