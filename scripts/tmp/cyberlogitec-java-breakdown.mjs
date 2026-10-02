@@ -1,0 +1,26 @@
+import { sb, fetchAll } from '../outreach/lib.mjs'
+const profs = await fetchAll(() => sb.from('user_profiles').select('id,position,desired_roles,skills,resume_summary,experiences,major,headline,location,yoe_months,english_cert,resume_url').not('resume_url','is',null).not('email','is',null).order('created_at'))
+const roles = (p) => [p.position, ...(p.desired_roles||[])].filter(Boolean).map(r=>String(r).toLowerCase())
+const exp = (p) => Array.isArray(p.experiences) ? p.experiences.map(e=>`${e.title||e.position||''} ${e.company||''} ${e.description||''}`).join(' ') : ''
+const txt = (p) => (JSON.stringify(p.skills||'')+' '+String(p.position||'')+' '+String(p.headline||'')+' '+String(p.resume_summary||'')+' '+exp(p)+' '+String(p.major||'')).toLowerCase()
+const hcm = (p) => /(h[ồo]\s*ch[íi]\s*minh|hcm|sài gòn|sai gon|saigon|thủ đức|thu duc|bình thạnh|bình dương|binh duong|đồng nai|dong nai|biên hòa|bien hoa)/i.test(String(p.location||''))
+const hn = (p) => /(hà nội|ha noi|hanoi)/i.test(String(p.location||''))
+const dn = (p) => /(đà nẵng|da nang|danang)/i.test(String(p.location||''))
+const blank = (p) => !String(p.location||'').trim()
+const y = (p) => p.yoe_months ?? 0
+const enAny = (p) => !!p.english_cert || /(ielts|toeic|toefl|english|tiếng anh)/i.test(p.__t)
+for (const p of profs) p.__t = txt(p)
+const java = profs.filter(p => /\bjava\b/.test(p.__t) && !/javascript/.test(p.__t.replace(/\bjava\b/g,'')) || (/\bjava\b/.test(p.__t)))
+const javaT = profs.filter(p => /\bjava\b/.test(p.__t))
+const devRole = (p) => roles(p).some(r=>/(backend|fullstack|full-stack|java|software|developer|engineer)/.test(r))
+const c = (arr, f) => arr.filter(f).length
+console.log('이력서 보유 전체', profs.length)
+console.log('Java 텍스트 언급', javaT.length, '| 그중 개발 직군', c(javaT, devRole))
+const jd = javaT.filter(devRole)
+console.log('--- Java × 개발 직군 지역: HCM', c(jd,hcm), '| 하노이', c(jd,hn), '| 다낭', c(jd,dn), '| 미기재', c(jd,blank), '| 기타', c(jd,p=>!hcm(p)&&!hn(p)&&!dn(p)&&!blank(p)))
+console.log('--- Java × 개발 직군 경력: 0~1y', c(jd,p=>y(p)<12), '| 1~2y', c(jd,p=>y(p)>=12&&y(p)<24), '| 2~3y', c(jd,p=>y(p)>=24&&y(p)<36), '| 3y+', c(jd,p=>y(p)>=36))
+const j3 = jd.filter(p=>y(p)>=36)
+console.log('--- Java × 개발 × 3y+ (', j3.length, ') 지역: HCM', c(j3,hcm), '| 하노이', c(j3,hn), '| 다낭', c(j3,dn), '| 미기재', c(j3,blank))
+const j3h = j3.filter(hcm)
+console.log('--- Java × 개발 × 3y+ × HCM (', j3h.length, '): Spring/Oracle 언급', c(j3h,p=>/(spring|oracle)/.test(p.__t)), '| 영어 시그널', c(j3h,enAny), '| 둘 다', c(j3h,p=>/(spring|oracle)/.test(p.__t)&&enAny(p)))
+console.log('--- 비교: Spring 언급 전체', c(profs,p=>/spring/.test(p.__t)), '| 그중 HCM 3y+', c(profs,p=>/spring/.test(p.__t)&&hcm(p)&&y(p)>=36))

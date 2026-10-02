@@ -435,8 +435,9 @@ export const T = {
 
 export const METRICS_BASE = [
   { key: 'sessions', dataKey: 'sessions', color: '#2563EB', summaryKey: 'totalSessions', section: 'basic', tier: 'primary' },
-  { key: 'submissions', dataKey: 'submissions', color: '#374151', summaryKey: 'totalSubmissions', section: 'basic', tier: 'primary' },
   { key: 'signups', dataKey: 'signups', color: '#F59E0B', summaryKey: 'totalSignups', section: 'basic', tier: 'primary' },
+  { key: 'resumeUploads', dataKey: 'resumeUploads', color: '#14B8A6', summaryKey: 'totalResumeUploads', section: 'basic', tier: 'primary' },
+  { key: 'submissions', dataKey: 'submissions', color: '#374151', summaryKey: 'totalSubmissions', section: 'basic', tier: 'secondary' },
   { key: 'ad', dataKey: 'ad', color: '#4F46E5', summaryKey: 'adSubmissions', section: 'basic', tier: 'secondary' },
   { key: 'organic', dataKey: 'organic', color: '#10B981', summaryKey: 'organicSubmissions', section: 'basic', tier: 'secondary' },
   { key: 'companies', dataKey: 'companies', color: '#6B7280', summaryKey: 'uniqueCompanies', section: 'basic', tier: 'secondary' },
@@ -448,7 +449,6 @@ export const METRICS_BASE = [
   { key: 'jobAppsCompany', dataKey: 'jobAppsCompany', color: '#1D4ED8', summaryKey: 'totalJobAppsCompany', section: 'talent', tier: 'secondary' },
   { key: 'cvSuccessApps', dataKey: 'cvSuccessApps', color: '#059669', summaryKey: 'totalCvSuccessApps', section: 'talent', tier: 'secondary' },
   { key: 'saveClicks', dataKey: 'saveClicks', color: '#F472B6', summaryKey: 'totalSaveClicks', section: 'talent', tier: 'primary' },
-  { key: 'resumeUploads', dataKey: 'resumeUploads', color: '#14B8A6', summaryKey: 'totalResumeUploads', section: 'talent', tier: 'primary' },
   { key: 'resumePublic', dataKey: 'resumePublic', color: '#0D9488', summaryKey: 'totalResumePublic', section: 'talent', tier: 'secondary' },
   { key: 'resumePublicApp', dataKey: 'resumePublicApp', color: '#22C55E', summaryKey: 'totalResumePublicApp', section: 'talent', tier: 'secondary' },
   { key: 'resumePublicWeb', dataKey: 'resumePublicWeb', color: '#0EA5E9', summaryKey: 'totalResumePublicWeb', section: 'talent', tier: 'secondary' },
