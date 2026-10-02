@@ -53,9 +53,11 @@ const langAny = (p) => !!p.english_cert || !!p.korean_cert || /(ielts|toeic|toef
 const beauty = (p) => /(beauty|mỹ phẩm|cosmetic|k-beauty|fashion|thời trang|lifestyle)/i.test(p.__t)
 const ecom = (p) => /(tiktok shop|amazon|shopify|shopee|lazada)/i.test(p.__t)
 const y = (p) => p.yoe_months ?? 0
-// 10/2 추가: 재학생 제외 — 면접에서 "풀타임 불가"가 나온 원인(공고의 "인턴 적합" 문구에 학생이 지원). 졸업연도 2027+ 또는 학생/인턴 헤드라인×졸업 2026+.
+// 10/2 추가: 재학생 제외 — 면접에서 "풀타임 불가"가 나온 원인(공고의 "인턴 적합" 문구에 학생이 지원).
+// 기준 = 졸업연도가 미래(2027+)이거나, 2026 졸업인데 헤드라인에 본인을 "student/sinh viên"으로 쓴 사람.
+// "intern" 헤드라인은 제외 기준에서 뺌 — 2026 졸업자가 인턴 경력을 헤드라인에 쓰는 게 보통이라 졸업자 13명이 잘려 나갔음(1차 룰의 /year/는 "1 year experience"까지 잡는 버그).
 const student = (p) => (parseInt(p.graduation_year) || 0) >= 2027
-  || (/(student|sinh viên|intern|thực tập|năm (nhất|hai|ba|tư|[1-4])|year)/i.test(String(p.headline || '')) && (parseInt(p.graduation_year) || 0) >= 2026)
+  || (/(student|sinh viên|đang học|năm (nhất|hai|ba|tư))/i.test(String(p.headline || '')) && (parseInt(p.graduation_year) || 0) >= 2026)
 const base = (p) => inHcm(p) && y(p) <= 24 && !devOnly(p) && !student(p)
 // 가점: 인플루언서 직접 경험 > 언어 상급 > 마케팅 직군 > 뷰티/패션·이커머스(우대)
 const score = (p) => (inflStrong(p) ? 2 : 0) + (langHi(p) ? 1 : 0) + (mktRole(p) ? 1 : 0) + (beauty(p) ? 1 : 0) + (ecom(p) ? 1 : 0)
