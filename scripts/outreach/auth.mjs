@@ -11,10 +11,16 @@ if (!env.GMAIL_CLIENT_ID || !env.GMAIL_CLIENT_SECRET) {
   process.exit(1)
 }
 
-const client = oauthClient()
-const url = client.generateAuthUrl({ access_type: 'offline', prompt: 'consent select_account', scope: GMAIL_SCOPE, login_hint: SENDER })
+// --drive: KTC 팀 Drive 에 있는 지원자 CV(recruitment@likelion.net 소유, 공개 다운로드 불가)를 읽기 위한
+// drive.readonly 토큰 — 파일을 열 수 있는 likelion.net 계정으로 동의하고 GDRIVE_REFRESH_TOKEN 으로 저장(Gmail 토큰과 분리).
+const forDrive = process.argv.includes('--drive')
+const scope = forDrive ? [...GMAIL_SCOPE, 'https://www.googleapis.com/auth/drive.readonly'] : GMAIL_SCOPE
+const envKey = forDrive ? 'GDRIVE_REFRESH_TOKEN' : 'GMAIL_REFRESH_TOKEN'
 
-console.log('\n1) 아래 URL 을 브라우저에서 열고 wsj@likelion.net 으로 동의하세요:\n')
+const client = oauthClient()
+const url = client.generateAuthUrl({ access_type: 'offline', prompt: 'consent select_account', scope, login_hint: SENDER })
+
+console.log(`\n1) 아래 URL 을 브라우저에서 열고 ${forDrive ? 'KTC CV Drive 파일을 열 수 있는 likelion.net 계정' : 'wsj@likelion.net'}으로 동의하세요:\n`)
 console.log(url + '\n')
 
 const server = http.createServer(async (req, res) => {
@@ -29,7 +35,7 @@ const server = http.createServer(async (req, res) => {
       process.exit(1)
     }
     console.log('\n✅ 아래 값을 .env.local 에 추가하세요:\n')
-    console.log(`GMAIL_REFRESH_TOKEN=${tokens.refresh_token}\n`)
+    console.log(`${envKey}=${tokens.refresh_token}\n`)
     process.exit(0)
   } catch (e) {
     console.error('✗ 토큰 교환 실패:', e.message)
