@@ -1219,6 +1219,13 @@ export const COLDMAIL_TEMPLATES = [
     html: vkuSignupHtml,
   },
   {
+    match: /^coldmail-ktc-cv-sheet2025/,
+    subject: KTC_CLAIM_SUBJECT,
+    desc: 'KTC WORKER 2025 마스터시트(2025.5~10 지원자) 기준 CV 클레임: 미가입·미접촉 중 Drive/직링크 CV 보유자. 지원 시점은 "2025년 X월"로 연도 명시. 본문 2문단=가입자 주 평균 오퍼 3.2건 + 이력서 기등록자 우선 추천(sheet1002 와 동일 카피). CV는 Drive API로 받아 resumes 버킷(ktc-claim/sheet2025)으로 이동 후 파싱.',
+    source: 'scripts/outreach/ktc-sheet-claim-coldmail.mjs --source 2025 + scripts/ktc-claim-coldmail-vi.html',
+    html: ktcClaimHtml,
+  },
+  {
     match: /^coldmail-ktc-cv-sheet1002/,
     subject: KTC_CLAIM_SUBJECT,
     desc: 'KTC CANDIDATE DATA 시트 전체 기준 CV 클레임 (10/2~): 7/28 CSV 리스트 밖 미가입·미접촉 지원자까지 확장. CV가 Drive 링크(recruitment@likelion.net 소유)인 2,300명+는 Drive API로 받아 resumes 버킷(ktc-claim/sheet1002)으로 옮겨 파싱(ktc_claim_profiles) 후 발송. 양식·랜딩·콜백 임포트는 KTC 4차 클레임과 동일.',

@@ -12,6 +12,8 @@
 //   node scripts/outreach/ktc-sheet-claim-coldmail.mjs                       # dry-run
 //   node scripts/outreach/ktc-sheet-claim-coldmail.mjs --test a@x.com [--lang ko]
 //   node scripts/outreach/ktc-sheet-claim-coldmail.mjs --send [--max N]
+//   위 모든 명령에 --source 2025 를 붙이면 KTC WORKER 2025 마스터시트(data/ktc2025-master.csv) 리드로 동작
+//   (캠페인 coldmail-ktc-cv-sheet2025 · 버킷 ktc-claim/sheet2025 · 지원 시점은 연도까지 명시). 2026 먼저 보내면 겹침 121명은 기접촉으로 자동 제외.
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolveMx } from 'node:dns/promises'
 import { createClient } from '@supabase/supabase-js'
@@ -19,15 +21,19 @@ import { google } from 'googleapis'
 import { sb, env, fetchAll, fetchBlacklist, OAUTH_REDIRECT } from './lib.mjs'
 import { makeToken, leadId } from '../../lib/ktcMailToken.js'
 
-const CAMPAIGN = 'coldmail-ktc-cv-sheet1002'
+const args = process.argv.slice(2)
+const flag = (k, d) => { const i = args.indexOf('--' + k); return i >= 0 ? (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true) : d }
+// --source 2026(기본, ktc-support candidates DB) | 2025(KTC WORKER 2025 마스터시트 export = data/ktc2025-master.csv,
+//   scripts/tmp/ktc2025-export.mjs 로 Drive API export. 1인1행·Unsubscribed 열 존중·CV=CV_Data 또는 16.Upload CV Drive 링크)
+const source = flag('source', '2026') === '2025' ? '2025' : '2026'
+const CAMPAIGN = source === '2025' ? 'coldmail-ktc-cv-sheet2025' : 'coldmail-ktc-cv-sheet1002'
 const SITE = (env.NEXT_PUBLIC_SITE_URL || 'https://salary-fyi.com').replace(/\/$/, '')
 const RESEND_FROM = env.RESEND_FROM || 'FYI <hello@salary-fyi.com>'
-const BUCKET = 'resumes', PREFIX = 'ktc-claim/sheet1002'
+const BUCKET = 'resumes', PREFIX = source === '2025' ? 'ktc-claim/sheet2025' : 'ktc-claim/sheet1002'
+const CSV_2025 = new URL('../../data/ktc2025-master.csv', import.meta.url)
 const IMPORTABLE = /^https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\//
 const DRIVE = /drive\.google\.com|docs\.google\.com/
 
-const args = process.argv.slice(2)
-const flag = (k, d) => { const i = args.indexOf('--' + k); return i >= 0 ? (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true) : d }
 const doPrepare = args.includes('--prepare')
 const doSend = args.includes('--send')
 const testTo = flag('test', null)
@@ -81,15 +87,30 @@ const appliedMonthOf = (raw, createdAt) => {
   return m
 }
 
-// ── 메일(원본 클레임 양식 그대로 — ktc-claim-coldmail.mjs 와 동일 렌더) ──
-const template = readFileSync(TEMPLATE, 'utf8')
+// ── 메일: 원본 클레임 양식에서 "맞는 포지션이 생기면 전달" 문단만 교체(10/2 유저 확정) ──
+// 훅 = "가입자는 1주 평균 3.2건의 오퍼"(이력서 등록 캠페인과 같은 실측 확정치) + "이력서가 이미 등록돼 있어
+// 합격 가능성 높은 공고를 우선 골라 추천"(KTC 추천 콜드메일이 T1/T2 적합도 순으로 골라 보내는 실제 프로세스).
+// 치환 실패 = 원문 변경 → 옛 카피가 나가는 사고라 throw 로 발송을 막는다.
+const swap = (tpl, pairs) => pairs.reduce((t, [a, b]) => {
+  if (!t.includes(a)) throw new Error(`템플릿 치환 실패(원문 변경됨?): ${a.slice(0, 40)}…`)
+  return t.replace(a, b)
+}, tpl)
+const OFFER_KO = 'FYI에 가입한 분들은 <b style="color:#191F28;">1주일 평균 3.2건의 오퍼</b>를 받고 있습니다. 회원님은 이력서가 이미 등록되어 있어,\n      프로필과 잘 맞아 합격 가능성이 높은 공고가 올라오면 저희가 먼저 골라 추천해 드립니다 — 추천은 이메일로 받아보실 수 있습니다.'
+const OFFER_VI = 'Thành viên FYI nhận trung bình <b style="color:#191F28;">3,2 lời mời mỗi tuần</b>. Vì hồ sơ của bạn đã được đăng ký sẵn,\n      khi có vị trí phù hợp với hồ sơ và có khả năng trúng tuyển cao, chúng tôi sẽ ưu tiên chọn và gợi ý cho bạn trước — bạn sẽ nhận được gợi ý qua email.'
+const template = swap(readFileSync(TEMPLATE, 'utf8'), lang === 'ko' ? [
+  ['그리고 회원님께 맞는 포지션이 열리면, 저희가 <b style="color:#191F28;">기업 채용 담당자에게 프로필을 바로 전달</b>해\n      드립니다 — 담당자의 연락은 이메일로 받아보실 수 있습니다.', OFFER_KO],
+] : [
+  ['Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn <b style="color:#191F28;">trực tiếp đến nhà tuyển dụng</b>\n      — và bạn sẽ nhận được liên hệ qua email.', OFFER_VI],
+])
 const subject = (l) => lang === 'ko'
   ? `${l.ten}님, 회원님의 ${l.position} 프로필이 FYI에 준비되어 있습니다`
   : `${l.ten} ơi, hồ sơ ${l.position} của bạn đã sẵn sàng trên FYI`
 // "얼마 전" 금지 — 5~7월 지원자가 대부분이라 월 명시. 지원일이 없거나 미래(오입력)면 시점 언급 없이.
+// 작년(2025 시트) 지원자는 연도까지 — "지난 6월"이 올해로 읽히면 거짓이 된다.
 const monthFrag = (l) => {
-  const m = l.appliedMonth
+  const m = l.appliedMonth, y = l.appliedYear
   if (!m) return lang === 'ko' ? '이전에 ' : 'Trước đây, '
+  if (y && y < new Date().getFullYear()) return lang === 'ko' ? `지난 ${y}년 ${m}월, ` : `Hồi tháng ${m} năm ${y}, `
   return lang === 'ko' ? `지난 ${m}월, ` : `Hồi tháng ${m}, `
 }
 const atCompanyHtml = (l) => l.company ? (lang === 'ko' ? ` <b>${esc(l.company)}</b>` : ` tại <b>${esc(l.company)}</b>`) : ''
@@ -121,7 +142,7 @@ ${monthFrag(l)}K-Tech College를 통해 ${l.company ? `${l.company}의 ` : ''}${
 
 이력서를 다시 작성하실 필요 없습니다. 구글 로그인 한 번이면 프로필이 바로 등록되고, 새로운 공고에 원클릭으로 지원할 수 있습니다.
 
-맞는 포지션이 열리면 저희가 기업 채용 담당자에게 프로필을 바로 전달해 드립니다.
+FYI에 가입한 분들은 1주일 평균 3.2건의 오퍼를 받고 있습니다. 회원님은 이력서가 이미 등록되어 있어, 프로필과 잘 맞아 합격 가능성이 높은 공고가 올라오면 저희가 먼저 골라 추천해 드립니다. 추천은 이메일로 받아보실 수 있습니다.
 
 내 프로필 확인하기:
 ${cta}
@@ -135,7 +156,7 @@ Với CV bạn đã nộp khi đó, chúng tôi đã chuẩn bị sẵn hồ sơ
 
 Bạn không cần viết lại CV. Chỉ cần đăng nhập Google một lần, hồ sơ sẽ được đăng ký ngay và bạn có thể ứng tuyển các vị trí mới chỉ với một chạm.
 
-Khi có vị trí phù hợp, chúng tôi sẽ gửi hồ sơ của bạn trực tiếp đến nhà tuyển dụng — và bạn sẽ nhận được liên hệ qua email.
+Thành viên FYI nhận trung bình 3,2 lời mời mỗi tuần. Vì hồ sơ của bạn đã được đăng ký sẵn, khi có vị trí phù hợp với hồ sơ và có khả năng trúng tuyển cao, chúng tôi sẽ ưu tiên chọn và gợi ý cho bạn trước — bạn sẽ nhận được gợi ý qua email.
 
 Nhận hồ sơ của tôi:
 ${cta}
@@ -146,6 +167,51 @@ Hủy đăng ký: ${unsub}`
 const ctaFor = (l) => `${SITE}/api/ktc/r?t=${encodeURIComponent(makeToken(l.email, CAMPAIGN))}&to=%2Fktc%2Fclaim`
 const unsubFor = (l) => `${SITE}/api/ktc/unsub?t=${encodeURIComponent(makeToken(l.email, CAMPAIGN))}`
 
+function parseCsv(text) {
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1)
+  const rows = []; let row = [], cur = '', q = false
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i]
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i++ } else q = false } else cur += c }
+    else if (c === '"') q = true
+    else if (c === ',') { row.push(cur); cur = '' }
+    else if (c === '\n') { row.push(cur); rows.push(row); row = []; cur = '' }
+    else if (c !== '\r') cur += c
+  }
+  if (cur || row.length) { row.push(cur); rows.push(row) }
+  const head = rows.shift()
+  return rows.filter(r => r.length > 5).map(r => Object.fromEntries(head.map((h, i) => [h, (r[i] || '').trim()])))
+}
+// 2025 마스터시트 → 리드. 직무는 TopDev 공고명("[Remote/Onsite Korea] BackEnd Developer (#2036580)")이나
+// 복수값("Back End Developer, Full Stack Developer")이라 접두 괄호·#id 제거 후 첫 항목만. 경력은 "4 năm 10 tháng"/"2"/"12" 혼재 →
+// "N năm" 또는 10 이하 숫자만 연차로 인정(12 같은 큰 수는 개월일 수 있어 표기 안 함).
+function leads2025() {
+  const rows = parseCsv(readFileSync(CSV_2025, 'utf8'))
+  const out = [], seen = new Set()
+  let nUnsub = 0
+  for (const r of rows) {
+    const email = norm(r['Email Address']) || norm(r['20. Thông tin liên hệ - Email'])
+    if (!validEmail(email) || seen.has(email)) continue
+    seen.add(email)
+    if (/unsub/i.test(r['Unsubscribed'] || '')) { nUnsub++; continue }
+    const cvs = [r['CV_Data'], r['16. Upload CV']].map(s => (s || '').trim())
+    const cvUrl = cvs.find(u => IMPORTABLE.test(u)) || cvs.find(u => DRIVE.test(u)) || ''
+    const posRaw = (r['Position_Data'] || r['Vị trí/Position'] || '').replace(/^\[[^\]]*\]\s*/, '').split(/,|\+|\//)[0]
+    const yoeRaw = r['YOE_Data'] || r['12. Years of Experience'] || ''
+    const yoeM = yoeRaw.match(/(\d+(?:[.,]\d+)?)\s*năm/i) || (/^\s*\d{1,2}\s*$/.test(yoeRaw) && +yoeRaw <= 10 ? [null, yoeRaw.trim()] : null)
+    const ts = (r['Timestamp Data Summitted'] || '').match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/)
+    out.push({
+      email, lead: leadId(email), cvUrl,
+      name: (r['Name_Data'] || r['2.1. Họ tên (Tiếng Việt)'] || '').replace(/\(.*?\)/g, '').trim(),
+      company: '', job: shortPos(posRaw), sheetPos: shortPos(posRaw),
+      university: cleanUni((r['6. Trường đại học bạn theo học'] || '').split(/\s+-\s+\d{1,2}\/\d{4}/)[0]),
+      yoe: yoeM ? yoeM[1].replace(',', '.') : '',
+      appliedMonth: ts ? +ts[1] : null, appliedYear: ts ? +ts[3] : 2025,
+    })
+  }
+  console.log(`[2025] 시트 ${rows.length}행 → 유니크 ${out.length + nUnsub} | 시트 Unsubscribed 제외 ${nUnsub}`)
+  return out
+}
 async function fetchAllKtc(client, build) {
   const out = []
   for (let from = 0; ; from += 1000) {
@@ -224,32 +290,37 @@ async function prepare(leads, claimBy) {
     return
   }
 
-  // ── 리드: ktc-support candidates 전량 → 사람 단위(최신 지원 행이 카드, CV 는 직링크 우선·없으면 Drive) ──
-  if (!env.KTC_SUPABASE_URL || !env.KTC_SUPABASE_SERVICE_ROLE_KEY) throw new Error('KTC_SUPABASE_URL / KTC_SUPABASE_SERVICE_ROLE_KEY 필요(.env.local)')
-  const ktc = createClient(env.KTC_SUPABASE_URL, env.KTC_SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
-  const rows = await fetchAllKtc(ktc, () => ktc.from('candidates')
-    .select('email, full_name, university, position, yoe, cv_url, applied_date, applied_job, applied_company, created_at')
-    .order('created_at', { ascending: true }))
-  const people = new Map()
-  for (const r of rows) {
-    const email = norm(r.email); if (!validEmail(email)) continue
-    const p = people.get(email) || { email, lead: leadId(email), cvDirect: '', cvDrive: '', latest: null }
-    const u = (r.cv_url || '').trim()
-    if (IMPORTABLE.test(u) && !p.cvDirect) p.cvDirect = u
-    if (DRIVE.test(u)) p.cvDrive = u // 최신 행이 덮어씀(가장 최근 CV)
-    p.latest = r // created_at 오름차순이라 마지막이 최신
-    people.set(email, p)
-  }
-  let leads = [...people.values()].map(p => {
-    const r = p.latest
-    return {
-      email: p.email, lead: p.lead, cvUrl: p.cvDirect || p.cvDrive,
-      name: (r.full_name || '').replace(/\(.*?\)/g, '').trim(),
-      company: (r.applied_company || '').trim(), job: stripCode(r.applied_job),
-      sheetPos: shortPos(r.position), university: cleanUni(r.university), yoe: (r.yoe || '').toString().trim(),
-      appliedMonth: appliedMonthOf(r.applied_date, r.created_at),
+  // ── 리드 ──
+  let leads
+  if (source === '2025') leads = leads2025()
+  else {
+    // ktc-support candidates 전량 → 사람 단위(최신 지원 행이 카드, CV 는 직링크 우선·없으면 Drive)
+    if (!env.KTC_SUPABASE_URL || !env.KTC_SUPABASE_SERVICE_ROLE_KEY) throw new Error('KTC_SUPABASE_URL / KTC_SUPABASE_SERVICE_ROLE_KEY 필요(.env.local)')
+    const ktc = createClient(env.KTC_SUPABASE_URL, env.KTC_SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } })
+    const rows = await fetchAllKtc(ktc, () => ktc.from('candidates')
+      .select('email, full_name, university, position, yoe, cv_url, applied_date, applied_job, applied_company, created_at')
+      .order('created_at', { ascending: true }))
+    const people = new Map()
+    for (const r of rows) {
+      const email = norm(r.email); if (!validEmail(email)) continue
+      const p = people.get(email) || { email, lead: leadId(email), cvDirect: '', cvDrive: '', latest: null }
+      const u = (r.cv_url || '').trim()
+      if (IMPORTABLE.test(u) && !p.cvDirect) p.cvDirect = u
+      if (DRIVE.test(u)) p.cvDrive = u // 최신 행이 덮어씀(가장 최근 CV)
+      p.latest = r // created_at 오름차순이라 마지막이 최신
+      people.set(email, p)
     }
-  })
+    leads = [...people.values()].map(p => {
+      const r = p.latest
+      return {
+        email: p.email, lead: p.lead, cvUrl: p.cvDirect || p.cvDrive,
+        name: (r.full_name || '').replace(/\(.*?\)/g, '').trim(),
+        company: (r.applied_company || '').trim(), job: stripCode(r.applied_job),
+        sheetPos: shortPos(r.position), university: cleanUni(r.university), yoe: (r.yoe || '').toString().trim(),
+        appliedMonth: appliedMonthOf(r.applied_date, r.created_at), appliedYear: null,
+      }
+    })
+  }
   const total = leads.length
 
   // ── 제외: FYI 가입 · 우리 콜드메일 접촉 이력(coldmail-ktc* 전부 — 미접촉 풀만) · 수신거부 · 블랙리스트 ──
@@ -285,7 +356,8 @@ async function prepare(leads, claimBy) {
     l.cvUrl = IMPORTABLE.test(c?.cv_url || '') ? c.cv_url : (IMPORTABLE.test(l.cvUrl) ? l.cvUrl : '')
     const parsedName = (p.full_name || '').replace(/\(.*?\)/g, '').trim()
     l.name = looksName(l.name) ? l.name : (looksName(parsedName) ? parsedName : ''); l.ten = tenOf(l.name)
-    l.university = l.university || cleanUni(p.university)
+    // 2025 시트의 대학 열은 자유 입력("sắp tốt nghiệp" 같은 값)이라 파싱본을 우선한다
+    l.university = source === '2025' ? (cleanUni(p.university) || l.university) : (l.university || cleanUni(p.university))
     l.skills = Array.isArray(p.skills) ? p.skills : []
     // 제목·카드용 직무: 시트 값(코드·괄호 제거)이 40자 이내면 그대로, 길면 파싱본 직무 → 짧은 공고명 순
     const parsedPos = shortPos(p.position || p.headline || '')
