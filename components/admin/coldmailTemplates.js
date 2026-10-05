@@ -4582,6 +4582,34 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'Cyber Logitec', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── OpenGraph Labs 10/5 Data Operator V215 (scripts/outreach/opengraph1005-recommend-coldmail.mjs) — 그룹 2×프레임 2 = 4항목 ──
+  ...[
+    ['student', '재학생(졸업 2027+ or 학생 헤드라인×2026+) × HCMC권/미기재 × IT/AI 전공 or 개발·AI 직군(실측 159)'],
+    ['grad', '2025~2026 졸업 × 경력 ≤12m × IT/AI × HCMC권/미기재, 학기 충돌 없는 층(실측 558)'],
+  ].flatMap(([g, cut]) => {
+    const intro = {
+      vi: '<b>OpenGraph Labs</b> — công ty công nghệ Hàn Quốc phát triển dữ liệu cho <b>Physical AI</b> — đang tuyển <b>20 Data Operator</b> qua FYI cho dự án thu thập dữ liệu 2 tuần tại TP.HCM: 19–20/10 đào tạo Physical AI, 21–30/10 <b>đeo thiết bị thu thập dữ liệu và tác nghiệp tại nhà máy / kho</b>. T2–T6 8:30–17:30, <b>3.500.000 ₫ khi hoàn thành toàn bộ</b>, ăn trưa/đi lại tự túc. <b>Điều kiện FYI không kiểm tra được — chỉ ứng tuyển khi đủ cả 4</b>: nam · sinh viên/mới tốt nghiệp IT hoặc quan tâm AI · tham gia đầy đủ 10 ngày (không nghỉ giữa chừng) · sẵn sàng làm việc thể lực tại nhà máy/kho.',
+      ko: '한국계 Physical AI 데이터 기업 <b>OpenGraph Labs</b> — <b>Data Operator 20명</b>, 10/19~30 2주(19~20 이론교육, 21~30 공장/창고에서 장비 착용 데이터 수집), 평일 8:30~17:30, 완주 시 350만동, 점심/교통 자비. <b>FYI가 검증 못 하는 필수 4개를 상단 체크리스트로 명시</b>: 남성 · IT 재학/졸업 또는 AI 관심 · 10일 전일 참석(중도 이탈 불가) · 공장/창고 체력 작업 가능.',
+      en: 'OpenGraph Labs (Korean Physical AI data company) is hiring 20 Data Operators for a 2-week data-collection project in HCMC (19–20 Oct training, 21–30 Oct wearing capture devices on factory/warehouse floors). Mon–Fri 8:30–17:30, 3.5M VND on completion, lunch/transport self-paid. Four unverifiable requirements listed up top: male, IT student/grad or AI interest, full 10-day attendance with no dropouts, physical work on site.',
+    }
+    const meta = 'Onsite · TP.HCM (nhà máy/kho) · 19/10–30/10 · T2–T6 8:30–17:30 · 3.500.000 ₫ khi hoàn thành · Nam · Sinh viên IT/quan tâm AI'
+    return [
+      {
+        match: new RegExp(`^opengraph1005-recommend-${g}-private`),
+        subject: { vi: '[FYI] Bạn được chọn vào danh sách đề cử — Data Operator tại OpenGraph Labs (Physical AI, 2 tuần, TP.HCM)', ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — OpenGraph Labs Data Operator', en: "[FYI] You've been nominated — Data Operator at OpenGraph Labs" },
+        desc: `OpenGraph Labs Data Operator(V215) recommend (10/5 영훈 TO 20 지시·Len 게재): 비공개 프레임 — 컷=${cut}. 기지원 20건(10/3 Threads/FB 유입) 제외, 캐스케이드 student→grad 합 717(유저 결정). 급여 불일치 주의(영훈 3.0M vs 공고 3.5M, 공고값 사용).`,
+        source: 'scripts/outreach/opengraph1005-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial: 'O', company: 'OpenGraph Labs', title: 'Data Operator', meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^opengraph1005-recommend-${g}-`),
+        subject: { vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi OpenGraph Labs — Data Operator (Physical AI, 2 tuần, TP.HCM)', ko: '[FYI] OpenGraph Labs 추천 명단에 선정되셨습니다 — Data Operator', en: "[FYI] You've been nominated to OpenGraph Labs — Data Operator" },
+        desc: `OpenGraph Labs Data Operator(V215) recommend (10/5): 공개 프레임 — 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/opengraph1005-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial: 'O', company: 'OpenGraph Labs', title: 'Data Operator', meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── DAT EST 10/5 Electrical Technician V216 (scripts/outreach/datest1005-recommend-coldmail.mjs) — 그룹 3×프레임 2 = 6항목 ──
   ...[
     ['core', '전기 직접 시그널 × 2y+ × 남부권/미기재(실측 19)'],
