@@ -424,6 +424,7 @@ export default function ProfilePage() {
         yoe_months: merged.yoe_months ? parseInt(merged.yoe_months) : null,
         salary_min: merged.salary_min ? parseInt(merged.salary_min) * 1000000 : null,
         salary_max: merged.salary_max ? parseInt(merged.salary_max) * 1000000 : null,
+        current_salary: merged.current_salary ? parseInt(merged.current_salary) * 1000000 : null,
       }
       await fetch('/api/profile/talent', { method: 'PUT', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify(payload) })
       setInitialForm(merged)
@@ -866,7 +867,7 @@ export default function ProfilePage() {
                 <div className="pinline">
                   <div className="pfield">
                     <div className="pfield-label">{t('profile.currentSalary')}</div>
-                    <input className={`pinput${df('current_salary')}`} inputMode="numeric" value={form.current_salary || ''} onChange={e => set('current_salary', e.target.value.replace(/[^0-9]/g, ''))} placeholder="" />
+                    <input className={`pinput${df('current_salary')}`} inputMode="numeric" value={form.current_salary || ''} onChange={e => set('current_salary', e.target.value.replace(/[^0-9]/g, '').slice(0, 3))} placeholder="" />
                   </div>
                 </div>
                 <div className="pfield" style={{ marginTop: 4 }}>

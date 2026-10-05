@@ -1,0 +1,4054 @@
+[
+ {
+  "id": "f09c7ae2-5e1b-443a-a6d4-5b65842df8db",
+  "before": {
+   "salary_min": 40000000000000,
+   "salary_max": 50000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 40000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "9c478fe2-35c7-4ad6-a40e-447276102409",
+  "before": {
+   "salary_min": 3000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "6bdb7995-5f8d-4794-9b5c-9225ed2deeea",
+  "before": {
+   "salary_min": 50000000000000,
+   "salary_max": 70000000000000,
+   "current_salary": 40000000
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 70000000
+  }
+ },
+ {
+  "id": "b84ea054-f9a9-4d28-a92e-de9615a71587",
+  "before": {
+   "salary_min": 30000000000000,
+   "salary_max": 40000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "ba161618-95e3-4d9a-9098-8b80e2fbc581",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "9194a4bb-76ab-4fa2-ac65-dc96d33e8bbc",
+  "before": {
+   "salary_min": 50000000000000,
+   "salary_max": 80000000000000,
+   "current_salary": 40000000
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "48aeaae3-f828-45cc-b889-868ff4196cdb",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "2d06a91c-3aaf-4fcc-aa9b-fecce6ea6516",
+  "before": {
+   "salary_min": 20000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "7e78d35d-5ebd-47a9-9b22-d37fe1c3e7fc",
+  "before": {
+   "salary_min": 30000000000000,
+   "salary_max": 60000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "1feb7807-b198-405b-9aa4-2228ac6f7fcc",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "fe24e67c-c7db-459c-8fdc-b56ea36f85cc",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000
+  }
+ },
+ {
+  "id": "dc0317af-649e-49ad-ac9e-77531ae55952",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 16000000000000,
+   "current_salary": 16000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 16000000
+  }
+ },
+ {
+  "id": "2ffd4062-6235-45a0-9a52-527c11eb9e68",
+  "before": {
+   "salary_min": 30000000000000,
+   "salary_max": 60000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "6b9bdc6c-f978-4f84-87da-46d20cbe8e3b",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "dfb18361-0295-4f66-899a-f2c18c748023",
+  "before": {
+   "salary_min": 35000000000000,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 35000000
+  }
+ },
+ {
+  "id": "9ffd8dbc-3fc4-4167-bd64-ef3dd57dfbad",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 22000000000000,
+   "current_salary": 14000000
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 22000000
+  }
+ },
+ {
+  "id": "5ceed79f-ef42-4543-9ce9-d4e9c79673d9",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "a71f31b9-d482-4680-9fcb-3e13d4088d27",
+  "before": {
+   "salary_min": 45000000000000,
+   "salary_max": 60000000000000,
+   "current_salary": 38000000
+  },
+  "patch": {
+   "salary_min": 45000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "2e6398f3-c073-45ef-a749-b742201ebe35",
+  "before": {
+   "salary_min": 30000000000000,
+   "salary_max": 40000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "b0b03d29-f7ed-4ca8-94c7-0e9bf27410f4",
+  "before": {
+   "salary_min": 50,
+   "salary_max": 100,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 100000000
+  }
+ },
+ {
+  "id": "29892758-173a-484c-b089-094115e18f92",
+  "before": {
+   "salary_min": 40000000000000,
+   "salary_max": 50000000000000,
+   "current_salary": 10000000
+  },
+  "patch": {
+   "salary_min": 40000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "cab9e5e6-b3f2-4224-bd27-09fe8bb54ae8",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "bd020aac-e46f-47c5-ba95-5cbcfc7808fa",
+  "before": {
+   "salary_min": 55000000000000,
+   "salary_max": 70000000000000,
+   "current_salary": 45000000
+  },
+  "patch": {
+   "salary_min": 55000000,
+   "salary_max": 70000000
+  }
+ },
+ {
+  "id": "1cc8a65b-42bb-4574-bee4-01c4da791907",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 18000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 18000000
+  }
+ },
+ {
+  "id": "35ca0ffe-5ef2-4600-9e4a-02dd3f16bc46",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 11000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 11000000
+  }
+ },
+ {
+  "id": "42f6866a-dcca-44c2-8409-50c1d662bd10",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "e3a67043-6fe8-458f-b66a-3de9d2a696db",
+  "before": {
+   "salary_min": 22000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 22000000
+  },
+  "patch": {
+   "salary_min": 22000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "c119b1b7-89e8-49e0-86e6-1c797c7c2b81",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 13000000000000,
+   "current_salary": 8000000
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 13000000
+  }
+ },
+ {
+  "id": "926a225d-c91f-4df3-8213-f8fc0358ffd2",
+  "before": {
+   "salary_min": 10000000000,
+   "salary_max": 14000000000,
+   "current_salary": 12
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 14000000,
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "96e942e8-9e49-4334-a07b-d7496b84e124",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "a6e97567-5e32-431b-9191-b74072a6101e",
+  "before": {
+   "salary_min": 5500000000000,
+   "salary_max": 70000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 5500000,
+   "salary_max": 70000000
+  }
+ },
+ {
+  "id": "ab7c7312-c86f-4c86-a53c-97627b067e2a",
+  "before": {
+   "salary_min": 60,
+   "salary_max": 90,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 60000000,
+   "salary_max": 90000000
+  }
+ },
+ {
+  "id": "502ece09-7e2a-4879-8813-07da42260abb",
+  "before": {
+   "salary_min": 20000000000,
+   "salary_max": 30000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "d0869c77-0cfd-4406-9ef5-011c30a60b50",
+  "before": {
+   "salary_min": 50000000000000,
+   "salary_max": 100000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 100000000
+  }
+ },
+ {
+  "id": "cc1cc6df-b4f7-461d-ad4d-d326343d42cb",
+  "before": {
+   "salary_min": 8,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "1cdc4bca-499a-4a1a-ae28-8db8d1bcd26c",
+  "before": {
+   "salary_min": 26000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 26000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "bea75aae-7a00-4ebf-9e85-643dd644741b",
+  "before": {
+   "salary_min": 1000000000000,
+   "salary_max": 5000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": 5000000
+  }
+ },
+ {
+  "id": "07f53a49-c60f-4855-8e10-4c2e96961a87",
+  "before": {
+   "salary_min": 300000000000000,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 300000000
+  }
+ },
+ {
+  "id": "d7875cca-5152-41fe-8021-03dfa47abe02",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "87c78644-3e3f-4383-b797-1380aef08cf9",
+  "before": {
+   "salary_min": 32000000000000,
+   "salary_max": 40000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 32000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "47645a37-c879-4276-884a-4e0372d4006b",
+  "before": {
+   "salary_min": 25000000,
+   "salary_max": 30000000,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "78a63c8b-2ed5-4600-a0b5-464f9dd895b7",
+  "before": {
+   "salary_min": 20000000000000,
+   "salary_max": null,
+   "current_salary": 17000000
+  },
+  "patch": {
+   "salary_min": 20000000
+  }
+ },
+ {
+  "id": "e3a3e801-98e5-4c65-a53e-7cde84ea9ed0",
+  "before": {
+   "salary_min": 46,
+   "salary_max": 55,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 46000000,
+   "salary_max": 55000000
+  }
+ },
+ {
+  "id": "0d381468-9542-4b7f-9f6f-08b8ddc7e03b",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "8daab521-c1a1-48e6-bf5c-c34eb54b8a42",
+  "before": {
+   "salary_min": 8,
+   "salary_max": 10,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "0681f4de-08e9-4acc-a92d-4058fce9cf24",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 25000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "89477b9e-4021-4d3c-9bd6-fa16ee1384d1",
+  "before": {
+   "salary_min": 1000000000000,
+   "salary_max": 3000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": 3000000
+  }
+ },
+ {
+  "id": "248363ad-2ccd-45b3-8ff9-35b254589ac7",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 35,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "28921704-96e0-4b4c-8ffb-521d44219107",
+  "before": {
+   "salary_min": 40,
+   "salary_max": 60,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 40000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "8f41ff0c-058d-4830-955f-d8b3f6d3157e",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 18000000000000,
+   "current_salary": 16000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 18000000
+  }
+ },
+ {
+  "id": "4813eacd-fef1-40df-aa2f-53dc825d2bac",
+  "before": {
+   "salary_min": 18000000000000,
+   "salary_max": 27000000000000,
+   "current_salary": 22000000000000
+  },
+  "patch": {
+   "salary_min": 18000000,
+   "salary_max": 27000000,
+   "current_salary": 22000000
+  }
+ },
+ {
+  "id": "8e46874f-b3d6-40d8-86d2-51255da51052",
+  "before": {
+   "salary_min": 40,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 40000000
+  }
+ },
+ {
+  "id": "e619680a-4021-4980-b8ab-085a5f6658fa",
+  "before": {
+   "salary_min": 70,
+   "salary_max": 90,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 70000000,
+   "salary_max": 90000000
+  }
+ },
+ {
+  "id": "8791c9a7-40b5-4427-b03f-0d4d186ab71d",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "f13310a4-9542-4735-a778-5e057481a471",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "0789e17b-9ab6-4372-82d2-54d9c8b219e4",
+  "before": {
+   "salary_min": 40,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 40000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "4592c10f-00a5-451e-b109-695e208c2f2b",
+  "before": {
+   "salary_min": 28,
+   "salary_max": 45,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 28000000,
+   "salary_max": 45000000
+  }
+ },
+ {
+  "id": "140bb282-314a-4d88-a751-c2f5d937a287",
+  "before": {
+   "salary_min": 7,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 7000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "eec535b3-90c7-4f6e-ba7c-b2a89052bf93",
+  "before": {
+   "salary_min": 800000000000,
+   "salary_max": 1000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": null
+  }
+ },
+ {
+  "id": "411d5b64-8608-4afe-9745-539ecd980cd1",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "d77b5957-983c-4b33-8cf1-dd32d56ecc2a",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "ecb6b230-0b71-4a60-8927-162e8c01e907",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "2106acba-660a-41c0-8c87-13d02f77c7b7",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "44e5b837-459b-40c2-a0cd-20e072f6860d",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "c9aa6dbd-4b78-445f-b3e5-3485b26d8b81",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "5846a358-0a89-46d8-801a-33d59ceac9c9",
+  "before": {
+   "salary_min": 30,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "e67137bd-7eb0-4e07-b043-1f84ccbd5bbd",
+  "before": {
+   "salary_min": 35000000000000,
+   "salary_max": 45000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 35000000,
+   "salary_max": 45000000
+  }
+ },
+ {
+  "id": "a32e1464-ebed-42a6-a731-8439e6a931b7",
+  "before": {
+   "salary_min": 37,
+   "salary_max": 100,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 37000000,
+   "salary_max": 100000000
+  }
+ },
+ {
+  "id": "be501eee-1c34-4107-a316-a0333a1c0bdd",
+  "before": {
+   "salary_min": null,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "e508e689-c810-4382-a814-adf9755513a3",
+  "before": {
+   "salary_min": 16,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 16000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "b06c8f1b-246a-433c-8edb-59e032905b41",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "4ef0a5db-db4f-4031-ad7f-2169ce0d3b1c",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 18,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 18000000
+  }
+ },
+ {
+  "id": "5d455fe0-eaf2-4fd3-8d74-bca7a0a69b60",
+  "before": {
+   "salary_min": 35,
+   "salary_max": 80,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 35000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "070ef554-70b3-416b-9f1a-c77fd8f38064",
+  "before": {
+   "salary_min": 16,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 16000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "876ce930-3da6-4b6f-a75e-16ad1cf46d08",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 14000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 14000000
+  }
+ },
+ {
+  "id": "18dffb27-22c3-401b-97de-dc2ea5caf8a4",
+  "before": {
+   "salary_min": 20000000000000,
+   "salary_max": 27000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 27000000
+  }
+ },
+ {
+  "id": "735510e6-e7bd-482a-bd7e-1cde5f2d0523",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "8bd6b8d1-4434-44be-9e56-0eeceb32f61f",
+  "before": {
+   "salary_min": 30,
+   "salary_max": 35,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "0796a239-bbb8-444f-97a1-962f93dbff54",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "c06e7e75-5430-48b7-8ae2-59da18dd301f",
+  "before": {
+   "salary_min": 50,
+   "salary_max": 60,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "46f6535f-6834-4b10-ab5a-55a04b6e89df",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 17000000000000,
+   "current_salary": 25000000
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 17000000
+  }
+ },
+ {
+  "id": "fdffa5b3-56e2-4ea5-a8a6-4e0072f1c920",
+  "before": {
+   "salary_min": 100000000000,
+   "salary_max": 120000000000,
+   "current_salary": 10000000
+  },
+  "patch": {
+   "salary_min": 100000000,
+   "salary_max": 120000000
+  }
+ },
+ {
+  "id": "24fecd50-664f-44ab-9fea-9c1616c2c41f",
+  "before": {
+   "salary_min": 21000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": 30000000
+  },
+  "patch": {
+   "salary_min": 21000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "ba3ee2ef-a62e-4a47-8e19-5c65294923a9",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "c1592444-a126-4d90-a7b0-9ea4f3a6cca0",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": 10000000
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "964d2e7b-7c7f-4e64-b5b4-429c07f61522",
+  "before": {
+   "salary_min": 50,
+   "salary_max": 80,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "f69a83aa-68e2-4ded-b9d1-9d800396e72a",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": 12000000
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "f59fe70b-b54d-4462-a405-1beb3ebee90f",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 30,
+   "current_salary": 25000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "c68a1b76-8d4a-4595-b54b-0afaec873d3d",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "0051a749-678e-4262-b4dc-6d2c11fc3001",
+  "before": {
+   "salary_min": 3000000000000,
+   "salary_max": 5000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 5000000
+  }
+ },
+ {
+  "id": "ec4a0ed1-7e84-4557-b568-4b2e1f8de9e5",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 35000000000000,
+   "current_salary": 35000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "be609741-e8b9-4ea2-b48d-96f2b29f1996",
+  "before": {
+   "salary_min": 22,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 22000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "b551c722-5088-4056-afa9-6a9cb30e214d",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "47948994-02ff-4b6f-b724-3ce7470fd7c6",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "47c21a33-e7f9-49b0-ac08-13c7f853e527",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "3a980c15-e329-428c-b474-e76a00d531a7",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "0629d971-d784-482c-b8dc-d0fe067eab4e",
+  "before": {
+   "salary_min": 60000000000000,
+   "salary_max": 75000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 60000000,
+   "salary_max": 75000000
+  }
+ },
+ {
+  "id": "546ea940-c360-45c8-b270-8167554dab75",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000
+  }
+ },
+ {
+  "id": "295b7682-0e89-447e-90a2-b990d6514bc8",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 9000000000000,
+   "current_salary": 8000000
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 9000000
+  }
+ },
+ {
+  "id": "7562eeb8-c28a-444a-bdf6-90b526d1fa44",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 17
+  },
+  "patch": {
+   "current_salary": 17000000
+  }
+ },
+ {
+  "id": "74377832-bcf2-43e0-b4fc-58e291dcef73",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 28
+  },
+  "patch": {
+   "current_salary": 28000000
+  }
+ },
+ {
+  "id": "3b2e414f-03cd-43d0-81ae-7a05e028f1c4",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "d704178e-55bd-4323-ab1b-a4f3cafdec1b",
+  "before": {
+   "salary_min": 14000000000000,
+   "salary_max": 17000000000000,
+   "current_salary": 16000000
+  },
+  "patch": {
+   "salary_min": 14000000,
+   "salary_max": 17000000
+  }
+ },
+ {
+  "id": "451389c9-d887-4de4-95d3-4a40ab84d3fa",
+  "before": {
+   "salary_min": 5,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 5000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "2fed19c7-4c35-4e41-9c5e-11c822460638",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "b6a9dfab-7cca-4a35-a0bc-21531062dc98",
+  "before": {
+   "salary_min": 8,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "0fec6ce3-9d02-4116-9d70-ee0268830436",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 25000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "aaacc852-5b69-4441-b0cf-3e7b862ece44",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "5f954ede-05d2-4716-8bbc-e4226da47a65",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "3924728f-53ba-4121-b3e8-c07263f750de",
+  "before": {
+   "salary_min": 7,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 7000000
+  }
+ },
+ {
+  "id": "f743a2b9-9524-4641-800f-2b298f71abe2",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 1200000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": null
+  }
+ },
+ {
+  "id": "fb382dd8-29bc-46ff-aa86-894890401f78",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "4977f409-63fc-4e8f-ae42-88118540c19a",
+  "before": {
+   "salary_min": 2500000000000,
+   "salary_max": 30000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "e3ca76cc-925f-4033-a082-72e6678b3761",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 20,
+   "current_salary": 14000000
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "09a059b7-3cc7-4fac-bf2a-127a9c9c3158",
+  "before": {
+   "salary_min": 27000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 31000000
+  },
+  "patch": {
+   "salary_min": 27000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "4c238b24-1a7c-46a1-99d5-fa38db9ed552",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "2f704956-4849-4715-8775-629db5c44a6b",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "ad69da49-1179-450b-9ee9-d6bda4a934b2",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 25
+  },
+  "patch": {
+   "current_salary": 25000000
+  }
+ },
+ {
+  "id": "f2bec1bf-3bbe-4edf-85a8-aa784d93e8dd",
+  "before": {
+   "salary_min": 18,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 18000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "554aedb3-ab9b-45ac-8b54-8417fbec2405",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "65eb5c80-2e28-4b2b-9381-c8fb97b4c87b",
+  "before": {
+   "salary_min": 18000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 18000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "94fb3dfa-4297-4905-85a1-67a03e813325",
+  "before": {
+   "salary_min": 50,
+   "salary_max": 80,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "eda66151-cb81-465f-aefa-494f5ae683aa",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "07c402a4-f425-4e66-9c1a-e62e2a503b12",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 18000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 18000000
+  }
+ },
+ {
+  "id": "fa2b5e54-7c5d-4761-b101-d6ede7d1e20f",
+  "before": {
+   "salary_min": 13000000000000,
+   "salary_max": 16000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 16000000
+  }
+ },
+ {
+  "id": "12111e00-c5cf-4b8b-83ca-adf343361817",
+  "before": {
+   "salary_min": 14000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 14000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "ea9f316b-bd5b-402f-86c8-c5f9d8b2157d",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "013b8442-6540-46b0-988a-5db576d1ed79",
+  "before": {
+   "salary_min": 30000000000000,
+   "salary_max": 35000000000000,
+   "current_salary": 30000000
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "6fcb12aa-823b-413a-aeb6-9f6d20768a3c",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 12000000
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "cbc09a29-f2cd-4968-b001-14ee31a92763",
+  "before": {
+   "salary_min": 24000000000000,
+   "salary_max": 26000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 24000000,
+   "salary_max": 26000000
+  }
+ },
+ {
+  "id": "072bf82d-584e-4e9c-8821-48217be13bd8",
+  "before": {
+   "salary_min": 31,
+   "salary_max": 45,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 31000000,
+   "salary_max": 45000000
+  }
+ },
+ {
+  "id": "d5340246-0b75-4757-b7a0-31ae815d32f4",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "428a916f-eb8d-4f0d-bc23-79a15d56c2a9",
+  "before": {
+   "salary_min": 13,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "3c65d6b8-4623-43c6-938a-2a03bbc7dc8e",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 14000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 14000000
+  }
+ },
+ {
+  "id": "379e9cc8-1632-43be-bc64-141278c115b1",
+  "before": {
+   "salary_min": 23,
+   "salary_max": 35,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 23000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "03bab774-7d37-461e-96b2-752b2fe16fde",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": 8000000
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "31d77ff9-7371-4157-9fdf-dfd402ed3701",
+  "before": {
+   "salary_min": 43,
+   "salary_max": 60,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 43000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "402fbca6-7906-4119-9c67-886e3050f554",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "e4254de3-e86d-427e-b05d-ea2cfa764387",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 20000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "e9dac7a9-9fc5-4812-8c62-b9f0f78e4a58",
+  "before": {
+   "salary_min": 7000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": 8
+  },
+  "patch": {
+   "salary_min": 7000000,
+   "salary_max": 12000000,
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "0637ebea-ee63-4ce3-b336-0e9740899e20",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 15000000
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "d8d01a43-56d1-4bc8-a8ca-449b7255646e",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "c39192b3-bdc9-4dd7-991f-2ed73f4da1e4",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "47c390dc-7ae1-4e20-b5f5-67d1c787fbd0",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 35
+  },
+  "patch": {
+   "current_salary": 35000000
+  }
+ },
+ {
+  "id": "87850d99-fe86-4b84-b725-9b57a985f359",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 23,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 23000000
+  }
+ },
+ {
+  "id": "b016e4e4-207d-4746-93d5-c6810f3b5c8e",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 12000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "1d80a54d-a30e-4e78-a3c7-8fa896e0d07b",
+  "before": {
+   "salary_min": 1000000000000,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null
+  }
+ },
+ {
+  "id": "eea9a90f-4fd3-43fd-b3a4-b8a84d7f741c",
+  "before": {
+   "salary_min": 14000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 14000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "89d11e1b-7543-4562-b61b-c09cc8c48a8d",
+  "before": {
+   "salary_min": 60,
+   "salary_max": 80,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 60000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "30b50ebe-8e4c-4c74-9df4-555a0c0d6f32",
+  "before": {
+   "salary_min": 40,
+   "salary_max": 80,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 40000000,
+   "salary_max": 80000000
+  }
+ },
+ {
+  "id": "cefe35e3-dd38-4876-b79d-72f0d2c6ff50",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 7
+  },
+  "patch": {
+   "current_salary": 7000000
+  }
+ },
+ {
+  "id": "d0582545-ec5a-4843-ae9d-aaa56a6d7850",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "2f0f27c7-777d-488c-9d13-f5c66b202454",
+  "before": {
+   "salary_min": 16,
+   "salary_max": 20,
+   "current_salary": 14000000
+  },
+  "patch": {
+   "salary_min": 16000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "4ef621c3-452e-4984-b3c1-0a1bcdae2d7c",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "a6dee6f2-7b0a-4559-bf41-0f427610f60c",
+  "before": {
+   "salary_min": 16,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 16000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "b66afa4a-3a2e-4bcc-bda6-7d5687ebe43a",
+  "before": {
+   "salary_min": 30,
+   "salary_max": 60,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "33af2961-e85a-44cd-9485-213f8aee5919",
+  "before": {
+   "salary_min": 13000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "cd3ee697-db4e-4976-85c1-3ef5a61b6169",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "f1939497-dbee-4fc1-967a-f6243188a92e",
+  "before": {
+   "salary_min": 5000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 5000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "0eea0f3b-e41e-48e5-ab3b-50a89838a17c",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "e3184f9b-c01a-4d4b-a6ba-6e3bd684abbb",
+  "before": {
+   "salary_min": 20000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": 20000000
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "cea3c37f-d116-4bbe-adde-897f9d010d1f",
+  "before": {
+   "salary_min": 33,
+   "salary_max": 38,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 33000000,
+   "salary_max": 38000000
+  }
+ },
+ {
+  "id": "23602f14-0d64-4715-b239-89f89e40f562",
+  "before": {
+   "salary_min": 0,
+   "salary_max": 0,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "4120b243-c409-49ba-afee-932faa76c0d0",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 13000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "e9a30d35-a0ee-4e36-b56d-9d0d0b11484d",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "6b0acab9-157d-4e9d-a443-72c6ced8b27d",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "33e11fe9-8a67-4c68-916e-103392339245",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "09cd6ae8-e9f8-4549-a0ac-228bc349d39e",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": 15000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "7ae4b7e4-526a-421d-afd6-87b46857d53e",
+  "before": {
+   "salary_min": 35,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 35000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "b3710143-f92f-49f1-908f-381fc03966d9",
+  "before": {
+   "salary_min": 50,
+   "salary_max": 120,
+   "current_salary": 60000000
+  },
+  "patch": {
+   "salary_min": 50000000,
+   "salary_max": 120000000
+  }
+ },
+ {
+  "id": "be1c5990-891f-41cd-8e65-bde6613b42b9",
+  "before": {
+   "salary_min": 20000000000,
+   "salary_max": 25000000000,
+   "current_salary": 25
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000,
+   "current_salary": 25000000
+  }
+ },
+ {
+  "id": "67a72e34-ad5e-44cb-b3a7-c0f140e29142",
+  "before": {
+   "salary_min": 8,
+   "salary_max": 12,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "29284c60-e563-42e5-b9ad-0201d44d788b",
+  "before": {
+   "salary_min": 8000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "66657c8d-5a00-4743-ba23-d29435716d59",
+  "before": {
+   "salary_min": 24,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 24000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "d40cf661-7b69-4562-8709-dd28c7af052c",
+  "before": {
+   "salary_min": 25000000,
+   "salary_max": 45000000,
+   "current_salary": 25000000000000
+  },
+  "patch": {
+   "current_salary": 25000000
+  }
+ },
+ {
+  "id": "516de218-1bb4-4313-b315-cdbf8632aee8",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "348631a4-6a0f-43ff-abd6-d5e9d4b045df",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "383dbaa3-07ea-4b45-be38-e81d493720b4",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "7b8f56d7-3ff0-4739-bc1b-9093bd3ae39b",
+  "before": {
+   "salary_min": 13000000000000,
+   "salary_max": 18000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 18000000
+  }
+ },
+ {
+  "id": "d66d9123-25dc-4ba2-975e-b0aa63cdb06f",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 12000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "b5a482e5-fb01-4d85-9895-db96cc6ff924",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": 5
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 12000000,
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "56c3a177-320b-4134-a312-c0c2bb9832e0",
+  "before": {
+   "salary_min": 5000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": 10000000
+  },
+  "patch": {
+   "salary_min": 5000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "01c54598-8c6d-490d-8e5c-f0320f43440e",
+  "before": {
+   "salary_min": 7000000000000,
+   "salary_max": 9000000000000,
+   "current_salary": 7000000
+  },
+  "patch": {
+   "salary_min": 7000000,
+   "salary_max": 9000000
+  }
+ },
+ {
+  "id": "857db4ae-ab39-422b-aef9-45a427421364",
+  "before": {
+   "salary_min": 35000000000000,
+   "salary_max": 60000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 35000000,
+   "salary_max": 60000000
+  }
+ },
+ {
+  "id": "b053c747-4967-4605-b3ad-9ef99cf02371",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 17000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 17000000
+  }
+ },
+ {
+  "id": "6dacf36b-65b8-4010-8c90-7add8d7a91e1",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 6
+  },
+  "patch": {
+   "current_salary": 6000000
+  }
+ },
+ {
+  "id": "abad3dc4-cfc4-4201-9836-d91e8bbf0733",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "78cca547-91e1-4928-a255-01e62c5d8ea4",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "b38ddf54-1c80-4626-99f4-b6c1110fdf14",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": 20
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000,
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "6a250e3d-429b-4c49-bfb3-3d4ae312591c",
+  "before": {
+   "salary_min": 33000000000000,
+   "salary_max": 35000000000000,
+   "current_salary": 30000000
+  },
+  "patch": {
+   "salary_min": 33000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "a086ce2a-1012-4c89-88d2-44e21610dceb",
+  "before": {
+   "salary_min": 9000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 15000000
+  },
+  "patch": {
+   "salary_min": 9000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "0b18ade6-c2a9-4651-989a-6b88b59d5eb0",
+  "before": {
+   "salary_min": 13000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "a62c8734-0c2c-4bb8-a3b5-cf2e0a352ef6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 27000000000000
+  },
+  "patch": {
+   "current_salary": 27000000
+  }
+ },
+ {
+  "id": "ac1eecdc-d4c6-4068-946c-7c4d34a8efb4",
+  "before": {
+   "salary_min": 14500000000000,
+   "salary_max": 20000000000000,
+   "current_salary": 16000000
+  },
+  "patch": {
+   "salary_min": 14500000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "7bd4c30e-cc0e-49e9-a605-f647cadbec9e",
+  "before": {
+   "salary_min": 7000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 7000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "fb2e22c6-4018-4ff9-ae62-54dd33d43d94",
+  "before": {
+   "salary_min": 23000000,
+   "salary_max": 25000000,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "1c0e4b02-eac0-408e-ac1b-68a33385ab10",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "cbe02c2b-ed3f-4b00-be5e-21ea76681d29",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 17,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 17000000
+  }
+ },
+ {
+  "id": "3fa4e66f-ec07-449b-b447-54fce200d9c1",
+  "before": {
+   "salary_min": 28000000000000,
+   "salary_max": 35000000000000,
+   "current_salary": 28
+  },
+  "patch": {
+   "salary_min": 28000000,
+   "salary_max": 35000000,
+   "current_salary": 28000000
+  }
+ },
+ {
+  "id": "78d3dd91-12da-48b3-8587-541eed8529c7",
+  "before": {
+   "salary_min": 30,
+   "salary_max": 40,
+   "current_salary": 34000000
+  },
+  "patch": {
+   "salary_min": 30000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "7ae14ff9-1b65-4c9c-95dd-2538d973c92c",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 35000000000000,
+   "current_salary": 26000000
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 35000000
+  }
+ },
+ {
+  "id": "08c056ff-8d93-4515-a896-9dd0639bbb53",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9
+  },
+  "patch": {
+   "current_salary": 9000000
+  }
+ },
+ {
+  "id": "d334246a-0ba3-4fc5-b75e-733d821204bd",
+  "before": {
+   "salary_min": 3000000000000,
+   "salary_max": 5000000000000,
+   "current_salary": 5000000
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 5000000
+  }
+ },
+ {
+  "id": "2b69d297-e456-4f02-9c43-a0047c00db47",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 15000000000000,
+   "current_salary": 3000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "20dc40d3-0ac3-401e-ab56-c43b9ce2401b",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "dd03b3f9-700b-4322-9e23-e36f5f02c910",
+  "before": {
+   "salary_min": 2000000000000,
+   "salary_max": 3000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": 3000000
+  }
+ },
+ {
+  "id": "a15a4fd6-b2a5-4f15-9663-c756e82c19ed",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 3500000000000
+  },
+  "patch": {
+   "current_salary": 3500000
+  }
+ },
+ {
+  "id": "91cf6cb1-55d9-4903-829c-ceed8e3dba7e",
+  "before": {
+   "salary_min": 3,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "313ee063-f86d-44ca-9cf2-3815a5a7d705",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 1
+  },
+  "patch": {
+   "current_salary": null
+  }
+ },
+ {
+  "id": "84a56605-3366-45c0-9462-dfac4faf70da",
+  "before": {
+   "salary_min": 19,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 19000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "24eba4bb-6f7a-4f47-8363-a71e9b19a61f",
+  "before": {
+   "salary_min": 30,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 30000000
+  }
+ },
+ {
+  "id": "a860171a-1064-4c0c-940c-1a66eb3622dc",
+  "before": {
+   "salary_min": 2,
+   "salary_max": 4,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": null,
+   "salary_max": 4000000
+  }
+ },
+ {
+  "id": "04160a2a-2363-4fe9-9ef7-38286d06a18d",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "207bd5ae-a4ce-45d8-ab2b-77bfda59f6aa",
+  "before": {
+   "salary_min": 50,
+   "salary_max": null,
+   "current_salary": 40000000
+  },
+  "patch": {
+   "salary_min": 50000000
+  }
+ },
+ {
+  "id": "e53f49a6-2bb1-494e-87ca-96890b04cb57",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 17000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 17000000
+  }
+ },
+ {
+  "id": "c13d0da4-c251-4148-854b-6baf4b1583d6",
+  "before": {
+   "salary_min": 6000000000000,
+   "salary_max": 10000000000000,
+   "current_salary": 8
+  },
+  "patch": {
+   "salary_min": 6000000,
+   "salary_max": 10000000,
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "45c1905f-456a-4e42-b62f-9c83623d886b",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "d7756878-2ecb-42b2-b391-256b6e85f95b",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 1
+  },
+  "patch": {
+   "current_salary": null
+  }
+ },
+ {
+  "id": "666a0603-0a94-4b2f-b99e-860afbb24aa4",
+  "before": {
+   "salary_min": 30000000,
+   "salary_max": 45000000,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "ba93d689-b926-4aff-bbe6-d1295c0d6de4",
+  "before": {
+   "salary_min": 16,
+   "salary_max": 22,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 16000000,
+   "salary_max": 22000000
+  }
+ },
+ {
+  "id": "fc86e548-cb5e-4e4b-b1e7-cde68af69cb6",
+  "before": {
+   "salary_min": 15000000000000,
+   "salary_max": 25000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "692b80b3-444e-4737-be4d-4146e6d78eb5",
+  "before": {
+   "salary_min": 10000000000000,
+   "salary_max": 12000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "bddb3373-8f00-4a0f-ac9c-5f69247e6067",
+  "before": {
+   "salary_min": 25000000000000,
+   "salary_max": 30000000000000,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "92a935c8-2647-4b58-81c6-14c8d373f8d0",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 3000000000000
+  },
+  "patch": {
+   "current_salary": 3000000
+  }
+ },
+ {
+  "id": "b7564820-ba19-44a4-8e7f-9d7e3c050357",
+  "before": {
+   "salary_min": 3000000000000,
+   "salary_max": 3500000000000,
+   "current_salary": 2000000
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 3500000
+  }
+ },
+ {
+  "id": "93c05537-01ab-4ab7-9bbd-64927405b501",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 25
+  },
+  "patch": {
+   "current_salary": 25000000
+  }
+ },
+ {
+  "id": "d820f485-a731-4659-a44b-cd1429003e30",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "50840d29-6d6b-4185-9136-6fa74477138a",
+  "before": {
+   "salary_min": 12000000000000,
+   "salary_max": 20000000000000,
+   "current_salary": 13000000
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "c7ac036d-982e-448e-b671-ad97c60dec4b",
+  "before": {
+   "salary_min": 13000000000000,
+   "salary_max": 14000000000000,
+   "current_salary": 14000000
+  },
+  "patch": {
+   "salary_min": 13000000,
+   "salary_max": 14000000
+  }
+ },
+ {
+  "id": "f7fb2bc7-198e-4370-b808-ce5f4036dc21",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 50,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 50000000
+  }
+ },
+ {
+  "id": "c352d30c-7964-4f54-abf0-db96b244f53a",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 16
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "62899b87-a1a0-41ac-905e-8cabda22d700",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "becc9e22-2bed-46d5-a5b2-43a8685b9027",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 25,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 25000000,
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "0abab3a8-4ea7-4b39-b01d-1739f45d331c",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "a57dd9e9-8d9c-432c-9361-b61dc5b00815",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "39ec8d45-d2c2-4fb1-af4d-458187f5803a",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 3
+  },
+  "patch": {
+   "current_salary": 3000000
+  }
+ },
+ {
+  "id": "55de2581-cc88-42b9-93d2-0a8c96d64ea0",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 25,
+   "current_salary": 20000000
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "8b834c47-5751-4741-a104-52e60b3bd8e0",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 50000000000000
+  },
+  "patch": {
+   "current_salary": 50000000
+  }
+ },
+ {
+  "id": "d1f56eca-3816-43db-882f-016295dc2629",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "313611c0-4839-47ec-9bec-e57320eebe68",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "6bcbaafa-2bff-45bd-a802-80cc8d7fee21",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 35000000000000
+  },
+  "patch": {
+   "current_salary": 35000000
+  }
+ },
+ {
+  "id": "6142f981-a1cf-44d5-96de-b247b1d4c261",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 18000000000000
+  },
+  "patch": {
+   "current_salary": 18000000
+  }
+ },
+ {
+  "id": "ef370069-645e-4f73-a458-0fba3dbfe680",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "147a8723-aae9-4de9-bd01-729c315faa77",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 11000000000000
+  },
+  "patch": {
+   "current_salary": 11000000
+  }
+ },
+ {
+  "id": "0237fc3d-3d80-4738-b8d0-1880c9b0e25a",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 50
+  },
+  "patch": {
+   "current_salary": 50000000
+  }
+ },
+ {
+  "id": "6212e45c-38f7-4d5d-aa67-526d9125b982",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 46600000000000
+  },
+  "patch": {
+   "current_salary": 46600000
+  }
+ },
+ {
+  "id": "d359f3a7-aa76-43bd-8ed9-81fc57713385",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "0d96ed6b-b0c2-4f54-844c-3fe43866c4d1",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "23168672-8a7c-44fd-80d3-d1e0b08667f5",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 17000000000000
+  },
+  "patch": {
+   "current_salary": 17000000
+  }
+ },
+ {
+  "id": "cf5b026a-0ba8-4e90-8c67-cb0deb3e08b4",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 16000000000000
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "100ce810-1046-4a7a-aabd-2b091653a6f0",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "ad59733b-3737-4b9a-8b09-c4384c7700a4",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 26000000000000
+  },
+  "patch": {
+   "current_salary": 26000000
+  }
+ },
+ {
+  "id": "d48eefc5-9842-4455-b511-4404aefe5003",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 8000000000000
+  },
+  "patch": {
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "093a9c5a-2cbc-42af-8a2c-dd9378f3d47d",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 16000000000000
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "3e903365-7dca-4a61-80d6-7479026c5e08",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 25,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 25000000,
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "85902a86-f10b-4076-9437-4c5fffc777f2",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "6b89d85f-da42-49b2-9c30-5fcfba812f34",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9000000000000
+  },
+  "patch": {
+   "current_salary": 9000000
+  }
+ },
+ {
+  "id": "15e24b90-54fe-4a1b-ba0b-d7e0a08ff659",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "590a4dfe-2348-49ed-b2be-41ff5f97af35",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 28,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 28000000
+  }
+ },
+ {
+  "id": "e0efeccf-29f1-4068-b8ed-b8c77350a75c",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "eb952bbe-5068-40ff-8c41-a55dc4e93af2",
+  "before": {
+   "salary_min": 0,
+   "salary_max": 0,
+   "current_salary": 16000000000000
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "a7bdd687-ee85-4a72-af09-a8ec4327109f",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 14,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 14000000
+  }
+ },
+ {
+  "id": "260c1b61-936f-4f83-b163-46bab3811f63",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9000000000000
+  },
+  "patch": {
+   "current_salary": 9000000
+  }
+ },
+ {
+  "id": "ce571496-2417-48cc-b59f-c591ece6d787",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 36000000000000
+  },
+  "patch": {
+   "current_salary": 36000000
+  }
+ },
+ {
+  "id": "8de3ccd0-0027-47f3-93b7-50befbee2dd4",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "08f2fd82-9a2a-4803-8f56-474cef2232e6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "daf06c2e-c5a0-425e-a1d6-2bc31b695553",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "a0bed5b7-9c95-44fe-a0e3-d5a278466d18",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 50000000000000
+  },
+  "patch": {
+   "current_salary": 50000000
+  }
+ },
+ {
+  "id": "b944e226-b58a-4ace-9f76-ad13220f8c21",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "04e8806f-0a48-40ec-b858-14f6a5d09a82",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 60000000000000
+  },
+  "patch": {
+   "current_salary": 60000000
+  }
+ },
+ {
+  "id": "ab8e5c4c-b6d3-46af-b83e-7587aa001031",
+  "before": {
+   "salary_min": 65,
+   "salary_max": 150,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 65000000,
+   "salary_max": 150000000
+  }
+ },
+ {
+  "id": "56f34978-7212-464d-88a0-213985b4df25",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 7500000000000
+  },
+  "patch": {
+   "current_salary": 7500000
+  }
+ },
+ {
+  "id": "89e4ebf0-a39b-4dc5-a6ec-5a511da80fca",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "d489b68b-7627-4336-8ab6-111605834231",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "add588b9-1d31-48c4-8ce9-d00ea4d310d1",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "3044fe7b-1aa2-4e53-b028-ad0f63baa802",
+  "before": {
+   "salary_min": 20,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 20000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "0da90d86-afe9-42b6-9162-f76d2217d525",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "dded141f-ca3f-4210-b210-215131ff8cfd",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 2000000000000
+  },
+  "patch": {
+   "current_salary": null
+  }
+ },
+ {
+  "id": "bb70ef32-ec86-4b5a-b991-e41f468f92a1",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "a5514c93-2116-4f4f-a524-5c29891b84e5",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9000000000000
+  },
+  "patch": {
+   "current_salary": 9000000
+  }
+ },
+ {
+  "id": "b23616ed-9709-4057-aef8-9a9808e838ad",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "b42de4d4-1ae9-4a2c-8738-6a9491fcc901",
+  "before": {
+   "salary_min": 18,
+   "salary_max": 40,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 18000000,
+   "salary_max": 40000000
+  }
+ },
+ {
+  "id": "15ce2ccd-ac56-4e34-9dfe-dbc71da6e4a8",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 22000000000000
+  },
+  "patch": {
+   "current_salary": 22000000
+  }
+ },
+ {
+  "id": "2368bc5a-7ca5-477e-b31e-263732382c97",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "e9da3691-2757-4d54-91de-8d8ae367527d",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "73d3a619-06c5-4e20-889e-610d85d5cf82",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "0e87ba06-1071-4bef-a026-4f22c5a4f79b",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "ea7e4f22-7f8d-4e76-91a6-39af36362ebf",
+  "before": {
+   "salary_min": 28,
+   "salary_max": null,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 28000000
+  }
+ },
+ {
+  "id": "94350793-1ef0-4cb9-a17e-19427b3420de",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "c5a4166b-8835-4e64-8fb7-00d1afdef7bb",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 25000000000000
+  },
+  "patch": {
+   "current_salary": 25000000
+  }
+ },
+ {
+  "id": "d9035a5e-b74d-4605-806e-636b96584e05",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "7aecb4d6-5d98-416c-ab89-930df0f2ca15",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 7500000000000
+  },
+  "patch": {
+   "current_salary": 7500000
+  }
+ },
+ {
+  "id": "f8f67fda-3d12-42c2-86cd-2b9906aa27f1",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "928314c1-5bc4-4c04-8223-9789e8c4784c",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 8000000000000
+  },
+  "patch": {
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "6909c522-7781-4ca5-886b-641d872cfdcc",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "96443b13-0c67-4dce-bc2d-0a46b8c96c66",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "034d8632-f373-45ce-b2c7-aa3f45b0cae6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 16000000000000
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "1ff4b64e-523a-482b-89b0-507eaea7a961",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "eac1b679-dcf7-47f5-afa9-9059826d4a37",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "83c319bd-a17c-44ef-8dd0-3dd736acb73c",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "d440a372-1e5d-4ae2-b1ef-f28216589fae",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 24000000000000
+  },
+  "patch": {
+   "current_salary": 24000000
+  }
+ },
+ {
+  "id": "cfbd7e8b-787f-46ee-8f49-4415b6932b28",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 7000000000000
+  },
+  "patch": {
+   "current_salary": 7000000
+  }
+ },
+ {
+  "id": "5c3813bc-3192-48e1-b287-33db0ccc0c91",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 28,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 28000000
+  }
+ },
+ {
+  "id": "4e085cc9-08cb-4e35-b761-422117613a92",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 22000000000000
+  },
+  "patch": {
+   "current_salary": 22000000
+  }
+ },
+ {
+  "id": "d7173539-8a3e-4287-b5eb-b4f73982402c",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "8764d2d1-74f8-4757-93d7-61fb2b62ec60",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 14000000000000
+  },
+  "patch": {
+   "current_salary": 14000000
+  }
+ },
+ {
+  "id": "5b1af939-e2b8-46a3-b3ad-84089ef83b80",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 37000000000000
+  },
+  "patch": {
+   "current_salary": 37000000
+  }
+ },
+ {
+  "id": "ddb498f1-4e89-47ed-a7b8-be75ff159a46",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "3408dbf1-a2a0-41c5-80a0-0f7056f69fb6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "9f9f4390-900f-43d9-85b8-7d600b495bf9",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "52833725-e7b8-40e3-9808-7539710a8b05",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 13000000000000
+  },
+  "patch": {
+   "current_salary": 13000000
+  }
+ },
+ {
+  "id": "dbbae886-a17d-4838-9985-1faf27d3c6f9",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "aefc64ba-c68b-4416-8117-3b0b9e138cb6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 7500000000000
+  },
+  "patch": {
+   "current_salary": 7500000
+  }
+ },
+ {
+  "id": "2566664e-081b-4055-a623-60ff22651382",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "71d1c05f-3e3e-442f-89d7-9629f5a8888f",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "7f741902-010a-400e-bcb3-ee3106a11679",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "17c27e55-9148-4f7a-8549-34e6d016d50b",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ },
+ {
+  "id": "db1868d3-cd3b-46ba-8b7a-0579f7f590b6",
+  "before": {
+   "salary_min": 10,
+   "salary_max": 15,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 10000000,
+   "salary_max": 15000000
+  }
+ },
+ {
+  "id": "55154508-4484-4551-90cc-a25f430a7caa",
+  "before": {
+   "salary_min": 3,
+   "salary_max": 12,
+   "current_salary": 7000000
+  },
+  "patch": {
+   "salary_min": 3000000,
+   "salary_max": 12000000
+  }
+ },
+ {
+  "id": "96a2cb51-8477-4503-917a-d6ce0b436647",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 8000000000000
+  },
+  "patch": {
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "1fb2b8dc-684f-44da-9be5-87f364e4d8ae",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 16000000000000
+  },
+  "patch": {
+   "current_salary": 16000000
+  }
+ },
+ {
+  "id": "5eed9ff7-a569-440d-94c9-fe784cf1fd4e",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "dc60b2ac-751f-4c91-b732-b41b5aa5c6b4",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 32000000000000
+  },
+  "patch": {
+   "current_salary": 32000000
+  }
+ },
+ {
+  "id": "a32301f7-b4b1-4b1d-813c-04339688be92",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "ab97a550-37fc-4258-92c4-8d317393bc70",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 11000000000000
+  },
+  "patch": {
+   "current_salary": 11000000
+  }
+ },
+ {
+  "id": "1817dc74-e48c-4949-ac1b-bcd769e6bd97",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 10000000000000
+  },
+  "patch": {
+   "current_salary": 10000000
+  }
+ },
+ {
+  "id": "fd178ce9-5519-4267-a000-40286ad6a81b",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "f8e1a195-5d96-43ec-ab78-2c7dc9f117ba",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 3000000000000
+  },
+  "patch": {
+   "current_salary": 3000000
+  }
+ },
+ {
+  "id": "d011afb4-66ea-4905-b4fa-e00856f42372",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9000000000000
+  },
+  "patch": {
+   "current_salary": 9000000
+  }
+ },
+ {
+  "id": "ac48ab06-8b0b-4de0-8d8a-93cef56df5ce",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15500000000000
+  },
+  "patch": {
+   "current_salary": 15500000
+  }
+ },
+ {
+  "id": "eda73836-92dd-4883-9f58-7a8daefd7db6",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "4ab4e72f-8534-42eb-a549-2c3c6bfc6a0d",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "00fbd07b-b825-46d0-b683-84e1e376efe6",
+  "before": {
+   "salary_min": 15,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 15000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "bd0b99cc-b35f-4d35-b6cd-7d90d746c903",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 9250000000000
+  },
+  "patch": {
+   "current_salary": 9250000
+  }
+ },
+ {
+  "id": "a1e8ae64-5082-488f-b1de-a296498ef383",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 12000000000000
+  },
+  "patch": {
+   "current_salary": 12000000
+  }
+ },
+ {
+  "id": "9b753714-69cc-4a4f-bd0a-ab73ccfc3e86",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 8000000000000
+  },
+  "patch": {
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "7d7f3a34-fa95-4473-a87f-82420b34fe2d",
+  "before": {
+   "salary_min": 12,
+   "salary_max": 20,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 12000000,
+   "salary_max": 20000000
+  }
+ },
+ {
+  "id": "2f8551ab-f1f3-4724-a238-893c128c8574",
+  "before": {
+   "salary_min": 18,
+   "salary_max": 25,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 18000000,
+   "salary_max": 25000000
+  }
+ },
+ {
+  "id": "8eb414ae-7bec-4410-851c-e4992ca3bc8c",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 45,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 45000000
+  }
+ },
+ {
+  "id": "61ba1bd5-a4e7-459d-92ad-5dc0f11bfc5a",
+  "before": {
+   "salary_min": 25,
+   "salary_max": 30,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 25000000,
+   "salary_max": 30000000
+  }
+ },
+ {
+  "id": "77ce9655-0f53-42c7-9429-ed9a87acaf4a",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 14000000000000
+  },
+  "patch": {
+   "current_salary": 14000000
+  }
+ },
+ {
+  "id": "1d4ab014-bfa4-4f37-bd92-4fc2c90ab0a2",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 150000000000000
+  },
+  "patch": {
+   "current_salary": 150000000
+  }
+ },
+ {
+  "id": "c172f91f-6757-4e05-927d-c12850e7da5e",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 30000000000000
+  },
+  "patch": {
+   "current_salary": 30000000
+  }
+ },
+ {
+  "id": "92afe0dc-b057-493c-b20a-ee8b004c1579",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 5000000000000
+  },
+  "patch": {
+   "current_salary": 5000000
+  }
+ },
+ {
+  "id": "93523bc2-0edf-4e24-93a7-f8925947fc1e",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 8000000000000
+  },
+  "patch": {
+   "current_salary": 8000000
+  }
+ },
+ {
+  "id": "7655b518-4fa4-41e9-a0c8-e01357653e56",
+  "before": {
+   "salary_min": 8,
+   "salary_max": 10,
+   "current_salary": null
+  },
+  "patch": {
+   "salary_min": 8000000,
+   "salary_max": 10000000
+  }
+ },
+ {
+  "id": "731b0baa-8e98-4223-9cd3-883716707bb0",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 15000000000000
+  },
+  "patch": {
+   "current_salary": 15000000
+  }
+ },
+ {
+  "id": "b8c330e4-943e-407e-88fb-146a29d1ac0a",
+  "before": {
+   "salary_min": null,
+   "salary_max": null,
+   "current_salary": 20000000000000
+  },
+  "patch": {
+   "current_salary": 20000000
+  }
+ }
+]

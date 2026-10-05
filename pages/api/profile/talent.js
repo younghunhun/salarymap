@@ -67,6 +67,19 @@ export default async function handler(req, res) {
     // 이력서 삭제는 null로 통일 — ''는 IS NOT NULL 집계에 잡히는 유령 행을 만든다.
     if (update.resume_url === '') update.resume_url = null
 
+    /* 연봉 3칼럼은 raw VND/월(3,000,000~300,000,000)로만 저장한다.
+       10/4 실측 348명 오염: 웹 폼에 VND 전액을 치면 ×1e6이 겹쳐 ≥1e12, 앱은 triệu를 그대로
+       보내 <1e3. 클라이언트마다 단위가 달라서 여기서 한 번에 맞춘다. 범위 밖은 null. */
+    for (const key of ['salary_min', 'salary_max', 'current_salary']) {
+      if (!(key in update) || update[key] == null || update[key] === '') continue
+      let n = Number(update[key])
+      if (!Number.isFinite(n) || n <= 0) { update[key] = null; continue }
+      if (n >= 1e12) n /= 1e6
+      else if (n >= 1e9) n /= 1e3
+      else if (n < 1e3) n *= 1e6
+      update[key] = n >= 3e6 && n <= 3e8 ? Math.round(n) : null
+    }
+
     // If this PUT is the moment a resume_url first lands on the profile
     // (most commonly the jobs-apply → AI prompt path), tag where it came
     // from. X-Resume-Source mirrors what /api/profile/upload reads.
