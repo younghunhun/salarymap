@@ -4582,6 +4582,34 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'Cyber Logitec', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── First Marketing Company 10/5 그래픽 디자이너 2공고 (scripts/outreach/fmc1005-recommend-coldmail.mjs) — 그룹×프레임 4항목 ──
+  ...[
+    ['ko', 'Thiết kế đồ họa (Korean Speaking)', 'V217', 'Onsite · Nguyễn Hữu Cảnh, TP.HCM · Không yêu cầu kinh nghiệm · 10–16 triệu ₫ · Ưu tiên tiếng Hàn',
+      '그래픽/디자인 시그널 × HCMC권 × 한국어 시그널(인증 or 텍스트, 실측 25 — Design 직군 4·TOPIK4+ 9는 전원 비Design). TOPIK4는 우대라 하드게이트 안 걸음.',
+      '<b>First Marketing Company</b> — doanh nghiệp Hàn Quốc về Digital Marketing, Influencer Marketing &amp; Brand Communication (19N Nguyễn Hữu Cảnh, TP.HCM) — đang tuyển <b>Thiết kế đồ họa (Korean Speaking)</b> qua FYI. Công việc: thiết kế đồ họa theo dự án từ Design Brief (concept, layout, hình ảnh), chỉnh sửa theo feedback và gửi file final đúng hạn. Yêu cầu: thành thạo <b>Photoshop, Illustrator, InDesign</b>, Color Theory/Typography/Layout, <b>bắt buộc có Portfolio</b>, không yêu cầu số năm kinh nghiệm. Ưu tiên: tiếng Hàn tối thiểu TOPIK 4. Lương 10–16 triệu ₫, 8h–17h T2–T6 &amp; 8h–12h T7, tháng 13, BHXH, du lịch, phép sinh nhật.',
+      '한국계 디지털 마케팅 에이전시 <b>First Marketing Company</b> HCMC — <b>그래픽 디자이너(한국어 가능)</b>. 디자인 브리프 기반 콘셉트·레이아웃·이미지 제작, 피드백 반영·납기 준수. 필수 Photoshop/Illustrator/InDesign·색채/타이포/레이아웃 이론·포트폴리오, 경력 무관. 우대 TOPIK 4+. 월 1,000만~1,600만동, 월~금 8–17시·토 8–12시, 13월 급여.',
+      'First Marketing Company (Korean digital marketing agency, HCMC) is hiring a Korean-speaking Graphic Designer. Brief-based concept/layout/visual design, revisions on feedback, on-time delivery. Must: Photoshop, Illustrator, InDesign, color/typography/layout fundamentals, portfolio required, no minimum experience. Nice: TOPIK 4+. 10–16M VND, Mon–Fri 8–17 and Sat 8–12, 13th-month salary.'],
+    ['gen', 'Thiết kế đồ họa', 'V218', 'Onsite · Nguyễn Hữu Cảnh, TP.HCM · Không yêu cầu kinh nghiệm · 10–16 triệu ₫',
+      'Design 직군 × HCMC권/미기재 × 한국어 시그널 없음(실측 223). 텍스트만 매치(마케팅 등 Photoshop 언급) 313은 확장층 미발송.',
+      '<b>First Marketing Company</b> — doanh nghiệp Hàn Quốc về Digital Marketing, Influencer Marketing &amp; Brand Communication (19N Nguyễn Hữu Cảnh, TP.HCM) — đang tuyển <b>Thiết kế đồ họa</b> qua FYI. Công việc: thiết kế đồ họa theo dự án từ Design Brief (concept, layout, hình ảnh), chỉnh sửa theo feedback và gửi file final đúng hạn. Yêu cầu: thành thạo <b>Photoshop, Illustrator, InDesign</b>, Color Theory/Typography/Layout, <b>bắt buộc có Portfolio</b>, không yêu cầu số năm kinh nghiệm. Lương 10–16 triệu ₫, 8h–17h T2–T6 &amp; 8h–12h T7, tháng 13, BHXH, du lịch, phép sinh nhật.',
+      '한국계 디지털 마케팅 에이전시 <b>First Marketing Company</b> HCMC — <b>그래픽 디자이너</b>. 디자인 브리프 기반 콘셉트·레이아웃·이미지 제작, 피드백 반영·납기 준수. 필수 Photoshop/Illustrator/InDesign·색채/타이포/레이아웃 이론·포트폴리오, 경력 무관. 월 1,000만~1,600만동, 월~금 8–17시·토 8–12시, 13월 급여.',
+      'First Marketing Company (Korean digital marketing agency, HCMC) is hiring a Graphic Designer. Brief-based concept/layout/visual design, revisions on feedback, on-time delivery. Must: Photoshop, Illustrator, InDesign, color/typography/layout fundamentals, portfolio required, no minimum experience. 10–16M VND, Mon–Fri 8–17 and Sat 8–12, 13th-month salary.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^fmc1005-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại First Marketing Company (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — First Marketing Company ${title}`, en: `[FYI] You've been nominated — ${title} at First Marketing Company` },
+      desc: `First Marketing Company ${title}(${code}) recommend (10/5 Len 게재 당일): 비공개 프레임 — 컷=${cut} 2공고 1인1통 캐스케이드 ko→gen, 빈도 게이트 없음.`,
+      source: 'scripts/outreach/fmc1005-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'F', company: 'First Marketing Company', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^fmc1005-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi First Marketing Company — ${title} (TP.HCM)`, ko: `[FYI] First Marketing Company 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to First Marketing Company — ${title}` },
+      desc: `First Marketing Company ${title}(${code}) recommend (10/5): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/fmc1005-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'F', company: 'First Marketing Company', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   {
     match: /^systeel0925-recommend-sm-private/,
     subject: {
