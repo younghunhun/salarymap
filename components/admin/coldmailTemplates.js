@@ -4582,6 +4582,35 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'Cyber Logitec', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── DAT EST 10/5 Electrical Technician V216 (scripts/outreach/datest1005-recommend-coldmail.mjs) — 그룹 3×프레임 2 = 6항목 ──
+  ...[
+    ['core', '전기 직접 시그널 × 2y+ × 남부권/미기재(실측 19)'],
+    ['factory', '공장 생산/설비 직군(Maintenance·Production·QC·Technician) × 2y+ × 남부권, 전기 무언급(실측 8)'],
+    ['region', '전기 직접 시그널 × 2y+ × 타지역(HCMC 근무 명시로 자기선별, 실측 21)'],
+  ].flatMap(([g, cut]) => {
+    const intro = {
+      vi: '<b>DAT EST</b> (Electrical Safety Engineering) — công ty Hàn Quốc về quản lý an toàn điện, kiểm định hệ thống điện và kỹ thuật điện cho nhà máy tại Việt Nam — đang tuyển <b>Electrical Technician</b> qua FYI: quản lý an toàn điện cho các nhà máy trong khu công nghiệp (TP.HCM và lân cận). <b>Điều kiện bắt buộc FYI không kiểm tra được qua hồ sơ — chỉ ứng tuyển khi đủ cả 4</b>: nam, quốc tịch Việt Nam · 2 năm+ kinh nghiệm thực tế về điện · có bằng lái xe ô tô · giao tiếp tiếng Anh cơ bản.' + (g === 'region' ? ' Vị trí làm tại TP.HCM — chỉ ứng tuyển khi sẵn sàng chuyển đến.' : ''),
+      ko: '한국계 전기안전 엔지니어링 <b>DAT EST</b> — 공단 공장 전기안전관리 <b>Electrical Technician</b>. <b>FYI가 이력서로 검증 못 하는 필수 4개를 상단 체크리스트로 명시(모두 충족 시만 지원)</b>: 베트남 남성 · 전기 실무 2년+ · 자동차 운전면허 · 기초 영어.' + (g === 'region' ? ' 타지역 수신자에겐 HCMC 근무·이주 전제 한 줄 추가.' : ''),
+      en: 'DAT EST (Korean electrical safety engineering) is hiring an Electrical Technician for factory electrical safety in HCMC industrial parks. Four requirements FYI cannot verify are listed as a checklist up top (apply only if all four): Vietnamese male, 2+ years hands-on electrical work, car driving licence, basic English.' + (g === 'region' ? ' Out-of-region recipients get a relocation note.' : ''),
+    }
+    const meta = 'Onsite · TP.HCM & các KCN lân cận · 2 năm+ kinh nghiệm điện · Nam · Có bằng lái xe'
+    return [
+      {
+        match: new RegExp(`^datest1005-recommend-${g}-private`),
+        subject: { vi: '[FYI] Bạn được chọn vào danh sách đề cử — Electrical Technician tại DAT EST (TP.HCM)', ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — DAT EST Electrical Technician', en: "[FYI] You've been nominated — Electrical Technician at DAT EST" },
+        desc: `DAT EST Electrical Technician(V216) recommend (10/5 Len 게재 당일): 비공개 프레임 — 컷=${cut}. 풀 상한 48(코어 19+공장직군 8+타지역 21, 유저 결정). 성별 컬럼 없음·면허 텍스트 0이라 검증 불가 요건 4개를 메일 상단 체크리스트로 자기선별.`,
+        source: 'scripts/outreach/datest1005-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial: 'D', company: 'DAT EST', title: 'Electrical Technician', meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^datest1005-recommend-${g}-`),
+        subject: { vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi DAT EST — Electrical Technician (TP.HCM)', ko: '[FYI] DAT EST 추천 명단에 선정되셨습니다 — Electrical Technician', en: "[FYI] You've been nominated to DAT EST — Electrical Technician" },
+        desc: `DAT EST Electrical Technician(V216) recommend (10/5): 공개 프레임 — 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/datest1005-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial: 'D', company: 'DAT EST', title: 'Electrical Technician', meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── First Marketing Company 10/5 그래픽 디자이너 2공고 (scripts/outreach/fmc1005-recommend-coldmail.mjs) — 그룹×프레임 4항목 ──
   ...[
     ['ko', 'Thiết kế đồ họa (Korean Speaking)', 'V217', 'Onsite · Nguyễn Hữu Cảnh, TP.HCM · Không yêu cầu kinh nghiệm · 10–16 triệu ₫ · Ưu tiên tiếng Hàn',

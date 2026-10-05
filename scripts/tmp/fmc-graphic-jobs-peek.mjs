@@ -3,7 +3,7 @@ import { sb } from '../outreach/lib.mjs'
 
 const { data, error } = await sb.from('jobs')
   .select('*')
-  .ilike('company', '%first marketing%')
+  .ilike('company', '%dat est%')
   .order('created_at', { ascending: false })
 if (error) { console.error(error); process.exit(1) }
 for (const j of data) {
