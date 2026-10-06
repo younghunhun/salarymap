@@ -35,7 +35,7 @@ const txt = (p) => {
   return [p.position, p.headline, norm(p.desired_roles), norm(p.skills), exp, JSON.stringify(p.resume_summary || ''), p.university, p.major].join(' ').toLowerCase()
 }
 const roles = (p) => [p.position, ...(p.desired_roles || [])].filter(Boolean)
-const inHcmc = (p) => /(h[ồo]\s*ch[íi]\s*minh|hcm|sài gòn|sai gon|thủ đức|thu duc|bình dương|binh duong)/i.test(String(p.location || ''))
+const inHcmc = (p) => /(h[ồo]\s*ch[íi]\s*minh|hcm|sài gòn|sai gon|thủ đức|thu duc|bình dương|binh duong|호찌민|호치민)/i.test(String(p.location || ''))
 const noLoc = (p) => !String(p.location || '').trim()
 const geoOk = (p) => inHcmc(p) || noLoc(p) // 꽝7 온사이트 — 하노이/다낭 제외
 const cert = (p) => String(p.korean_cert || '').toLowerCase()
