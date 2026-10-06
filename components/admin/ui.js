@@ -69,6 +69,11 @@ export function StatusTag({ tone = 'neutral', size = 'small', children, style })
 export function Card({ children, padding = 20, style, className }) {
   return <div className={className} style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, padding, ...style }}>{children}</div>
 }
+// 강조 구역 — 화면에서 가장 먼저 보는 블록 하나(예: 추이 탭의 '오늘 실시간')를 옅은 주황 바탕으로 띄운다.
+// 안에는 흰 StatTile(large)을 넣는다. 한 화면에 하나만.
+export function EmphasisCard({ children, padding = 20, style, className }) {
+  return <div className={className} style={{ background: 'var(--color-primary-50, #FFEFE5)', border: '1px solid var(--color-primary-100, #FFDFCC)', borderRadius: 12, padding, ...style }}>{children}</div>
+}
 // 섹션 제목 — title(16/600) + 선택 sub(13 회색, 제목 아래) + 선택 right(버튼 등, 오른쪽)
 export function SectionTitle({ children, sub, right, style }) {
   return (
@@ -83,20 +88,25 @@ export function SectionTitle({ children, sub, right, style }) {
 }
 
 // ── 통계 타일 ────────────────────────────────────────────────────────
-// 한 가지 모양만: 흰 카드, 라벨(12/600 회색) → 값(24/700) → 보조(12 회색).
+// 기본 모양 하나: 흰 카드, 라벨(12/600 회색) → 값(24/700) → 보조(12 회색).
+// emphasis: 옅은 주황 박스 + 큰 값(28px). 그 화면에서 제일 먼저 봐야 하는 숫자에만(전부 강조하면 강조가 아니다).
+// large:    박스 색은 그대로 두고 값만 28px — 강조 구역(EmphasisCard) 안의 흰 타일에 쓴다.
 // accent: 값 색(주 지표 1개에만 C.primary). delta: 값 옆 작은 보조 수치(예: '68%').
 export function StatGrid({ children, min = 180, style }) {
   return <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${min}px, 1fr))`, gap: G.md, ...style }}>{children}</div>
 }
-export function StatTile({ label, value, sub, delta, accent, style }) {
+export function StatTile({ label, value, sub, delta, accent, emphasis = false, large = false, style }) {
+  const box = emphasis
+    ? { background: 'var(--color-primary-50, #FFEFE5)', border: '1px solid var(--color-primary-100, #FFDFCC)' }
+    : { background: '#fff', border: `1px solid ${C.border}` }
   return (
-    <div style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, padding: `${G.lg}px 20px`, minWidth: 0, ...style }}>
-      <div style={{ fontSize: 12, fontWeight: 600, color: C.sub, ...ellipsis }}>{label}</div>
+    <div style={{ ...box, borderRadius: 12, padding: `${G.lg}px 20px`, minWidth: 0, ...style }}>
+      <div style={{ fontSize: 12, fontWeight: 600, color: emphasis ? 'var(--color-primary-700, #993A00)' : C.sub, ...ellipsis }}>{label}</div>
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginTop: 6 }}>
-        <span style={{ fontSize: 24, fontWeight: 700, color: accent || C.text, lineHeight: 1.15, letterSpacing: '-0.01em', ...num }}>{value}</span>
-        {delta !== undefined && delta !== null && <span style={{ fontSize: 12, fontWeight: 600, color: C.faint, ...num }}>{delta}</span>}
+        <span style={{ fontSize: emphasis || large ? 28 : 24, fontWeight: 700, color: accent || C.text, lineHeight: 1.15, letterSpacing: '-0.01em', ...num }}>{value}</span>
+        {delta !== undefined && delta !== null && <span style={{ fontSize: 12, fontWeight: 600, color: emphasis ? 'var(--color-primary-600, #CC4D00)' : C.faint, ...num }}>{delta}</span>}
       </div>
-      {sub && <div style={{ fontSize: 12, color: C.faint, marginTop: 4, lineHeight: 1.4 }}>{sub}</div>}
+      {sub && <div style={{ fontSize: 12, color: emphasis ? 'var(--color-primary-700, #993A00)' : C.faint, marginTop: 4, lineHeight: 1.4 }}>{sub}</div>}
     </div>
   )
 }

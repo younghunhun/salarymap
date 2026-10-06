@@ -17,7 +17,7 @@ import GoalMetricsView, { ColdmailView } from '../../components/admin/GoalMetric
 import { TabGroup, ChipGroup, Toggle } from '@likelion-design/ui'
 import {
   G, C, num, PrimaryButton, SecondaryButton, GhostButton, Field, TextArea, FilterTabs, StatusTag,
-  Card, SectionTitle, StatGrid, StatTile, State, T as TS,
+  Card, SectionTitle, StatGrid, StatTile, State, T as TS, EmphasisCard,
 } from '../../components/admin/ui'
 import { T, METRICS_BASE, EXP_COLORS, COLORS } from '../../constants/dashboard'
 import { aggregateDaily, vnDate } from '../../utils/dashboard'
@@ -30,11 +30,12 @@ function cellPct(cur, prev) {
   return Math.round(((cur - prev) / prev) * 100)
 }
 
-// 선택 가능한 통계 타일 — kit StatTile 에는 onClick 이 없어 한 겹 감싼다. 선택 표시는 주황 1px 테두리뿐.
+// 선택 가능한 통계 타일 — kit StatTile 에는 onClick 이 없어 한 겹 감싼다.
+// 선택 표시는 주황 2px 링(box-shadow 라 크기가 안 변한다).
 function PickTile({ active, onClick, ...p }) {
   return (
     <div onClick={onClick} style={{ minWidth: 0, cursor: onClick ? 'pointer' : 'default' }}>
-      <StatTile {...p} style={{ height: '100%', boxSizing: 'border-box', border: `1px solid ${active ? C.primary : C.border}`, transition: 'border-color 0.12s ease' }} />
+      <StatTile {...p} style={{ height: '100%', boxSizing: 'border-box', boxShadow: active ? `0 0 0 2px ${C.primary}` : 'none', transition: 'box-shadow 0.12s ease' }} />
     </div>
   )
 }
@@ -426,7 +427,7 @@ export default function AdminDashboard() {
 
         {/* Today Realtime — 추이 탭에서만 표시 */}
         {realtime && tab === 'trend' && (
-          <Card style={{ marginBottom: G.xl }}>
+          <EmphasisCard style={{ marginBottom: G.xl }}>
             <SectionTitle
               right={lastUpdated && (
                 <span style={{ fontSize: 12, color: C.faint, ...num }}>
@@ -449,10 +450,10 @@ export default function AdminDashboard() {
                   { label: t.metrics.signups, value: realtime.signups },
                   { label: t.metrics.resumeUploads, value: realtime.resumeUploads },
                   { label: t.metrics.jobApps, value: realtime.jobApps },
-                ].map(item => <StatTile key={item.label} label={item.label} value={item.value} />)}
+                ].map(item => <StatTile key={item.label} label={item.label} value={item.value} large style={{ border: '1px solid var(--color-primary-100, #FFDFCC)' }} />)}
               </StatGrid>
             </div>
-          </Card>
+          </EmphasisCard>
         )}
 
         <style jsx global>{`
