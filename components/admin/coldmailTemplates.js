@@ -4955,6 +4955,42 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'L', company: 'Labtobottle', title: 'Nhân viên Kinh doanh', meta: 'Onsite · TP.HCM / Hà Nội / Đà Nẵng · 18–20 triệu ₫', tail: BENEFIT_PUBLIC,
     }),
   },
+  {
+    match: /^poscofe1006-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — Senior Front-end Publishing Developer tại POSCO DX VIETNAM (TP.HCM)',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — POSCO DX VIETNAM Senior Front-end Publishing Developer',
+      en: "[FYI] You've been nominated — Senior Front-end Publishing Developer at POSCO DX VIETNAM",
+    },
+    desc: 'POSCO DX VIETNAM Senior Front-end Publishing Developer(V219) recommend (10/6): 비공개 프레임 — onsite 7군(Cobi Tower I)·급여 협의·FE/퍼블리싱 5년+ 필수·HTML5/CSS3/JS·Vue 또는 React·AI 생성 코드 리팩토링/폴더구조 표준화·재사용 컴포넌트·반응형/크로스브라우저·영어 소통(한국어 우대). 컷=(Frontend/Fullstack 직군 or FE/퍼블리싱 텍스트 or React/Vue) × 경력 60개월+ × HCMC권/위치 미기재 × React/Vue 명시 — 실측 103명(React/Vue 미명시 퍼블리셔 20·타지역 93·3~5y 97은 제외). 언어는 게이트 제외, 정렬 가점만.',
+    source: 'scripts/outreach/poscofe1006-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Senior Front-end Publishing Developer</b> qua FYI. Công việc: phân tích và refactor mã nguồn Front-end (HTML/CSS/JS, Vue.js hoặc React) do AI Agent của công ty sinh ra theo cấu trúc thư mục chuẩn và component tái sử dụng; xây dựng giao diện web; đối chiếu màn hình với thiết kế UX/UI; kiểm tra responsive/cross-browser; xây dựng tiêu chuẩn Front-end và web publishing. Yêu cầu: tối thiểu 5 năm Front-end hoặc web publishing, thành thạo HTML5/CSS3/JavaScript, kinh nghiệm Vue.js hoặc React, refactor mã nguồn, Git, tiếng Anh tốt. Ưu tiên: UX/UI, Figma, Design System, TypeScript/Sass/Vite/Webpack, Enterprise/ERP/MES, tiếng Hàn. Vị trí ưu tiên năng lực Front-end/web publishing hơn thiết kế UX/UI.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 ODC <b>POSCO DX VIETNAM</b>이 FYI를 통해 <b>Senior Front-end Publishing Developer</b>를 채용 중. 사내 AI Agent가 생성한 FE 코드(HTML/CSS/JS, Vue/React)를 표준 폴더구조·재사용 컴포넌트로 리팩토링, 웹 UI 구현, UX/UI 디자인 대비 검증, 반응형/크로스브라우저 확인, FE 표준·퍼블리싱 가이드 수립. FE/퍼블리싱 5년+ 필수, HTML5/CSS3/JS, Vue 또는 React, 리팩토링 경험, Git, 영어 소통. UX/UI·Figma·디자인시스템·TS/SCSS/Vite/Webpack·ERP/MES·한국어 우대. UX 디자인보다 FE/퍼블리싱 역량 우선. 7군 Cobi Tower I 온사이트, 급여 협의.',
+        en: 'POSCO DX VIETNAM — the POSCO group offshore development center (ODC) working directly with Korea HQ — is hiring a Senior Front-end Publishing Developer via FYI. Analyze and refactor AI-generated Front-end code (HTML/CSS/JS, Vue.js or React) into standardized folder structures and reusable components, build web UIs, validate screens against UX/UI designs, verify responsive and cross-browser behavior, set Front-end and publishing standards. Requires 5+ years of Front-end or web publishing, strong HTML5/CSS3/JavaScript, Vue.js or React, refactoring experience, Git, working English. UX/UI, Figma, Design Systems, TypeScript/Sass/Vite/Webpack, Enterprise/ERP/MES and Korean preferred. Front-end and publishing skills are prioritized over UX/UI design. Onsite District 7, salary negotiable.',
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior Front-end Publishing Developer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^poscofe1006-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi POSCO DX VIETNAM — Senior Front-end Publishing Developer (TP.HCM)',
+      ko: '[FYI] POSCO DX VIETNAM 추천 명단에 선정되셨습니다 — Senior Front-end Publishing Developer',
+      en: "[FYI] You've been nominated to POSCO DX VIETNAM — Senior Front-end Publishing Developer",
+    },
+    desc: 'POSCO DX VIETNAM Senior Front-end Publishing Developer(V219) recommend (10/6): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/poscofe1006-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển <b>Senior Front-end Publishing Developer</b> (onsite Quận 7, TP.HCM, 5 năm+ Front-end/web publishing, Vue.js hoặc React) qua FYI. Đội ngũ FYI đã xem xét toàn bộ hồ sơ và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ công khai của bạn sẽ được gửi kèm danh sách cho nhà tuyển dụng trong tuần này.',
+        ko: 'POSCO 그룹 한국 본사와 직접 협업하는 베트남 ODC <b>POSCO DX VIETNAM</b>의 Senior Front-end Publishing Developer(7군 온사이트, FE/퍼블리싱 5년+, Vue/React) 포지션 — FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했으며, 공개 프로필은 이번 주 명단과 함께 담당자에게 전달됩니다.',
+        en: "POSCO DX VIETNAM Senior Front-end Publishing Developer (onsite District 7, HCMC, 5+ years Front-end/web publishing, Vue.js or React) — the FYI team reviewed all profiles and <b>nominated you</b>; your public profile goes to the recruiter with this week's list.",
+      },
+      initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior Front-end Publishing Developer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
