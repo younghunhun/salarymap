@@ -1,6 +1,8 @@
-import { sectionStyle, sectionTitle } from '../../constants/dashboard'
+import { Fragment } from 'react'
+import { RiArrowRightLine } from '@remixicon/react'
 import { useAdmin } from '../../lib/adminSwr'
 import UserAssetCards from './UserAssetCards'
+import { G, C, ellipsis, num, Card, SectionTitle, StatGrid, StatTile, T, TableCard, State } from './ui'
 
 const L = {
   ko: {
@@ -87,8 +89,8 @@ export default function CommunityView({ token, lang = 'ko', dateRange }) {
   const qs = dateRange ? `?from=${dateRange.from}&to=${dateRange.to}` : ''
   const { data, isLoading: loading } = useAdmin(`/api/admin/community${qs}`, token)
 
-  if (loading) return <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>{t.loading}</div>
-  if (!data || !data.summary) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}>{t.empty}</div>
+  if (loading) return <State kind="loading">{t.loading}</State>
+  if (!data || !data.summary) return <State kind="empty" title={t.empty} />
 
   const { summary, daily, byCategory, topPosts, funnel, topFollowedCompanies = [] } = data
   const maxCat = Math.max(1, ...byCategory.map(c => c.posts))
@@ -103,55 +105,51 @@ export default function CommunityView({ token, lang = 'ko', dateRange }) {
     { label: t.fCreate, value: funnel.created, conv: funnel.createRate, convLabel: t.fOfList, color: '#ff6000' },
   ] : []
 
+  const L3 = (ko, en, vi) => (lang === 'ko' ? ko : lang === 'vi' ? vi : en)
+  const postStat = { flexShrink: 0, minWidth: 56, textAlign: 'right', fontSize: 12, color: C.sub, ...num }
+
   return (
-    <>
+    <div style={{ paddingBottom: 40 }}>
       <UserAssetCards token={token} keys={['userFollows', 'subscriptions']} lang={lang} />
+
       {/* 핵심 활동 */}
-      <div style={{ marginBottom: 18 }}>
-        <div style={{ fontSize: 11.5, fontWeight: 700, color: '#8B95A1', letterSpacing: '0.02em', marginBottom: 10 }}>{lang === 'ko' ? '핵심 활동' : lang === 'vi' ? 'Hoạt động chính' : 'Core activity'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
+      <div style={{ marginBottom: G.xl }}>
+        <SectionTitle>{L3('핵심 활동', 'Core activity', 'Hoạt động chính')}</SectionTitle>
+        <StatGrid>
           {['totalPosts', 'totalComments', 'totalLikes', 'uniqueAuthors'].map(k => (
-            <div key={k} style={{ background: '#fff', border: '1px solid #EEF0F2', borderLeft: '3px solid #ff4400', borderRadius: 12, padding: '15px 17px' }}>
-              <div style={{ fontSize: 12.5, color: '#6B7280', marginBottom: 6, fontWeight: 600 }}>{t[CARD_LABEL[k]]}</div>
-              <div style={{ fontSize: 28, fontWeight: 800, color: '#191F28', letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums', lineHeight: 1.05 }}>{summary[k]}</div>
-            </div>
+            <StatTile key={k} label={t[CARD_LABEL[k]]} value={summary[k]} />
           ))}
-        </div>
+        </StatGrid>
       </div>
 
       {/* 참여 · 유입 */}
-      <div style={{ marginBottom: 10 }}>
-        <div style={{ fontSize: 11.5, fontWeight: 700, color: '#8B95A1', letterSpacing: '0.02em', marginBottom: 10 }}>{lang === 'ko' ? '참여 · 유입' : lang === 'vi' ? 'Tương tác · Lượt truy cập' : 'Engagement'}</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(116px, 1fr))', gap: 8 }}>
+      <div style={{ marginBottom: G.xl }}>
+        <SectionTitle>{L3('참여 · 유입', 'Engagement', 'Tương tác · Lượt truy cập')}</SectionTitle>
+        <StatGrid>
           {['postViews', 'writeClicks', 'navClicks', 'follows'].map(k => (
-            <div key={k} style={{ background: '#F8FAFB', border: '1px solid #EEF1F3', borderRadius: 10, padding: '11px 13px' }}>
-              <div style={{ fontSize: 11.5, color: '#8B95A1', marginBottom: 4, fontWeight: 600 }}>{t[CARD_LABEL[k]]}</div>
-              <div style={{ fontSize: 19, fontWeight: 700, color: '#4E5968', fontVariantNumeric: 'tabular-nums' }}>{summary[k]}</div>
-            </div>
+            <StatTile key={k} label={t[CARD_LABEL[k]]} value={summary[k]} />
           ))}
+        </StatGrid>
+        <div style={{ fontSize: 12, color: C.faint, marginTop: G.sm, lineHeight: 1.5 }}>
+          {t.note} · {t.avgComments}: <strong style={{ color: C.sub, ...num }}>{summary.avgCommentsPerPost}</strong>
+          {!summary.hasEventTracking && <span style={{ marginLeft: G.sm }}>{t.noTracking}</span>}
         </div>
       </div>
-      <div style={{ fontSize: 11, color: '#ADB5BD', marginBottom: 24 }}>
-        {t.note} · {t.avgComments}: <strong style={{ color: '#6B7280' }}>{summary.avgCommentsPerPost}</strong>
-        {!summary.hasEventTracking && <span style={{ marginLeft: 8 }}>{t.noTracking}</span>}
-      </div>
 
-      {/* Entry funnel */}
+      {/* Entry funnel — 타일은 다른 숫자와 같은 StatTile, 단계 사이에만 화살표 */}
       {funnel && (
-        <div style={{ ...sectionStyle, marginBottom: 24 }}>
-          <h3 style={sectionTitle}>{t.funnelTitle}</h3>
-          <div style={{ display: 'flex', alignItems: 'stretch', gap: 6, flexWrap: 'wrap' }}>
+        <div style={{ marginBottom: G.xl }}>
+          <SectionTitle>{t.funnelTitle}</SectionTitle>
+          <div className="adm-m-scroll" style={{ display: 'flex', alignItems: 'stretch', gap: G.sm }}>
             {funnelSteps.map((s, i) => (
-              <div key={s.label} style={{ display: 'flex', alignItems: 'center', gap: 6, flex: '1 1 0', minWidth: 110 }}>
-                <div style={{ flex: 1, alignSelf: 'stretch', display: 'flex', flexDirection: 'column', justifyContent: 'center', background: '#fafafa', border: '1px solid #eee', borderRadius: 10, padding: '12px 10px', textAlign: 'center' }}>
-                  <div style={{ fontSize: 11, color: '#6B7280', marginBottom: 4 }}>{s.label}</div>
-                  <div style={{ fontSize: 24, fontWeight: 700, color: i === funnelSteps.length - 1 ? '#ff4400' : '#191F28' }}>{s.value}</div>
-                  {s.conv != null && (
-                    <div style={{ fontSize: 11, color: '#9CA3AF', marginTop: 3 }}>{fmtPct(s.conv)} <span style={{ color: '#cbcbcb' }}>{s.convLabel}</span></div>
-                  )}
-                </div>
-                {i < funnelSteps.length - 1 && <span style={{ color: '#d1d5db', fontSize: 16 }}>→</span>}
-              </div>
+              <Fragment key={s.label}>
+                {i > 0 && <RiArrowRightLine size={16} color={C.faint} style={{ flexShrink: 0, alignSelf: 'center' }} />}
+                <StatTile label={s.label} value={s.value}
+                  delta={s.conv != null ? fmtPct(s.conv) : undefined}
+                  sub={s.conv != null ? s.convLabel : undefined}
+                  accent={i === funnelSteps.length - 1 ? C.primary : undefined}
+                  style={{ flex: '1 1 0', minWidth: 132 }} />
+              </Fragment>
             ))}
           </div>
         </div>
@@ -159,104 +157,102 @@ export default function CommunityView({ token, lang = 'ko', dateRange }) {
 
       {/* Category + Top posts */}
       <div className="adm-grid-2col">
-        <div style={sectionStyle}>
-          <h3 style={sectionTitle}>{t.catTitle}</h3>
+        <Card>
+          <SectionTitle>{t.catTitle}</SectionTitle>
           {byCategory.length === 0 ? (
-            <div style={{ color: '#aaa', fontSize: 13 }}>—</div>
-          ) : byCategory.map(c => (
-            <div key={c.key} style={{ marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 3 }}>
-                <span>{catName(c.key)}</span>
-                <span style={{ fontWeight: 600 }}>{c.posts}</span>
-              </div>
-              <div style={{ height: 8, background: '#f3f4f6', borderRadius: 4, overflow: 'hidden' }}>
-                <div style={{ height: '100%', width: `${(c.posts / maxCat) * 100}%`, background: CAT_COLORS[c.key] || '#888', borderRadius: 4 }} />
-              </div>
+            <div style={{ color: C.faint, fontSize: 13 }}>—</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: G.md }}>
+              {byCategory.map(c => (
+                <div key={c.key}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: C.text, marginBottom: G.xs }}>
+                    <span>{catName(c.key)}</span>
+                    <span style={{ fontWeight: 600, ...num }}>{c.posts}</span>
+                  </div>
+                  <div style={{ height: 8, background: C.line, borderRadius: 4, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${(c.posts / maxCat) * 100}%`, background: CAT_COLORS[c.key] || C.faint, borderRadius: 4 }} />
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          )}
+        </Card>
 
-        <div style={sectionStyle}>
-          <h3 style={sectionTitle}>{t.topTitle}</h3>
+        <Card>
+          <SectionTitle>{t.topTitle}</SectionTitle>
           <div style={{ maxHeight: 400, overflowY: 'auto' }}>
             {topPosts.length === 0 ? (
-              <div style={{ color: '#aaa', fontSize: 13 }}>—</div>
+              <div style={{ color: C.faint, fontSize: 13 }}>—</div>
             ) : topPosts.map((p, i) => (
               <a key={p.id} href={`/community/${p.id}`} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 0', borderBottom: '1px solid #f3f3f3', fontSize: 13, textDecoration: 'none', color: '#111' }}>
-                <span style={{ color: '#999', width: 18, textAlign: 'right', fontSize: 11, flexShrink: 0 }}>{i + 1}</span>
-                <span style={{ flexShrink: 0, fontSize: 10, fontWeight: 600, color: CAT_COLORS[p.category] || '#888' }}>{catName(p.category)}</span>
-                <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{p.title}</span>
-                <span style={{ flexShrink: 0, color: '#868E96', fontSize: 11.5, fontVariantNumeric: 'tabular-nums' }}>{t.thLike} {p.like_count}</span>
-                <span style={{ flexShrink: 0, color: '#868E96', fontSize: 11.5, fontVariantNumeric: 'tabular-nums' }}>{t.thComment} {p.comment_count}</span>
-                <span style={{ flexShrink: 0, color: '#868E96', fontSize: 11.5, fontVariantNumeric: 'tabular-nums' }}>{t.thView} {p.view_count}</span>
+                style={{ display: 'flex', alignItems: 'center', gap: G.sm, padding: '10px 0', borderBottom: i === topPosts.length - 1 ? 'none' : `1px solid ${C.line}`, fontSize: 13.5, textDecoration: 'none', color: C.text }}>
+                <span style={{ color: C.faint, width: 20, textAlign: 'right', fontSize: 12, flexShrink: 0, ...num }}>{i + 1}</span>
+                <span style={{ flexShrink: 0, fontSize: 12, fontWeight: 600, color: CAT_COLORS[p.category] || C.sub }}>{catName(p.category)}</span>
+                <span style={{ flex: 1, ...ellipsis }}>{p.title}</span>
+                <span style={postStat}>{t.thLike} {p.like_count}</span>
+                <span style={postStat}>{t.thComment} {p.comment_count}</span>
+                <span style={postStat}>{t.thView} {p.view_count}</span>
               </a>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Top followed companies */}
       {topFollowedCompanies.length > 0 && (
-        <div style={{ ...sectionStyle, marginBottom: 24 }}>
-          <h3 style={sectionTitle}>{t.followTitle}</h3>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid #EEF0F2', background: '#FAFBFC' }}>
-                  {[t.thCompany, t.thFollows, t.thUnfollows, t.thNet].map((h, i) => (
-                    <th key={h} style={{ padding: '9px 12px', textAlign: i === 0 ? 'left' : 'right', fontWeight: 700, color: '#8B95A1', fontSize: 11.5 }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {topFollowedCompanies.map((c, i) => (
-                  <tr key={c.company} style={{ borderBottom: '1px solid #F7F8FA' }}>
-                    <td style={{ padding: '7px 12px' }}>
-                      <a href={`/companies/${encodeURIComponent(c.company)}`} target="_blank" rel="noopener noreferrer" style={{ color: '#191F28', textDecoration: 'none' }}>{c.company}</a>
-                    </td>
-                    <td style={{ padding: '7px 12px', textAlign: 'right', color: '#191F28', fontWeight: 600 }}>{c.follows}</td>
-                    <td style={{ padding: '7px 12px', textAlign: 'right', color: '#ADB5BD' }}>{c.unfollows || '-'}</td>
-                    <td style={{ padding: '7px 12px', textAlign: 'right', fontWeight: 600, color: c.net >= 0 ? '#191F28' : '#DC2626' }}>{c.net > 0 ? `+${c.net}` : c.net}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* Daily detail — 최근 날짜 먼저(역순), 합계 상단, 색 중립 */}
-      <div style={sectionStyle}>
-        <h3 style={sectionTitle}>{t.dailyTitle}</h3>
-        <div style={{ overflowX: 'auto', border: '1px solid #F2F4F6', borderRadius: 10 }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <div style={{ marginBottom: G.xl }}>
+          <SectionTitle>{t.followTitle}</SectionTitle>
+          <TableCard minWidth={480}>
             <thead>
               <tr>
-                {[t.thDate, t.thPosts, t.thComments, t.thLikes, t.thNavClicks, t.thPostViews, t.thListViews, t.thWriteClicks, t.thFollows].map((h, i) => (
-                  <th key={h} style={{ background: '#FAFBFC', padding: '9px 12px', textAlign: i === 0 ? 'left' : 'right', fontWeight: 700, color: '#8B95A1', fontSize: 11.5, whiteSpace: 'nowrap', borderBottom: '1px solid #EEF0F2' }}>{h}</th>
+                {[t.thCompany, t.thFollows, t.thUnfollows, t.thNet].map((h, i) => (
+                  <th key={h} style={i === 0 ? T.th : T.thNum}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              <tr style={{ fontWeight: 700, borderBottom: '1px solid #EEF0F2', background: '#FCFCFD' }}>
-                <td style={{ padding: '9px 12px' }}>{lang === 'ko' ? '합계' : lang === 'vi' ? 'Tổng' : 'Total'}</td>
-                {['totalPosts', 'totalComments', 'totalLikes', 'navClicks', 'postViews', 'listViews', 'writeClicks', 'follows'].map(k => (
-                  <td key={k} style={{ padding: '9px 12px', textAlign: 'right', color: '#191F28', fontVariantNumeric: 'tabular-nums' }}>{summary[k]}</td>
-                ))}
-              </tr>
-              {[...daily].sort((a, b) => (a.date < b.date ? 1 : -1)).map((d) => (
-                <tr key={d.date} style={{ borderBottom: '1px solid #F7F8FA' }}>
-                  <td style={{ padding: '7px 12px', color: '#4E5968', whiteSpace: 'nowrap' }}>{d.date}</td>
-                  {['posts', 'comments', 'likes', 'navClicks', 'postViews', 'listViews', 'writeClicks', 'follows'].map(k => (
-                    <td key={k} style={{ padding: '7px 12px', textAlign: 'right', color: d[k] ? '#191F28' : '#C7CDD4', fontVariantNumeric: 'tabular-nums' }}>{d[k] || '-'}</td>
-                  ))}
+              {topFollowedCompanies.map((c) => (
+                <tr key={c.company}>
+                  <td style={T.td}>
+                    <a href={`/companies/${encodeURIComponent(c.company)}`} target="_blank" rel="noopener noreferrer" style={{ color: C.text, textDecoration: 'none' }}>{c.company}</a>
+                  </td>
+                  <td style={{ ...T.tdNum, fontWeight: 600 }}>{c.follows}</td>
+                  <td style={{ ...T.tdNum, color: C.faint }}>{c.unfollows || '-'}</td>
+                  <td style={{ ...T.tdNum, fontWeight: 600, color: c.net >= 0 ? C.text : C.negative }}>{c.net > 0 ? `+${c.net}` : c.net}</td>
                 </tr>
               ))}
             </tbody>
-          </table>
+          </TableCard>
         </div>
-      </div>
-    </>
+      )}
+
+      {/* Daily detail — 최근 날짜 먼저(역순), 합계 상단, 색 중립 */}
+      <SectionTitle>{t.dailyTitle}</SectionTitle>
+      <TableCard minWidth={760}>
+        <thead>
+          <tr>
+            {[t.thDate, t.thPosts, t.thComments, t.thLikes, t.thNavClicks, t.thPostViews, t.thListViews, t.thWriteClicks, t.thFollows].map((h, i) => (
+              <th key={h} style={i === 0 ? T.th : T.thNum}>{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr style={{ background: C.bg }}>
+            <td style={{ ...T.td, fontWeight: 700, borderBottom: `1px solid ${C.border}` }}>{L3('합계', 'Total', 'Tổng')}</td>
+            {['totalPosts', 'totalComments', 'totalLikes', 'navClicks', 'postViews', 'listViews', 'writeClicks', 'follows'].map(k => (
+              <td key={k} style={{ ...T.tdNum, fontWeight: 700, borderBottom: `1px solid ${C.border}` }}>{summary[k]}</td>
+            ))}
+          </tr>
+          {[...daily].sort((a, b) => (a.date < b.date ? 1 : -1)).map((d) => (
+            <tr key={d.date}>
+              <td style={{ ...T.tdSub, whiteSpace: 'nowrap', ...num }}>{d.date}</td>
+              {['posts', 'comments', 'likes', 'navClicks', 'postViews', 'listViews', 'writeClicks', 'follows'].map(k => (
+                <td key={k} style={{ ...T.tdNum, color: d[k] ? C.text : C.faint }}>{d[k] || '-'}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </TableCard>
+    </div>
   )
 }
