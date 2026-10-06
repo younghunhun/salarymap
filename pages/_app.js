@@ -17,7 +17,7 @@ function activePageFor(pathname) {
   if (pathname === '/') return 'home';
   if (pathname === '/cv') return 'cv';
   if (pathname === '/resume') return 'resume';
-  if (pathname === '/jobs' || pathname === '/jobs/[id]') return 'jobs';
+  if (pathname === '/jobs' || pathname === '/jobs/[id]' || pathname === '/l/[slug]') return 'jobs';
   if (pathname.startsWith('/community') || pathname.startsWith('/companies/')) return 'community';
   if (pathname === '/my-applications') return 'my-applications';
   if (pathname === '/saved-jobs') return 'saved-jobs';

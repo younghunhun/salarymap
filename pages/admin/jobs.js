@@ -9,6 +9,7 @@ import Icon from '../../components/Icon'
 import { ROLE_GROUPS } from '../../constants/jobs'
 import { isSalaryNegotiable, NEGOTIABLE_SOURCES } from '../../utils/salary'
 import KtcLandingJobsView from '../../components/admin/KtcLandingJobsView'
+import JobCollectionsView from '../../components/admin/JobCollectionsView'
 import JobPreview from '../../components/jobs/JobPreview'
 import { Chips, Dropdown, DatePickerSingle } from '../../components/admin/FormControls'
 
@@ -650,6 +651,11 @@ export default function AdminJobs() {
         {/* KTC 랜딩 공고 관리 (별도 Supabase 크로스 관리) */}
         {tab === 'ktc-landing' && (
           <KtcLandingJobsView token={token} lang={globalLang === 'ko' || globalLang === 'vi' ? globalLang : 'en'} />
+        )}
+
+        {/* 캠페인 링크 — 광고용 공고 묶음 /l/<slug> (job_collections) */}
+        {tab === 'collections' && (
+          <JobCollectionsView token={token} lang={globalLang === 'ko' || globalLang === 'vi' ? globalLang : 'en'} />
         )}
 
         {/* KPI TAB (기업/채용 지표 요약) */}

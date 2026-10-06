@@ -153,7 +153,9 @@ function JobCard({ job, idx, bump, matched, bookmarked, onOpen, onToggleBookmark
   )
 }
 
-export default function JobsPage() {
+// collection — /l/[slug](캠페인 링크)가 SSR 로 넘기는 job_collections 행. 있으면 그 공고만 보여주고
+// 제목/OG 를 캠페인 값으로 바꾼다. /jobs 직접 진입은 undefined.
+export default function JobsPage({ collection = null }) {
   const router = useRouter()
   const fileRef = useRef(null)
   const { t, lang } = useT()
@@ -395,7 +397,7 @@ export default function JobsPage() {
   const openDetail = (job, idx) => {
     setCarouselIdx(0); setDetailApplyMode(false); setResumeFile(null)
     setDetailJob({ ...job, _imgFallback: DEFAULT_IMAGES[idx % 3] })
-    router.push({ pathname: '/jobs', query: { ...router.query, jobId: job.id } }, undefined, { shallow: true, scroll: false })
+    router.push({ pathname: router.pathname, query: { ...router.query, jobId: job.id } }, undefined, { shallow: true, scroll: false })
     track('click_job_card', 'jobs', { jobId: job.id, title: job.title, company: job.company })
   }
 
@@ -403,7 +405,7 @@ export default function JobsPage() {
     setDetailJob(null)
     if (router.query.jobId !== undefined) {
       const { jobId, ...rest } = router.query
-      router.replace({ pathname: '/jobs', query: rest }, undefined, { shallow: true, scroll: false })
+      router.replace({ pathname: router.pathname, query: rest }, undefined, { shallow: true, scroll: false })
     }
   }
 
@@ -451,7 +453,10 @@ export default function JobsPage() {
 
   const companyQuery = router.query.company ? String(router.query.company).toLowerCase() : null
   // 특정 공고 몇 건만 보여주는 딥링크 (?ids=uuid,uuid) — 메타 광고 착지용(회사 전체가 아닌 캠페인 JD만).
-  const idsQuery = router.query.ids ? new Set(String(router.query.ids).split(',').map(s => s.trim()).filter(Boolean)) : null
+  // /l/<slug> 캠페인 링크는 같은 필터를 collection.job_ids 로 건다 — slug 하나로 짧은 URL.
+  const idsQuery = collection?.job_ids?.length
+    ? new Set(collection.job_ids)
+    : router.query.ids ? new Set(String(router.query.ids).split(',').map(s => s.trim()).filter(Boolean)) : null
 
   // 검색·회사·마감 제외만 적용된 목록 — 본 목록과 필터 모달의 실시간 건수가 공유한다.
   const baseFilteredJobs = (() => {
@@ -675,7 +680,7 @@ export default function JobsPage() {
 
   const clearCompanyQuery = () => {
     const { company, ...rest } = router.query
-    router.replace({ pathname: '/jobs', query: rest }, undefined, { shallow: true, scroll: false })
+    router.replace({ pathname: router.pathname, query: rest }, undefined, { shallow: true, scroll: false })
   }
 
   // 지원 완료 모달에 띄울 유사 공고 3개 — 목적은 기업 직접등록(company_self) 공고로 지원을
@@ -913,15 +918,15 @@ export default function JobsPage() {
   return (
     <>
       <Head>
-        <title>{t('jobs.title')}</title>
-        <meta name="description" content="Curated IT jobs in Vietnam with higher pay. Our headhunter personally introduces you to top companies. Remote, Korean, and global opportunities." />
+        <title>{collection ? `${collection.title} | FYI Salary` : t('jobs.title')}</title>
+        <meta name="description" content={collection?.description || 'Curated IT jobs in Vietnam with higher pay. Our headhunter personally introduces you to top companies. Remote, Korean, and global opportunities.'} />
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://salary-fyi.com/jobs" />
-        <meta property="og:title" content="Jobs — Higher Pay, Better Roles | FYI Salary" />
-        <meta property="og:description" content="Curated IT jobs in Vietnam with higher pay. Our headhunter personally introduces you." />
-        <meta property="og:image" content="https://salary-fyi.com/og-image.png" />
-        <link rel="canonical" href="https://salary-fyi.com/jobs" />
+        <meta property="og:url" content={collection ? `https://salary-fyi.com/l/${collection.slug}` : 'https://salary-fyi.com/jobs'} />
+        <meta property="og:title" content={collection ? collection.title : 'Jobs — Higher Pay, Better Roles | FYI Salary'} />
+        <meta property="og:description" content={collection?.description || 'Curated IT jobs in Vietnam with higher pay. Our headhunter personally introduces you.'} />
+        <meta property="og:image" content={collection?.og_image_url || 'https://salary-fyi.com/og-image.png'} />
+        <link rel="canonical" href={collection ? `https://salary-fyi.com/l/${collection.slug}` : 'https://salary-fyi.com/jobs'} />
       </Head>
 
       <style>{`
@@ -1236,8 +1241,8 @@ export default function JobsPage() {
         <div className="jw-head">
           <div className="jw-head-l">
             <div className="jw-eye">{t('jobs.eyebrow')}</div>
-            <div className="jw-h1">{t('jobs.h1')}</div>
-            <div className="jw-sub">{t('jobs.sub')}</div>
+            <div className="jw-h1">{collection ? collection.title : t('jobs.h1')}</div>
+            <div className="jw-sub">{collection ? (collection.description || t('jobs.sub')) : t('jobs.sub')}</div>
           </div>
           <div className="jf-search">
             <svg className="jf-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
