@@ -4991,6 +4991,43 @@ export const COLDMAIL_TEMPLATES = [
       initial: 'P', company: 'POSCO DX VIETNAM', title: 'Senior Front-end Publishing Developer', meta: 'Onsite · Quận 7, TP.HCM · Senior (5 năm+) · Lương thỏa thuận', tail: BENEFIT_PUBLIC,
     }),
   },
+  // ── Nexacode 10/6 AI Growth Marketer R216 (scripts/outreach/nxgrowth1006-recommend-coldmail.mjs) — R205 재오픈 공고 ──
+  {
+    match: /^nxgrowth1006-.*-private/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử — AI Growth Marketer tại Nexacode',
+      ko: '[FYI] 추천 후보 명단에 선정되셨습니다 — Nexacode AI Growth Marketer',
+      en: "[FYI] You've been nominated — AI Growth Marketer at Nexacode",
+    },
+    desc: 'Nexacode(R216) AI Growth Marketer recommend (10/6, 69명): 비공개 프레임 — R205 AI Native Marketer(9/17)의 재오픈 공고. 컷=마케팅 직군 × 6m+ × <b>유료광고 운영 텍스트 필수</b>(nxai0917 과 같은 정의). 유저 결정으로 지역 게이트 해제(전국 — HCM권 21·그 외 48)·한국어 게이트 없음, <b>전작 R205 수신·지원자 51명 제외(미발송 풀만)</b>. T1 광고운영×AI툴 16 / T2 광고운영 53. T3(SNS·콘텐츠·SEO만, 유료광고 미기재 472)는 미발송. 근무형태 문구는 공고 본문 그대로(1군 지사 + 필요 시 원격) — 완전 리모트로 단정하지 않음. 제목에서 (TP.HCM) 제거.',
+    source: 'scripts/outreach/nxgrowth1006-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Nexacode</b> — công ty phần mềm xây dựng sản phẩm SaaS, ERP và giải pháp chuyển đổi số — đang tuyển <b>AI Growth Marketer</b> qua FYI: người sử dụng AI để tìm ra khách hàng thực tế và kết nối họ đến tư vấn và doanh thu. Công việc chính: <b>thu hút khách hàng B2B tại Hàn Quốc</b> (nghiên cứu khách hàng có nhu cầu bảo trì và thuê ngoài phần mềm, đề xuất phù hợp theo từng khách hàng, thu hút lead tư vấn); <b>bán nội dung số và SaaS</b> (vận hành Threads, Instagram, <b>quảng cáo Meta</b>, blog và SEO/SEM cho website, đồng thời cải thiện ROAS); <b>ứng dụng AI</b> để nghiên cứu khách hàng, sản xuất creative, phân tích hiệu quả và tự động hóa các công việc lặp lại. Nexacode tìm ứng viên có thể giải thích căn cứ lựa chọn khách hàng và phương pháp tiếp cận, đưa ra được kết quả tư vấn/doanh số do chính mình thực hiện, đồng thời biết kiểm chứng kết quả do AI tạo ra và cải thiện dựa trên dữ liệu thực tế. Phỏng vấn khoảng 60 phút, trong đó khoảng 30 phút kiểm tra năng lực thực tế qua chia sẻ màn hình (được phép dùng công cụ AI). Hình thức làm việc: <b>có thể làm việc từ xa khi cần thiết</b>, văn phòng chi nhánh tại Quận 1, TP.HCM; thử việc khoảng 2 tháng, sau khi lên chính thức có thưởng theo hiệu suất. Lương <b>12–20 triệu ₫/tháng</b>. Đội ngũ FYI đã xem xét toàn bộ hồ sơ đã đăng ký và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ của bạn (kinh nghiệm vận hành quảng cáo trả phí) phù hợp với yêu cầu của vị trí này.',
+        ko: 'SaaS·ERP·DX 소프트웨어 기업 <b>Nexacode</b>가 FYI를 통해 <b>AI Growth Marketer</b>를 채용 중 — AI를 활용해 실제 고객을 찾아 상담과 매출로 연결하는 역할. 주요 업무: <b>한국 B2B 고객 확보</b>(유지보수·SW 아웃소싱 수요 고객 리서치, 고객별 맞춤 제안, 상담 리드 확보), <b>디지털 콘텐츠·SaaS 판매</b>(Threads·Instagram·<b>Meta 광고</b>·블로그·웹사이트 SEO/SEM 운영, ROAS 개선), <b>AI 활용</b>(고객 리서치·크리에이티브 제작·성과 분석·반복 업무 자동화). 고객 선정 근거와 접근 방법을 설명할 수 있고 본인이 직접 만든 상담/매출 성과를 제시할 수 있으며, AI 결과물을 검증하고 실데이터로 개선할 수 있는 사람. 면접 약 60분(그중 약 30분은 화면 공유 실무 테스트, AI 툴 사용 가능). <b>필요 시 원격 근무 가능</b>, 베트남 지사는 호치민 1군. 수습 약 2개월, 정규 전환 후 성과 보너스. 월 1,200만~2,000만 동. FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했습니다(유료 광고 운영 경험).',
+        en: "Nexacode — a SaaS/ERP/DX software company — is hiring an AI Growth Marketer via FYI: someone who uses AI to find real customers and turn them into consultations and revenue. Main work: acquiring B2B customers in Korea (researching companies that need software maintenance/outsourcing, tailored proposals, consultation leads); selling digital content and SaaS (running Threads, Instagram, Meta ads, blog and website SEO/SEM, improving ROAS); applying AI to customer research, creative production, performance analysis and automating repetitive work. Interview is about 60 minutes including a ~30-minute hands-on screen-share test (AI tools allowed). Remote work possible when needed; Vietnam branch office in District 1, HCMC. About 2 months probation, performance bonus after conversion. 12–20M VND/month. The FYI team reviewed all profiles and <b>nominated you</b> (paid ads experience).",
+      },
+      initial: 'N', company: 'Nexacode', title: 'AI Growth Marketer', meta: 'Văn phòng Quận 1, TP.HCM · Có thể làm việc từ xa khi cần · 12–20 triệu ₫/tháng', tail: BENEFIT_PRIVATE,
+    }),
+  },
+  {
+    match: /^nxgrowth1006-/,
+    subject: {
+      vi: '[FYI] Bạn được chọn vào danh sách đề cử gửi Nexacode — AI Growth Marketer',
+      ko: '[FYI] Nexacode 추천 명단에 선정되셨습니다 — AI Growth Marketer',
+      en: "[FYI] You've been nominated to Nexacode — AI Growth Marketer",
+    },
+    desc: 'Nexacode(R216) AI Growth Marketer recommend (10/6): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.',
+    source: 'scripts/outreach/nxgrowth1006-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, {
+      intro: {
+        vi: '<b>Nexacode</b> — công ty phần mềm xây dựng sản phẩm SaaS, ERP và giải pháp chuyển đổi số — đang tuyển <b>AI Growth Marketer</b> qua FYI: người sử dụng AI để tìm ra khách hàng thực tế và kết nối họ đến tư vấn và doanh thu. Công việc chính: <b>thu hút khách hàng B2B tại Hàn Quốc</b> (nghiên cứu khách hàng có nhu cầu bảo trì và thuê ngoài phần mềm, đề xuất phù hợp theo từng khách hàng, thu hút lead tư vấn); <b>bán nội dung số và SaaS</b> (vận hành Threads, Instagram, <b>quảng cáo Meta</b>, blog và SEO/SEM cho website, đồng thời cải thiện ROAS); <b>ứng dụng AI</b> để nghiên cứu khách hàng, sản xuất creative, phân tích hiệu quả và tự động hóa các công việc lặp lại. Nexacode tìm ứng viên có thể giải thích căn cứ lựa chọn khách hàng và phương pháp tiếp cận, đưa ra được kết quả tư vấn/doanh số do chính mình thực hiện, đồng thời biết kiểm chứng kết quả do AI tạo ra và cải thiện dựa trên dữ liệu thực tế. Phỏng vấn khoảng 60 phút, trong đó khoảng 30 phút kiểm tra năng lực thực tế qua chia sẻ màn hình (được phép dùng công cụ AI). Hình thức làm việc: <b>có thể làm việc từ xa khi cần thiết</b>, văn phòng chi nhánh tại Quận 1, TP.HCM; thử việc khoảng 2 tháng, sau khi lên chính thức có thưởng theo hiệu suất. Lương <b>12–20 triệu ₫/tháng</b>. Đội ngũ FYI đã xem xét toàn bộ hồ sơ đã đăng ký và <b>chọn bạn vào danh sách đề cử</b> — hồ sơ của bạn (kinh nghiệm vận hành quảng cáo trả phí) phù hợp với yêu cầu của vị trí này.',
+        ko: 'SaaS·ERP·DX 소프트웨어 기업 <b>Nexacode</b>가 FYI를 통해 <b>AI Growth Marketer</b>를 채용 중 — AI를 활용해 실제 고객을 찾아 상담과 매출로 연결하는 역할. 주요 업무: <b>한국 B2B 고객 확보</b>(유지보수·SW 아웃소싱 수요 고객 리서치, 고객별 맞춤 제안, 상담 리드 확보), <b>디지털 콘텐츠·SaaS 판매</b>(Threads·Instagram·<b>Meta 광고</b>·블로그·웹사이트 SEO/SEM 운영, ROAS 개선), <b>AI 활용</b>(고객 리서치·크리에이티브 제작·성과 분석·반복 업무 자동화). 고객 선정 근거와 접근 방법을 설명할 수 있고 본인이 직접 만든 상담/매출 성과를 제시할 수 있으며, AI 결과물을 검증하고 실데이터로 개선할 수 있는 사람. 면접 약 60분(그중 약 30분은 화면 공유 실무 테스트, AI 툴 사용 가능). <b>필요 시 원격 근무 가능</b>, 베트남 지사는 호치민 1군. 수습 약 2개월, 정규 전환 후 성과 보너스. 월 1,200만~2,000만 동. FYI 팀이 이력서 전체를 검토해 회원님을 <b>추천 명단에 선정</b>했습니다(유료 광고 운영 경험).',
+        en: "Nexacode — a SaaS/ERP/DX software company — is hiring an AI Growth Marketer via FYI: someone who uses AI to find real customers and turn them into consultations and revenue. Main work: acquiring B2B customers in Korea (researching companies that need software maintenance/outsourcing, tailored proposals, consultation leads); selling digital content and SaaS (running Threads, Instagram, Meta ads, blog and website SEO/SEM, improving ROAS); applying AI to customer research, creative production, performance analysis and automating repetitive work. Interview is about 60 minutes including a ~30-minute hands-on screen-share test (AI tools allowed). Remote work possible when needed; Vietnam branch office in District 1, HCMC. About 2 months probation, performance bonus after conversion. 12–20M VND/month. The FYI team reviewed all profiles and <b>nominated you</b> (paid ads experience).",
+      },
+      initial: 'N', company: 'Nexacode', title: 'AI Growth Marketer', meta: 'Văn phòng Quận 1, TP.HCM · Có thể làm việc từ xa khi cần · 12–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
+    }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
