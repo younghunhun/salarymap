@@ -616,11 +616,7 @@ export default function Home({ initialCompanies = [] }) {
       sessionStorage.setItem('fyi_gate_pending', source || '1');
       localStorage.removeItem('fyi_login_return'); // 이전 채용 CTA가 남긴 리턴 경로가 게이트 로그인을 가로채지 않게
     } catch {}
-    fetch('/api/track', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'company_gate_click', page: '/', meta: { source } }),
-    }).catch(() => {});
+    track('company_gate_click', { meta: { source }, page: '/' });
     setAuthCtx('gate');
     setShowAuthModal(true);
   };
@@ -704,6 +700,29 @@ export default function Home({ initialCompanies = [] }) {
     window.openLoginGate = openLoginGate; // ResultSection 하드 게이트 CTA에서 사용
     return () => { delete window.openAuthModal; delete window.openLoginGate; };
   }, [setShowAuthModal]);
+
+  // 로그인 직후 1회: 익명 연봉 제출을 이 계정에 연결하고, 게이트에서 시작된 로그인이면 전환 이벤트 기록.
+  // (One Tap 경로는 components/GoogleOneTap.js 가 같은 마커를 자체 소비한다.)
+  const consumePendingMarkers = (u) => {
+    try {
+      const pendingSid = localStorage.getItem('fyi_submission_id');
+      if (pendingSid) {
+        localStorage.removeItem('fyi_submission_id');
+        fetch('/api/link-submission', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ submission_id: pendingSid, user_id: u.id, email: u.email }),
+        }).catch(() => {});
+      }
+    } catch {}
+    try {
+      const gateSource = sessionStorage.getItem('fyi_gate_pending');
+      if (gateSource) {
+        sessionStorage.removeItem('fyi_gate_pending');
+        track('company_gate_login_success', { meta: { source: gateSource }, page: '/' });
+      }
+    } catch {}
+  };
 
   const saveUserProfile = async (u) => {
     try {
@@ -801,31 +820,15 @@ export default function Home({ initialCompanies = [] }) {
         setIsLoggedIn(true);
         setUser(session.user);
 
+        // 익명 제출 연결 + 게이트 귀속은 ?login=success 와 무관하게 세션만 있으면 처리한다.
+        // 게이트의 Google 로그인은 /api/auth/google?return=/ 로 돌아와 login=success 가 안 붙어
+        // 2026-07 부터 이 블록이 전혀 안 돌았다 (제출 user_id 미연결, company_gate_login_success 0건).
+        // 마커는 익명 플로우에서만 심기고 소비 즉시 지우므로 일반 세션 복원에서는 no-op.
+        consumePendingMarkers(session.user);
+
         // Handle ?login=success redirect from OAuth
         if (isLoginSuccess) {
           saveUserProfile(session.user);
-          // Link prior anonymous submission to this user
-          const pendingSid = localStorage.getItem('fyi_submission_id');
-          if (pendingSid) {
-            fetch('/api/link-submission', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ submission_id: pendingSid, user_id: session.user.id, email: session.user.email }),
-            }).catch(() => {});
-            localStorage.removeItem('fyi_submission_id');
-          }
-          // 가입 게이트에서 시작된 로그인이면 전환 이벤트 기록 (마커 값 = 게이트 source)
-          try {
-            const gateSource = sessionStorage.getItem('fyi_gate_pending');
-            if (gateSource) {
-              sessionStorage.removeItem('fyi_gate_pending');
-              fetch('/api/track', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ event: 'company_gate_login_success', page: '/', userId: session.user.id, meta: { source: gateSource } }),
-              }).catch(() => {});
-            }
-          } catch {}
           window.history.replaceState({}, '', '/');
         }
       } else {
@@ -850,6 +853,7 @@ export default function Home({ initialCompanies = [] }) {
               return;
             }
           }
+          if (event === 'SIGNED_IN') consumePendingMarkers(session.user);
           setIsLoggedIn(true);
           setUser(session.user);
         }
