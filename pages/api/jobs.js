@@ -7,7 +7,7 @@ const supabase = createClient(
 
 // 리스트 카드 렌더에 필요한 컬럼만 — 무거운 텍스트(description/benefits/hiring_process)는
 // 상세 패널 열 때 /api/jobs/[id]로 lazy fetch한다.
-const LIST_FIELDS = [
+export const LIST_FIELDS = [
   'id', 'title', 'company', 'company_initials', 'company_url',
   'company_size', 'location', 'type', 'country', 'role',
   'experience_min', 'experience_max', 'salary_min', 'salary_max',

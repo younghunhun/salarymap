@@ -160,8 +160,10 @@ export default function JobsPage({ collection = null }) {
   const fileRef = useRef(null)
   const { t, lang } = useT()
 
-  const [jobs, setJobs] = useState([])
-  const [jobsLoaded, setJobsLoaded] = useState(false)
+  // 캠페인 링크는 SSR 이 묶은 공고를 같이 내려준다 → 전체 목록(/api/jobs) 도착 전에 바로 그린다.
+  // 전체 목록은 아래 effect 가 그대로 받아와 교체한다(지원 후 유사 공고 추천 등에 필요).
+  const [jobs, setJobs] = useState(() => (collection?.jobs?.length ? dedupeJobs(collection.jobs) : []))
+  const [jobsLoaded, setJobsLoaded] = useState(() => !!collection?.jobs?.length)
   const [searchQuery, setSearchQuery] = useState('')
   // 다중선택 배열(앱 필터와 동일). roles 항목은 소분류 value | 'cat:<대분류>' | 'grp:*'(광고 랜딩) 혼용 가능.
   const [roleFilters, setRoleFilters] = useState([])

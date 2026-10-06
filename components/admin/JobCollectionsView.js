@@ -69,7 +69,7 @@ export function adLink(c) {
 }
 
 // 공고 검색 → 클릭으로 추가. 빠른 생성 카드와 상세 폼이 같이 쓴다.
-function JobPicker({ allJobs, jobById, value, onChange, L }) {
+function JobPicker({ allJobs, jobById, value, onChange, L, loading }) {
   const [q, setQ] = useState('')
   const query = q.trim().toLowerCase()
   const candidates = query
@@ -85,7 +85,7 @@ function JobPicker({ allJobs, jobById, value, onChange, L }) {
           placeholder={L('공고 검색 — 제목, 회사, JD 코드', 'Search jobs — title, company, JD code', 'Tìm tin — tiêu đề, công ty, mã')} />
         {query && (
           <div style={{ position: 'absolute', left: 0, right: 0, top: '100%', zIndex: 20, marginTop: G.xs, background: '#fff', border: `1px solid ${C.border}`, borderRadius: 8, maxHeight: 296, overflowY: 'auto', boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
-            {candidates.length === 0 && <div style={{ padding: `${G.md}px ${G.lg}px` }}><Text variant="body-p4" style={{ color: C.faint }}>{L('검색 결과가 없습니다', 'No matches', 'Không có kết quả')}</Text></div>}
+            {candidates.length === 0 && <div style={{ padding: `${G.md}px ${G.lg}px` }}><Text variant="body-p4" style={{ color: C.faint }}>{loading ? L('공고 목록을 불러오는 중입니다…', 'Loading jobs…', 'Đang tải tin…') : L('검색 결과가 없습니다', 'No matches', 'Không có kết quả')}</Text></div>}
             {candidates.map(j => (
               <button key={j.id} type="button" onClick={() => { onChange([...value, j.id]); setQ('') }}
                 style={{ display: 'flex', width: '100%', alignItems: 'center', justifyContent: 'space-between', gap: G.md, padding: `10px ${G.lg}px`, background: 'none', border: 'none', borderBottom: `1px solid ${C.bg}`, cursor: 'pointer', textAlign: 'left', fontFamily: 'inherit', fontSize: 13.5, color: C.text }}>
@@ -123,8 +123,10 @@ export default function JobCollectionsView({ token, lang }) {
   const L = (k, e, v) => (lang === 'vi' ? (v ?? e) : ko ? k : e)
   const pl = (p) => (lang === 'vi' ? p.label[2] : ko ? p.label[0] : p.label[1])
   const { data, error, isLoading, mutate } = useAdmin('/api/admin/job-collections', token)
-  // 공고 선택용 — 공고 목록 탭과 같은 키라 SWR 캐시를 공유한다
-  const { data: allJobs = [] } = useAdmin('/api/admin/jobs', token)
+  // 공고 선택용 경량 목록 — 전체 공고 API(/api/admin/jobs)는 26MB 라 쓰지 않는다
+  const { data: pickerData } = useAdmin('/api/admin/job-collections?picker=1', token)
+  const allJobs = pickerData?.jobs || []
+  const jobsLoading = !pickerData
   const [editing, setEditing] = useState(null) // null | 'new' | collection.id
   const [form, setForm] = useState(EMPTY)
   const [slugTouched, setSlugTouched] = useState(false)
@@ -261,7 +263,7 @@ export default function JobCollectionsView({ token, lang }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: G.md }}>
           <div style={card}>
             <SectionTitle>{L('포함할 공고', 'Jobs', 'Tin tuyển dụng')}</SectionTitle>
-            <JobPicker allJobs={allJobs} jobById={jobById} value={form.job_ids} onChange={ids => setForm(f => ({ ...f, job_ids: ids }))} L={L} />
+            <JobPicker loading={jobsLoading} allJobs={allJobs} jobById={jobById} value={form.job_ids} onChange={ids => setForm(f => ({ ...f, job_ids: ids }))} L={L} />
           </div>
 
           <div style={card}>
@@ -337,7 +339,7 @@ export default function JobCollectionsView({ token, lang }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: G.xl }}>
           <div>
             <FieldLabel>1. {L('공고 선택', 'Pick jobs', 'Chọn tin')}{pickedJobs.length > 0 ? `  ·  ${L(`${pickedJobs.length}건`, `${pickedJobs.length} selected`, `${pickedJobs.length} tin`)}` : ''}</FieldLabel>
-            <JobPicker allJobs={allJobs} jobById={jobById} value={picked} onChange={setPicked} L={L} />
+            <JobPicker loading={jobsLoading} allJobs={allJobs} jobById={jobById} value={picked} onChange={setPicked} L={L} />
           </div>
           <div>
             <FieldLabel>2. {L('어디에 쓰는 링크인가요?', 'Where will this link be used?', 'Link dùng ở đâu?')}</FieldLabel>

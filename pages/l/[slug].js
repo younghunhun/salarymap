@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import JobsPage from '../jobs'
+import { LIST_FIELDS } from '../api/jobs'
 
 // 캠페인 링크 /l/<slug> — 어드민 '캠페인 링크' 탭(job_collections)에서 만든 공고 묶음 랜딩.
 // 화면은 /jobs 그대로 재사용하고(지원·상세 패널·북마크 전부 동일), 보이는 공고를 collection.job_ids
@@ -21,7 +22,15 @@ export async function getServerSideProps({ params }) {
     .maybeSingle()
   if (!data) return { notFound: true }
 
-  return { props: { collection: data } }
+  // 묶은 공고를 SSR 로 같이 내려 첫 화면에 바로 그린다 — 안 그러면 /api/jobs(활성 공고 전체, 1.8MB)를
+  // 다 받을 때까지 스켈레톤만 보인다. 필드는 /api/jobs 목록과 동일(LIST_FIELDS), 활성 공고만.
+  const { data: jobs } = await supabase
+    .from('jobs')
+    .select(LIST_FIELDS)
+    .in('id', data.job_ids || [])
+    .eq('is_active', true)
+
+  return { props: { collection: { ...data, jobs: jobs || [] } } }
 }
 
 export default function CollectionPage({ collection }) {

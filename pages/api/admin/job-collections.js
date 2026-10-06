@@ -37,6 +37,25 @@ export default async function handler(req, res) {
   if (!admin) return res.status(401).json({ error: 'Unauthorized' })
 
   try {
+    // 공고 선택용 경량 목록 (?picker=1) — /api/admin/jobs 는 select('*') 라 본문·raw_payload 까지 26MB/6초가 걸려
+    // 검색창이 그동안 '결과 없음'으로 보였다(10/6). 검색·표시에 쓰는 5개 필드만 준다.
+    if (req.method === 'GET' && req.query.picker === '1') {
+      const PAGE = 1000
+      let jobs = []
+      for (let offset = 0; ; offset += PAGE) {
+        const { data: page, error } = await supabase
+          .from('jobs')
+          .select('id, title, company, source_id, is_active')
+          .order('created_at', { ascending: false })
+          .order('id', { ascending: false })
+          .range(offset, offset + PAGE - 1)
+        if (error) throw error
+        jobs = jobs.concat(page || [])
+        if (!page || page.length < PAGE) break
+      }
+      return res.json({ jobs })
+    }
+
     if (req.method === 'GET') {
       const { data, error } = await supabase
         .from('job_collections')
