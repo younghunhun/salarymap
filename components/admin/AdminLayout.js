@@ -19,8 +19,11 @@ function buildNav(lang) {
       items: [
         { label: L('메인 퍼널', 'Main funnel', 'Phễu chính'), pathname: '/admin/dashboard', tab: 'main' },
         { label: L('추이', 'Trend', 'Xu hướng'), pathname: '/admin/dashboard', tab: 'trend' },
-        // 리텐션·지원자·이력서 탭은 안 보게 되어 뺐다(10/6) — 대시보드가 무거워서.
-        // 뷰(RetentionView/ApplicationsView/ResumesView)와 API 는 남아 있고, URL ?tab= 직접 진입도 막혔다.
+        // 안 보는 탭을 메뉴에서 뺐다(10/6) — 대시보드가 무거워서. 뷰 파일과 API 는 전부 남아 있다(되살리려면 메뉴+dashboard.js 분기만 복구).
+        //   1차: 리텐션·지원자·이력서   2차: 광고메일·앱 대시보드·기업·이익 지원·인재 소싱·픽디 크롤링 (URL ?tab= 직접 진입도 막힘)
+        //   3차: 승주 작업실·유진 작업실(Personal 그룹). 단 승주 작업실(?tab=goals)은 메뉴에서만 숨겼다 —
+        //        실험 알림 크론(lib/experimentAlerts.js ADMIN_URL)의 '실험탭 열기(롤백 스위치)' 버튼이 그 주소로 온다.
+        //   상담 문의(/admin/showcasing-inquiries)는 독립 페이지라 메뉴만 뺐다 — 문의 알림(lib/notifyShowcaseInquiry.js)의 링크로는 계속 열린다.
         // 인재풀·인재 퀄리티·인재 공급을 '인재' 한 페이지로 합쳤다(10/6) — 안에서 알약으로 전환.
         { label: L('인재', 'Talent', 'Ứng viên'), pathname: '/admin/dashboard', tab: 'talent' },
         // 승주 작업실 > 콜드메일 하위 탭을 상위로 뺐다(10/2) — 작업실에서 유일하게 매일 보는 표라 두 단계 진입이 낭비.
@@ -28,37 +31,9 @@ function buildNav(lang) {
         // '어학 점수'는 유진 작업실 > 어학 정보 수집 안으로 옮겼다 — 캠페인 카드 바로
         // 아래에서 "그래서 무슨 점수가 들어왔나"를 이어서 보는 흐름이라 여기 두면 끊긴다.
         // /admin/lang-scores URL 은 살아 있다(명단이 길어 전체 화면으로 볼 때).
-        { label: L('광고메일', 'Recommend', 'Email đề xuất'), pathname: '/admin/dashboard', tab: 'recommend' },
         { label: L('블랙리스트', 'Blacklist', 'Danh sách đen'), pathname: '/admin/dashboard', tab: 'blacklist' },
         { label: L('연봉 인증', 'Verifications', 'Xác minh lương'), pathname: '/admin/dashboard', tab: 'verifications' },
         { label: L('커뮤니티', 'Community', 'Cộng đồng'), pathname: '/admin/dashboard', tab: 'community' },
-      ],
-    },
-    {
-      label: L('앱 대시보드', 'App dashboard', 'Dashboard app'),
-      items: [
-        { label: L('앱 대시보드', 'App dashboard', 'Dashboard app'), pathname: '/admin/dashboard', tab: 'appMetrics' },
-      ],
-    },
-    {
-      label: L('픽디 크롤링', 'Pikdi crawl', 'Crawl Pikdi'),
-      items: [
-        { label: L('픽디 크롤링', 'Pikdi crawl', 'Crawl Pikdi'), pathname: '/admin/dashboard', tab: 'pikdi' },
-      ],
-    },
-    {
-      label: L('매칭 쇼케이싱', 'Matching showcase'),
-      items: [
-        // 자체 페이지라 tab 이 없다 — '어학 점수'와 같다.
-        { label: L('상담 문의', 'Inquiries'), pathname: '/admin/showcasing-inquiries' },
-      ],
-    },
-    {
-      label: L('기업', 'Companies', 'Doanh nghiệp'),
-      items: [
-        { label: L('기업', 'Companies', 'Công ty'), pathname: '/admin/dashboard', tab: 'company' },
-        { label: L('이익 지원', 'Revenue', 'Doanh thu'), pathname: '/admin/dashboard', tab: 'revenue' },
-        { label: L('인재 소싱', 'Talent sources', 'Nguồn nhân tài'), pathname: '/admin/dashboard', tab: 'ktc-sources' },
       ],
     },
     {
@@ -71,13 +46,6 @@ function buildNav(lang) {
         { label: L('회사', 'Companies', 'Công ty'), pathname: '/admin/jobs', tab: 'companies' },
         { label: L('공고 지표', 'Job KPI', 'KPI tin đăng'), pathname: '/admin/jobs', tab: 'kpi' },
         { label: 'Admins', pathname: '/admin/jobs', tab: 'admins' },
-      ],
-    },
-    {
-      label: 'Personal',
-      items: [
-        { label: L('승주 작업실', "Seungju's Lab"), pathname: '/admin/dashboard', tab: 'goals' },
-        { label: L('유진 작업실', "Yujin's Lab"), pathname: '/admin/dashboard', tab: 'yujin' },
       ],
     },
   ]

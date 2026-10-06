@@ -10,16 +10,10 @@ import DateRangePicker from '../../components/admin/DateRangePicker'
 import Icon from '../../components/Icon'
 import MainFunnelView from '../../components/admin/MainFunnelView'
 import TalentView from '../../components/admin/TalentView'
-import KtcSourcesView from '../../components/admin/KtcSourcesView'
 import VerificationsView from '../../components/admin/VerificationsView'
 import CommunityView from '../../components/admin/CommunityView'
-import CompanyView from '../../components/admin/CompanyView'
-import RevenueView from '../../components/admin/RevenueView'
-import PikdiView from '../../components/admin/PikdiView'
-import RecommendView from '../../components/admin/RecommendView'
 import BlacklistView from '../../components/admin/BlacklistView'
 import GoalMetricsView, { ColdmailView } from '../../components/admin/GoalMetricsView'
-import YujinLabView, { YujinLabTabs } from '../../components/admin/YujinLabView'
 import {
   T, METRICS_BASE, EXP_COLORS, COLORS,
   inputStyle, sectionStyle, sectionTitle,
@@ -27,9 +21,6 @@ import {
 import { aggregateDaily, vnDate } from '../../utils/dashboard'
 
 const MetricChart = dynamic(() => import('../../components/DashboardCharts'), { ssr: false })
-// AppMetricsView pulls in recharts; load it lazily so the base admin bundle
-// doesn't carry the charting lib for tabs that don't render charts.
-const AppMetricsView = dynamic(() => import('../../components/admin/AppMetricsView'), { ssr: false })
 
 function cellPct(cur, prev) {
   if (cur === null || cur === undefined || prev === null || prev === undefined) return null
@@ -70,16 +61,14 @@ export default function AdminDashboard() {
   const router = useRouter()
   const tab = router.query.tab || 'main'
   // 날짜 범위를 실제로 쓰는 탭에서만 날짜 피커 노출 (이력서/인재풀/연봉인증은 누적 목록이라 무관)
-  const showDatePicker = ['main', 'trend', 'community', 'appMetrics', 'ktc-sources'].includes(tab)
+  const showDatePicker = ['main', 'trend', 'community'].includes(tab)
   const [chartMode, setChartMode] = useState('1d')
   const [tableView, setTableView] = useState('daily')
   const [tableSection, setTableSection] = useState('basic')
   // 유진 작업실의 페이지 전환 — 알약은 AdminLayout 타이틀 옆, 본문은 아래라 상태를 여기서 든다.
-  const [labTab, setLabTab] = useState('inflow')
   const tableScrollRef = useRef(null)
   const [dualAxis, setDualAxis] = useState(true)
   const [autoRefresh, setAutoRefresh] = useState(true)
-  const yesterday = vnDate(Date.now() - 86400000)
   const todayStr = vnDate(Date.now())
   // 기본 기간 = 최근 30일(당일 포함). 누적이 길어져 전 기간 기본은 폐기.
   const from30 = vnDate(Date.now() - 29 * 86400000)
@@ -113,11 +102,9 @@ export default function AdminDashboard() {
   // 키는 각 View 의 useAdmin URL 과 글자까지 동일해야 적중한다.
   useEffect(() => {
     if (!token) return
-    const effectiveTo = dateRange.to >= yesterday ? todayStr : dateRange.to
     const urls = [
       '/api/admin/resumes',                                            // talent (인재풀)
       `/api/admin/community?from=${dateRange.from}&to=${dateRange.to}`, // community
-      `/api/admin/app-metrics?from=${dateRange.from}&to=${effectiveTo}`, // appMetrics
       '/api/salary-verification/admin?status=pending',                 // verifications(기본 필터)
     ]
     // 활성 탭(추이)의 메인 요청이 먼저 나가도록 살짝 늦춰 경쟁을 피한다.
@@ -419,7 +406,7 @@ export default function AdminDashboard() {
           .adm-realtime-grid .adm-rt-value { font-size: 18px !important; }
         }
       `}</style>
-      <AdminLayout titleRight={tab === 'yujin' ? <YujinLabTabs value={labTab} onChange={setLabTab} lang={lang} /> : null}>
+      <AdminLayout>
       <div className="adm-dash">
         {/* Header — 날짜 피커는 날짜 쓰는 탭에서만 */}
         {showDatePicker && (
@@ -958,53 +945,18 @@ export default function AdminDashboard() {
           <CommunityView token={token} lang={lang} dateRange={dateRange} />
         )}
 
-        {/* Company Tab — 기업 가입내역 + ATS 활용/모집 내역 */}
-        {tab === 'company' && (
-          <CompanyView token={token} lang={lang} />
-        )}
-
-        {/* Revenue Tab — 이익 지원 (기업 등록 공고 + KTC 시드 공고) */}
-        {tab === 'revenue' && (
-          <RevenueView token={token} lang={lang} />
-        )}
-
-        {/* KTC 소싱 채널 비교 — FYI vs 타 플랫폼(ITviec/LinkedIn/…) 지원자 확보량·질 */}
-        {tab === 'ktc-sources' && (
-          <KtcSourcesView token={token} lang={lang} dateRange={dateRange} />
-        )}
-
-        {/* App Metrics Tab */}
-        {tab === 'appMetrics' && (
-          <AppMetricsView token={token} lang={lang} dateRange={dateRange} />
-        )}
-
-        {/* 픽디 크롤링 — 경쟁사 공고 벤치마킹 열람 전용 (콜드메일 발송/추적 없음) */}
-        {tab === 'pikdi' && (
-          <PikdiView token={token} lang={lang} />
-        )}
-
-        {/* 광고메일 — 공고 추천 메일 발송/전환 현황 */}
+        {/* 콜드메일 (광고메일 탭은 10/6 메뉴에서 뺐다 — RecommendView 파일은 남아 있음) */}
         {tab === 'coldmail' && (
           <ColdmailView token={token} lang={lang} />
-        )}
-        {tab === 'recommend' && (
-          <RecommendView token={token} lang={lang} />
         )}
         {tab === 'blacklist' && (
           <BlacklistView token={token} lang={lang} />
         )}
 
-        {/* Personal · 승주 작업실 */}
+        {/* 승주 작업실 — 메뉴에서는 뺐지만(10/6) 분기는 남긴다: 실험 알림(텔레그램)의 '실험탭 열기(롤백 스위치)'
+            버튼이 ?tab=goals 로 들어온다(lib/experimentAlerts.js). 메뉴에 없어 페이지 제목은 안 뜬다. */}
         {tab === 'goals' && (
           <GoalMetricsView token={token} lang={lang} />
-        )}
-
-        {/* Personal · 유진 작업실 */}
-        {tab === 'yujin' && (
-          <YujinLabView
-            token={token} lang={lang} dateRange={dateRange} labTab={labTab}
-            onDateChange={(from, to) => { setDateTouched(true); setDateRange({ from, to }) }}
-          />
         )}
 
       </div>
