@@ -14,10 +14,12 @@ import VerificationsView from '../../components/admin/VerificationsView'
 import CommunityView from '../../components/admin/CommunityView'
 import BlacklistView from '../../components/admin/BlacklistView'
 import GoalMetricsView, { ColdmailView } from '../../components/admin/GoalMetricsView'
+import { TabGroup, ChipGroup, Toggle } from '@likelion-design/ui'
 import {
-  T, METRICS_BASE, EXP_COLORS, COLORS,
-  inputStyle, sectionStyle, sectionTitle,
-} from '../../constants/dashboard'
+  G, C, num, PrimaryButton, SecondaryButton, GhostButton, Field, TextArea, FilterTabs, StatusTag,
+  Card, SectionTitle, StatGrid, StatTile, State, T as TS,
+} from '../../components/admin/ui'
+import { T, METRICS_BASE, EXP_COLORS, COLORS } from '../../constants/dashboard'
 import { aggregateDaily, vnDate } from '../../utils/dashboard'
 
 const MetricChart = dynamic(() => import('../../components/DashboardCharts'), { ssr: false })
@@ -28,11 +30,20 @@ function cellPct(cur, prev) {
   return Math.round(((cur - prev) / prev) * 100)
 }
 
-// 퍼포먼스 대시보드 섹션 구분 (섹션별 강조색)
+// 선택 가능한 통계 타일 — kit StatTile 에는 onClick 이 없어 한 겹 감싼다. 선택 표시는 주황 1px 테두리뿐.
+function PickTile({ active, onClick, ...p }) {
+  return (
+    <div onClick={onClick} style={{ minWidth: 0, cursor: onClick ? 'pointer' : 'default' }}>
+      <StatTile {...p} style={{ height: '100%', boxSizing: 'border-box', border: `1px solid ${active ? C.primary : C.border}`, transition: 'border-color 0.12s ease' }} />
+    </div>
+  )
+}
+
+// 퍼포먼스 대시보드 섹션 구분
 const SECTION_LABELS = {
-  basic: { ko: '기본 정보', en: 'Basics', vi: 'Thông tin cơ bản', accent: '#2563EB' },
-  talent: { ko: '인재 채용 지표', en: 'Talent funnel', vi: 'Phễu ứng viên', accent: '#0D9488' },
-  company: { ko: '기업 채용 지표', en: 'Company funnel', vi: 'Phễu doanh nghiệp', accent: '#EA580C' },
+  basic: { ko: '기본 정보', en: 'Basics', vi: 'Thông tin cơ bản' },
+  talent: { ko: '인재 채용 지표', en: 'Talent funnel', vi: 'Phễu ứng viên' },
+  company: { ko: '기업 채용 지표', en: 'Company funnel', vi: 'Phễu doanh nghiệp' },
 }
 const TIER_LABELS = {
   primary: { ko: '주요 지표', en: 'Key metrics', vi: 'Chỉ số chính' },
@@ -390,7 +401,7 @@ export default function AdminDashboard() {
         .adm-dash { max-width: 1200px; margin: 0 auto; padding: 24px 16px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
         .adm-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
         .adm-header-title { display: flex; align-items: center; gap: 12px; }
-        .adm-header-controls { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+        .adm-header-controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .adm-grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         @media (max-width: 768px) {
           .adm-dash { padding: 16px 12px 80px 12px; }
@@ -398,12 +409,7 @@ export default function AdminDashboard() {
           .adm-header-controls { width: 100%; flex-wrap: wrap; }
           .adm-header-controls input[type="date"] { width: 110px; font-size: 12px; }
           .adm-grid-2col { grid-template-columns: 1fr; }
-          .adm-metric-cards { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important; gap: 8px !important; }
-          .adm-metric-cards > div { padding: 12px 14px !important; }
-          .adm-metric-cards .adm-metric-value { font-size: 22px !important; }
-          .adm-realtime-grid { grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)) !important; gap: 6px !important; }
-          .adm-realtime-grid > div { padding: 8px 6px !important; }
-          .adm-realtime-grid .adm-rt-value { font-size: 18px !important; }
+          .adm-metric-cards > div, .adm-realtime-grid > div { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 8px !important; }
         }
       `}</style>
       <AdminLayout>
@@ -413,51 +419,40 @@ export default function AdminDashboard() {
           <div className="adm-header">
             <div className="adm-header-controls">
               <DateRangePicker value={dateRange} onChange={(from, to) => { setDateTouched(true); setDateRange({ from, to }) }} />
-              {loading && <span style={{ fontSize: 12, color: '#9AA0A6' }}>{L('불러오는 중…', 'Loading…', 'Đang tải…')}</span>}
+              {loading && <span style={{ fontSize: 12, color: C.faint }}>{L('불러오는 중…', 'Loading…', 'Đang tải…')}</span>}
             </div>
           </div>
         )}
 
         {/* Today Realtime — 추이 탭에서만 표시 */}
         {realtime && tab === 'trend' && (
-          <div style={{
-            background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 100%)',
-            borderRadius: 12, padding: '16px 20px', marginBottom: 24, color: '#fff',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Card style={{ marginBottom: G.xl }}>
+            <SectionTitle
+              right={lastUpdated && (
+                <span style={{ fontSize: 12, color: C.faint, ...num }}>
+                  {new Date(lastUpdated.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(11, 16)} (VN)
+                </span>
+              )}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: G.sm, flexWrap: 'wrap' }}>
                 <span style={{
-                  width: 8, height: 8, borderRadius: '50%', background: '#34d399',
+                  width: 8, height: 8, borderRadius: '50%', background: C.positive,
                   display: 'inline-block', animation: autoRefresh ? 'pulse 2s infinite' : 'none',
                 }} />
-                <span style={{ fontSize: 14, fontWeight: 700 }}>{t.today}</span>
-                <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{realtime.date}</span>
-                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)', marginLeft: 4 }}>UTC+7</span>
-              </div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                {lastUpdated && (
-                  <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
-                    {new Date(lastUpdated.getTime() + 7 * 60 * 60 * 1000).toISOString().slice(11, 16)} (VN)
-                  </span>
-                )}
-              </div>
+                {t.today}
+                <span style={{ fontSize: 13, fontWeight: 400, color: C.sub, ...num }}>{realtime.date} · UTC+7</span>
+              </span>
+            </SectionTitle>
+            <div className="adm-realtime-grid">
+              <StatGrid>
+                {[
+                  { label: t.metrics.sessions, value: ga4?.today?.sessions ?? '-' },
+                  { label: t.metrics.signups, value: realtime.signups },
+                  { label: t.metrics.resumeUploads, value: realtime.resumeUploads },
+                  { label: t.metrics.jobApps, value: realtime.jobApps },
+                ].map(item => <StatTile key={item.label} label={item.label} value={item.value} />)}
+              </StatGrid>
             </div>
-            <div className="adm-realtime-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8 }}>
-              {[
-                { label: t.metrics.sessions, value: ga4?.today?.sessions ?? '-', color: '#2563EB' },
-                { label: t.metrics.signups, value: realtime.signups, color: '#fbbf24' },
-                { label: t.metrics.resumeUploads, value: realtime.resumeUploads, color: '#14B8A6' },
-                { label: t.metrics.jobApps, value: realtime.jobApps, color: '#f87171' },
-              ].map(item => (
-                <div key={item.label} style={{
-                  background: 'rgba(255,255,255,0.08)', borderRadius: 8, padding: '10px 12px', textAlign: 'center',
-                }}>
-                  <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>{item.label}</div>
-                  <div style={{ fontSize: 22, fontWeight: 700, color: item.color }}>{item.value}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          </Card>
         )}
 
         <style jsx global>{`
@@ -467,18 +462,15 @@ export default function AdminDashboard() {
           }
         `}</style>
 
-        {loading && <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>{t.loadingData}</div>}
+        {loading && <State kind="loading">{t.loadingData}</State>}
 
         {/* Trend Tab */}
         {summary && !loading && tab === 'trend' && (
           <>
             {/* Metric Cards */}
             {selected.length > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-                <button onClick={() => setSelected([])}
-                  style={{ padding: '3px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 11, background: '#fff', cursor: 'pointer', color: '#888' }}>
-                  {L('선택 초기화', 'Clear selection', 'Bỏ chọn')} ({selected.length})
-                </button>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: G.md }}>
+                <SecondaryButton label={`${L('선택 초기화', 'Clear selection', 'Bỏ chọn')} (${selected.length})`} onClick={() => setSelected([])} />
               </div>
             )}
             {['basic', 'talent', 'company'].map(sec => {
@@ -492,294 +484,205 @@ export default function AdminDashboard() {
                       tier: m.tier, clickable: true,
                     }
                   })
-              const accent = SECTION_LABELS[sec].accent
               const primary = cards.filter(c => c.tier === 'primary')
               const secondary = cards.filter(c => c.tier !== 'primary')
-              const renderCard = (c, big) => {
+              const renderCard = (c) => {
                 const isActive = c.clickable && selected.includes(c.key)
                 return (
-                  <div key={c.key}
-                    onClick={c.clickable ? () => setSelected(prev => isActive ? prev.filter(k => k !== c.key) : [...prev, c.key]) : undefined}
-                    style={{
-                      background: isActive ? accent + '14' : (big ? '#fff' : '#F8FAFB'),
-                      border: `1px solid ${isActive ? accent : (big ? '#E5E8EB' : '#EEF1F3')}`,
-                      borderLeft: big ? `3px solid ${accent}` : undefined,
-                      borderRadius: big ? 10 : 8, padding: big ? '15px 17px' : '10px 12px',
-                      cursor: c.clickable ? 'pointer' : 'default',
-                      transition: 'border-color 0.12s ease, background 0.12s ease',
-                    }}>
-                    <div style={{ fontSize: big ? 13 : 11.5, color: big ? '#4E5968' : '#8B95A1', marginBottom: big ? 7 : 4, fontWeight: big ? 700 : 600 }}>{c.label}</div>
-                    <div style={{ fontSize: big ? 30 : 18, fontWeight: 800, color: big ? accent : '#4E5968', letterSpacing: '-0.02em', fontVariantNumeric: 'tabular-nums', lineHeight: 1.05 }}>{c.value}</div>
-                  </div>
+                  <PickTile key={c.key} label={c.label} value={c.value} active={isActive}
+                    onClick={c.clickable ? () => setSelected(prev => isActive ? prev.filter(k => k !== c.key) : [...prev, c.key]) : undefined} />
                 )
               }
-              const tierLabel = (tier) => (
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#8B95A1', margin: '0 0 7px', letterSpacing: '0.02em' }}>{TIER_LABELS[tier][lang]}</div>
+              const tierLabel = (text) => (
+                <div style={{ fontSize: 12, fontWeight: 600, color: C.faint, marginBottom: G.sm }}>{text}</div>
               )
               return (
                 <Fragment key={sec}>
-                <div style={{ marginBottom: 28 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14, paddingBottom: 9, borderBottom: '1px solid #EEF1F3' }}>
-                    <span style={{ width: 4, height: 17, borderRadius: 2, background: accent }} />
-                    <span style={{ fontSize: 16, fontWeight: 800, color: '#191F28', letterSpacing: '-0.01em' }}>{SECTION_LABELS[sec][lang]}</span>
-                  </div>
+                <div style={{ marginBottom: G.xl }}>
+                  <SectionTitle style={{ marginBottom: G.md }}>{SECTION_LABELS[sec][lang]}</SectionTitle>
                   {primary.length > 0 && (
-                    <div style={{ marginBottom: secondary.length ? 16 : 0 }}>
-                      {secondary.length > 0 && tierLabel('primary')}
-                      <div className="adm-metric-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))', gap: 10 }}>
-                        {primary.map(c => renderCard(c, true))}
-                      </div>
+                    <div style={{ marginBottom: secondary.length ? G.lg : 0 }}>
+                      {secondary.length > 0 && tierLabel(TIER_LABELS.primary[lang])}
+                      <div className="adm-metric-cards"><StatGrid>{primary.map(renderCard)}</StatGrid></div>
                     </div>
                   )}
                   {secondary.length > 0 && (
-                    <div style={sec === 'basic' ? { paddingLeft: 14, borderLeft: '2px solid #EEF1F3', marginLeft: 2 } : undefined}>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#8B95A1', margin: '0 0 7px', letterSpacing: '0.02em' }}>
-                        {sec === 'basic' ? L('↳ 연봉 제출 구성 (광고·자연·회사수)', '↳ Submission breakdown', '↳ Cơ cấu lượt gửi lương') : TIER_LABELS.secondary[lang]}
-                      </div>
-                      <div className="adm-metric-cards" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(116px, 1fr))', gap: 8 }}>
-                        {secondary.map(c => renderCard(c, false))}
-                      </div>
+                    <div>
+                      {tierLabel(sec === 'basic' ? L('연봉 제출 구성 (광고·자연·회사수)', 'Submission breakdown', 'Cơ cấu lượt gửi lương') : TIER_LABELS.secondary[lang])}
+                      <div className="adm-metric-cards"><StatGrid>{secondary.map(renderCard)}</StatGrid></div>
                     </div>
                   )}
                 </div>
 
                 {/* Chart — 선택 지표가 속한 섹션 바로 아래 */}
                 {sec === chartSection && selectedMetrics.length > 0 && (
-                  <div style={sectionStyle}>
-                    <div className="adm-chart-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
-                      <h3 style={{ ...sectionTitle, margin: 0 }}>{selectedMetrics.map(m => m.label).join(' + ')} {t.trend}</h3>
-                      <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <Card style={{ marginBottom: G.xl }}>
+                    <SectionTitle style={{ flexWrap: 'wrap' }}
+                      right={<>
                         {selectedMetrics.length === 2 && (
-                          <button onClick={() => setDualAxis(v => !v)}
-                            style={{
-                              padding: '5px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600,
-                              border: '1px solid #d1d5db', cursor: 'pointer', transition: 'all 0.15s',
-                              background: dualAxis ? '#EEF2FF' : '#fff',
-                              color: dualAxis ? '#4F46E5' : '#999',
-                            }}>
-                            {lang === 'ko' ? (dualAxis ? 'Y축 분리' : 'Y축 공유') : (dualAxis ? 'Dual Y' : 'Shared Y')}{/* vi도 영문 축약 사용 */}
-                          </button>
+                          <Toggle size="small" labelPosition="end" checked={dualAxis} onChange={() => setDualAxis(v => !v)}
+                            label={lang === 'ko' ? 'Y축 분리' : 'Dual Y'} />
                         )}
-                        <div style={{ display: 'flex', gap: 0, background: '#f3f4f6', borderRadius: 8, padding: 2 }}>
-                          {[
-                            { key: '1d', label: t.chart1d },
-                            { key: '3d', label: t.chart3d },
-                            { key: 'weekly', label: t.chartWeekly },
-                            { key: 'monthly', label: t.chartMonthly },
-                          ].map(m => (
-                            <button key={m.key} onClick={() => setChartMode(m.key)}
-                              style={{
-                                padding: '5px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
-                                border: 'none', cursor: 'pointer', transition: 'all 0.15s',
-                                background: chartMode === m.key ? '#fff' : 'transparent',
-                                color: chartMode === m.key ? '#111' : '#999',
-                                boxShadow: chartMode === m.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                              }}>
-                              {m.label}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                        <FilterTabs value={chartMode} onChange={setChartMode}
+                          items={[
+                            { value: '1d', label: t.chart1d },
+                            { value: '3d', label: t.chart3d },
+                            { value: 'weekly', label: t.chartWeekly },
+                            { value: 'monthly', label: t.chartMonthly },
+                          ]} />
+                      </>}>
+                      {selectedMetrics.map(m => m.label).join(' + ')} {t.trend}
+                    </SectionTitle>
                     <MetricChart daily={chartData} metrics={selectedMetrics} experiments={chartMode === '1d' ? visibleExperiments : []} avgLabel={t.avg} lang={lang} dualAxis={dualAxis} />
 
                     {visibleExperiments.length > 0 && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 12, paddingTop: 12, borderTop: '1px solid #f3f4f6' }}>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm, marginTop: G.md, paddingTop: G.md, borderTop: `1px solid ${C.line}` }}>
                         {visibleExperiments.map((exp, i) => (
                           <div key={exp.id} style={{
                             display: 'inline-flex', alignItems: 'center', gap: 6,
-                            padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 500,
-                            background: exp.color + '18', border: `1px solid ${exp.color}40`, color: '#333',
+                            height: 28, padding: '0 10px 0 6px', borderRadius: 4, fontSize: 12,
+                            background: C.bg, border: `1px solid ${C.border}`, color: C.text,
                           }}>
                             <span style={{
-                              width: 16, height: 16, borderRadius: '50%', background: exp.color, flexShrink: 0,
+                              width: 18, height: 18, borderRadius: '50%', background: exp.color, flexShrink: 0,
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
-                              color: '#fff', fontSize: 10, fontWeight: 700, lineHeight: 1,
+                              color: '#fff', fontSize: 12, fontWeight: 700, lineHeight: 1, ...num,
                             }}>{i + 1}</span>
-                            <span style={{ color: '#888', fontSize: 11 }}>{exp.date.slice(5)}</span>
+                            <span style={{ color: C.faint, ...num }}>{exp.date.slice(5)}</span>
                             {exp.title}
                           </div>
                         ))}
                       </div>
                     )}
-                  </div>
+                  </Card>
                 )}
                 </Fragment>
               )
             })}
 
             {/* Experiments */}
-            <div style={sectionStyle}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: showExpForm || experiments.length > 0 ? 16 : 0 }}>
-                <h3 style={{ ...sectionTitle, margin: 0 }}>{t.expTitle}</h3>
-                <button onClick={() => setShowExpForm(!showExpForm)}
-                  style={{ padding: '5px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 12, background: showExpForm ? '#f3f4f6' : '#fff', cursor: 'pointer', fontWeight: 600 }}>
-                  {showExpForm ? t.expCancel : t.expAdd}
-                </button>
-              </div>
+            <Card style={{ marginBottom: G.xl }}>
+              <SectionTitle style={{ alignItems: 'center', marginBottom: showExpForm || experiments.length > 0 ? G.lg : 0 }}
+                right={<SecondaryButton label={showExpForm ? t.expCancel : t.expAdd} onClick={() => setShowExpForm(!showExpForm)} />}>
+                {t.expTitle}
+              </SectionTitle>
 
               {showExpForm && (
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 16, padding: 12, background: '#fafafa', borderRadius: 8 }}>
-                  <label style={{ display: 'flex', flexDirection: 'column', gap: 2, fontSize: 11, color: '#888' }}>
-                    {t.expStartDate}
-                    <input type="date" value={expForm.date}
-                      onChange={e => setExpForm(f => ({ ...f, date: e.target.value }))}
-                      style={{ ...inputStyle, width: 140 }} />
-                  </label>
-                  <input type="text" value={expForm.title} placeholder={t.expPlaceholder}
-                    onChange={e => setExpForm(f => ({ ...f, title: e.target.value }))}
-                    onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) addExperiment() }}
-                    style={{ ...inputStyle, flex: 1 }} />
-                  <div style={{ display: 'flex', gap: 4 }}>
-                    {EXP_COLORS.map(c => (
-                      <div key={c} onClick={() => setExpForm(f => ({ ...f, color: c }))}
-                        style={{
-                          width: 20, height: 20, borderRadius: '50%', background: c, cursor: 'pointer',
-                          border: expForm.color === c ? '2px solid #333' : '2px solid transparent',
-                        }} />
-                    ))}
-                  </div>
-                  <button onClick={addExperiment}
-                    style={{ padding: '6px 16px', border: 'none', borderRadius: 6, fontSize: 13, background: '#111', color: '#fff', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}>
-                    {t.expSave}
-                  </button>
-                  <div style={{ width: '100%', marginTop: 8 }}>
-                    <div style={{ fontSize: 11, color: '#888', marginBottom: 4 }}>{L('영향 지표', 'Affected Metrics', 'Chỉ số ảnh hưởng')}</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                      {METRICS_BASE.map(m => {
-                        const on = expForm.metrics.includes(m.key)
-                        return (
-                          <button key={m.key} onClick={() => setExpForm(f => ({ ...f, metrics: on ? f.metrics.filter(k => k !== m.key) : [...f.metrics, m.key] }))}
-                            style={{ padding: '3px 8px', borderRadius: 12, fontSize: 10, fontWeight: 600, border: on ? `1.5px solid ${m.color}` : '1px solid #ddd', background: on ? m.color + '18' : '#fff', color: on ? m.color : '#999', cursor: 'pointer' }}>
-                            {t.metrics[m.key] || m.key}
-                          </button>
-                        )
-                      })}
+                <div style={{ marginBottom: G.lg, padding: G.lg, background: C.bg, borderRadius: 8 }}>
+                  <div className="adm-m-wrap" style={{ display: 'flex', gap: G.md, alignItems: 'flex-end' }}>
+                    <Field width={168} inputType="date" title={t.expStartDate} value={expForm.date}
+                      onChange={e => setExpForm(f => ({ ...f, date: e.target.value }))} />
+                    <div style={{ flex: 1, minWidth: 200 }}>
+                      <Field value={expForm.title} placeholder={t.expPlaceholder}
+                        onChange={e => setExpForm(f => ({ ...f, title: e.target.value }))}
+                        onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) addExperiment() }} />
                     </div>
+                    <div style={{ display: 'flex', gap: G.xs, alignItems: 'center', height: 36 }}>
+                      {EXP_COLORS.map(c => (
+                        <div key={c} onClick={() => setExpForm(f => ({ ...f, color: c }))}
+                          style={{
+                            width: 20, height: 20, borderRadius: '50%', background: c, cursor: 'pointer',
+                            border: '2px solid #fff', boxShadow: `0 0 0 2px ${expForm.color === c ? C.text : 'transparent'}`,
+                          }} />
+                      ))}
+                    </div>
+                    <PrimaryButton label={t.expSave} onClick={addExperiment} />
+                  </div>
+                  <div style={{ marginTop: G.lg }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: C.sub, marginBottom: G.sm }}>{L('영향 지표', 'Affected Metrics', 'Chỉ số ảnh hưởng')}</div>
+                    <ChipGroup multiple type="outline" variant="primary" size="small"
+                      items={METRICS_BASE.map(m => ({ value: m.key, label: t.metrics[m.key] || m.key }))}
+                      value={expForm.metrics}
+                      onChange={k => setExpForm(f => ({ ...f, metrics: f.metrics.includes(k) ? f.metrics.filter(x => x !== k) : [...f.metrics, k] }))} />
                   </div>
                 </div>
               )}
 
               {experiments.length > 0 && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
                   {experiments.map(exp => {
                     const isEditing = editingExp?.id === exp.id
                     if (isEditing) return (
-                      <div key={exp.id} style={{ padding: 12, borderRadius: 8, background: '#f0f0ff', border: `1.5px solid #4F46E5`, fontSize: 13 }}>
-                        <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-                          <input type="date" value={editingExp.date} onChange={e => setEditingExp(f => ({ ...f, date: e.target.value }))}
-                            style={{ ...inputStyle, width: 140 }} />
-                          <input type="text" value={editingExp.title} onChange={e => setEditingExp(f => ({ ...f, title: e.target.value }))}
-                            onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) updateExperiment() }}
-                            style={{ ...inputStyle, flex: 1 }} />
-                          <div style={{ display: 'flex', gap: 3 }}>
+                      <div key={exp.id} style={{ padding: G.lg, margin: `${G.sm}px 0`, borderRadius: 8, background: C.bg, border: `1px solid ${C.border}` }}>
+                        <div className="adm-m-wrap" style={{ display: 'flex', gap: G.md, alignItems: 'center', marginBottom: G.md }}>
+                          <Field width={168} inputType="date" value={editingExp.date} onChange={e => setEditingExp(f => ({ ...f, date: e.target.value }))} />
+                          <div style={{ flex: 1, minWidth: 200 }}>
+                            <Field value={editingExp.title} onChange={e => setEditingExp(f => ({ ...f, title: e.target.value }))}
+                              onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) updateExperiment() }} />
+                          </div>
+                          <div style={{ display: 'flex', gap: G.xs, alignItems: 'center' }}>
                             {EXP_COLORS.map(c => (
                               <div key={c} onClick={() => setEditingExp(f => ({ ...f, color: c }))}
-                                style={{ width: 18, height: 18, borderRadius: '50%', background: c, cursor: 'pointer', border: editingExp.color === c ? '2px solid #333' : '2px solid transparent' }} />
+                                style={{ width: 20, height: 20, borderRadius: '50%', background: c, cursor: 'pointer', border: '2px solid #fff', boxShadow: `0 0 0 2px ${editingExp.color === c ? C.text : 'transparent'}` }} />
                             ))}
                           </div>
                         </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 8 }}>
-                          {METRICS_BASE.map(m => {
-                            const on = (editingExp.metrics || []).includes(m.key)
-                            return (
-                              <button key={m.key} onClick={() => setEditingExp(f => ({ ...f, metrics: on ? (f.metrics || []).filter(k => k !== m.key) : [...(f.metrics || []), m.key] }))}
-                                style={{ padding: '3px 8px', borderRadius: 12, fontSize: 10, fontWeight: 600, border: on ? `1.5px solid ${m.color}` : '1px solid #ddd', background: on ? m.color + '18' : '#fff', color: on ? m.color : '#999', cursor: 'pointer' }}>
-                                {t.metrics[m.key] || m.key}
-                              </button>
-                            )
-                          })}
-                        </div>
+                        <ChipGroup multiple type="outline" variant="primary" size="small"
+                          items={METRICS_BASE.map(m => ({ value: m.key, label: t.metrics[m.key] || m.key }))}
+                          value={editingExp.metrics || []}
+                          onChange={k => setEditingExp(f => ({ ...f, metrics: (f.metrics || []).includes(k) ? (f.metrics || []).filter(x => x !== k) : [...(f.metrics || []), k] }))} />
                         {/* Status & Result */}
-                        <div style={{ padding: '10px 0', borderTop: '1px solid #e5e7eb', marginTop: 4 }}>
-                          <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
-                            <span style={{ fontSize: 11, color: '#888', minWidth: 32 }}>{t.expStatus}</span>
-                            {['running', 'success', 'failure'].map(s => {
-                              const on = (editingExp.status || 'running') === s
-                              const colors = { running: '#2563EB', success: '#10B981', failure: '#EF4444' }
-                              const labels = { running: t.expRunning, success: t.expSuccess, failure: t.expFailure }
-                              return (
-                                <button key={s} onClick={() => setEditingExp(f => ({ ...f, status: s, ...(s !== 'running' && !f.end_date ? { end_date: new Date().toISOString().slice(0, 10) } : {}) }))}
-                                  style={{ padding: '3px 10px', borderRadius: 12, fontSize: 11, fontWeight: 600, border: on ? `1.5px solid ${colors[s]}` : '1px solid #ddd', background: on ? colors[s] + '18' : '#fff', color: on ? colors[s] : '#999', cursor: 'pointer' }}>
-                                  {labels[s]}
-                                </button>
-                              )
-                            })}
+                        <div style={{ paddingTop: G.md, borderTop: `1px solid ${C.border}`, marginTop: G.md }}>
+                          <div className="adm-m-wrap" style={{ display: 'flex', gap: G.sm, alignItems: 'center' }}>
+                            <span style={{ fontSize: 12, fontWeight: 600, color: C.sub, minWidth: 32 }}>{t.expStatus}</span>
+                            <FilterTabs value={editingExp.status || 'running'}
+                              onChange={s => setEditingExp(f => ({ ...f, status: s, ...(s !== 'running' && !f.end_date ? { end_date: new Date().toISOString().slice(0, 10) } : {}) }))}
+                              items={[
+                                { value: 'running', label: t.expRunning },
+                                { value: 'success', label: t.expSuccess },
+                                { value: 'failure', label: t.expFailure },
+                              ]} />
                             {(editingExp.status === 'success' || editingExp.status === 'failure') && (
-                              <label style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: '#888', marginLeft: 8 }}>
+                              <label style={{ display: 'flex', alignItems: 'center', gap: G.sm, fontSize: 12, fontWeight: 600, color: C.sub, marginLeft: G.sm }}>
                                 {t.expEndDate}
-                                <input type="date" value={editingExp.end_date || ''} onChange={e => setEditingExp(f => ({ ...f, end_date: e.target.value }))}
-                                  style={{ ...inputStyle, width: 130, fontSize: 12 }} />
+                                <Field width={168} inputType="date" value={editingExp.end_date || ''} onChange={e => setEditingExp(f => ({ ...f, end_date: e.target.value }))} />
                               </label>
                             )}
                           </div>
                           {(editingExp.status === 'success' || editingExp.status === 'failure') && (
-                            <textarea value={editingExp.result_note || ''} onChange={e => setEditingExp(f => ({ ...f, result_note: e.target.value }))}
-                              placeholder={t.expResultPlaceholder}
-                              style={{ ...inputStyle, width: '100%', minHeight: 60, resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box' }} />
+                            <div style={{ marginTop: G.md }}>
+                              <TextArea height={72} value={editingExp.result_note || ''} onChange={e => setEditingExp(f => ({ ...f, result_note: e.target.value }))}
+                                placeholder={t.expResultPlaceholder} />
+                            </div>
                           )}
                         </div>
-                        <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
-                          <button onClick={() => setEditingExp(null)}
-                            style={{ padding: '4px 12px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 12, background: '#fff', cursor: 'pointer' }}>
-                            {t.expCancel}
-                          </button>
-                          <button onClick={() => deleteExperiment(exp.id)}
-                            style={{ padding: '4px 12px', border: '1px solid #fca5a5', borderRadius: 6, fontSize: 12, background: '#fff', color: '#EF4444', cursor: 'pointer', fontWeight: 600 }}>
-                            {t.expDelete}
-                          </button>
-                          <button onClick={updateExperiment}
-                            style={{ padding: '4px 12px', border: 'none', borderRadius: 6, fontSize: 12, background: '#111', color: '#fff', cursor: 'pointer', fontWeight: 600 }}>
-                            {t.expSave}
-                          </button>
+                        <div style={{ display: 'flex', gap: G.sm, justifyContent: 'flex-end', marginTop: G.lg }}>
+                          <GhostButton label={t.expCancel} onClick={() => setEditingExp(null)} />
+                          <SecondaryButton label={t.expDelete} onClick={() => deleteExperiment(exp.id)} />
+                          <PrimaryButton label={t.expSave} onClick={updateExperiment} />
                         </div>
                       </div>
                     )
+                    const status = exp.status || 'running'
                     return (
-                    <div key={exp.id} onClick={() => setEditingExp({ ...exp, metrics: exp.metrics || [] })} style={{
-                      display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
-                      padding: '8px 12px', borderRadius: 8, background: '#fafafa', fontSize: 13, cursor: 'pointer',
-                    }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, flex: 1, minWidth: 0 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div key={exp.id} onClick={() => setEditingExp({ ...exp, metrics: exp.metrics || [] })}
+                      style={{ padding: `${G.md}px 0`, borderTop: `1px solid ${C.line}`, cursor: 'pointer' }}>
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: G.md }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, minWidth: 0, minHeight: 28 }}>
                           <span style={{ width: 10, height: 10, borderRadius: '50%', background: exp.color, flexShrink: 0 }} />
-                          <span style={{ fontWeight: 500 }}>{exp.title}</span>
+                          <span style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{exp.title}</span>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 18, flexWrap: 'wrap' }}>
-                          <span style={{ color: '#999', fontSize: 11 }}>{exp.date}{exp.end_date ? ` → ${exp.end_date}` : ''}</span>
-                          {exp.metrics?.length > 0 && (
-                            <>
-                              <span style={{ color: '#ddd', fontSize: 11 }}>·</span>
-                              {exp.metrics.map(mk => {
-                                const mb = METRICS_BASE.find(x => x.key === mk)
-                                return mb ? <span key={mk} style={{ fontSize: 9, padding: '1px 6px', borderRadius: 8, background: mb.color + '18', color: mb.color, fontWeight: 600 }}>{t.metrics[mk] || mk}</span> : null
-                              })}
-                            </>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, flexShrink: 0, minHeight: 28 }}>
+                          <StatusTag tone={{ running: 'info', success: 'success', failure: 'error' }[status]}>
+                            {{ running: t.expRunning, success: t.expSuccess, failure: t.expFailure }[status]}
+                          </StatusTag>
+                          {(!exp.status || exp.status === 'running') && (
+                            <SecondaryButton size="small" label={t.expEnd}
+                              onClick={e => { e.stopPropagation(); setEditingExp({ ...exp, metrics: exp.metrics || [], status: 'success', end_date: new Date().toISOString().slice(0, 10) }) }} />
                           )}
+                          <Icon name="edit" size={14} color="#8A95A0" />
                         </div>
                       </div>
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flexShrink: 0 }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                            {(() => {
-                              const s = exp.status || 'running'
-                              const cfg = { running: { bg: '#DBEAFE', color: '#1E40AF', icon: '●' }, success: { bg: '#D1FAE5', color: '#065F46', icon: '✓' }, failure: { bg: '#FEE2E2', color: '#991B1B', icon: '✗' } }
-                              const c = cfg[s]
-                              const labels = { running: t.expRunning, success: t.expSuccess, failure: t.expFailure }
-                              return <span style={{ fontSize: 11, padding: '2px 10px', borderRadius: 4, background: c.bg, color: c.color, fontWeight: 700, whiteSpace: 'nowrap' }}>{c.icon} {labels[s]}</span>
-                            })()}
-                            {(!exp.status || exp.status === 'running') && (
-                              <button onClick={e => { e.stopPropagation(); setEditingExp({ ...exp, metrics: exp.metrics || [], status: 'success', end_date: new Date().toISOString().slice(0, 10) }) }}
-                                style={{ padding: '3px 10px', border: '1px solid #d1d5db', borderRadius: 6, fontSize: 11, background: '#fff', cursor: 'pointer', fontWeight: 600, color: '#374151', whiteSpace: 'nowrap' }}>
-                                {t.expEnd}
-                              </button>
-                            )}
-                          </div>
-                          {exp.result_note && (
-                            <div style={{ fontSize: 11, color: '#888', lineHeight: 1.4, maxWidth: 200, textAlign: 'right' }}>{exp.result_note}</div>
-                          )}
+                      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: `${G.xs}px ${G.md}px`, flexWrap: 'wrap', marginLeft: 18, marginTop: G.xs }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', minWidth: 0 }}>
+                          <span style={{ color: C.faint, fontSize: 12, ...num }}>{exp.date}{exp.end_date ? ` → ${exp.end_date}` : ''}</span>
+                          {exp.metrics?.map(mk => (
+                            METRICS_BASE.some(x => x.key === mk) ? <StatusTag key={mk}>{t.metrics[mk] || mk}</StatusTag> : null
+                          ))}
                         </div>
-                        <Icon name="edit" size={11} color="#ccc" style={{ marginTop: 4 }} />
+                        {exp.result_note && (
+                          <div style={{ fontSize: 12, color: C.sub, lineHeight: 1.4, maxWidth: 320, textAlign: 'right', marginLeft: 'auto' }}>{exp.result_note}</div>
+                        )}
                       </div>
                     </div>
                     )
@@ -788,120 +691,99 @@ export default function AdminDashboard() {
               )}
 
               {experiments.length === 0 && !showExpForm && (
-                <div style={{ color: '#aaa', fontSize: 13, marginTop: 8 }}>
+                <div style={{ color: C.faint, fontSize: 13, marginTop: G.sm }}>
                   {t.expEmpty}
                 </div>
               )}
-            </div>
+            </Card>
 
             {/* Intent & Top Companies */}
-            <div className="adm-grid-2col">
-              <div style={sectionStyle}>
-                <h3 style={sectionTitle}>{t.intentTitle}</h3>
+            <div className="adm-grid-2col" style={{ gap: G.md, marginBottom: G.xl }}>
+              <Card>
+                <SectionTitle>{t.intentTitle}</SectionTitle>
                 {data.intent.filter(i => i.value > 0).map((item, i) => {
                   const maxVal = Math.max(...data.intent.filter(x => x.value > 0).map(x => x.value))
                   return (
-                    <div key={i} style={{ marginBottom: 8 }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, marginBottom: 2 }}>
+                    <div key={i} style={{ marginBottom: G.md }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13, color: C.text, marginBottom: G.xs }}>
                         <span>{item.name}</span>
-                        <span style={{ fontWeight: 600 }}>{item.value} ({item.pct}%)</span>
+                        <span style={{ fontWeight: 600, ...num }}>{item.value} ({item.pct}%)</span>
                       </div>
-                      <div style={{ height: 8, background: '#f3f4f6', borderRadius: 4, overflow: 'hidden' }}>
+                      <div style={{ height: 8, background: C.line, borderRadius: 4, overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${(item.value / maxVal) * 100}%`, background: COLORS[i % COLORS.length], borderRadius: 4 }} />
                       </div>
                     </div>
                   )
                 })}
-              </div>
+              </Card>
 
-              <div style={sectionStyle}>
-                <h3 style={sectionTitle}>{t.topCompanies} ({summary.uniqueCompanies}{t.countUnit})</h3>
+              <Card>
+                <SectionTitle>{t.topCompanies} ({summary.uniqueCompanies}{t.countUnit})</SectionTitle>
                 <div style={{ maxHeight: 400, overflowY: 'auto' }}>
                   {data.topCompanies.map((c, i) => (
-                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', borderBottom: '1px solid #f3f3f3', fontSize: 13 }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ color: '#999', width: 20, textAlign: 'right', fontSize: 11 }}>{i + 1}</span>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: `${G.sm}px 0`, borderBottom: `1px solid ${C.line}`, fontSize: 13, color: C.text }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: G.sm }}>
+                        <span style={{ color: C.faint, width: 20, textAlign: 'right', fontSize: 12, ...num }}>{i + 1}</span>
                         {c.name}
                       </span>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: G.sm }}>
                         <div style={{ width: Math.max(4, (c.count / (data.topCompanies[0]?.count || 1)) * 100), height: 16, background: '#4F46E5', borderRadius: 3, opacity: 0.7 }} />
-                        <span style={{ fontWeight: 600, minWidth: 24, textAlign: 'right' }}>{c.count}</span>
+                        <span style={{ fontWeight: 600, minWidth: 24, textAlign: 'right', ...num }}>{c.count}</span>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </Card>
             </div>
 
             {/* Daily Detail Table */}
-            <div style={sectionStyle}>
-              <div className="adm-m-wrap" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 0 }}>
-                <h3 style={sectionTitle}>
-                  {tableView === 'weekly' ? t.weeklyDetail : tableView === 'monthly' ? t.monthlyDetail : t.dailyDetail}
-                  {tableView !== 'daily' && (
-                    <span style={{ fontSize: 11, fontWeight: 500, color: '#9CA3AF', marginLeft: 8 }}>
-                      {L('변화율', 'Change', 'Biến động')}: {tableView === 'weekly' ? 'WoW' : 'MoM'}
-                    </span>
-                  )}
-                </h3>
-                <div style={{ display: 'flex', gap: 0, background: '#f3f4f6', borderRadius: 8, padding: 2 }}>
-                  {[
-                    { key: 'daily', label: L('일별', 'Daily', 'Theo ngày') },
-                    { key: 'weekly', label: L('주별', 'Weekly', 'Theo tuần') },
-                    { key: 'monthly', label: L('월별', 'Monthly', 'Theo tháng') },
-                  ].map(m => (
-                    <button key={m.key} onClick={() => setTableView(m.key)}
-                      style={{
-                        padding: '5px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600,
-                        border: 'none', cursor: 'pointer', transition: 'all 0.15s',
-                        background: tableView === m.key ? '#fff' : 'transparent',
-                        color: tableView === m.key ? '#111' : '#999',
-                        boxShadow: tableView === m.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-                      }}>
-                      {m.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
+            <div style={{ marginBottom: G.xl }}>
+              <SectionTitle style={{ alignItems: 'center', flexWrap: 'wrap', marginBottom: G.sm }}
+                right={
+                  <FilterTabs value={tableView} onChange={setTableView}
+                    items={[
+                      { value: 'daily', label: L('일별', 'Daily', 'Theo ngày') },
+                      { value: 'weekly', label: L('주별', 'Weekly', 'Theo tuần') },
+                      { value: 'monthly', label: L('월별', 'Monthly', 'Theo tháng') },
+                    ]} />
+                }>
+                {tableView === 'weekly' ? t.weeklyDetail : tableView === 'monthly' ? t.monthlyDetail : t.dailyDetail}
+                {tableView !== 'daily' && (
+                  <span style={{ fontSize: 12, fontWeight: 500, color: C.faint, marginLeft: G.sm }}>
+                    {L('변화율', 'Change', 'Biến động')}: {tableView === 'weekly' ? 'WoW' : 'MoM'}
+                  </span>
+                )}
+              </SectionTitle>
               {/* 섹션 선택 — 누른 섹션의 지표들만 열로 (가로 폭주 방지) */}
-              <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-                {['basic', 'talent', 'company'].map(s => (
-                  <button key={s} onClick={() => setTableSection(s)}
-                    style={{
-                      padding: '6px 14px', borderRadius: 999, fontSize: 12.5, fontWeight: 700,
-                      border: `1px solid ${tableSection === s ? SECTION_LABELS[s].accent : '#E5E8EB'}`,
-                      background: tableSection === s ? SECTION_LABELS[s].accent + '14' : '#fff',
-                      color: tableSection === s ? SECTION_LABELS[s].accent : '#6B7280',
-                      cursor: 'pointer', transition: 'all 0.12s',
-                    }}>
-                    {SECTION_LABELS[s][lang]}
-                  </button>
-                ))}
+              <div style={{ marginBottom: G.lg, borderBottom: `1px solid ${C.border}` }}>
+                <TabGroup type="text" size="medium" value={tableSection} onChange={setTableSection}
+                  items={['basic', 'talent', 'company'].map(s => ({ value: s, label: SECTION_LABELS[s][lang] }))} />
               </div>
-              <div ref={tableScrollRef} style={{ maxHeight: 420, overflow: 'auto' }}>
-                <table className="adm-m-nowrap" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+              {/* kit TableCard 와 같은 모양 — 스크롤 ref·고정 머리글/합계 행이 필요해 여기서 직접 그린다 */}
+              <div ref={tableScrollRef} className="adm-m-scroll" style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, maxHeight: 520, overflow: 'auto' }}>
+                <table className="adm-m-nowrap" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0 }}>
                   <thead>
                     <tr>
-                      <th style={{ padding: '8px 12px', textAlign: 'left', fontWeight: 600, color: '#374151', position: 'sticky', top: 0, background: '#fff', boxShadow: 'inset 0 -2px 0 #e5e7eb', zIndex: 3 }}>{tableView === 'daily' ? L('날짜', 'Date', 'Ngày') : L('기간', 'Period', 'Kỳ')}</th>
+                      <th style={{ ...TS.th, position: 'sticky', top: 0, zIndex: 3 }}>{tableView === 'daily' ? L('날짜', 'Date', 'Ngày') : L('기간', 'Period', 'Kỳ')}</th>
                       {tableColumns.map(c => (
-                        <th key={c.key} style={{ padding: '8px 12px', textAlign: 'right', fontWeight: c.sub ? 500 : 600, color: c.sub ? '#9CA3AF' : '#374151', fontSize: c.sub ? 12 : undefined, position: 'sticky', top: 0, background: c.sub ? '#F6F8FA' : '#fff', boxShadow: 'inset 0 -2px 0 #e5e7eb', zIndex: 3 }}>{c.label}</th>
+                        <th key={c.key} style={{ ...TS.thNum, whiteSpace: 'normal', wordBreak: 'keep-all', fontWeight: c.sub ? 500 : 600, color: c.sub ? C.faint : C.sub, position: 'sticky', top: 0, zIndex: 3 }}>{c.label}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {(tableView === 'weekly' ? weeklyTableData : tableView === 'monthly' ? monthlyTableData : dailyWithToday).map((d, i, arr) => (
-                      <tr key={i} style={{ borderBottom: '1px solid #f3f4f6', background: i % 2 === 0 ? '#fff' : '#fafafa' }}>
-                        <td style={{ padding: '6px 12px' }}>{tableView === 'daily' ? d.date : d.label}</td>
+                      <tr key={i}>
+                        <td style={{ ...TS.td, whiteSpace: 'nowrap', ...num }}>{tableView === 'daily' ? d.date : d.label}</td>
                         {tableColumns.map(col => {
                           const val = d[col.key]
                           const isNull = val === null || val === undefined
                           const prev = (tableView !== 'daily' && i > 0) ? arr[i - 1][col.key] : null
                           const pct = tableView !== 'daily' ? cellPct(val, prev) : null
                           return (
-                            <td key={col.key} style={{ padding: '6px 12px', textAlign: 'right', color: isNull ? '#ccc' : (col.sub ? '#8B95A1' : (col.color || undefined)), fontWeight: col.bold ? 600 : undefined, background: col.sub ? '#F6F8FA' : undefined }}>
+                            <td key={col.key} style={{ ...TS.tdNum, color: isNull ? C.faint : (col.sub ? C.sub : (col.color || C.text)), fontWeight: col.bold ? 600 : undefined }}>
                               <div>{isNull ? '-' : val}</div>
                               {pct !== null && (
-                                <div style={{ fontSize: 10, fontWeight: 600, color: pct > 0 ? '#EF4444' : pct < 0 ? '#3B82F6' : '#9CA3AF' }}>
+                                <div style={{ fontSize: 12, fontWeight: 600, color: pct > 0 ? '#EF4444' : pct < 0 ? '#3B82F6' : C.faint }}>
                                   {pct > 0 ? '+' : ''}{pct}%
                                 </div>
                               )}
@@ -910,10 +792,10 @@ export default function AdminDashboard() {
                         })}
                       </tr>
                     ))}
-                    <tr style={{ fontWeight: 700 }}>
-                      <td style={{ padding: '8px 12px', position: 'sticky', bottom: 0, background: '#fff', boxShadow: 'inset 0 2px 0 #e5e7eb' }}>{t.total}</td>
+                    <tr>
+                      <td style={{ ...TS.td, fontWeight: 700, position: 'sticky', bottom: 0, background: C.bg, borderTop: `1px solid ${C.border}`, borderBottom: 'none' }}>{t.total}</td>
                       {tableColumns.map(c => (
-                        <td key={c.key} style={{ padding: '8px 12px', textAlign: 'right', color: c.sub ? '#8B95A1' : '#191F28', position: 'sticky', bottom: 0, background: c.sub ? '#F6F8FA' : '#fff', boxShadow: 'inset 0 2px 0 #e5e7eb' }}>{summary[c.summaryKey] ?? '-'}</td>
+                        <td key={c.key} style={{ ...TS.tdNum, fontWeight: 700, color: c.sub ? C.sub : C.text, position: 'sticky', bottom: 0, background: C.bg, borderTop: `1px solid ${C.border}`, borderBottom: 'none' }}>{summary[c.summaryKey] ?? '-'}</td>
                       ))}
                     </tr>
                   </tbody>

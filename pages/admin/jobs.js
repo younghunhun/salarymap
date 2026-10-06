@@ -12,6 +12,9 @@ import KtcLandingJobsView from '../../components/admin/KtcLandingJobsView'
 import JobCollectionsView from '../../components/admin/JobCollectionsView'
 import JobPreview from '../../components/jobs/JobPreview'
 import { Chips, Dropdown, DatePickerSingle } from '../../components/admin/FormControls'
+import { ChipGroup, Toggle, Text } from '@likelion-design/ui'
+import { RiCloseLine, RiImageAddLine, RiArrowDownSLine, RiArrowUpSLine } from '@remixicon/react'
+import { G, C, mono, PrimaryButton, SecondaryButton, GhostButton, SearchField, Field, TextArea, FilterTabs, StatusTag, Card, SectionTitle, StatGrid, StatTile, T, TableCard, State } from '../../components/admin/ui'
 
 // 근무지 자주 쓰는 값 (실 DB 분포 기준) — 그 외는 드롭다운의 직접 입력으로
 const LOCATION_OPTIONS = [
@@ -44,9 +47,15 @@ export default function AdminJobs() {
   const tab = router.query.tab || 'jobs'
   const [jobFilter, setJobFilter] = useState('all')
   const [jobSearch, setJobSearch] = useState('')
+  // 공고 6,000건+ 를 한 번에 그리면 검색 한 글자마다 0.5초 안팎이 걸린다 — 60건씩 이어 붙인다.
+  // 검색·필터·정렬은 전체 대상 그대로이고 그리는 것만 자른다. 조건이 바뀌면 처음부터.
+  const JOBS_PAGE = 60
+  const [jobsVisible, setJobsVisible] = useState(JOBS_PAGE)
+  useEffect(() => { setJobsVisible(JOBS_PAGE) }, [jobFilter, jobSearch])
   const [editing, setEditing] = useState(null)
   const [form, setForm] = useState(EMPTY_JOB)
   const [saving, setSaving] = useState(false)
+  const [editLoadingId, setEditLoadingId] = useState(null) // 수정 버튼을 눌러 전체 행을 받아오는 중인 공고 id
   const [msg, setMsg] = useState(null)
   const [newAdminEmail, setNewAdminEmail] = useState('')
   const [imageUploading, setImageUploading] = useState(false)
@@ -124,14 +133,14 @@ export default function AdminJobs() {
       const { error } = await res.json().catch(() => ({}))
       setSaving(false); flash(L('저장 실패: ', 'Save failed: ') + (error || res.status)); return
     }
-    flash(editing ? L('수정됨', 'Updated') : L('등록됨', 'Created'))
+    flash(editing ? L('수정했습니다', 'Updated') : L('등록했습니다', 'Created'))
     setSaving(false); setEditing(null); setForm(EMPTY_JOB); mutateJobs(); router.push({ pathname: '/admin/jobs', query: { tab: 'jobs' } }, undefined, { shallow: true })
   }
 
   const handleDelete = async (id) => {
     if (!confirm(L('이 공고를 삭제하시겠습니까?', 'Delete this job?'))) return
     await fetch('/api/admin/jobs', { method: 'DELETE', headers: await headers(), body: JSON.stringify({ id }) })
-    flash(L('삭제됨', 'Deleted')); mutateJobs()
+    flash(L('삭제했습니다', 'Deleted')); mutateJobs()
   }
 
   const handleToggle = async (job) => {
@@ -141,7 +150,7 @@ export default function AdminJobs() {
 
   const handleToggleVerify = async (c) => {
     await fetch('/api/admin/companies', { method: 'PUT', headers: await headers(), body: JSON.stringify({ id: c.id, verified: !c.verified_at }) })
-    flash(c.verified_at ? L('인증 해제됨', 'Verification removed') : L('✅ 인증 완료', '✅ Verified')); mutateCompanies()
+    flash(c.verified_at ? L('인증을 해제했습니다', 'Verification removed') : L('인증했습니다', 'Verified')); mutateCompanies()
   }
 
   const handleIssueAccount = async () => {
@@ -153,7 +162,7 @@ export default function AdminJobs() {
       if (!res.ok) { flash('❌ ' + (data.error || L('발급 실패', 'Failed to issue'))); return }
       setAcctResult(data)
       setAcct({ email: '', companyName: '', contactName: '' })
-      flash(data.reused ? L('기존 계정 비번 재설정됨', 'Existing account password reset') : L('✅ 계정 발급 완료', '✅ Account issued')); mutateCompanies()
+      flash(data.reused ? L('기존 계정의 비밀번호를 재설정했습니다', 'Existing account password reset') : L('계정을 발급했습니다', 'Account issued')); mutateCompanies()
     } catch (e) {
       flash('❌ ' + (e.message || L('발급 실패', 'Failed to issue')))
     } finally {
@@ -163,7 +172,7 @@ export default function AdminJobs() {
 
   const handleToggleFeatured = async (job) => {
     await fetch('/api/admin/jobs', { method: 'PUT', headers: await headers(), body: JSON.stringify({ id: job.id, is_featured: !job.is_featured }) })
-    flash(job.is_featured ? L('프리미엄 해제됨', 'Premium removed') : L('⭐ 프리미엄 등록됨 — 적극 채용 중 노출', '⭐ Premium enabled — shown in “Actively hiring”'))
+    flash(job.is_featured ? L('프리미엄을 해제했습니다', 'Premium removed') : L('프리미엄으로 등록했습니다 — 적극 채용 중 섹션에 노출됩니다', 'Premium enabled — shown in “Actively hiring”'))
     mutateJobs()
   }
 
@@ -171,26 +180,26 @@ export default function AdminJobs() {
     await fetch('/api/admin/jobs', { method: 'PUT', headers: await headers(), body: JSON.stringify({ id: job.id, status: 'live', is_active: true }) })
     // 승인 알림 (기업에게, 베스트에포트)
     try { await fetch('/api/admin/notify-job-approved', { method: 'POST', headers: await headers(), body: JSON.stringify({ jobId: job.id }) }) } catch (_) {}
-    flash(L('✅ 승인됨 — 기업에 알림 발송', '✅ Approved — company notified')); mutateJobs()
+    flash(L('승인했습니다 — 기업에 알림을 보냈습니다', 'Approved — company notified')); mutateJobs()
   }
   const handleReject = async (job) => {
     if (!confirm(L('이 공고를 반려하시겠습니까?', 'Reject this job posting?'))) return
     await fetch('/api/admin/jobs', { method: 'PUT', headers: await headers(), body: JSON.stringify({ id: job.id, status: 'rejected', is_active: false }) })
-    flash(L('반려됨', 'Rejected')); mutateJobs()
+    flash(L('반려했습니다', 'Rejected')); mutateJobs()
   }
 
   const handleAddAdmin = async () => {
     if (!newAdminEmail.includes('@')) return
     const res = await fetch('/api/admin/users', { method: 'POST', headers: await headers(), body: JSON.stringify({ email: newAdminEmail.trim() }) })
-    if (res.ok) { flash('Admin added'); setNewAdminEmail(''); mutateAdmins() }
-    else { const d = await res.json(); flash(d.error || 'Failed') }
+    if (res.ok) { flash(L('관리자를 추가했습니다', 'Admin added')); setNewAdminEmail(''); mutateAdmins() }
+    else { const d = await res.json(); flash(d.error || L('추가하지 못했습니다', 'Failed')) }
   }
 
   const handleRemoveAdmin = async (email) => {
-    if (!confirm(`Remove ${email} from admin?`)) return
+    if (!confirm(L(`${email} 계정을 관리자에서 삭제하시겠습니까?`, `Remove ${email} from admin?`))) return
     const res = await fetch('/api/admin/users', { method: 'DELETE', headers: await headers(), body: JSON.stringify({ email }) })
-    if (res.ok) { flash('Removed'); mutateAdmins() }
-    else { const d = await res.json(); flash(d.error || 'Failed') }
+    if (res.ok) { flash(L('삭제했습니다', 'Removed')); mutateAdmins() }
+    else { const d = await res.json(); flash(d.error || L('삭제하지 못했습니다', 'Failed')) }
   }
 
   const uploadFiles = async (files) => {
@@ -198,7 +207,7 @@ export default function AdminJobs() {
     setImageUploading(true)
     const newUrls = []
     for (const file of files) {
-      if (file.size > 5 * 1024 * 1024) { flash('Max 5MB per image'); continue }
+      if (file.size > 5 * 1024 * 1024) { flash(L('이미지는 장당 5MB까지 올릴 수 있습니다', 'Max 5MB per image')); continue }
       const ext = file.name?.split('.').pop() || 'png'
       const path = `jobs/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
       const { error } = await supabase.storage.from('job-images').upload(path, file)
@@ -235,18 +244,31 @@ export default function AdminJobs() {
   }
 
   const goTab = (t) => router.push({ pathname: '/admin/jobs', query: { tab: t } }, undefined, { shallow: true })
-  const startEdit = (job) => {
-    setEditing(job)
-    const negotiable = isSalaryNegotiable(job)
-    setForm({
-      ...job,
-      images: job.images || [],
-      // 협의 가능(0-0) 공고는 체크박스만 켜고 입력칸엔 기본값 노출 (체크 해제 시 바로 쓸 수 있게)
-      salary_min: negotiable ? EMPTY_JOB.salary_min : job.salary_min,
-      salary_max: negotiable ? EMPTY_JOB.salary_max : job.salary_max,
-      salary_negotiable: negotiable,
-    })
-    goTab('job-new')
+  // 목록(/api/admin/jobs)은 가벼운 컬럼만 온다 — 수정은 전체 행을 따로 받아서 연다.
+  // 받아오지 못하면 폼을 열지 않는다(가벼운 행으로 열면 저장 시 본문이 빈 값으로 덮어써진다).
+  const startEdit = async (listJob) => {
+    if (editLoadingId) return
+    setEditLoadingId(listJob.id)
+    try {
+      const res = await fetch(`/api/admin/jobs?id=${listJob.id}`, { headers: await headers() })
+      if (!res.ok) throw new Error(String(res.status))
+      const job = await res.json()
+      setEditing(job)
+      const negotiable = isSalaryNegotiable(job)
+      setForm({
+        ...job,
+        images: job.images || [],
+        // 협의 가능(0-0) 공고는 체크박스만 켜고 입력칸엔 기본값 노출 (체크 해제 시 바로 쓸 수 있게)
+        salary_min: negotiable ? EMPTY_JOB.salary_min : job.salary_min,
+        salary_max: negotiable ? EMPTY_JOB.salary_max : job.salary_max,
+        salary_negotiable: negotiable,
+      })
+      goTab('job-new')
+    } catch (e) {
+      flash('❌ ' + L('공고를 불러오지 못했습니다. 다시 시도해 주세요.', 'Failed to load the job. Please try again.'))
+    } finally {
+      setEditLoadingId(null)
+    }
   }
   const startNew = () => { setEditing(null); setForm(EMPTY_JOB); goTab('jobs') }
 
@@ -256,11 +278,12 @@ export default function AdminJobs() {
       <div style={{ marginBottom: 16 }}><Icon name="lock" size={48} color="#1a1a1a" /></div>
       <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Admin access required</div>
       <div style={{ color: '#888', marginBottom: 24 }}>Sign in with an admin account.</div>
-      <button style={S.btnP} onClick={() => { window.location.href = '/api/auth/google?return=' + encodeURIComponent('/admin/dashboard'); }}>
-        Sign in with Google
-      </button>
+      <PrimaryButton label="Sign in with Google" onClick={() => { window.location.href = '/api/auth/google?return=' + encodeURIComponent('/admin/dashboard'); }} />
     </div>
   )
+
+  const count = (n) => <span style={{ color: C.faint, fontWeight: 500 }}>{n}</span>
+  const fmtN = (v) => (typeof v === 'number' ? v.toLocaleString() : v)
 
   return (
     <>
@@ -276,23 +299,25 @@ export default function AdminJobs() {
 
         {/* JOBS TAB */}
         {tab === 'job-new' && (() => {
-          const sec = { marginBottom: 26 };
-          const secTitle = { fontSize: 13, fontWeight: 700, color: '#191F28', marginBottom: 14, paddingBottom: 8, borderBottom: '1px solid #F2F4F6' };
-          const col = { display: 'flex', flexDirection: 'column', gap: 14 };
-          const row2 = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 };
-          const hint = { fontWeight: 400, color: '#ADB5BD' };
+          const sec = { marginBottom: G.xl + G.sm };
+          const col = { display: 'flex', flexDirection: 'column', gap: G.lg };
+          const row2 = { display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: G.md };
+          // 라벨·도움말은 DS TextField 의 title/description 과 같은 크기(13px)로 맞춘다
+          const lbl = { fontSize: 13, lineHeight: 1.6, marginBottom: G.xs };
+          const help = { fontSize: 13, color: C.faint, lineHeight: 1.6, marginTop: G.xs };
+          const thumbX = { position: 'absolute', top: -6, right: -6, width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, borderRadius: '50%', background: C.text, color: '#fff', border: 'none', cursor: 'pointer' };
           return (
             // 스플릿 화면: 왼쪽 폼 + 오른쪽은 실사이트 우측 상세 패널(.jd) 그대로 (50vw 고정)
             <div>
-            <div style={{ position: 'fixed', top: 0, bottom: 0, left: 232, right: '50vw', overflowY: 'auto', background: '#fff', zIndex: 30, borderRight: '1px solid #EEF0F2' }}>
-            <div style={{ maxWidth: 680, padding: '28px 32px 80px' }}>
-              <div style={{ fontSize: 18, fontWeight: 800, color: '#191F28', marginBottom: 22 }}>
+            <div style={{ position: 'fixed', top: 0, bottom: 0, left: 232, right: '50vw', overflowY: 'auto', background: '#fff', zIndex: 30, borderRight: `1px solid ${C.border}` }}>
+            <div style={{ maxWidth: 680, padding: `${G.xl}px 32px ${G.xl}px` }}>
+              <Text variant="heading-h6" as="div" style={{ color: C.text, marginBottom: G.xl }}>
                 {editing ? L('공고 수정', 'Edit job') : L('새 공고 등록', 'New job')}
-              </div>
+              </Text>
 
               {/* 공고 구분(source) — KTC로 저장하면 /ktc 랜딩과 KTC 지표에 함께 잡힌다 */}
               <div style={sec}>
-                <div style={secTitle}>{L('공고 구분', 'Job source')}</div>
+                <SectionTitle>{L('공고 구분', 'Job source')}</SectionTitle>
                 <Chips value={form.source || 'manual'} onChange={v => setForm({ ...form, source: v })}
                   options={[
                     { value: 'manual', label: L('FYI 직접등록', 'FYI direct') },
@@ -302,16 +327,13 @@ export default function AdminJobs() {
                   ]} />
                 {form.source === 'ktc' && (
                   <>
-                    <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 8 }}>
+                    <div style={help}>
                       {L('/jobs 와 /ktc 페이지에 함께 노출됩니다.', 'Shown on both /jobs and the /ktc page.')}
                     </div>
-                    <div style={{ marginTop: 12 }}>
-                      <label style={S.lbl}>{L('JD 코드', 'JD code')}</label>
-                      <input value={form.source_id || ''} onChange={e => setForm({ ...form, source_id: e.target.value.trim() })} style={S.inp} placeholder="V173" />
-                      <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 6 }}>
-                        {L('ops 시트 JD EXECUTION의 Job ID와 대조해 입력. 비워두면 크론이 제목·회사 매칭으로 자동 입력하지만, 매칭 실패 시 공란으로 남아 지원 귀속이 깨집니다. 재게시는 V173#2 형식.',
-                           'Match the Job ID in the ops JD EXECUTION sheet. If left empty, the nightly cron fills it by title/company match — a failed match stays empty and breaks application attribution. Reposts use V173#2.')}
-                      </div>
+                    <div style={{ marginTop: G.lg }}>
+                      <Field title={L('JD 코드', 'JD code')} value={form.source_id || ''} onChange={e => setForm({ ...form, source_id: e.target.value.trim() })} placeholder="V173"
+                        description={L('ops 시트 JD EXECUTION의 Job ID와 대조해 입력해 주세요. 비워두면 크론이 제목·회사 매칭으로 자동 입력하지만, 매칭에 실패하면 공란으로 남아 지원 귀속이 깨집니다. 재게시는 V173#2 형식으로 입력합니다.',
+                           'Match the Job ID in the ops JD EXECUTION sheet. If left empty, the nightly cron fills it by title/company match — a failed match stays empty and breaks application attribution. Reposts use V173#2.')} />
                     </div>
                   </>
                 )}
@@ -319,35 +341,36 @@ export default function AdminJobs() {
 
               {/* 섹션 순서 = 실제 노출 화면 순서 (사진 → 제목·회사 → 근무조건 → 연봉 → 스택·회사정보 → 설명 → 복지 → 절차 → 지원) */}
               <div style={sec}>
-                <div style={secTitle}>{L('사진', 'Photos')} <span style={hint}>{L('맨 위 히어로로 노출', 'shown as the hero image')}</span></div>
-                <div style={col}>
-                  <div>
-                    <label style={S.lbl}>{L('회사 사진', 'Company photos')} <span style={hint}>{L('캐러셀', 'carousel')}</span></label>
-                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+                <SectionTitle sub={L('맨 위 히어로 이미지로 노출됩니다.', 'Shown as the hero image.')}>{L('사진', 'Photos')}</SectionTitle>
+                <div>
+                  <div style={lbl}>{L('회사 사진', 'Company photos')} <span style={{ color: C.faint }}>{L('캐러셀', 'carousel')}</span></div>
+                  {(form.images || []).length > 0 && (
+                    <div style={{ display: 'flex', gap: G.md, flexWrap: 'wrap', margin: `${G.sm}px 0 ${G.md}px` }}>
                       {(form.images || []).map((url, i) => (
                         <div key={i} style={{ position: 'relative' }}>
-                          <img src={url} alt="" style={{ width: 100, height: 70, objectFit: 'cover', borderRadius: 8, border: '1px solid #EEF0F2' }} />
-                          <button onClick={() => removeImage(i)} style={{ position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%', background: '#C92A2A', color: '#fff', border: 'none', fontSize: 10, cursor: 'pointer' }}>×</button>
+                          <img src={url} alt="" style={{ display: 'block', width: 100, height: 70, objectFit: 'cover', borderRadius: 8, border: `1px solid ${C.border}` }} />
+                          <button type="button" aria-label="remove" onClick={() => removeImage(i)} style={thumbX}><RiCloseLine size={12} /></button>
                         </div>
                       ))}
                     </div>
-                    <div
-                      onClick={() => imgInputRef.current?.click()}
-                      onPaste={handlePaste}
-                      tabIndex={0}
-                      style={{ border: '1.5px dashed #D7DBE0', borderRadius: 10, padding: '16px 20px', textAlign: 'center', cursor: 'pointer', fontSize: 12.5, color: '#868E96', outline: 'none' }}
-                      onFocus={e => e.target.style.borderColor = '#ff4400'}
-                      onBlur={e => e.target.style.borderColor = '#D7DBE0'}
-                    >
-                      {imageUploading ? L('업로드 중...', 'Uploading…') : L('클릭해서 선택 · 또는 Ctrl+V로 붙여넣기', 'Click to select · or paste with Ctrl+V')}
-                    </div>
-                    <input ref={imgInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handleImageUpload} />
+                  )}
+                  <div
+                    onClick={() => imgInputRef.current?.click()}
+                    onPaste={handlePaste}
+                    tabIndex={0}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: G.sm, border: `1px dashed ${LINE}`, borderRadius: 8, padding: `${G.lg}px 20px`, background: C.bg, cursor: 'pointer', fontSize: 13, color: C.sub, outline: 'none' }}
+                    onFocus={e => e.currentTarget.style.borderColor = C.primary}
+                    onBlur={e => e.currentTarget.style.borderColor = LINE}
+                  >
+                    <RiImageAddLine size={16} style={{ flexShrink: 0 }} />
+                    {imageUploading ? L('업로드 중...', 'Uploading…') : L('클릭해서 선택 · 또는 Ctrl+V로 붙여넣기', 'Click to select · or paste with Ctrl+V')}
                   </div>
+                  <input ref={imgInputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handleImageUpload} />
                 </div>
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('제목 · 회사', 'Title · Company')}</div>
+                <SectionTitle>{L('제목 · 회사', 'Title · Company')}</SectionTitle>
                 <div style={col}>
                   <F label={L('직무명', 'Job title')} value={form.title} set={v => setForm({ ...form, title: v })} />
                   <F label={L('회사명', 'Company')} value={form.company} set={v => setForm({ ...form, company: v })} />
@@ -355,7 +378,7 @@ export default function AdminJobs() {
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('근무 조건', 'Work conditions')} <span style={hint}>{L('지역 · 형태 · 경력 · 마감 줄', 'the location · type · exp · deadline line')}</span></div>
+                <SectionTitle sub={L('지역 · 형태 · 경력 · 마감 줄에 표시됩니다.', 'Shown on the location · type · exp · deadline line.')}>{L('근무 조건', 'Work conditions')}</SectionTitle>
                 <div style={col}>
                   <div style={row2}>
                     <Dropdown label={L('근무지', 'Location')} value={form.location} options={LOCATION_OPTIONS} allowCustom
@@ -376,38 +399,30 @@ export default function AdminJobs() {
                     const curGroup = ROLE_GROUPS.find(g => g.key === roleGroupKey)
                       || ROLE_GROUPS.find(g => g.roles.some(r => r.value === form.role))
                       || ROLE_GROUPS[0]
-                    const chip = (on, accent) => ({
-                      fontSize: 12.5, fontWeight: 600, cursor: 'pointer', borderRadius: 999, padding: '7px 13px',
-                      border: '1px solid', borderColor: on ? '#ff4400' : '#E5E8EB',
-                      background: on ? (accent ? '#ff4400' : '#FFF1EC') : '#fff',
-                      color: on ? (accent ? '#fff' : '#ff4400') : '#4E5968',
-                    })
                     return (
                       <div>
-                        <label style={S.lbl}>{L('직군 (검색 필터용)', 'Role (for search filters)')}</label>
-                        {/* 하나의 컨트롤로 묶는 박스: 상단 = 대분류 탭, 하단 = 소분류 칩 */}
-                        <div style={{ border: '1px solid #E5E8EB', borderRadius: 12, overflow: 'hidden' }}>
-                          <div style={{ display: 'flex', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid #E5E8EB', background: '#F8FAFC', padding: '0 8px' }}>
+                        <div style={lbl}>{L('직군 (검색 필터용)', 'Role (for search filters)')}</div>
+                        {/* 하나의 컨트롤로 묶는 박스: 상단 = 대분류 탭(대분류가 10개라 줄바꿈되는 자체 탭), 하단 = 소분류 칩 */}
+                        <div style={{ border: `1px solid ${C.border}`, borderRadius: 8, overflow: 'hidden' }}>
+                          <div style={{ display: 'flex', columnGap: G.md, flexWrap: 'wrap', borderBottom: `1px solid ${C.border}`, background: C.bg, padding: `0 ${G.md}px` }}>
                             {ROLE_GROUPS.map(g => {
                               const on = g.key === curGroup.key
                               return (
                                 <button key={g.key} type="button" onClick={() => setRoleGroupKey(g.key)} style={{
-                                  padding: '9px 11px', fontSize: 12.5, fontWeight: on ? 700 : 500,
-                                  color: on ? '#191F28' : '#8B95A1', background: 'none', border: 'none',
-                                  borderBottom: on ? '2px solid #ff4400' : '2px solid transparent',
-                                  marginBottom: -1, cursor: 'pointer', whiteSpace: 'nowrap',
+                                  padding: `${G.sm}px 2px`, fontSize: 13, fontWeight: on ? 600 : 400, fontFamily: 'inherit',
+                                  color: on ? C.text : C.sub, background: 'none', border: 'none',
+                                  boxShadow: on ? `inset 0 -2px 0 ${C.text}` : 'none',
+                                  cursor: 'pointer', whiteSpace: 'nowrap',
                                 }}>
                                   {g.label[lk]}
                                 </button>
                               )
                             })}
                           </div>
-                          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', padding: '12px 12px' }}>
-                            {curGroup.roles.map(r => (
-                              <button key={r.value} type="button" onClick={() => setForm({ ...form, role: r.value })} style={chip(form.role === r.value, true)}>
-                                {r.label[lk]}
-                              </button>
-                            ))}
+                          <div style={{ padding: G.md }}>
+                            <ChipGroup type="outline" variant="primary" size="medium" value={form.role} onChange={v => setForm({ ...form, role: v })}
+                              items={curGroup.roles.map(r => ({ value: r.value, label: r.label[lk] }))}
+                              style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm }} />
                           </div>
                         </div>
                       </div>
@@ -417,23 +432,23 @@ export default function AdminJobs() {
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('연봉', 'Salary')}</div>
+                <SectionTitle>{L('연봉', 'Salary')}</SectionTitle>
                 <div style={row2}>
                   <F label={L('연봉 최소 (VND)', 'Min salary (VND)')} value={form.salary_min} type="number" disabled={!!form.salary_negotiable} set={v => setForm({ ...form, salary_min: v })} />
                   <F label={L('연봉 최대 (VND)', 'Max salary (VND)')} value={form.salary_max} type="number" disabled={!!form.salary_negotiable} set={v => setForm({ ...form, salary_max: v })} />
                 </div>
-                <label style={{ display: 'flex', alignItems: 'center', gap: 9, cursor: 'pointer', marginTop: 12 }}>
-                  <input type="checkbox" checked={!!form.salary_negotiable} onChange={e => setForm({ ...form, salary_negotiable: e.target.checked })} style={{ width: 16, height: 16, flexShrink: 0, accentColor: '#ff4400' }} />
-                  <span style={{ fontSize: 13, fontWeight: 600, color: '#4E5968' }}>{L('급여 협의 가능 (금액 비공개)', 'Salary negotiable (amount hidden)')}</span>
-                </label>
+                <div style={{ marginTop: G.lg }}>
+                  <Toggle size="small" labelPosition="end" checked={!!form.salary_negotiable} onChange={e => setForm({ ...form, salary_negotiable: e.target.checked })}
+                    label={L('급여 협의 가능 (금액 비공개)', 'Salary negotiable (amount hidden)')} />
+                </div>
                 {form.salary_negotiable && (
                   form.source && !NEGOTIABLE_SOURCES.includes(form.source) ? (
-                    <div style={{ fontSize: 11.5, color: '#C92A2A', marginTop: 6 }}>
-                      {L(`크롤 수집 공고(${form.source})는 '협의 가능' 대신 추정 연봉이 노출됩니다 — 실제 금액을 입력하세요.`,
+                    <div style={{ ...help, color: C.negative }}>
+                      {L(`크롤 수집 공고(${form.source})는 '협의 가능' 대신 추정 연봉이 노출됩니다. 실제 금액을 입력해 주세요.`,
                          `Crawled job (${form.source}) — an estimated range is shown instead of “Negotiable”. Enter the real amount.`)}
                     </div>
                   ) : (
-                    <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 6 }}>
+                    <div style={help}>
                       {L("금액 대신 '협의 가능'으로 노출됩니다.", 'Shown as “Negotiable” instead of an amount.')}
                     </div>
                   )
@@ -441,60 +456,56 @@ export default function AdminJobs() {
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('기술 스택', 'Tech stack')} <span style={hint}>{L('쉼표로 구분', 'comma-separated')}</span></div>
-                <input value={(form.tech_stack || []).join(', ')} onChange={e => setForm({ ...form, tech_stack: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })} style={S.inp} placeholder="React, Node.js, PostgreSQL" />
+                <SectionTitle sub={L('쉼표로 구분해 입력해 주세요.', 'Comma-separated.')}>{L('기술 스택', 'Tech stack')}</SectionTitle>
+                <Field value={(form.tech_stack || []).join(', ')} onChange={e => setForm({ ...form, tech_stack: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })} placeholder="React, Node.js, PostgreSQL" />
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('상세 설명', 'About the role')}</div>
-                <textarea value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })}
-                  style={{ ...S.inp, height: 130, resize: 'vertical' }} />
+                <SectionTitle>{L('상세 설명', 'About the role')}</SectionTitle>
+                <TextArea height={160} value={form.description || ''} onChange={e => setForm({ ...form, description: e.target.value })} />
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('복지', 'Benefits')} <span style={hint}>{L('쉼표로 구분', 'comma-separated')}</span></div>
-                <input value={(form.benefits || []).join(', ')} onChange={e => setForm({ ...form, benefits: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })} style={S.inp} placeholder={L('유연근무, 4대보험', 'Flexible hours, insurance')} />
+                <SectionTitle sub={L('쉼표로 구분해 입력해 주세요.', 'Comma-separated.')}>{L('복지', 'Benefits')}</SectionTitle>
+                <Field value={(form.benefits || []).join(', ')} onChange={e => setForm({ ...form, benefits: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })} placeholder={L('유연근무, 4대보험', 'Flexible hours, insurance')} />
               </div>
 
               <div style={sec}>
-                <div style={secTitle}>{L('채용 절차', 'Hiring process')}</div>
-                <input value={form.hiring_process || ''} onChange={e => setForm({ ...form, hiring_process: e.target.value })} style={S.inp} placeholder={L('예: 서류 → 1차 인터뷰 → 최종', 'e.g. CV → interview → final')} />
+                <SectionTitle>{L('채용 절차', 'Hiring process')}</SectionTitle>
+                <Field value={form.hiring_process || ''} onChange={e => setForm({ ...form, hiring_process: e.target.value })} placeholder={L('예: 서류 → 1차 인터뷰 → 최종', 'e.g. CV → interview → final')} />
               </div>
 
               {/* 세부 정보 — 자주 안 쓰는 필드 접기 (입력 부담 축소) */}
               <div style={sec}>
-                <button type="button" onClick={() => setShowAdvanced(v => !v)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 13, fontWeight: 700, color: '#6B7280', marginBottom: showAdvanced ? 14 : 0 }}>
-                  {showAdvanced ? '▾' : '▸'} {L('세부 정보 (선택)', 'More details (optional)')}
+                <button type="button" onClick={() => setShowAdvanced(v => !v)} style={{ display: 'flex', alignItems: 'center', gap: G.xs, background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontSize: 16, fontWeight: 600, lineHeight: 1.4, color: C.text, fontFamily: 'inherit', marginBottom: showAdvanced ? G.lg : 0 }}>
+                  {L('세부 정보 (선택)', 'More details (optional)')}
+                  {showAdvanced ? <RiArrowUpSLine size={20} style={{ color: C.sub }} /> : <RiArrowDownSLine size={20} style={{ color: C.sub }} />}
                 </button>
                 {showAdvanced && (
                   <div style={col}>
-                    <div style={row2}>
+                    <div style={{ ...row2, gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
                       <F label={L('회사 약자', 'Company initials')} value={form.company_initials} set={v => setForm({ ...form, company_initials: v })} />
                       <F label={L('회사 규모', 'Company size')} value={form.company_size} set={v => setForm({ ...form, company_size: v })} />
-                    </div>
-                    <div style={row2}>
                       <F label={L('모집 인원', 'Headcount')} value={form.headcount} type="number" set={v => setForm({ ...form, headcount: v })} />
-                      <div>
-                        <Chips label={L('국가', 'Country')} value={form.country} onChange={v => setForm({ ...form, country: v })}
-                          options={COUNTRIES.map(c => ({ value: c, label: c === 'korea' ? 'Korea' : c === 'vietnam' ? 'Vietnam' : 'Global' }))} />
-                      </div>
                     </div>
+                    <Chips label={L('국가', 'Country')} value={form.country} onChange={v => setForm({ ...form, country: v })}
+                      options={COUNTRIES.map(c => ({ value: c, label: c === 'korea' ? 'Korea' : c === 'vietnam' ? 'Vietnam' : 'Global' }))} />
                     <div style={row2}>
                       <F label={L('썸네일 URL', 'Thumbnail URL')} value={form.image_url} set={v => setForm({ ...form, image_url: v })} />
                       <F label={L('로고 URL', 'Logo URL')} value={form.logo_url} set={v => setForm({ ...form, logo_url: v })} />
                     </div>
                     {(form.logo_url || form.image_url) && (
-                      <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
+                      <div style={{ display: 'flex', gap: G.md, alignItems: 'flex-end' }}>
                         {form.logo_url && (
                           <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <img src={form.logo_url} alt="logo" style={{ height: 40, borderRadius: 6, objectFit: 'contain', border: '1px solid #EEF0F2' }} />
-                            <button onClick={() => setForm({ ...form, logo_url: '' })} style={{ position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%', background: '#C92A2A', color: '#fff', border: 'none', fontSize: 11, cursor: 'pointer' }}>×</button>
+                            <img src={form.logo_url} alt="logo" style={{ display: 'block', height: 40, borderRadius: 8, objectFit: 'contain', border: `1px solid ${C.border}` }} />
+                            <button type="button" aria-label="remove" onClick={() => setForm({ ...form, logo_url: '' })} style={thumbX}><RiCloseLine size={12} /></button>
                           </div>
                         )}
                         {form.image_url && (
                           <div style={{ position: 'relative', display: 'inline-block' }}>
-                            <img src={form.image_url} alt="preview" style={{ height: 70, borderRadius: 6, objectFit: 'cover', border: '1px solid #EEF0F2' }} />
-                            <button onClick={() => setForm({ ...form, image_url: '' })} style={{ position: 'absolute', top: -6, right: -6, width: 20, height: 20, borderRadius: '50%', background: '#C92A2A', color: '#fff', border: 'none', fontSize: 11, cursor: 'pointer' }}>×</button>
+                            <img src={form.image_url} alt="preview" style={{ display: 'block', height: 70, borderRadius: 8, objectFit: 'cover', border: `1px solid ${C.border}` }} />
+                            <button type="button" aria-label="remove" onClick={() => setForm({ ...form, image_url: '' })} style={thumbX}><RiCloseLine size={12} /></button>
                           </div>
                         )}
                       </div>
@@ -503,43 +514,32 @@ export default function AdminJobs() {
                 )}
               </div>
 
-              <div style={sec}>
-                <div style={secTitle}>{L('지원 · 노출', 'Apply · Visibility')}</div>
+              <div>
+                <SectionTitle>{L('지원 · 노출', 'Apply · Visibility')}</SectionTitle>
                 <div style={col}>
                   <F label={L('지원 URL', 'Apply URL')} value={form.apply_url} set={v => setForm({ ...form, apply_url: v })} />
-                  <label style={{
-                    display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer',
-                    padding: '14px 16px', borderRadius: 10,
-                    border: `1.5px solid ${form.is_featured ? '#ff4400' : '#E5E8EB'}`,
-                    background: form.is_featured ? '#FFF7F4' : '#fff',
-                  }}>
-                    <input type="checkbox" checked={form.is_featured || false} onChange={e => setForm({ ...form, is_featured: e.target.checked })} style={{ width: 18, height: 18, flexShrink: 0, accentColor: '#ff4400' }} />
-                    <div>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, color: form.is_featured ? '#ff4400' : '#191F28' }}>{L('프리미엄 노출', 'Premium placement')}{form.is_featured && L(' · 활성', ' · active')}</div>
-                      <div style={{ fontSize: 11.5, color: '#868E96', marginTop: 2 }}>{L('“적극 채용 중인 회사” 섹션 + 목록 최상단 노출', 'Shown in the “Actively hiring” section and at the top of the list')}</div>
-                    </div>
-                  </label>
+                  <Toggle size="small" labelPosition="end" checked={form.is_featured || false} onChange={e => setForm({ ...form, is_featured: e.target.checked })}
+                    label={<>{L('프리미엄 노출', 'Premium placement')}{form.is_featured && L(' · 활성', ' · active')}</>}
+                    description={L('“적극 채용 중인 회사” 섹션과 목록 최상단에 노출됩니다.', 'Shown in the “Actively hiring” section and at the top of the list.')} />
                 </div>
               </div>
+            </div>
 
-              <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-                <button
-                  style={{ ...S.btnP, ...((saving || !form.title || !form.company) ? { opacity: 0.4, cursor: 'default' } : null) }}
-                  onClick={handleSave} disabled={saving || !form.title || !form.company}>
-                  {saving ? L('저장 중...', 'Saving…') : editing ? L('수정', 'Save') : L('등록', 'Create')}
-                </button>
-                {editing && <button style={S.btnG} onClick={startNew}>{L('취소', 'Cancel')}</button>}
-              </div>
-              {(!form.title || !form.company) && (
-                <div style={{ fontSize: 12, color: '#C92A2A', marginTop: 8 }}>
-                  {L('직무명과 회사명을 입력해야 등록할 수 있어요.', 'Job title and company are required to save.')}
+            {/* 제출 줄 — 폼이 길어 스크롤 위치와 무관하게 패널 하단에 붙여 둔다 */}
+            <div style={{ position: 'sticky', bottom: 0, zIndex: 5, background: '#fff', borderTop: `1px solid ${C.border}`, padding: `${G.md}px 32px` }}>
+              <div style={{ maxWidth: 616, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: G.sm }}>
+                <div style={{ marginRight: 'auto', minWidth: 0, fontSize: 13, color: C.sub, lineHeight: 1.5 }}>
+                  {(!form.title || !form.company) && L('직무명과 회사명을 입력해야 등록할 수 있습니다.', 'Job title and company are required to save.')}
                 </div>
-              )}
+                {editing && <SecondaryButton size="large" label={L('취소', 'Cancel')} onClick={startNew} />}
+                <PrimaryButton size="large" onClick={handleSave} disabled={saving || !form.title || !form.company}
+                  label={saving ? L('저장 중...', 'Saving…') : editing ? L('저장', 'Save') : L('등록', 'Create')} />
+              </div>
             </div>
             </div>
 
             {/* 오른쪽: 실사이트 우측 상세 패널 그대로 (jobs 페이지에서 공고 클릭했을 때와 동일) */}
-            <div style={{ position: 'fixed', top: 0, bottom: 0, right: 0, width: '50vw', zIndex: 31, overflowY: 'auto', overscrollBehavior: 'contain', background: '#fafaf8', boxShadow: '-8px 0 40px rgba(0,0,0,0.1)' }}>
+            <div style={{ position: 'fixed', top: 0, bottom: 0, right: 0, width: '50vw', zIndex: 31, overflowY: 'auto', overscrollBehavior: 'contain', background: '#fafaf8' }}>
               <JobPreview form={form} companyName={form.company} panel />
             </div>
             </div>
@@ -548,7 +548,6 @@ export default function AdminJobs() {
 
         {tab === 'jobs' && (
           <div style={{ minHeight: '70vh' }}>
-            {jobs.length === 0 && <div style={{ color: '#aaa', fontSize: 13 }}>No jobs yet</div>}
             {(() => {
               const q = jobSearch.trim().toLowerCase();
               const searched = q ? jobs.filter(j => [j.title, j.company, j.location, j.role].some(v => (v || '').toLowerCase().includes(q))) : jobs;
@@ -569,79 +568,82 @@ export default function AdminJobs() {
               });
               const fmtDate = (d) => d ? new Date(d).toLocaleDateString() : '-';
               const FILTERS = [['all', L('전체', 'All'), searched.length], ['company', L('기업 등록', 'Company-posted'), companyCount], ['ktc', 'KTC', ktcCount], ['pending', L('승인 대기', 'Pending'), pendingCount]];
-              const chip = { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: '#4E5968', background: '#F2F4F6', borderRadius: 8, padding: '4px 9px' };
-              const actBtn = { fontSize: 12, fontWeight: 600, color: '#4E5968', background: '#fff', border: '1px solid #E5E8EB', padding: '6px 12px', borderRadius: 8, cursor: 'pointer' };
               return (
                 <>
-                  <input value={jobSearch} onChange={e => setJobSearch(e.target.value)} placeholder={L('검색  ·  직무 · 회사 · 지역', 'Search  ·  title · company · location')}
-                    style={{ width: '100%', maxWidth: 380, fontSize: 13.5, padding: '10px 13px', border: '1px solid #E5E8EB', borderRadius: 10, outline: 'none', marginBottom: 12, boxSizing: 'border-box' }} />
-                  <div style={{ display: 'flex', gap: 6, marginBottom: 16, flexWrap: 'wrap' }}>
-                    {FILTERS.map(([key, label, n]) => {
-                      const on = jobFilter === key;
-                      return (
-                        <button key={key} onClick={() => setJobFilter(key)}
-                          style={{
-                            fontSize: 13, fontWeight: 600, cursor: 'pointer', borderRadius: 999, padding: '7px 14px',
-                            border: '1px solid', borderColor: on ? '#ff4400' : '#E5E8EB',
-                            background: on ? '#FFF1EC' : '#fff', color: on ? '#ff4400' : '#4E5968',
-                          }}>
-                          {label} <span style={{ opacity: on ? 0.7 : 0.5 }}>{n}</span>
-                        </button>
-                      );
-                    })}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: G.md, flexWrap: 'wrap', marginBottom: G.lg }}>
+                    <div className="adm-m-scroll" style={{ minWidth: 0, maxWidth: '100%' }}>
+                      <FilterTabs value={jobFilter} onChange={setJobFilter} items={FILTERS.map(([value, label, n]) => ({ value, label, count: n }))} />
+                    </div>
+                    <SearchField value={jobSearch} onChange={e => setJobSearch(e.target.value)} placeholder={L('직무 · 회사 · 지역 검색', 'Search title · company · location')} />
                   </div>
-                  {sorted.length === 0 && <div style={{ color: '#aaa', fontSize: 13, padding: '8px 0' }}>{L('해당 공고 없음', 'No matching jobs')}</div>}
-                  {sorted.map(job => {
+                  {jobs.length === 0 && (
+                    <State title={L('표시할 공고가 없습니다', 'No jobs to show')}>
+                      {L('목록을 불러오는 중이라면 잠시 후 표시됩니다.', 'If the list is still loading, it will appear shortly.')}
+                    </State>
+                  )}
+                  {jobs.length > 0 && sorted.length === 0 && <State title={L('해당하는 공고가 없습니다', 'No matching jobs')} />}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: G.md }}>
+                  {sorted.slice(0, jobsVisible).map(job => {
                     const st = job.status === 'pending_review'
-                      ? { label: L('승인 대기', 'Pending'), bg: '#FFF4E5', color: '#C2410C' }
+                      ? { label: L('승인 대기', 'Pending'), tone: 'warning' }
                       : job.status === 'rejected'
-                      ? { label: L('반려', 'Rejected'), bg: '#FEE2E2', color: '#991B1B' }
+                      ? { label: L('반려', 'Rejected'), tone: 'error' }
                       : job.is_active
-                      ? { label: L('노출중', 'Live'), bg: '#E7F6EC', color: '#1B7A43' }
-                      : { label: L('비노출', 'Hidden'), bg: '#F1F3F5', color: '#868E96' };
+                      ? { label: L('노출중', 'Live'), tone: 'success' }
+                      : { label: L('비노출', 'Hidden'), tone: 'neutral' };
                     return (
-                      <div key={job.id} style={{ background: '#fff', border: '1px solid #EEF0F2', borderRadius: 14, padding: '15px 17px', marginBottom: 10 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 }}>
+                      <Card key={job.id} style={{ contentVisibility: 'auto', containIntrinsicSize: 'auto 190px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: G.md }}>
                           <div style={{ minWidth: 0 }}>
-                            <div style={{ fontSize: 12.5, fontWeight: 600, color: '#8B95A1', marginBottom: 3 }}>{job.company}</div>
-                            <a href={`/jobs/${job.id}`} target="_blank" rel="noopener noreferrer" title={L('공고 보기', 'View posting')} style={{ display: 'inline-block', fontSize: 16, fontWeight: 700, color: '#191F28', letterSpacing: '-0.01em', textDecoration: 'none', cursor: 'pointer' }}>{job.title}</a>
+                            <div style={{ fontSize: 13, color: C.sub, lineHeight: 1.5 }}>{job.company}</div>
+                            <a href={`/jobs/${job.id}`} target="_blank" rel="noopener noreferrer" title={L('공고 보기', 'View posting')} style={{ display: 'inline-block', fontSize: 16, fontWeight: 600, lineHeight: 1.4, color: C.text, textDecoration: 'none', cursor: 'pointer' }}>{job.title}</a>
                           </div>
-                          <span style={{ flexShrink: 0, fontSize: 11.5, fontWeight: 700, padding: '4px 10px', borderRadius: 999, background: st.bg, color: st.color }}>{st.label}</span>
+                          <StatusTag tone={st.tone}>{st.label}</StatusTag>
                         </div>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 10 }}>
-                          {job.location && <span style={chip}>{job.location}</span>}
-                          {job.type && <span style={chip}>{job.type}</span>}
-                          <span style={{ ...chip, color: '#191F28', fontWeight: 700 }}>{isSalaryNegotiable(job) ? L('협의 가능', 'Negotiable') : `${Math.round(job.salary_min/1e6)}–${Math.round(job.salary_max/1e6)}M`}</span>
-                          {job.source === 'company_self' && <span style={{ ...chip, background: '#EAF2FE', color: '#1D4ED8' }}>{L('기업등록', 'Company')}</span>}
-                          {job.source === 'ktc' && <span style={{ ...chip, background: '#F3F0FF', color: '#5F3DC4' }}>KTC</span>}
-                          {job.is_featured && <span style={{ ...chip, background: '#FEF6E0', color: '#92660E' }}>{L('프리미엄', 'Premium')}</span>}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: G.xs, marginTop: G.md }}>
+                          {job.location && <StatusTag>{job.location}</StatusTag>}
+                          {job.type && <StatusTag>{job.type}</StatusTag>}
+                          <StatusTag>{isSalaryNegotiable(job) ? L('협의 가능', 'Negotiable') : `${Math.round(job.salary_min/1e6)}–${Math.round(job.salary_max/1e6)}M`}</StatusTag>
+                          {job.source === 'company_self' && <StatusTag tone="info">{L('기업등록', 'Company')}</StatusTag>}
+                          {job.source === 'ktc' && <StatusTag tone="info">KTC</StatusTag>}
+                          {job.is_featured && <StatusTag tone="primary">{L('프리미엄', 'Premium')}</StatusTag>}
                         </div>
                         {job.source === 'company_self' && (
-                          <div style={{ fontSize: 11.5, color: '#ADB5BD', marginTop: 8 }}>
+                          <div style={{ fontSize: 12, color: C.faint, marginTop: G.sm }}>
                             {job.account_company && <>{L('계정', 'Account')} {job.account_company} · </>}{job.poster_email || L('등록자 미상', 'Unknown poster')} · {fmtDate(job.created_at)}
                           </div>
                         )}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 13, paddingTop: 13, borderTop: '1px solid #F2F4F6' }}>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: G.sm, marginTop: G.lg, paddingTop: G.lg, borderTop: `1px solid ${C.line}` }}>
                           {job.status === 'pending_review' && (
                             <>
-                              <button style={{ ...actBtn, border: 'none', background: '#1B7A43', color: '#fff' }} onClick={() => handleApprove(job)}>{L('승인', 'Approve')}</button>
-                              <button style={{ ...actBtn, border: 'none', background: '#FEE2E2', color: '#C92A2A' }} onClick={() => handleReject(job)}>{L('반려', 'Reject')}</button>
+                              <PrimaryButton size="small" label={L('승인', 'Approve')} onClick={() => handleApprove(job)} />
+                              <SecondaryButton size="small" label={L('반려', 'Reject')} onClick={() => handleReject(job)} />
                             </>
                           )}
-                          <button style={actBtn} onClick={() => startEdit(job)}>{L('수정', 'Edit')}</button>
+                          <SecondaryButton size="small" label={L('수정', 'Edit')} loading={editLoadingId === job.id} disabled={!!editLoadingId} onClick={() => startEdit(job)} />
                           {job.status !== 'pending_review' && (
-                            <button style={job.is_featured ? { ...actBtn, borderColor: '#F3D98B', background: '#FEF6E0', color: '#92660E' } : actBtn} onClick={() => handleToggleFeatured(job)} title={L('적극 채용 중 섹션 노출 토글', 'Toggle “Actively hiring” placement')}>
-                              {job.is_featured ? L('프리미엄 해제', 'Remove premium') : L('프리미엄', 'Premium')}
-                            </button>
+                            <SecondaryButton size="small" onClick={() => handleToggleFeatured(job)} title={L('적극 채용 중 섹션 노출 토글', 'Toggle “Actively hiring” placement')}
+                              label={job.is_featured ? L('프리미엄 해제', 'Remove premium') : L('프리미엄', 'Premium')} />
                           )}
                           {job.status !== 'pending_review' && (
-                            <button style={actBtn} onClick={() => handleToggle(job)}>{job.is_active ? L('비노출', 'Hide') : L('노출', 'Show')}</button>
+                            <SecondaryButton size="small" label={job.is_active ? L('비노출', 'Hide') : L('노출', 'Show')} onClick={() => handleToggle(job)} />
                           )}
-                          <button style={{ ...actBtn, marginLeft: 'auto', color: '#C92A2A', borderColor: '#F5D5D5' }} onClick={() => handleDelete(job.id)}>{L('삭제', 'Delete')}</button>
+                          <div style={{ marginLeft: 'auto' }}>
+                            <GhostButton size="small" label={L('삭제', 'Delete')} onClick={() => handleDelete(job.id)} />
+                          </div>
                         </div>
-                      </div>
+                      </Card>
                     );
                   })}
+                  </div>
+                  {sorted.length > jobsVisible && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: G.sm, marginTop: G.xl }}>
+                      <SecondaryButton
+                        label={L(`${Math.min(JOBS_PAGE, sorted.length - jobsVisible)}건 더 보기`, `Show ${Math.min(JOBS_PAGE, sorted.length - jobsVisible)} more`)}
+                        onClick={() => setJobsVisible(v => v + JOBS_PAGE)} />
+                      <span style={{ fontSize: 12, color: C.faint, fontVariantNumeric: 'tabular-nums' }}>{Math.min(jobsVisible, sorted.length).toLocaleString()} / {sorted.length.toLocaleString()}</span>
+                    </div>
+                  )}
                 </>
               );
             })()}
@@ -660,36 +662,40 @@ export default function AdminJobs() {
 
         {/* KPI TAB (기업/채용 지표 요약) */}
         {tab === 'kpi' && (
-          <div style={S.card}>
-            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}>📊 {L('기업·채용 지표', 'Company & hiring metrics')}</div>
-            {!kpi && <div style={{ color: '#aaa', fontSize: 13 }}>{L('불러오는 중...', 'Loading…')}</div>}
+          <div>
+            <SectionTitle>{L('기업·채용 지표', 'Company & hiring metrics')}</SectionTitle>
+            {!kpi && <State kind="loading">{L('불러오는 중...', 'Loading…')}</State>}
             {kpi && (() => {
-              const Stat = ({ label, value, sub }) => (
-                <div style={{ flex: '1 1 140px', minWidth: 140, background: '#fafafa', border: '1px solid #eee', borderRadius: 10, padding: '14px 16px' }}>
-                  <div style={{ fontSize: 11, color: '#999', fontWeight: 700 }}>{label}</div>
-                  <div style={{ fontSize: 24, fontWeight: 800, marginTop: 4 }}>{value}</div>
-                  {sub && <div style={{ fontSize: 11, color: '#888', marginTop: 2 }}>{sub}</div>}
-                </div>
-              )
               const fc = kpi.forCompanies
               return (
                 <>
-                  <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 18 }}>
-                    <Stat label={L('가입 회사', 'Companies')} value={kpi.companies} sub={L(`멤버 ${kpi.members}명`, `${kpi.members} members`)} />
-                    <Stat label={L('기업 등록 공고', 'Company-posted jobs')} value={kpi.jobs.companySelf} sub={L(`크롤 ${kpi.jobs.crawled} · 전체 ${kpi.jobs.total}`, `crawled ${kpi.jobs.crawled} · total ${kpi.jobs.total}`)} />
-                    <Stat label={L('승인 대기', 'Pending')} value={kpi.jobs.pending} sub={L(`노출중 ${kpi.jobs.live}`, `${kpi.jobs.live} live`)} />
-                    <Stat label={L('총 지원', 'Total applications')} value={kpi.applications.total} />
-                  </div>
-                  <div style={{ fontSize: 13, fontWeight: 700, margin: '6px 0 8px' }}>{L('for-companies 퍼널', 'for-companies funnel')} <span style={{ fontWeight: 500, color: '#999', fontSize: 11 }}>{L('(전체 · 30일 · 7일)', '(all · 30d · 7d)')}</span></div>
-                  <div style={{ border: '1px solid #eee', borderRadius: 10, overflow: 'hidden' }}>
-                    {[[L('진입(nav 클릭)', 'Enter (nav click)'), fc.enter], [L('공고 등록 클릭', 'Post-job click'), fc.postJob], [L('문의 클릭', 'Contact click'), fc.contact]].map(([label, m], i) => (
-                      <div key={label} style={{ display: 'flex', alignItems: 'center', padding: '10px 14px', borderTop: i ? '1px solid #f0f0f0' : 'none' }}>
-                        <div style={{ flex: 1, fontSize: 13, fontWeight: 600 }}>{label}</div>
-                        <div style={{ fontSize: 13 }}><b>{m.all}</b> <span style={{ color: '#999' }}>· {m.d30} · {m.d7}</span></div>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ fontSize: 11, color: '#aaa', marginTop: 10 }}>{L('※ for-companies는 페이지뷰 이벤트 미계측 — 진입은 nav 클릭 기준. 문의 리드는 Slack으로 전송됨.', '※ for-companies pageviews aren’t tracked — “enter” counts nav clicks. Contact leads are sent to Slack.')}</div>
+                  <StatGrid style={{ marginBottom: G.xl + G.sm }}>
+                    <StatTile label={L('가입 회사', 'Companies')} value={fmtN(kpi.companies)} sub={L(`멤버 ${fmtN(kpi.members)}명`, `${fmtN(kpi.members)} members`)} />
+                    <StatTile label={L('기업 등록 공고', 'Company-posted jobs')} value={fmtN(kpi.jobs.companySelf)} sub={L(`크롤 ${fmtN(kpi.jobs.crawled)} · 전체 ${fmtN(kpi.jobs.total)}`, `crawled ${fmtN(kpi.jobs.crawled)} · total ${fmtN(kpi.jobs.total)}`)} />
+                    <StatTile label={L('승인 대기', 'Pending')} value={fmtN(kpi.jobs.pending)} sub={L(`노출중 ${fmtN(kpi.jobs.live)}`, `${fmtN(kpi.jobs.live)} live`)} />
+                    <StatTile label={L('총 지원', 'Total applications')} value={fmtN(kpi.applications.total)} />
+                  </StatGrid>
+                  <SectionTitle sub={L('for-companies는 페이지뷰 이벤트를 계측하지 않아 진입은 nav 클릭 기준입니다. 문의 리드는 Slack으로 전송됩니다.', 'for-companies pageviews aren’t tracked — “enter” counts nav clicks. Contact leads are sent to Slack.')}>
+                    {L('for-companies 퍼널', 'for-companies funnel')}
+                  </SectionTitle>
+                  <TableCard minWidth={480}>
+                    <thead><tr>
+                      <th style={T.th}>{L('단계', 'Step')}</th>
+                      <th style={T.thNum}>{L('전체', 'All')}</th>
+                      <th style={T.thNum}>{L('30일', '30d')}</th>
+                      <th style={T.thNum}>{L('7일', '7d')}</th>
+                    </tr></thead>
+                    <tbody>
+                      {[[L('진입(nav 클릭)', 'Enter (nav click)'), fc.enter], [L('공고 등록 클릭', 'Post-job click'), fc.postJob], [L('문의 클릭', 'Contact click'), fc.contact]].map(([label, m]) => (
+                        <tr key={label}>
+                          <td style={{ ...T.td, fontWeight: 600 }}>{label}</td>
+                          <td style={{ ...T.tdNum, fontWeight: 600 }}>{fmtN(m.all)}</td>
+                          <td style={T.tdNum}>{fmtN(m.d30)}</td>
+                          <td style={T.tdNum}>{fmtN(m.d7)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </TableCard>
                 </>
               )
             })()}
@@ -698,115 +704,144 @@ export default function AdminJobs() {
 
         {/* COMPANIES TAB (가입 회사 계정 + 인증) */}
         {tab === 'companies' && (
-          <div style={S.card}>
-            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{L('가입 회사 계정', 'Company accounts')}</div>
-            <div style={{ fontSize: 12, color: '#999', marginBottom: 16 }}>{L('공고를 등록할 수 있는 기업 계정. 인증(verified) 상태를 관리합니다.', 'Company accounts that can post jobs. Manage their verified status here.')}</div>
+          <div>
+            <SectionTitle sub={L('공고를 등록할 수 있는 기업 계정입니다. 인증(verified) 상태를 관리합니다.', 'Company accounts that can post jobs. Manage their verified status here.')}>
+              {L('가입 회사 계정', 'Company accounts')} {count(companies.length)}
+            </SectionTitle>
 
             {/* 계정 발급 — Google 안 되는 회사용 이메일/비번 로그인 계정 생성 */}
-            <div style={{ border: '1px solid #e5e7eb', borderRadius: 10, padding: 14, marginBottom: 20, background: '#fafafa' }}>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 2 }}>＋ {L('계정 발급', 'Issue account')}</div>
-              <div style={{ fontSize: 11, color: '#999', marginBottom: 12 }}>{L('이메일/비밀번호 로그인 계정을 만들어 자격증명을 고객에게 전달합니다. gmail 등 개인메일도 가능(계정별 독립 회사).', 'Create an email/password login account and hand the credentials to the customer. Personal emails like gmail are fine (each becomes its own company).')}</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
-                <input type="email" placeholder={L('로그인 이메일', 'Login email')} value={acct.email}
-                  onChange={e => setAcct({ ...acct, email: e.target.value })}
-                  style={{ ...S.inp, flex: '1 1 200px' }} />
-                <input type="text" placeholder={L('회사명(표시)', 'Company name (display)')} value={acct.companyName}
-                  onChange={e => setAcct({ ...acct, companyName: e.target.value })}
-                  style={{ ...S.inp, flex: '1 1 200px' }} />
-                <input type="text" placeholder={L('담당자명(선택)', 'Contact name (optional)')} value={acct.contactName}
-                  onChange={e => setAcct({ ...acct, contactName: e.target.value })}
-                  style={{ ...S.inp, flex: '1 1 160px' }} />
+            <Card style={{ marginBottom: G.md }}>
+              <SectionTitle sub={L('이메일/비밀번호 로그인 계정을 만들어 자격증명을 고객에게 전달합니다. gmail 등 개인 메일도 가능합니다(계정별 독립 회사).', 'Create an email/password login account and hand the credentials to the customer. Personal emails like gmail are fine (each becomes its own company).')}>
+                {L('계정 발급', 'Issue account')}
+              </SectionTitle>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm, alignItems: 'center' }}>
+                <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+                  <Field inputType="email" placeholder={L('로그인 이메일', 'Login email')} value={acct.email}
+                    onChange={e => setAcct({ ...acct, email: e.target.value })} />
+                </div>
+                <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+                  <Field placeholder={L('회사명(표시)', 'Company name (display)')} value={acct.companyName}
+                    onChange={e => setAcct({ ...acct, companyName: e.target.value })} />
+                </div>
+                <div style={{ flex: '1 1 160px', minWidth: 0 }}>
+                  <Field placeholder={L('담당자명(선택)', 'Contact name (optional)')} value={acct.contactName}
+                    onChange={e => setAcct({ ...acct, contactName: e.target.value })} />
+                </div>
+                <PrimaryButton onClick={handleIssueAccount}
+                  disabled={acctIssuing || !acct.email.includes('@') || !acct.companyName.trim()}
+                  label={acctIssuing ? L('발급 중…', 'Issuing…') : L('계정 발급', 'Issue account')} />
               </div>
-              <button style={S.btnP} onClick={handleIssueAccount}
-                disabled={acctIssuing || !acct.email.includes('@') || !acct.companyName.trim()}>
-                {acctIssuing ? L('발급 중…', 'Issuing…') : L('계정 발급', 'Issue account')}
-              </button>
+            </Card>
 
-              {acctResult && (
-                <div style={{ marginTop: 12, padding: 12, borderRadius: 8, background: '#ecfdf5', border: '1px solid #a7f3d0', fontSize: 12 }}>
-                  <div style={{ fontWeight: 700, color: '#065f46', marginBottom: 6 }}>
+            {acctResult && (
+              <Card style={{ marginBottom: G.md }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, flexWrap: 'wrap', marginBottom: G.md }}>
+                  <StatusTag tone="success">{acctResult.reused ? L('비밀번호 재설정', 'Password reset') : L('발급 완료', 'Issued')}</StatusTag>
+                  <span style={{ fontSize: 13, color: C.sub }}>
                     {acctResult.reused
-                      ? L('기존 계정 비밀번호 재설정됨 — 아래를 전달하세요', 'Existing account password reset — share the details below')
-                      : L('✅ 발급 완료 — 아래를 고객에게 전달하세요', '✅ Issued — hand the details below to the customer')}
-                  </div>
-                  <div style={{ fontFamily: 'monospace', lineHeight: 1.7, userSelect: 'all' }}>
-                    <div>URL: {acctResult.url}</div>
-                    <div>{L('이메일', 'Email')}: {acctResult.email}</div>
-                    <div>{L('비밀번호', 'Password')}: <b>{acctResult.password}</b></div>
-                  </div>
-                  <div style={{ marginTop: 8, display: 'flex', gap: 8 }}>
-                    <button style={S.btnS}
-                      onClick={() => { navigator.clipboard.writeText(`URL: ${acctResult.url}\n${L('이메일', 'Email')}: ${acctResult.email}\n${L('비밀번호', 'Password')}: ${acctResult.password}`); flash(L('복사됨', 'Copied')) }}>
-                      {L('복사', 'Copy')}
-                    </button>
-                    <button style={S.btnS} onClick={() => setAcctResult(null)}>{L('닫기', 'Close')}</button>
-                  </div>
-                  <div style={{ marginTop: 8, color: '#059669', fontSize: 11 }}>{L('※ 비밀번호는 지금만 표시됩니다. 창을 닫으면 다시 볼 수 없어요.', '※ The password is shown only now. Once you close this, it cannot be viewed again.')}</div>
+                      ? L('기존 계정의 비밀번호를 재설정했습니다. 아래 정보를 전달해 주세요.', 'Existing account password reset — share the details below.')
+                      : L('아래 정보를 고객에게 전달해 주세요.', 'Hand the details below to the customer.')}
+                  </span>
                 </div>
-              )}
-            </div>
+                <div style={{ ...mono, lineHeight: 1.7, userSelect: 'all', color: C.text, background: C.bg, border: `1px solid ${C.border}`, borderRadius: 4, padding: `${G.md}px ${G.lg}px`, overflowWrap: 'anywhere' }}>
+                  <div>URL: {acctResult.url}</div>
+                  <div>{L('이메일', 'Email')}: {acctResult.email}</div>
+                  <div>{L('비밀번호', 'Password')}: <b>{acctResult.password}</b></div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, flexWrap: 'wrap', marginTop: G.md }}>
+                  <SecondaryButton size="small" label={L('복사', 'Copy')}
+                    onClick={() => { navigator.clipboard.writeText(`URL: ${acctResult.url}\n${L('이메일', 'Email')}: ${acctResult.email}\n${L('비밀번호', 'Password')}: ${acctResult.password}`); flash(L('복사했습니다', 'Copied')) }} />
+                  <GhostButton size="small" label={L('닫기', 'Close')} onClick={() => setAcctResult(null)} />
+                  <span style={{ fontSize: 12, color: C.faint }}>{L('비밀번호는 지금만 표시됩니다. 닫으면 다시 볼 수 없습니다.', 'The password is shown only now. Once you close this, it cannot be viewed again.')}</span>
+                </div>
+              </Card>
+            )}
 
-            {companies.length === 0 && <div style={{ color: '#aaa', fontSize: 13 }}>{L('가입 회사 없음', 'No companies yet')}</div>}
-            {companies.map(c => (
-              <div key={c.id} style={S.row}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>
-                    {c.name}
-                    {c.verified_at
-                      ? <span style={{ ...S.badge, background: '#dcfce7', color: '#166534' }}>{L('✓ 인증됨', '✓ Verified')}</span>
-                      : <span style={{ ...S.badge, background: '#f3f4f6', color: '#6b7280' }}>{L('미인증', 'Unverified')}</span>}
-                  </div>
-                  <div style={{ fontSize: 12, color: '#888' }}>
-                    {c.email_domain || L('도메인 없음', 'no domain')} · {L(`멤버 ${c.member_count}명`, `${c.member_count} members`)} · {L(`공고 ${c.job_count}개(노출 ${c.live_count})`, `${c.job_count} jobs (${c.live_count} live)`)} · {L('가입', 'Joined')} {c.created_at ? new Date(c.created_at).toLocaleDateString() : '-'}
-                  </div>
-                </div>
-                <button
-                  style={{ ...S.btnS, ...(c.verified_at ? { color: '#dc2626' } : { background: '#059669', color: '#fff', fontWeight: 800 }) }}
-                  onClick={() => handleToggleVerify(c)}
-                >
-                  {c.verified_at ? L('인증 해제', 'Unverify') : L('인증하기', 'Verify')}
-                </button>
-              </div>
-            ))}
+            <TableCard minWidth={720}>
+              <thead><tr>
+                <th style={T.th}>{L('회사 · 도메인', 'Company · Domain')}</th>
+                <th style={T.th}>{L('인증', 'Verified')}</th>
+                <th style={T.thNum}>{L('멤버', 'Members')}</th>
+                <th style={T.thNum}>{L('공고', 'Jobs')}</th>
+                <th style={T.thNum}>{L('노출중', 'Live')}</th>
+                <th style={T.th}>{L('가입일', 'Joined')}</th>
+                <th style={T.th}></th>
+              </tr></thead>
+              <tbody>
+                {companies.map(c => (
+                  <tr key={c.id}>
+                    <td style={T.td}>
+                      <div style={{ fontWeight: 600 }}>{c.name}</div>
+                      <div style={{ fontSize: 12, color: C.sub, marginTop: 2, overflowWrap: 'anywhere' }}>{c.email_domain || L('도메인 없음', 'no domain')}</div>
+                    </td>
+                    <td style={T.td}>
+                      {c.verified_at
+                        ? <StatusTag tone="success">{L('인증됨', 'Verified')}</StatusTag>
+                        : <StatusTag tone="neutral">{L('미인증', 'Unverified')}</StatusTag>}
+                    </td>
+                    <td style={T.tdNum}>{c.member_count}</td>
+                    <td style={T.tdNum}>{c.job_count}</td>
+                    <td style={T.tdNum}>{c.live_count}</td>
+                    <td style={{ ...T.tdSub, whiteSpace: 'nowrap' }}>{c.created_at ? new Date(c.created_at).toLocaleDateString() : '-'}</td>
+                    <td style={T.tdAction}>
+                      <SecondaryButton size="small" label={c.verified_at ? L('인증 해제', 'Unverify') : L('인증하기', 'Verify')} onClick={() => handleToggleVerify(c)} />
+                    </td>
+                  </tr>
+                ))}
+                {companies.length === 0 && <tr><td colSpan={7} style={{ ...T.td, textAlign: 'center', color: C.faint, padding: 32 }}>{L('가입한 회사가 없습니다', 'No companies yet')}</td></tr>}
+              </tbody>
+            </TableCard>
           </div>
         )}
 
         {/* ADMINS TAB */}
         {tab === 'admins' && (
-          <div style={S.card}>
-            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 16 }}>Admin Users</div>
+          <div>
+            <SectionTitle sub={L('어드민에 접근할 수 있는 계정입니다.', 'Accounts that can access this admin.')}>
+              {L('관리자 계정', 'Admin users')} {count(admins.length)}
+            </SectionTitle>
 
             {/* Add new admin */}
-            <div style={{ display: 'flex', gap: 8, marginBottom: 20 }}>
-              <input
-                type="email"
-                placeholder="email@example.com"
-                value={newAdminEmail}
-                onChange={e => setNewAdminEmail(e.target.value)}
-                onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) handleAddAdmin() }}
-                style={{ ...S.inp, flex: 1 }}
-              />
-              <button style={S.btnP} onClick={handleAddAdmin} disabled={!newAdminEmail.includes('@')}>
-                Add Admin
-              </button>
-            </div>
+            <Card padding={G.lg} style={{ marginBottom: G.md }}>
+              <div style={{ display: 'flex', gap: G.sm, alignItems: 'center' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <Field
+                    inputType="email"
+                    placeholder="email@example.com"
+                    value={newAdminEmail}
+                    onChange={e => setNewAdminEmail(e.target.value)}
+                    onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) handleAddAdmin() }}
+                  />
+                </div>
+                <PrimaryButton label={L('관리자 추가', 'Add admin')} onClick={handleAddAdmin} disabled={!newAdminEmail.includes('@')} />
+              </div>
+            </Card>
 
             {/* Admin list */}
-            {admins.map(a => (
-              <div key={a.id} style={S.row}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 600 }}>{a.email}</div>
-                  <div style={{ fontSize: 11, color: '#bbb' }}>
-                    Added by {a.added_by || 'system'} · {new Date(a.created_at).toLocaleDateString()}
-                  </div>
-                </div>
-                {a.email !== currentEmail ? (
-                  <button style={{ ...S.btnS, color: '#dc2626' }} onClick={() => handleRemoveAdmin(a.email)}>Remove</button>
-                ) : (
-                  <span style={{ fontSize: 11, color: '#aaa' }}>You</span>
-                )}
-              </div>
-            ))}
+            <TableCard minWidth={560}>
+              <thead><tr>
+                <th style={T.th}>{L('이메일', 'Email')}</th>
+                <th style={T.th}>{L('추가한 사람', 'Added by')}</th>
+                <th style={T.th}>{L('추가일', 'Added')}</th>
+                <th style={T.th}></th>
+              </tr></thead>
+              <tbody>
+                {admins.map(a => (
+                  <tr key={a.id}>
+                    <td style={{ ...T.td, fontWeight: 600 }}>{a.email}</td>
+                    <td style={T.tdSub}>{a.added_by || L('시스템', 'system')}</td>
+                    <td style={{ ...T.tdSub, whiteSpace: 'nowrap' }}>{new Date(a.created_at).toLocaleDateString()}</td>
+                    <td style={T.tdAction}>
+                      {a.email !== currentEmail ? (
+                        <GhostButton size="small" label={L('삭제', 'Remove')} onClick={() => handleRemoveAdmin(a.email)} />
+                      ) : (
+                        <StatusTag tone="neutral">{L('본인', 'You')}</StatusTag>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </TableCard>
           </div>
         )}
       </div>
@@ -816,29 +851,12 @@ export default function AdminJobs() {
 }
 
 function F({ label, value, set, type = 'text', disabled = false }) {
-  return (
-    <div>
-      <label style={S.lbl}>{label}</label>
-      <input type={type} value={value || ''} onChange={e => set(e.target.value)} disabled={disabled}
-        style={{ ...S.inp, ...(disabled ? { background: '#F2F4F6', color: '#ADB5BD' } : null) }} />
-    </div>
-  )
+  return <Field title={label} inputType={type} value={value || ''} onChange={e => set(e.target.value)} disabled={disabled} />
 }
+const LINE = 'var(--color-gray-300, #D1D6DC)' // DS 입력 테두리 — 업로드 점선 박스를 입력창과 같은 선 색으로
 const S = {
   center: { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', fontFamily: "-apple-system, 'Helvetica Neue', Arial, sans-serif" },
   shell: { maxWidth: 900, margin: '0 auto', padding: '24px 20px 60px' },
-  tab: { fontSize: 13, fontWeight: 600, color: '#888', background: '#fff', border: '1px solid #eee', padding: '7px 16px', borderRadius: 8, cursor: 'pointer' },
-  tabOn: { background: '#111', color: '#fff', borderColor: '#111' },
-  card: { background: '#fff', borderRadius: 12, border: '1px solid #eee', padding: '20px 24px', marginBottom: 16 },
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 16px' },
-  lbl: { display: 'block', fontSize: 12, fontWeight: 600, color: '#4E5968', marginBottom: 6 },
-  inp: { width: '100%', fontSize: 13.5, padding: '10px 12px', border: '1px solid #E5E8EB', borderRadius: 8, outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' },
-  row: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderBottom: '1px solid #f5f5f5', flexWrap: 'wrap' },
-  badge: { fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 10, marginLeft: 8 },
-  btnP: { fontSize: 13, fontWeight: 700, color: '#fff', background: '#ff4400', border: 'none', padding: '10px 24px', borderRadius: 8, cursor: 'pointer' },
-  btnG: { fontSize: 13, fontWeight: 600, color: '#888', background: 'none', border: '1px solid #ddd', padding: '10px 24px', borderRadius: 8, cursor: 'pointer' },
-  btnS: { fontSize: 11, fontWeight: 600, color: '#555', background: '#f5f5f5', border: 'none', padding: '5px 10px', borderRadius: 6, cursor: 'pointer' },
-  sel: { fontSize: 12, padding: '6px 10px', border: '1px solid #e0e0e0', borderRadius: 6, outline: 'none', fontFamily: 'inherit', flexShrink: 0 },
   // 새 공고 탭은 fixed 패널(zIndex 30/31)이 화면을 덮으므로 플래시도 fixed 토스트로 띄운다
-  flash: { position: 'fixed', top: 14, left: '50%', transform: 'translateX(-50%)', zIndex: 200, maxWidth: '80vw', background: '#dcfce7', color: '#166534', fontSize: 13, fontWeight: 600, padding: '10px 18px', borderRadius: 10, boxShadow: '0 4px 16px rgba(0,0,0,0.12)' },
+  flash: { position: 'fixed', top: 16, left: '50%', transform: 'translateX(-50%)', zIndex: 200, maxWidth: '80vw', background: C.text, color: '#fff', fontSize: 13, fontWeight: 600, lineHeight: 1.5, padding: `${G.sm}px ${G.lg}px`, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.16)' },
 }

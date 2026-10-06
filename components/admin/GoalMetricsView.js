@@ -5,6 +5,9 @@ import { ROLE_GROUPS } from '../../constants/jobs'
 import SurveyView from './SurveyView'
 import { KRW_PER_M_VND, vndMToKrwText } from '../../lib/fx'
 import { useAdmin } from '../../lib/adminSwr'
+import { IconButton } from '@likelion-design/ui'
+import { RiArrowDownSLine, RiArrowRightSLine, RiCloseLine, RiMailLine } from '@remixicon/react'
+import { G, C, T, TableCard, SectionTitle, StatusTag, GhostButton, State } from './ui'
 
 // 콜드메일 캠페인표 — 대시보드 상위 탭(?tab=coldmail)으로 분리(10/2). useAdmin(SWR) 캐시라 탭을 오가도
 // 받은 표가 즉시 뜨고 30초 지나면 뒤에서만 갱신한다(작업실의 생 fetch+useState 는 unmount 마다 재요청했다).
@@ -12,7 +15,7 @@ export function ColdmailView({ token, lang }) {
   const ko = lang !== 'en'
   const { data, error, isLoading } = useAdmin('/api/admin/campaign-resume-public-metrics', token)
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '16px 16px 48px' }}>
+    <div style={{ paddingBottom: 40 }}>
       <ColdmailPublicTab data={data} loading={isLoading && !data} error={error ? (ko ? '불러오기 실패 ' : 'Load failed ') + error.message : ''} ko={ko} lang={lang} />
     </div>
   )
@@ -808,31 +811,31 @@ function AugustGoalPanel({ g, ko, onRefresh, generatedAt, lang }) {
 // 숫자를 세로로 비교할 수 없다. 그룹 판정은 API(groupOf)가 하고 여기선 라벨만 붙인다.
 const CAMPAIGN_GROUPS = [
   {
-    key: 'vku', ko: '⭐ VKU Job Matching Weekend (9/30 다낭)', en: '⭐ VKU Job Matching Weekend (Sep 30, Da Nang)',
+    key: 'vku', ko: 'VKU Job Matching Weekend (9/30 다낭)', en: 'VKU Job Matching Weekend (Sep 30, Da Nang)',
     koDesc: '행사 면접 신청자 CV 클레임(coldmail-ktc-cv-vku1001) + 박람회 참가자 가입 유도(coldmail-vku-signup-1001) · 전환 = FYI 가입',
     enDesc: 'Event interview applicants (CV claim) + fair attendees (signup) · convert = FYI signup',
     convKo: '가입', convEn: 'Signups',
   },
   {
-    key: 'signup', ko: '① 회원 가입 유도', en: '(1) Signup',
+    key: 'signup', ko: '1. 회원 가입 유도', en: '1. Signup',
     koDesc: 'FYI 계정이 없는 KTC 지원자 대상 · 전환 = FYI 가입',
     enDesc: 'KTC applicants without an FYI account · convert = signup',
     convKo: '가입', convEn: 'Signups',
   },
   {
-    key: 'register', ko: '② 이력서 등록 유도', en: '(2) Resume upload',
+    key: 'register', ko: '2. 이력서 등록 유도', en: '2. Resume upload',
     koDesc: '가입했지만 이력서가 없는 회원 대상 · 전환 = 이력서 등록(파일 업로드)',
     enDesc: 'Members with an account but no resume · convert = uploaded a file',
     convKo: '등록', convEn: 'Uploaded',
   },
   {
-    key: 'resume', ko: '③ 이력서 공개 전환', en: '(3) Resume public',
+    key: 'resume', ko: '3. 이력서 공개 전환', en: '3. Resume public',
     koDesc: '이미 가입한 회원 중 이력서 비공개자 대상 · 전환 = 이력서 공개',
     enDesc: 'Existing members with a private resume · convert = made public',
     convKo: '공개 전환', convEn: 'Converted',
   },
   {
-    key: 'recommend', ko: '④ 공고 추천 → 지원', en: '(4) Job recommend',
+    key: 'recommend', ko: '4. 공고 추천 → 지원', en: '4. Job recommend',
     koDesc: '이력서 공개 회원에게 맞는 공고 추천 · 전환 = 해당 공고 지원',
     enDesc: 'Matched job recommendations to public-resume members · convert = applied',
     convKo: '지원자', convEn: 'Applicants',
@@ -841,19 +844,19 @@ const CAMPAIGN_GROUPS = [
     convertFrom: 'apply',
   },
   {
-    key: 'photo', ko: '⑤ 프로필 사진 등록', en: '(5) Profile photo',
+    key: 'photo', ko: '5. 프로필 사진 등록', en: '5. Profile photo',
     koDesc: '이력서 보유·사진 없는 회원 대상 · 클릭 = 랜딩 조회 · 전환 = 사진 업로드(원클릭 랜딩)',
     enDesc: 'Members with a resume but no photo · click = landing view · convert = photo uploaded',
     convKo: '사진 등록', convEn: 'Uploaded',
   },
   {
-    key: 'salary', ko: '⑥ 현/직전연봉 수집', en: '(6) Salary collection',
+    key: 'salary', ko: '6. 현/직전연봉 수집', en: '6. Salary collection',
     koDesc: '이력서 보유·경력 1년+ 회원 대상 · 전환 = 현/직전 월급 입력(무로그인 랜딩 /salary-update)',
     enDesc: 'Members with a resume and 1+ yr experience · convert = entered current/last salary (no-login landing)',
     convKo: '입력', convEn: 'Filled',
   },
   {
-    key: 'screen', ko: '⑦ 원탭 스크리닝', en: '(7) One-tap screening',
+    key: 'screen', ko: '7. 원탭 스크리닝', en: '7. One-tap screening',
     koDesc: '이력서에 없는 경험(드론 조립 등)을 추천 전에 한 번 묻는 메일 · 클릭 = 랜딩 조회 · 전환 = 답변 · 지원 건수 = "예" 뒤 원탭 지원',
     enDesc: 'Asks one question a CV cannot answer before nominating · click = landing view · convert = answered · applies = one-tap apply after "yes"',
     convKo: '응답', convEn: 'Answered',
@@ -867,18 +870,54 @@ const convertedOf = (c, g) => (g.convertFrom === 'apply' ? c.appliers : c.conver
 // public/private 는 같은 발송 건의 프레임 분기(1인1통·상호배타)라 병합 합산이 안전하다.
 const stemOf = (name) => name.replace(/-(public|private)$/, '')
 
+// 콜드메일 표 공용 조각 — 표 규격은 어드민 kit(T/TableCard). 숫자 색은 열 의미로만 쓴다: 클릭=파랑, 전환=청록.
+const CM = { click: '#2563EB', conv: '#0D9488' }
+const cmCount = { ...T.tdNum, fontWeight: 600 }
+const cmSumRow = { background: C.bg }
+const cmNameLink = { cursor: 'pointer', textDecoration: 'underline dotted', textDecorationColor: C.faint, textUnderlineOffset: 3 }
+const cmMeta = { fontWeight: 400, color: C.faint, fontSize: 12 }
+const cmDraft = (ko) => <StatusTag tone="warning" style={{ marginLeft: G.sm, verticalAlign: 'middle' }}>{ko ? '미발송' : 'Draft'}</StatusTag>
+// 발송·클릭·CTR·전환·전환율·지원 건수 6칸. r = { sent, clicked, conv, applies }, bold = 소계/날짜 합계 행
+function cmNumCells(r, ko, pct, bold) {
+  const w = bold ? { fontWeight: 700 } : null
+  return (
+    <>
+      <td style={{ ...T.tdNum, ...w }}>{r.sent}</td>
+      <td style={{ ...cmCount, color: CM.click, ...w }}>{r.clicked}</td>
+      <td style={{ ...T.tdNum, ...w }}>{r.sent ? pct(r.clicked / r.sent) : '—'}</td>
+      <td style={{ ...cmCount, color: CM.conv, ...w }}>{r.conv}</td>
+      <td style={{ ...T.tdNum, ...w }}>{r.sent ? pct(r.conv / r.sent) : '—'}</td>
+      <td style={{ ...cmCount, color: r.applies ? C.text : C.faint, ...w }}>
+        {r.applies ? `${r.applies}${ko ? '건' : ''}` : '—'}
+      </td>
+    </>
+  )
+}
+// 숫자 열 너비를 고정해 그룹 표끼리 열 위치가 세로로 맞는다(캠페인 열이 나머지를 가져간다).
+const cmThNum = { ...T.thNum, width: 112 }
+function CmHead({ g, ko }) {
+  return (
+    <thead><tr>
+      <th style={T.th}>{ko ? '캠페인' : 'Campaign'}</th>
+      <th style={cmThNum}>{ko ? '발송' : 'Sent'}</th>
+      <th style={cmThNum}>{ko ? '클릭' : 'Clicks'}</th>
+      <th style={cmThNum}>CTR</th>
+      <th style={cmThNum}>{ko ? g.convKo : g.convEn}</th>
+      <th style={cmThNum}>{ko ? '전환율' : 'Rate'}</th>
+      <th style={cmThNum}>{ko ? '지원 건수' : 'Applies'}</th>
+    </tr></thead>
+  )
+}
+
 function ColdmailPublicTab({ data, loading, error, ko, lang }) {
   const [mailPreview, setMailPreview] = useState(null) // { campaign, tpl } — 캠페인명 클릭 시 발송 메일 양식 모달
   // 토글 언어로 subject/html 해석 — vi=발송 원문, ko/en=열람용 번역본.
   const mailTpl = mailPreview ? localizeTemplate(mailPreview.tpl, lang) : null
-  if (loading || !data) return <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>{ko ? '불러오는 중…' : 'Loading…'}</div>
-  if (error) return <div style={{ textAlign: 'center', padding: 40, color: '#c00' }}>{error}</div>
-  if (data.error) return <div style={{ textAlign: 'center', padding: 40, color: '#c00' }}>{data.error}</div>
+  if (loading || !data) return <State kind="loading">{ko ? '불러오는 중…' : 'Loading…'}</State>
+  if (error) return <State kind="error">{error}</State>
+  if (data.error) return <State kind="error">{data.error}</State>
 
   const pct = (v) => `${Math.round(v * 100)}%`
-  const th = { textAlign: 'left', fontSize: 11, fontWeight: 700, color: '#9CA3AF', padding: '6px 10px', borderBottom: '1px solid #EEF0F2', textTransform: 'uppercase', letterSpacing: '.04em' }
-  const td = { fontSize: 13, color: '#1F2937', padding: '7px 10px', borderBottom: '1px solid #F5F6F7' }
-  const num = { ...td, textAlign: 'right', fontVariantNumeric: 'tabular-nums', fontWeight: 600 }
 
   return (
     <div>
@@ -892,7 +931,7 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
         // recommend 는 캠페인 버킷이 200개+ 라 평면 표로는 못 읽는다 — 발송일 접기 + 프레임 짝 병합.
         if (g.key === 'recommend') {
           return <RecommendGroupSection key={g.key} g={g} rows={rows} drafts={drafts} ko={ko}
-            pct={pct} th={th} td={td} num={num}
+            pct={pct}
             onPreview={(campaign, tpl) => setMailPreview({ campaign, tpl })} />
         }
         // 소계는 캠페인별 비율의 평균이 아니라 합계끼리 나눈다 — 발송량이 다른 캠페인을 섞어야 해서.
@@ -902,94 +941,75 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
           appliers: a.appliers + c.appliers,
         }), { sent: 0, clicked: 0, converted: 0, applies: 0, appliers: 0 })
         return (
-          <div key={g.key} style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#374151', margin: '0 0 2px' }}>
-              {ko ? g.ko : g.en}
-            </div>
-            <div style={{ fontSize: 11.5, color: '#9CA3AF', margin: '0 0 8px' }}>
-              {ko ? g.koDesc : g.enDesc}
-            </div>
-            <div className="adm-m-scroll" style={{ overflowX: 'auto', border: '1px solid #EEF0F2', borderRadius: 12 }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
-                <thead><tr>
-                  <th style={th}>{ko ? '캠페인' : 'Campaign'}</th>
-                  <th style={{ ...th, textAlign: 'right' }}>{ko ? '발송' : 'Sent'}</th>
-                  <th style={{ ...th, textAlign: 'right' }}>{ko ? '클릭' : 'Clicks'}</th>
-                  <th style={{ ...th, textAlign: 'right' }}>CTR</th>
-                  <th style={{ ...th, textAlign: 'right' }}>{ko ? g.convKo : g.convEn}</th>
-                  <th style={{ ...th, textAlign: 'right' }}>{ko ? '전환율' : 'Rate'}</th>
-                  <th style={{ ...th, textAlign: 'right' }}>{ko ? '지원 건수' : 'Applies'}</th>
-                </tr></thead>
-                <tbody>
-                  {[...rows, ...drafts].map((c) => {
-                    const conv = convertedOf(c, g)
-                    const tpl = templateFor(c.campaign)
-                    return (
-                    <tr key={c.campaign}>
-                      <td style={{ ...td, fontWeight: 700 }}>
-                        {tpl ? (
-                          <span onClick={() => setMailPreview({ campaign: c.campaign, tpl })} title={ko ? '발송 메일 양식 보기' : 'View email template'}
-                            style={{ cursor: 'pointer', borderBottom: '1px dashed #C4C9CF' }}>{c.campaign}</span>
-                        ) : c.campaign}
-                        {c.firstSentDay && <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: 11.5 }}> · {c.firstSentDay.slice(5)}{c.lastSentDay && c.lastSentDay !== c.firstSentDay ? `~${c.lastSentDay.slice(5)}` : ''}</span>}
-                        {c.draft && <span style={{ fontWeight: 600, color: '#D97706', fontSize: 11 }}> · {ko ? '미발송' : 'draft'}</span>}
-                      </td>
-                      <td style={num}>{c.sent}</td>
-                      <td style={{ ...num, color: '#2563EB' }}>{c.clicked}</td>
-                      <td style={num}>{c.sent ? pct(c.clickRate) : '—'}</td>
-                      <td style={{ ...num, color: '#0D9488' }}>{conv}</td>
-                      <td style={num}>{c.sent ? pct(conv / c.sent) : '—'}</td>
-                      <td style={{ ...num, color: c.applies ? '#D97706' : undefined, fontWeight: 800 }}>
-                        {c.applies ? `${c.applies}${ko ? '건' : ''}` : '—'}
-                      </td>
-                    </tr>
-                    )
-                  })}
-                  {rows.length > 1 && (
-                    <tr style={{ background: '#FAFBFC' }}>
-                      <td style={{ ...td, fontWeight: 800, color: '#6B7280' }}>{ko ? '소계' : 'Subtotal'}</td>
-                      <td style={{ ...num, fontWeight: 800 }}>{sum.sent}</td>
-                      <td style={{ ...num, fontWeight: 800, color: '#2563EB' }}>{sum.clicked}</td>
-                      <td style={{ ...num, fontWeight: 800 }}>{sum.sent ? pct(sum.clicked / sum.sent) : '—'}</td>
-                      <td style={{ ...num, fontWeight: 800, color: '#0D9488' }}>{sum.converted}</td>
-                      <td style={{ ...num, fontWeight: 800 }}>{sum.sent ? pct(sum.converted / sum.sent) : '—'}</td>
-                      <td style={{ ...num, fontWeight: 800, color: sum.applies ? '#D97706' : undefined }}>
-                        {sum.applies ? `${sum.applies}${ko ? '건' : ''}` : '—'}
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
+          <div key={g.key} style={{ marginBottom: G.xl }}>
+            <SectionTitle sub={ko ? g.koDesc : g.enDesc} style={{ marginBottom: G.md }}>{ko ? g.ko : g.en}</SectionTitle>
+            <TableCard minWidth={920}>
+              <CmHead g={g} ko={ko} />
+              <tbody>
+                {[...rows, ...drafts].map((c) => {
+                  const conv = convertedOf(c, g)
+                  const tpl = templateFor(c.campaign)
+                  return (
+                  <tr key={c.campaign}>
+                    <td style={{ ...T.td, fontWeight: 600 }}>
+                      {tpl ? (
+                        <span onClick={() => setMailPreview({ campaign: c.campaign, tpl })} title={ko ? '발송 메일 양식 보기' : 'View email template'}
+                          style={cmNameLink}>{c.campaign}</span>
+                      ) : c.campaign}
+                      {c.firstSentDay && <span style={cmMeta}> · {c.firstSentDay.slice(5)}{c.lastSentDay && c.lastSentDay !== c.firstSentDay ? `~${c.lastSentDay.slice(5)}` : ''}</span>}
+                      {c.draft && cmDraft(ko)}
+                    </td>
+                    <td style={T.tdNum}>{c.sent}</td>
+                    <td style={{ ...cmCount, color: CM.click }}>{c.clicked}</td>
+                    <td style={T.tdNum}>{c.sent ? pct(c.clickRate) : '—'}</td>
+                    <td style={{ ...cmCount, color: CM.conv }}>{conv}</td>
+                    <td style={T.tdNum}>{c.sent ? pct(conv / c.sent) : '—'}</td>
+                    <td style={{ ...cmCount, color: c.applies ? C.text : C.faint }}>
+                      {c.applies ? `${c.applies}${ko ? '건' : ''}` : '—'}
+                    </td>
+                  </tr>
+                  )
+                })}
+                {rows.length > 1 && (
+                  <tr style={cmSumRow}>
+                    <td style={{ ...T.td, fontWeight: 700 }}>{ko ? '소계' : 'Subtotal'}</td>
+                    {cmNumCells({ sent: sum.sent, clicked: sum.clicked, conv: sum.converted, applies: sum.applies }, ko, pct, true)}
+                  </tr>
+                )}
+              </tbody>
+            </TableCard>
           </div>
         )
       })}
 
       {mailPreview && (
         <div onClick={() => setMailPreview(null)}
-          style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: G.lg }}>
           <div onClick={(e) => e.stopPropagation()}
-            style={{ background: '#fff', borderRadius: 16, width: '100%', maxWidth: 640, maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
-            <div style={{ padding: '16px 20px', borderBottom: '1px solid #EEF0F2', display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+            style={{ background: '#fff', borderRadius: 12, width: '100%', maxWidth: 640, maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 20px 60px rgba(0,0,0,0.25)' }}>
+            <div style={{ padding: `${G.lg}px 20px`, borderBottom: `1px solid ${C.border}`, display: 'flex', alignItems: 'flex-start', gap: G.md }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 800, color: '#0F172A', marginBottom: 4 }}>{mailPreview.campaign}</div>
-                <div style={{ fontSize: 12.5, fontWeight: 600, color: '#374151', marginBottom: 6 }}>✉️ {mailTpl.subject}</div>
-                <div style={{ fontSize: 12, color: '#6B7280', lineHeight: 1.55 }}>{mailTpl.desc}</div>
-                <div style={{ fontSize: 11, color: '#B0B0B8', marginTop: 6 }}>{mailTpl.source}</div>
+                <div style={{ fontSize: 16, fontWeight: 600, color: C.text, lineHeight: 1.4, marginBottom: G.xs, wordBreak: 'break-all' }}>{mailPreview.campaign}</div>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 6, fontSize: 13, fontWeight: 600, color: C.body, lineHeight: 1.5, marginBottom: G.sm }}>
+                  <RiMailLine size={16} color={C.faint} style={{ flexShrink: 0, marginTop: 2 }} />
+                  <span>{mailTpl.subject}</span>
+                </div>
+                <div style={{ fontSize: 13, color: C.sub, lineHeight: 1.5 }}>{mailTpl.desc}</div>
+                <div style={{ fontSize: 12, color: C.faint, marginTop: G.sm, lineHeight: 1.5 }}>{mailTpl.source}</div>
                 {lang !== 'vi' && mailTpl.html && (
-                  <div style={{ fontSize: 11, color: '#B45309', marginTop: 6 }}>
-                    {ko ? '열람용 번역본입니다 — 실제 발송 원문은 베트남어(VI 토글로 확인)' : 'Translated for viewing — the actual mail was sent in Vietnamese (see VI toggle)'}
+                  <div style={{ fontSize: 12, color: C.faint, marginTop: G.xs, lineHeight: 1.5 }}>
+                    {ko ? '열람용 번역본입니다. 실제 발송 원문은 베트남어이며 VI 토글로 확인할 수 있습니다.' : 'Translated for viewing — the actual mail was sent in Vietnamese (see VI toggle)'}
                   </div>
                 )}
               </div>
-              <button onClick={() => setMailPreview(null)}
-                style={{ border: 'none', background: '#F2F4F6', borderRadius: 8, width: 28, height: 28, fontSize: 14, cursor: 'pointer', color: '#4E5968', flexShrink: 0 }}>✕</button>
+              <IconButton size="small" type="outline" color="neutral" icon={<RiCloseLine size={16} />} aria-label={ko ? '닫기' : 'Close'}
+                onClick={() => setMailPreview(null)} style={{ flexShrink: 0 }} />
             </div>
             {mailTpl.html ? (
               <iframe title="mail-preview" sandbox="" srcDoc={mailTpl.html}
                 style={{ border: 'none', width: '100%', flex: 1, minHeight: 420, background: '#f2f4f6' }} />
             ) : (
-              <div style={{ padding: '28px 20px', fontSize: 13, color: '#9CA3AF', textAlign: 'center' }}>
+              <div style={{ padding: '32px 20px', fontSize: 13, color: C.faint, textAlign: 'center' }}>
                 {ko ? '본문 원문이 보존돼 있지 않은 캠페인입니다 (git 히스토리 참조).' : 'Original body not preserved (see git history).'}
               </div>
             )}
@@ -999,25 +1019,23 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
 
       {data.daily.length > 0 && (
         <>
-          <div style={{ fontSize: 13, fontWeight: 700, color: '#374151', margin: '0 0 8px' }}>{ko ? '일별 (클릭·전환 — 인원 기준, 첫 발생일)' : 'Daily (unique people, first occurrence)'}</div>
-          <div style={{ overflowX: 'auto', border: '1px solid #EEF0F2', borderRadius: 12 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 360 }}>
-              <thead><tr>
-                <th style={th}>{ko ? '날짜' : 'Date'}</th>
-                <th style={{ ...th, textAlign: 'right' }}>{ko ? '클릭' : 'Clicks'}</th>
-                <th style={{ ...th, textAlign: 'right' }}>{ko ? '공개 전환' : 'Converts'}</th>
-              </tr></thead>
-              <tbody>
-                {[...data.daily].reverse().map((d) => (
-                  <tr key={d.day}>
-                    <td style={td}>{d.day.slice(5)}</td>
-                    <td style={num}>{d.clicks || ''}</td>
-                    <td style={{ ...num, color: d.converts ? '#0D9488' : undefined, fontWeight: 800 }}>{d.converts || ''}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <SectionTitle style={{ marginBottom: G.md }}>{ko ? '일별 (클릭·전환 — 인원 기준, 첫 발생일)' : 'Daily (unique people, first occurrence)'}</SectionTitle>
+          <TableCard minWidth={360}>
+            <thead><tr>
+              <th style={T.th}>{ko ? '날짜' : 'Date'}</th>
+              <th style={cmThNum}>{ko ? '클릭' : 'Clicks'}</th>
+              <th style={cmThNum}>{ko ? '공개 전환' : 'Converts'}</th>
+            </tr></thead>
+            <tbody>
+              {[...data.daily].reverse().map((d) => (
+                <tr key={d.day}>
+                  <td style={{ ...T.tdSub, fontVariantNumeric: 'tabular-nums' }}>{d.day.slice(5)}</td>
+                  <td style={{ ...cmCount, color: CM.click }}>{d.clicks || ''}</td>
+                  <td style={{ ...cmCount, color: CM.conv }}>{d.converts || ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </TableCard>
         </>
       )}
     </div>
@@ -1026,7 +1044,7 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
 
 // recommend 그룹 전용 계층 표 — 발송일 섹션(최신 위·소계 헤더행) → public/private 짝 병합 행 →
 // 펼치면 프레임별 하위행(양식 모달은 프레임마다 템플릿이 달라 여기서만 연다).
-function RecommendGroupSection({ g, rows, drafts, ko, pct, th, td, num, onPreview }) {
+function RecommendGroupSection({ g, rows, drafts, ko, pct, onPreview }) {
   const [dayOpen, setDayOpen] = useState({}) // day -> bool (유저 토글, 기본값은 최근 2일만 펼침)
   const [stemOpen, setStemOpen] = useState({}) // stem -> bool
   const [showAllDays, setShowAllDays] = useState(false)
@@ -1065,103 +1083,86 @@ function RecommendGroupSection({ g, rows, drafts, ko, pct, th, td, num, onPrevie
     const tpl = templateFor(c.campaign)
     return tpl ? (
       <span onClick={(e) => { e.stopPropagation(); onPreview(c.campaign, tpl) }} title={ko ? '발송 메일 양식 보기' : 'View email template'}
-        style={{ cursor: 'pointer', borderBottom: '1px dashed #C4C9CF' }}>{c.campaign}</span>
+        style={cmNameLink}>{c.campaign}</span>
     ) : c.campaign
   }
-  const numCells = (r, style = {}) => (
-    <>
-      <td style={{ ...num, ...style }}>{r.sent}</td>
-      <td style={{ ...num, color: '#2563EB', ...style }}>{r.clicked}</td>
-      <td style={{ ...num, ...style }}>{r.sent ? pct(r.clicked / r.sent) : '—'}</td>
-      <td style={{ ...num, color: '#0D9488', ...style }}>{r.conv}</td>
-      <td style={{ ...num, ...style }}>{r.sent ? pct(r.conv / r.sent) : '—'}</td>
-      <td style={{ ...num, color: r.applies ? '#D97706' : undefined, fontWeight: 800, ...style }}>
-        {r.applies ? `${r.applies}${ko ? '건' : ''}` : '—'}
-      </td>
-    </>
+  // 펼침 표시 — 16px 아이콘 칸을 항상 잡아 이름 시작 위치를 맞춘다(펼칠 게 없는 행은 빈 칸).
+  const caret = (open, show = true) => (
+    <span style={{ display: 'inline-flex', width: 16, height: 16, marginRight: G.xs, verticalAlign: 'text-bottom', color: C.faint }}>
+      {show && (open ? <RiArrowDownSLine size={16} /> : <RiArrowRightSLine size={16} />)}
+    </span>
   )
 
   return (
-    <div style={{ marginBottom: 24 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: '#374151', margin: '0 0 2px' }}>{ko ? g.ko : g.en}</div>
-      <div style={{ fontSize: 11.5, color: '#9CA3AF', margin: '0 0 8px' }}>
-        {ko ? g.koDesc : g.enDesc}{' · '}
-        {ko ? '날짜/행을 클릭하면 펼쳐집니다' : 'Click a date or row to expand'}
-      </div>
-      <div className="adm-m-scroll" style={{ overflowX: 'auto', border: '1px solid #EEF0F2', borderRadius: 12 }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: 560 }}>
-          <thead><tr>
-            <th style={th}>{ko ? '캠페인' : 'Campaign'}</th>
-            <th style={{ ...th, textAlign: 'right' }}>{ko ? '발송' : 'Sent'}</th>
-            <th style={{ ...th, textAlign: 'right' }}>{ko ? '클릭' : 'Clicks'}</th>
-            <th style={{ ...th, textAlign: 'right' }}>CTR</th>
-            <th style={{ ...th, textAlign: 'right' }}>{ko ? g.convKo : g.convEn}</th>
-            <th style={{ ...th, textAlign: 'right' }}>{ko ? '전환율' : 'Rate'}</th>
-            <th style={{ ...th, textAlign: 'right' }}>{ko ? '지원 건수' : 'Applies'}</th>
-          </tr></thead>
-          <tbody>
-            {visibleDays.map((day) => {
-              const list = byDay[day].sort((a, b) => b.sent - a.sent)
-              const open = isDayOpen(day)
-              const dSum = list.reduce((a, s) => ({
-                sent: a.sent + s.sent, clicked: a.clicked + s.clicked,
-                conv: a.conv + s.conv, applies: a.applies + s.applies,
-              }), { sent: 0, clicked: 0, conv: 0, applies: 0 })
-              return (
-                <Fragment key={day || 'draft'}>
-                  <tr onClick={() => setDayOpen((p) => ({ ...p, [day]: !open }))}
-                    style={{ background: '#F7F8FA', cursor: 'pointer' }}>
-                    <td style={{ ...td, fontWeight: 800, color: '#374151' }}>
-                      <span style={{ display: 'inline-block', width: 14, color: '#9CA3AF' }}>{open ? '▾' : '▸'}</span>
-                      {day ? day.slice(5) : (ko ? '미발송 초안' : 'Drafts')}
-                      <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: 11.5 }}> · {ko ? `캠페인 ${list.length}` : `${list.length} campaigns`}</span>
-                    </td>
-                    {numCells(dSum, { fontWeight: 800 })}
-                  </tr>
-                  {open && list.map((s) => {
-                    const single = s.children.length === 1 && s.children[0].campaign === s.stem
-                    const sOpen = !!stemOpen[s.stem]
-                    return (
-                      <Fragment key={s.stem}>
-                        <tr onClick={single ? undefined : () => setStemOpen((p) => ({ ...p, [s.stem]: !sOpen }))}
-                          style={single ? undefined : { cursor: 'pointer' }}>
-                          <td style={{ ...td, fontWeight: 700 }}>
-                            <span style={{ display: 'inline-block', width: 14, color: '#C4C9CF' }}>{single ? '' : sOpen ? '▾' : '▸'}</span>
-                            {single ? nameOf(s.children[0]) : s.stem}
-                            {s.lastSentDay && s.lastSentDay !== s.firstSentDay && <span style={{ fontWeight: 400, color: '#9CA3AF', fontSize: 11.5 }}> · ~{s.lastSentDay.slice(5)}</span>}
-                            {s.children.every((c) => c.draft) && <span style={{ fontWeight: 600, color: '#D97706', fontSize: 11 }}> · {ko ? '미발송' : 'draft'}</span>}
+    <div style={{ marginBottom: G.xl }}>
+      <SectionTitle style={{ marginBottom: G.md }}
+        sub={<>{ko ? g.koDesc : g.enDesc}{' · '}{ko ? '날짜/행을 클릭하면 펼쳐집니다' : 'Click a date or row to expand'}</>}>
+        {ko ? g.ko : g.en}
+      </SectionTitle>
+      <TableCard minWidth={920}>
+        <CmHead g={g} ko={ko} />
+        <tbody>
+          {visibleDays.map((day) => {
+            const list = byDay[day].sort((a, b) => b.sent - a.sent)
+            const open = isDayOpen(day)
+            const dSum = list.reduce((a, s) => ({
+              sent: a.sent + s.sent, clicked: a.clicked + s.clicked,
+              conv: a.conv + s.conv, applies: a.applies + s.applies,
+            }), { sent: 0, clicked: 0, conv: 0, applies: 0 })
+            return (
+              <Fragment key={day || 'draft'}>
+                <tr onClick={() => setDayOpen((p) => ({ ...p, [day]: !open }))}
+                  style={{ ...cmSumRow, cursor: 'pointer' }}>
+                  <td style={{ ...T.td, fontWeight: 700 }}>
+                    {caret(open)}
+                    {day ? day.slice(5) : (ko ? '미발송 초안' : 'Drafts')}
+                    <span style={cmMeta}> · {ko ? `캠페인 ${list.length}` : `${list.length} campaigns`}</span>
+                  </td>
+                  {cmNumCells(dSum, ko, pct, true)}
+                </tr>
+                {open && list.map((s) => {
+                  const single = s.children.length === 1 && s.children[0].campaign === s.stem
+                  const sOpen = !!stemOpen[s.stem]
+                  return (
+                    <Fragment key={s.stem}>
+                      <tr onClick={single ? undefined : () => setStemOpen((p) => ({ ...p, [s.stem]: !sOpen }))}
+                        style={single ? undefined : { cursor: 'pointer' }}>
+                        <td style={{ ...T.td, fontWeight: 600 }}>
+                          {caret(sOpen, !single)}
+                          {single ? nameOf(s.children[0]) : s.stem}
+                          {s.lastSentDay && s.lastSentDay !== s.firstSentDay && <span style={cmMeta}> · ~{s.lastSentDay.slice(5)}</span>}
+                          {s.children.every((c) => c.draft) && cmDraft(ko)}
+                        </td>
+                        {cmNumCells(s, ko, pct)}
+                      </tr>
+                      {sOpen && !single && s.children.map((c) => (
+                        <tr key={c.campaign}>
+                          <td style={{ ...T.tdSub, paddingLeft: 56 }}>
+                            {nameOf(c)}
+                            {c.draft && cmDraft(ko)}
                           </td>
-                          {numCells(s)}
+                          {cmNumCells({ sent: c.sent, clicked: c.clicked, conv: convertedOf(c, g), applies: c.applies }, ko, pct)}
                         </tr>
-                        {sOpen && !single && s.children.map((c) => (
-                          <tr key={c.campaign} style={{ background: '#FCFCFD' }}>
-                            <td style={{ ...td, paddingLeft: 34, color: '#6B7280' }}>
-                              {nameOf(c)}
-                              {c.draft && <span style={{ fontWeight: 600, color: '#D97706', fontSize: 11 }}> · {ko ? '미발송' : 'draft'}</span>}
-                            </td>
-                            {numCells({ sent: c.sent, clicked: c.clicked, conv: convertedOf(c, g), applies: c.applies }, { fontWeight: 500 })}
-                          </tr>
-                        ))}
-                      </Fragment>
-                    )
-                  })}
-                </Fragment>
-              )
-            })}
-            {hiddenCount > 0 && (
-              <tr onClick={() => setShowAllDays(true)} style={{ cursor: 'pointer' }}>
-                <td colSpan={7} style={{ ...td, textAlign: 'center', color: '#6B7280', fontWeight: 600 }}>
-                  {ko ? `지난 발송일 ${hiddenCount}개 더 보기` : `Show ${hiddenCount} more days`}
-                </td>
-              </tr>
-            )}
-            <tr style={{ background: '#FAFBFC' }}>
-              <td style={{ ...td, fontWeight: 800, color: '#6B7280' }}>{ko ? '소계' : 'Subtotal'}</td>
-              {numCells(sum, { fontWeight: 800 })}
+                      ))}
+                    </Fragment>
+                  )
+                })}
+              </Fragment>
+            )
+          })}
+          {hiddenCount > 0 && (
+            <tr onClick={() => setShowAllDays(true)} style={{ cursor: 'pointer' }}>
+              <td colSpan={7} style={{ ...T.td, textAlign: 'center', padding: `${G.sm}px ${G.lg}px` }}>
+                <GhostButton size="small" label={ko ? `지난 발송일 ${hiddenCount}개 더 보기` : `Show ${hiddenCount} more days`} />
+              </td>
             </tr>
-          </tbody>
-        </table>
-      </div>
+          )}
+          <tr style={cmSumRow}>
+            <td style={{ ...T.td, fontWeight: 700, borderBottom: 'none' }}>{ko ? '소계' : 'Subtotal'}</td>
+            {cmNumCells(sum, ko, pct, true)}
+          </tr>
+        </tbody>
+      </TableCard>
     </div>
   )
 }

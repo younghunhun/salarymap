@@ -140,7 +140,7 @@ export default function CommunityView({ token, lang = 'ko', dateRange }) {
       {funnel && (
         <div style={{ marginBottom: G.xl }}>
           <SectionTitle>{t.funnelTitle}</SectionTitle>
-          <div className="adm-m-scroll" style={{ display: 'flex', alignItems: 'stretch', gap: G.sm }}>
+          <div className="adm-m-scroll" style={{ display: 'flex', alignItems: 'stretch', gap: G.sm, overflowX: 'auto' }}>
             {funnelSteps.map((s, i) => (
               <Fragment key={s.label}>
                 {i > 0 && <RiArrowRightLine size={16} color={C.faint} style={{ flexShrink: 0, alignSelf: 'center' }} />}

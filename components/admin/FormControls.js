@@ -1,21 +1,27 @@
 import { useState, useEffect, useRef } from 'react'
+import { ChipGroup } from '@likelion-design/ui'
+import { RiArrowDownSLine, RiArrowLeftSLine, RiArrowRightSLine, RiCheckLine } from '@remixicon/react'
+import { G, C } from './ui'
 
 // 어드민 공고 폼 공용 커스텀 컨트롤 — 네이티브 select/date 대신 자체 UI.
-// DateRangePicker와 같은 스타일 언어 (#ff4400 악센트, 팝오버, 알약 버튼).
+// 모양은 디자인 시스템 입력(TextField size="small")에 맞춘다: 높이 36 · 모서리 4 · 1px 테두리 · 글자 15.
+// 칩은 DS ChipGroup(outline·primary) 그대로 — 높이 30, 선택 시 주황 테두리 + 옅은 주황 배경.
 
-const ACCENT = '#ff4400'
-const TINT = '#FFF1EC'
-const LBL = { display: 'block', fontSize: 12, fontWeight: 600, color: '#6B7280', marginBottom: 6 }
+const LINE = 'var(--color-gray-300, #D1D6DC)' // DS 입력 테두리(TextField 와 같은 값)
+const INK = 'var(--color-gray-800, #333D4B)'  // DS 입력 글자색
+const TINT = 'rgba(255, 96, 0, 0.08)'         // DS 칩 선택 배경
+const LBL = { display: 'block', fontSize: 13, lineHeight: 1.6, marginBottom: G.xs } // DS TextField title 과 같은 크기·줄높이(21px)
 const BTN = {
-  width: '100%', textAlign: 'left', fontSize: 13.5, padding: '10px 12px', boxSizing: 'border-box',
-  border: '1px solid #E5E8EB', borderRadius: 10, background: '#fff', cursor: 'pointer', color: '#191F28',
-  display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8,
+  width: '100%', height: 36, textAlign: 'left', fontSize: 15, padding: `0 ${G.sm}px 0 ${G.md}px`, boxSizing: 'border-box',
+  border: `1px solid ${LINE}`, borderRadius: 4, background: '#fff', cursor: 'pointer', color: INK, fontFamily: 'inherit',
+  display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.sm,
 }
 const POP = {
-  position: 'absolute', top: 'calc(100% + 6px)', left: 0, zIndex: 50, minWidth: '100%',
-  background: '#fff', border: '1px solid #E5E8EB', borderRadius: 12, boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
-  padding: 6, maxHeight: 320, overflowY: 'auto',
+  position: 'absolute', top: `calc(100% + ${G.xs}px)`, left: 0, zIndex: 50, minWidth: '100%',
+  background: '#fff', border: `1px solid ${C.border}`, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+  padding: G.xs, maxHeight: 320, overflowY: 'auto',
 }
+const ARROW = <RiArrowDownSLine size={18} style={{ color: C.faint, flexShrink: 0 }} />
 
 function useClickOutside(open, setOpen) {
   const ref = useRef(null)
@@ -34,20 +40,8 @@ export function Chips({ label, value, options, onChange }) {
   return (
     <div>
       {label && <label style={LBL}>{label}</label>}
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {options.map(o => {
-          const on = value === o.value
-          return (
-            <button key={o.value} type="button" onClick={() => onChange(o.value)} style={{
-              fontSize: 13, fontWeight: 600, cursor: 'pointer', borderRadius: 999, padding: '8px 15px',
-              border: '1px solid', borderColor: on ? ACCENT : '#E5E8EB',
-              background: on ? TINT : '#fff', color: on ? ACCENT : '#4E5968',
-            }}>
-              {o.label}
-            </button>
-          )
-        })}
-      </div>
+      <ChipGroup type="outline" variant="primary" size="medium" items={options} value={value ?? ''} onChange={onChange}
+        style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm }} />
     </div>
   )
 }
@@ -70,13 +64,13 @@ export function Dropdown({ label, value, options = [], groups = null, onChange, 
     return (
       <button key={o.value} type="button" onClick={() => { onChange(o.value); setOpen(false) }} style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%',
-        fontSize: 13.5, padding: '8px 10px', border: 'none', borderRadius: 8, cursor: 'pointer', textAlign: 'left',
-        background: on ? TINT : 'transparent', color: on ? ACCENT : '#191F28', fontWeight: on ? 700 : 500,
+        gap: G.sm, fontSize: 14, padding: `${G.sm}px ${G.md}px`, border: 'none', borderRadius: 4, cursor: 'pointer', textAlign: 'left',
+        background: on ? C.bg : 'transparent', color: C.text, fontWeight: on ? 600 : 400, fontFamily: 'inherit',
       }}
-        onMouseEnter={e => { if (!on) e.currentTarget.style.background = '#F5F6F8' }}
+        onMouseEnter={e => { if (!on) e.currentTarget.style.background = C.bg }}
         onMouseLeave={e => { if (!on) e.currentTarget.style.background = 'transparent' }}
       >
-        {o.label}{on && <span>✓</span>}
+        {o.label}{on && <RiCheckLine size={16} style={{ color: C.primary, flexShrink: 0 }} />}
       </button>
     )
   }
@@ -90,12 +84,12 @@ export function Dropdown({ label, value, options = [], groups = null, onChange, 
           defaultValue={value || ''}
           onBlur={e => { onChange(e.target.value.trim()); setCustomMode(false) }}
           onKeyDown={e => { if (e.key === 'Enter') { onChange(e.target.value.trim()); setCustomMode(false) } }}
-          style={{ width: '100%', fontSize: 13.5, padding: '10px 12px', boxSizing: 'border-box', border: `1px solid ${ACCENT}`, borderRadius: 10, outline: 'none' }}
+          style={{ width: '100%', height: 36, fontSize: 15, padding: `0 ${G.md}px`, boxSizing: 'border-box', border: `1px solid ${INK}`, borderRadius: 4, outline: 'none', color: INK, fontFamily: 'inherit' }}
         />
       ) : (
-        <button type="button" onClick={() => setOpen(v => !v)} style={BTN}>
-          <span style={{ color: display ? '#191F28' : '#ADB5BD', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{display || placeholder}</span>
-          <span style={{ color: '#ADB5BD', fontSize: 11 }}>▾</span>
+        <button type="button" onClick={() => setOpen(v => !v)} style={{ ...BTN, borderColor: open ? INK : LINE }}>
+          <span style={{ color: display ? INK : C.faint, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{display || placeholder}</span>
+          {ARROW}
         </button>
       )}
       {open && (
@@ -103,15 +97,15 @@ export function Dropdown({ label, value, options = [], groups = null, onChange, 
           {groups
             ? groups.map(g => (
                 <div key={g.key || g.label}>
-                  <div style={{ fontSize: 10.5, fontWeight: 800, color: '#9AA0A6', textTransform: 'uppercase', letterSpacing: '0.06em', padding: '8px 10px 4px' }}>{g.label}</div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: C.faint, padding: `${G.sm}px ${G.md}px ${G.xs}px` }}>{g.label}</div>
                   {g.options.map(item)}
                 </div>
               ))
             : options.map(item)}
           {allowCustom && (
             <button type="button" onClick={() => { setOpen(false); setCustomMode(true) }} style={{
-              display: 'block', width: '100%', fontSize: 13, padding: '8px 10px', border: 'none', borderTop: '1px solid #F2F4F6',
-              borderRadius: 0, cursor: 'pointer', textAlign: 'left', background: 'transparent', color: '#6B7280', fontWeight: 600, marginTop: 4,
+              display: 'block', width: '100%', fontSize: 14, padding: `${G.sm}px ${G.md}px`, border: 'none', borderTop: `1px solid ${C.line}`,
+              borderRadius: 0, cursor: 'pointer', textAlign: 'left', background: 'transparent', color: C.sub, fontWeight: 400, marginTop: G.xs, fontFamily: 'inherit',
             }}>
               {customLabel}
             </button>
@@ -147,33 +141,33 @@ export function DatePickerSingle({ label, value, onChange, emptyLabel = '상시 
   const cells = [...Array(startPad).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)]
   const todayS = fmt(today)
 
-  const navBtn = { width: 26, height: 26, border: 'none', background: 'transparent', cursor: 'pointer', color: '#4E5968', fontSize: 14, borderRadius: 6 }
-  const presetBtn = { fontSize: 12, fontWeight: 600, cursor: 'pointer', borderRadius: 999, padding: '5px 11px', border: '1px solid #E5E8EB', background: '#fff', color: '#4E5968' }
+  const navBtn = { width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, border: 'none', background: 'transparent', cursor: 'pointer', color: C.body, borderRadius: 4 }
+  const presetBtn = { height: 28, fontSize: 13, cursor: 'pointer', borderRadius: 999, padding: `0 ${G.md}px`, border: `1px solid ${LINE}`, background: '#fff', color: INK, fontFamily: 'inherit' }
 
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       {label && <label style={LBL}>{label}</label>}
-      <button type="button" onClick={() => setOpen(v => !v)} style={BTN}>
-        <span style={{ color: value ? '#191F28' : '#ADB5BD' }}>{value || emptyLabel}</span>
-        <span style={{ color: '#ADB5BD', fontSize: 11 }}>▾</span>
+      <button type="button" onClick={() => setOpen(v => !v)} style={{ ...BTN, borderColor: open ? INK : LINE }}>
+        <span style={{ color: value ? INK : C.faint }}>{value || emptyLabel}</span>
+        {ARROW}
       </button>
       {open && (
-        <div style={{ ...POP, width: 252, padding: 12 }}>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-            <button type="button" style={{ ...presetBtn, ...(value ? {} : { borderColor: ACCENT, background: TINT, color: ACCENT }) }} onClick={() => { onChange(''); setOpen(false) }}>{emptyLabel}</button>
+        <div style={{ ...POP, left: 'auto', right: 0, minWidth: 0, width: 264, padding: G.md }}>
+          <div style={{ display: 'flex', gap: G.xs, flexWrap: 'wrap', marginBottom: G.md }}>
+            <button type="button" style={{ ...presetBtn, ...(value ? {} : { borderColor: C.primary, background: TINT, color: C.primary }) }} onClick={() => { onChange(''); setOpen(false) }}>{emptyLabel}</button>
             {presets.map(d => (
               <button key={d} type="button" style={presetBtn} onClick={() => {
                 const t = new Date(); t.setDate(t.getDate() + d); onChange(fmt(t)); setOpen(false)
               }}>+{d}d</button>
             ))}
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <button type="button" style={navBtn} onClick={() => { const m = viewM - 1; setViewM((m + 12) % 12); if (m < 0) setViewY(viewY - 1) }}>‹</button>
-            <div style={{ fontSize: 13, fontWeight: 700, color: '#191F28' }}>{MONTHS_EN[viewM]} {viewY}</div>
-            <button type="button" style={navBtn} onClick={() => { const m = viewM + 1; setViewM(m % 12); if (m > 11) setViewY(viewY + 1) }}>›</button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: G.xs }}>
+            <button type="button" style={navBtn} onClick={() => { const m = viewM - 1; setViewM((m + 12) % 12); if (m < 0) setViewY(viewY - 1) }}><RiArrowLeftSLine size={18} /></button>
+            <div style={{ fontSize: 14, fontWeight: 600, color: C.text }}>{MONTHS_EN[viewM]} {viewY}</div>
+            <button type="button" style={navBtn} onClick={() => { const m = viewM + 1; setViewM(m % 12); if (m > 11) setViewY(viewY + 1) }}><RiArrowRightSLine size={18} /></button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}>
-            {WD.map((w, i) => <div key={i} style={{ fontSize: 10.5, fontWeight: 700, color: '#9AA0A6', textAlign: 'center', padding: '2px 0' }}>{w}</div>)}
+            {WD.map((w, i) => <div key={i} style={{ fontSize: 12, fontWeight: 600, color: C.faint, textAlign: 'center', padding: `${G.xs}px 0` }}>{w}</div>)}
             {cells.map((d, i) => {
               if (!d) return <div key={i} />
               const s = `${viewY}-${pad(viewM + 1)}-${pad(d)}`
@@ -181,12 +175,12 @@ export function DatePickerSingle({ label, value, onChange, emptyLabel = '상시 
               const isToday = s === todayS
               return (
                 <button key={i} type="button" onClick={() => { onChange(s); setOpen(false) }} style={{
-                  width: '100%', aspectRatio: '1', border: 'none', borderRadius: 7, cursor: 'pointer', fontSize: 12.5,
-                  fontWeight: sel || isToday ? 700 : 500,
-                  background: sel ? ACCENT : 'transparent',
-                  color: sel ? '#fff' : isToday ? ACCENT : '#191F28',
+                  width: '100%', aspectRatio: '1', padding: 0, border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 13, fontFamily: 'inherit',
+                  fontWeight: sel || isToday ? 600 : 400, fontVariantNumeric: 'tabular-nums',
+                  background: sel ? C.primary : 'transparent',
+                  color: sel ? '#fff' : isToday ? C.primary : C.text,
                 }}
-                  onMouseEnter={e => { if (!sel) e.currentTarget.style.background = '#F5F6F8' }}
+                  onMouseEnter={e => { if (!sel) e.currentTarget.style.background = C.bg }}
                   onMouseLeave={e => { if (!sel) e.currentTarget.style.background = 'transparent' }}
                 >{d}</button>
               )

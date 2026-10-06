@@ -2,11 +2,13 @@ import { useState } from 'react'
 import UserAssetCards from './UserAssetCards'
 import { useAdmin } from '../../lib/adminSwr'
 import { getSalaryTier, normalizeTrieu } from '../../lib/salaryTiers'
+import { RiFileTextLine, RiUserLine } from '@remixicon/react'
+import { G, C, ellipsis, num, PrimaryButton, SecondaryButton, Field, FilterTabs, StatusTag, Card, State } from './ui'
 
 const STATUS = {
-  pending:  { ko: '검토 대기', en: 'Pending',  vi: 'Chờ duyệt',   bg: '#D97706' },
-  approved: { ko: '승인됨',   en: 'Approved', vi: 'Đã duyệt',    bg: '#059669' },
-  rejected: { ko: '반려됨',   en: 'Rejected', vi: 'Đã từ chối',  bg: '#DC2626' },
+  pending:  { ko: '검토 대기', en: 'Pending',  vi: 'Chờ duyệt',   tone: 'warning' },
+  approved: { ko: '승인됨',   en: 'Approved', vi: 'Đã duyệt',    tone: 'success' },
+  rejected: { ko: '반려됨',   en: 'Rejected', vi: 'Đã từ chối',  tone: 'error' },
 }
 
 const DOC_LABELS = {
@@ -93,90 +95,85 @@ export default function VerificationsView({ token, lang }) {
     setActionLoading(null)
   }
 
-  const pill = (on) => ({ fontSize: 12.5, fontWeight: 600, cursor: 'pointer', borderRadius: 999, padding: '6px 14px', border: '1px solid', borderColor: on ? '#ff4400' : '#E5E8EB', background: on ? '#FFF1EC' : '#fff', color: on ? '#ff4400' : '#4E5968' })
-  const inp = { width: '100%', padding: '7px 11px', border: '1px solid #E5E8EB', borderRadius: 8, fontSize: 13, fontFamily: 'inherit', outline: 'none', boxSizing: 'border-box' }
   const FILTERS = [['pending', STATUS.pending[lk]], ['approved', STATUS.approved[lk]], ['rejected', STATUS.rejected[lk]], ['all', L.all]]
 
   return (
-    <div>
+    <div style={{ paddingBottom: 40 }}>
       <UserAssetCards token={token} keys={['verifiedWorkers', 'approvedVerifications']} lang={lang} />
 
-      <div style={{ display: 'flex', gap: 6, marginBottom: 18, flexWrap: 'wrap' }}>
-        {FILTERS.map(([k, label]) => (
-          <button key={k} onClick={() => setFilter(k)} style={pill(filter === k)}>{label}</button>
-        ))}
+      <div style={{ marginBottom: G.lg }}>
+        <FilterTabs value={filter} onChange={setFilter} items={FILTERS.map(([value, label]) => ({ value, label }))} />
       </div>
 
       {loading ? (
-        <div style={{ textAlign: 'center', padding: 40, color: '#ADB5BD' }}>{L.loading}</div>
+        <State kind="loading">{L.loading}</State>
       ) : verifications.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: 48, color: '#ADB5BD', fontSize: 14 }}>{L.empty}</div>
+        <State kind="empty" title={L.empty} />
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12, alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: G.md, alignItems: 'start' }}>
           {verifications.map(v => {
             const st = STATUS[v.status] || STATUS.pending
             return (
-            <div key={v.id} style={{ background: '#fff', border: '1px solid #EEF0F2', borderRadius: 12, padding: '13px 15px' }}>
+            <Card key={v.id}>
               {/* Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.md, marginBottom: G.lg }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, minWidth: 0 }}>
                   {v.profile?.photo_url ? (
-                    <img src={v.profile.photo_url} style={{ width: 30, height: 30, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
+                    <img src={v.profile.photo_url} style={{ width: 36, height: 36, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} alt="" />
                   ) : (
-                    <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#F2F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ADB5BD" strokeWidth="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    <div style={{ width: 36, height: 36, borderRadius: '50%', background: C.line, color: C.faint, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <RiUserLine size={16} />
                     </div>
                   )}
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 700, color: '#191F28' }}>{v.profile?.full_name || 'Unknown'}</div>
-                    <div style={{ fontSize: 11.5, color: '#8B95A1', marginTop: 1 }}>{v.profile?.verified_company_name || '-'}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: C.text, lineHeight: 1.4, ...ellipsis }}>{v.profile?.full_name || 'Unknown'}</div>
+                    <div style={{ fontSize: 12, color: C.sub, lineHeight: 1.4, ...ellipsis }}>{v.profile?.verified_company_name || '-'}</div>
                   </div>
                 </div>
-                <span style={{ flexShrink: 0, fontSize: 11, fontWeight: 700, padding: '3px 10px', borderRadius: 999, background: st.bg, color: '#fff' }}>{st[lk]}</span>
+                <StatusTag tone={st.tone}>{st[lk]}</StatusTag>
               </div>
 
               {/* Details */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginBottom: 12 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: G.sm, marginBottom: G.lg }}>
                 {[
                   [L.docType, (DOC_LABELS[v.document_type] && DOC_LABELS[v.document_type][lk]) || v.document_type],
                   [L.salary, v.salary_amount ? `${normalizeTrieu(v.salary_amount).toLocaleString()}M VND` : '-'],
                   [L.requested, new Date(v.created_at).toLocaleDateString(locale)],
                 ].map(([label, val]) => (
-                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 8, fontSize: 12.5 }}>
-                    <span style={{ color: '#8B95A1' }}>{label}</span>
-                    <span style={{ color: '#191F28', fontWeight: 600, textAlign: 'right' }}>{val}</span>
+                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: G.sm, fontSize: 13, lineHeight: 1.4 }}>
+                    <span style={{ color: C.sub }}>{label}</span>
+                    <span style={{ color: C.text, fontWeight: 600, textAlign: 'right', ...num }}>{val}</span>
                   </div>
                 ))}
               </div>
 
               {/* Document Link */}
-              <a href={v.document_url} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 11px', borderRadius: 8, border: '1px solid #E5E8EB', background: '#fff', color: '#4E5968', fontSize: 12, fontWeight: 600, textDecoration: 'none', marginBottom: v.status === 'pending' ? 12 : 0 }}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                {L.viewDoc}
-              </a>
+              <SecondaryButton size="small" prefixIcon={<RiFileTextLine size={14} />} label={L.viewDoc}
+                onClick={() => window.open(v.document_url, '_blank', 'noopener,noreferrer')} />
 
               {/* Admin Actions */}
               {v.status === 'pending' && (() => {
                 const trieu = normalizeTrieu(parseInt(salaryInput[v.id], 10))
                 const tier = trieu > 0 ? getSalaryTier(trieu * 1000000) : null
                 return (
-                <div style={{ borderTop: '1px solid #F2F4F6', paddingTop: 12 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-                    <div style={{ position: 'relative', flex: 1, minWidth: 120 }}>
-                      <input type="number" value={salaryInput[v.id] || ''} onChange={e => setSalaryInput(prev => ({ ...prev, [v.id]: e.target.value }))} placeholder={L.salaryPh}
-                        style={{ ...inp, padding: '7px 70px 7px 11px', fontWeight: 600 }} />
-                      <span style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 12, color: '#ADB5BD' }}>{L.unit}</span>
+                <div style={{ borderTop: `1px solid ${C.line}`, marginTop: G.lg, paddingTop: G.lg }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, marginBottom: G.sm, flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: 120 }}>
+                      <Field inputType="number" value={salaryInput[v.id] || ''} onChange={e => setSalaryInput(prev => ({ ...prev, [v.id]: e.target.value }))}
+                        placeholder={L.salaryPh} suffixUnit={<span style={{ whiteSpace: 'nowrap', fontSize: 13, color: C.faint }}>{L.unit}</span>} />
                     </div>
                     {tier && (
-                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '7px 11px', borderRadius: 8, background: tier.grad, color: '#fff', fontSize: 12, fontWeight: 800, whiteSpace: 'nowrap' }}>→ {ko ? tier.defaultLabel : tier.enLabel}</span>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, fontWeight: 600, color: C.body, whiteSpace: 'nowrap' }}>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', background: tier.color, flexShrink: 0 }} />
+                        {ko ? tier.defaultLabel : tier.enLabel}
+                      </span>
                     )}
                   </div>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button onClick={() => handleAction(v.id, 'approved')} disabled={actionLoading === v.id}
-                      style={{ flex: 1, padding: '7px 0', borderRadius: 8, border: 'none', background: '#059669', color: '#fff', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', opacity: actionLoading === v.id ? 0.5 : 1 }}>{L.approve}</button>
-                    <button onClick={() => handleAction(v.id, 'rejected')} disabled={actionLoading === v.id}
-                      style={{ flex: 1, padding: '7px 0', borderRadius: 8, border: '1px solid #E5E8EB', background: '#fff', color: '#DC2626', fontSize: 12.5, fontWeight: 700, cursor: 'pointer', opacity: actionLoading === v.id ? 0.5 : 1 }}>{L.reject}</button>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: G.sm }}>
+                    <PrimaryButton label={L.approve} disabled={actionLoading === v.id} style={{ width: '100%' }}
+                      onClick={() => handleAction(v.id, 'approved')} />
+                    <SecondaryButton label={L.reject} disabled={actionLoading === v.id} style={{ width: '100%' }}
+                      onClick={() => handleAction(v.id, 'rejected')} />
                   </div>
                 </div>
                 )
@@ -184,11 +181,11 @@ export default function VerificationsView({ token, lang }) {
 
               {/* Reviewer info */}
               {v.status !== 'pending' && v.reviewed_by && (
-                <div style={{ fontSize: 11.5, color: '#ADB5BD', marginTop: 12, paddingTop: 12, borderTop: '1px solid #F2F4F6' }}>
+                <div style={{ fontSize: 12, color: C.faint, marginTop: G.lg, paddingTop: G.md, borderTop: `1px solid ${C.line}`, lineHeight: 1.5 }}>
                   {v.reviewed_by} · {v.reviewed_at ? new Date(v.reviewed_at).toLocaleString(locale) : ''}{v.admin_note && ` · ${v.admin_note}`}
                 </div>
               )}
-            </div>
+            </Card>
             )
           })}
         </div>

@@ -1,12 +1,46 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
-import { ActionButton, TextField, TabGroup } from '@likelion-design/ui'
-import { RiSearchLine, RiFilter3Line, RiDownloadLine, RiSparkling2Line } from '@remixicon/react'
+import { ActionButton, TextField, TabGroup, Chip, IconButton } from '@likelion-design/ui'
+import { RiSearchLine, RiFilter3Line, RiDownloadLine, RiSparkling2Line, RiCloseLine, RiArrowDownSLine, RiExternalLinkLine } from '@remixicon/react'
 import { useAdmin } from '../../lib/adminSwr'
 import { isTopTier, overseasOf, classifyUniversity } from '../../lib/topUniversities'
 import { ROLE_GROUPS } from '../../constants/jobs'
 import { ELITE_CATS, asSkills, asExperiences, eliteCategory } from '../../lib/talentCategory'
 import { vndMToKrwText } from '../../lib/fx'
+import { G, C, ellipsis, num, PrimaryButton, SecondaryButton, GhostButton, StatusTag, Card, State, Notice } from './ui'
+
+// ── 이 파일 전용 UI 조각(키트에 없는 것) ───────────────────────────────
+// 선택 칩 — DS Chip(outline·primary·medium = 30px 알약). 필터 모달·최우수 카테고리·메일 언어가 같은 모양을 쓴다.
+// count 는 라벨 옆 흐린 숫자(옵션별 건수).
+function Opt({ on, onClick, count, children }) {
+  return (
+    <Chip type="outline" variant="primary" size="medium" showCheck={false} value="" checked={!!on} onChange={onClick}
+      label={count === undefined ? children : <>{children}<span style={{ marginLeft: 6, color: C.faint, ...num }}>{count.toLocaleString()}</span></>} />
+  )
+}
+// 모달 — 어두운 배경 + 흰 패널(반경 12, 여백 24). 머리(제목 16/600 · 보조 줄 · 닫기)와 바닥(버튼 줄)은 고정,
+// 본문만 스크롤된다(옵션이 많아도 완료 버튼이 화면 밖으로 밀리지 않게). 배경 클릭으로 닫힌다.
+function Modal({ width, title, sub, footer, onClose, children }) {
+  return (
+    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(25,31,40,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 12, width, maxWidth: '100%', maxHeight: '85vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 12px 40px rgba(25,31,40,0.2)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: G.md, padding: `${G.xl}px ${G.xl}px ${G.lg}px` }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontSize: 16, fontWeight: 600, color: C.text, lineHeight: 1.4 }}>{title}</div>
+            {sub && <div style={{ fontSize: 13, color: C.sub, lineHeight: 1.5, marginTop: 2 }}>{sub}</div>}
+          </div>
+          <IconButton size="small" type="solid" color="secondary" icon={<RiCloseLine size={16} />} aria-label="close" onClick={onClose} />
+        </div>
+        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `${G.sm}px ${G.xl}px 0` }}>{children}</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, padding: `${G.lg}px ${G.xl}px`, borderTop: `1px solid ${C.line}` }}>{footer}</div>
+      </div>
+    </div>
+  )
+}
+const fieldLabel = { fontSize: 12, fontWeight: 600, color: C.sub, marginBottom: G.sm }
+// 카드 안 회색 칩(기술·포폴·명문대) — 키트 StatusTag(neutral)와 같은 모양의 가벼운 span.
+// 카드가 5천 장 넘게 한 번에 그려져 칩만 3만 개가 넘는다. DS Tag 컴포넌트로 그리면 목록 마운트가 눈에 띄게 느려져 여기만 직접 그린다.
+const miniChip = { display: 'inline-flex', alignItems: 'center', gap: G.xs, height: 22, padding: `0 ${G.sm}px`, borderRadius: 6, background: C.line, color: C.body, fontSize: 12, fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0, textDecoration: 'none' }
 
 // 인재의 학벌 신호 = 도메인 인증 학교(authoritative) ∪ 이력서 자유입력 university.
 // 인증 학교는 verified_school_tier(='top')로 바로 명문대 집계되고, 그 외엔 자유입력
@@ -118,7 +152,7 @@ export default function TalentPoolView({ token, lang }) {
     noMatch: 'Không có ứng viên phù hợp.',
     statTotal: 'Tổng', statPublic: 'Công khai', people: '', statTop: 'Trường top', statOverseas: 'Du học', statKorean: 'Tiếng Hàn', filtered: 'Đã lọc',
     searchPh: 'Tên, vị trí, công ty, trường, kỹ năng...', csv: 'Tải CSV',
-    all: 'Tất cả', fPublic: '🔓 Công khai', fTop: '🎓 Trường top', fOverseas: '🌏 Du học', fKorean: '🇰🇷 Tiếng Hàn', allWork: 'Tất cả hình thức',
+    all: 'Tất cả', fPublic: 'Công khai', fTop: 'Trường top', fOverseas: 'Du học', fKorean: 'Tiếng Hàn', allWork: 'Tất cả hình thức',
     badgePublic: 'Công khai', lblGroup: 'Nhóm ngành', lblRole: 'Vị trí', lblCond: 'Điều kiện',
     eliteBtn: 'Ứng viên xuất sắc', aiFillAll: 'Điền AI tất cả', batchStop: 'Dừng', batchDone: 'Hoàn tất',
     filterBtn: 'Bộ lọc', reset: 'Đặt lại', done: 'Xong', lblLevel: 'Kinh nghiệm', lblWork: 'Hình thức',
@@ -126,7 +160,7 @@ export default function TalentPoolView({ token, lang }) {
     rowSalary: 'Lương/năm', salarySrcProfile: 'tự khai', salarySrcVerified: 'đã xác minh',
     topNote: 'Trường top VN', langEn: 'T.Anh', langKo: 'T.Hàn', noInfo: 'Chưa rõ', newGrad: 'Fresher',
     unknown: 'Chưa rõ', noRole: 'Chưa rõ vị trí', levelUnknown: 'Cấp bậc?', aiFill: 'Điền bằng AI', aiFilling: 'Đang phân tích…',
-    aiTitle: 'Kinh nghiệm/ngoại ngữ còn trống — bấm để điền bằng AI', resume: 'CV →',
+    aiTitle: 'Kinh nghiệm/ngoại ngữ còn trống — bấm để điền bằng AI', resume: 'Xem CV',
     unclassified: 'Chưa phân loại', parseFail: 'Phân tích thất bại', retry: 'Thử lại',
     recBtn: 'Đề xuất việc', recApplied: 'đã ứng tuyển',
     poolTitle: 'Nguồn ứng viên', noName: 'Không có tên',
@@ -135,7 +169,7 @@ export default function TalentPoolView({ token, lang }) {
     noMatch: '조건에 맞는 인재가 없습니다.',
     statTotal: '전체', statPublic: '공개', people: '명', statTop: '명문대', statOverseas: '해외', statKorean: '한국어', filtered: '필터',
     searchPh: '이름, 직무, 회사, 학교, 스킬...', csv: 'CSV 다운로드',
-    all: '전체', fPublic: '🔓 공개', fTop: '🎓 명문대', fOverseas: '🌏 해외대', fKorean: '🇰🇷 한국어', allWork: '근무형태 전체',
+    all: '전체', fPublic: '공개', fTop: '명문대', fOverseas: '해외대', fKorean: '한국어', allWork: '근무형태 전체',
     badgePublic: '공개', lblGroup: '직군', lblRole: '세부 직무', lblCond: '조건',
     eliteBtn: '최우수 인재', aiFillAll: 'AI 전체 채우기', batchStop: '중단', batchDone: '완료',
     filterBtn: '필터', reset: '초기화', done: '완료', lblLevel: '경력', lblWork: '근무형태',
@@ -143,7 +177,7 @@ export default function TalentPoolView({ token, lang }) {
     rowSalary: '연봉', salarySrcProfile: '직접기입', salarySrcVerified: '뱃지 인증',
     topNote: '베트남 상위권 대학 (한국 인서울급)', langEn: '영어', langKo: '한국어', noInfo: '정보 없음', newGrad: '신입',
     unknown: '미상', noRole: '직무 미상', levelUnknown: '경력?', aiFill: 'AI 채우기', aiFilling: '분석 중…',
-    aiTitle: '경력/어학이 비어 있어요 — 눌러서 AI로 채웁니다', resume: '이력서 보기',
+    aiTitle: '경력/어학이 비어 있습니다 — 누르면 AI로 채웁니다', resume: '이력서 보기',
     unclassified: '미분류', parseFail: '분석 실패', retry: '재시도',
     recBtn: '공고 추천', recApplied: '지원',
     poolTitle: '공개 인재풀', noName: '이름 없음',
@@ -152,7 +186,7 @@ export default function TalentPoolView({ token, lang }) {
     noMatch: 'No matching talent.',
     statTotal: 'Total', statPublic: 'Public', people: '', statTop: 'Top-tier', statOverseas: 'Overseas', statKorean: 'Korean', filtered: 'Filtered',
     searchPh: 'Name, role, company, school, skills...', csv: 'Download CSV',
-    all: 'All', fPublic: '🔓 Public', fTop: '🎓 Top-tier', fOverseas: '🌏 Overseas', fKorean: '🇰🇷 Korean', allWork: 'All work types',
+    all: 'All', fPublic: 'Public', fTop: 'Top-tier', fOverseas: 'Overseas', fKorean: 'Korean', allWork: 'All work types',
     badgePublic: 'Public', lblGroup: 'Group', lblRole: 'Role', lblCond: 'Filters',
     eliteBtn: 'Top talent', aiFillAll: 'AI fill all', batchStop: 'Stop', batchDone: 'Done',
     filterBtn: 'Filters', reset: 'Reset', done: 'Done', lblLevel: 'Level', lblWork: 'Work type',
@@ -160,7 +194,7 @@ export default function TalentPoolView({ token, lang }) {
     rowSalary: 'Salary/yr', salarySrcProfile: 'self-reported', salarySrcVerified: 'badge-verified',
     topNote: 'Top-tier VN univ.', langEn: 'EN', langKo: 'KO', noInfo: 'N/A', newGrad: 'New grad',
     unknown: 'Unknown', noRole: 'No role', levelUnknown: 'Level?', aiFill: 'AI fill', aiFilling: 'Filling…',
-    aiTitle: 'Career/language empty — click to fill with AI', resume: 'Resume →',
+    aiTitle: 'Career/language empty — click to fill with AI', resume: 'View resume',
     unclassified: 'Unclassified', parseFail: 'Parse failed', retry: 'Retry',
     recBtn: 'Recommend', recApplied: 'applied',
     poolTitle: 'Talent Pool', noName: 'No name',
@@ -185,12 +219,17 @@ export default function TalentPoolView({ token, lang }) {
   const [batch, setBatch] = useState(null) // AI 전체 채우기 진행상태 { total, done, fail } | null
   const batchCancel = useRef(false)
   const [filterOpen, setFilterOpen] = useState(false) // 필터 모달
+  // 카드 5,000장+ 를 한 번에 그리면 첫 표시가 5~6초 걸린다(카드마다 DS 버튼 2~3개) — 60장씩 이어 붙인다.
+  // 검색·필터·CSV 는 전체(filtered) 대상 그대로이고, 화면에 그리는 것만 자른다. 조건이 바뀌면 처음부터.
+  const PAGE_SIZE = 60
+  const [visible, setVisible] = useState(PAGE_SIZE)
+  useEffect(() => { setVisible(PAGE_SIZE) }, [search, groupSel, posFilter, levelFilter, workFilter, koreanOnly, topOnly, overseasOnly, publicOnly])
 
-  if (loading) return <div style={{ textAlign: 'center', padding: 40, color: '#666' }}>{L.loadingPool}</div>
+  if (loading) return <State kind="loading">{L.loadingPool}</State>
 
   // 이력서 보유자 전체 — 공개 여부는 필터 칩(publicOnly)과 카드 뱃지로 구분한다.
   const pool = all || []
-  if (pool.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#999' }}>{L.emptyPool}</div>
+  if (pool.length === 0) return <State kind="empty" title={L.emptyPool} />
 
   async function reparse(userId) {
     if (parsingId) return
@@ -334,9 +373,9 @@ export default function TalentPoolView({ token, lang }) {
     setPublicOnly(false); setTopOnly(false); setOverseasOnly(false); setKoreanOnly(false)
   }
   const fSection = (label, node) => (
-    <div style={{ marginBottom: 18 }}>
-      <div style={{ fontSize: 11, fontWeight: 800, color: '#9CA3AF', marginBottom: 8, letterSpacing: 0.2 }}>{label}</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7 }}>{node}</div>
+    <div style={{ marginBottom: G.xl }}>
+      <div style={fieldLabel}>{label}</div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm }}>{node}</div>
     </div>
   )
 
@@ -364,49 +403,40 @@ export default function TalentPoolView({ token, lang }) {
     URL.revokeObjectURL(url)
   }
 
-  const chip = (active) => ({
-    padding: '5px 12px', borderRadius: 999, fontSize: 12, fontWeight: 600,
-    border: `1px solid ${active ? '#ff6000' : '#E5E8EB'}`, cursor: 'pointer',
-    background: active ? '#ff600014' : '#fff', color: active ? '#ff6000' : '#6B7280',
-    transition: 'all 0.15s',
-  })
-  const cntStyle = { color: '#9CA3AF', fontWeight: 500 }
-
   return (
     <>
       <style>{`
-        .tp-card { transition: box-shadow 0.15s, border-color 0.15s; }
-        .tp-card:hover { border-color: #ff6000; box-shadow: 0 2px 10px rgba(15,23,42,0.06); }
         .jobsel-dropdown::-webkit-scrollbar { width: 6px; }
-        .jobsel-dropdown::-webkit-scrollbar-thumb { background: #E5E8EB; border-radius: 3px; }
+        .jobsel-dropdown::-webkit-scrollbar-thumb { background: #E5E7EA; border-radius: 3px; }
       `}</style>
 
       {/* 컨트롤 한 줄 — 왼쪽: 모드(인재풀 ↔ 최우수) + 필터, 오른쪽: 검색 · AI 채우기 · CSV.
           예전엔 모드 탭 / 건수+검색 / 필터가 세 줄로 쌓여 있었다(10/6 디자인 시스템 컴포넌트로 정리).
           전체·공개·학교 합계는 TalentView 요약 줄에 있고, 여기엔 필터가 걸렸을 때의 건수만 남긴다. */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.md, flexWrap: 'wrap', marginBottom: G.lg }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: G.sm, minWidth: 0, flexWrap: 'wrap', flex: '1 1 420px' }}>
           <TabGroup type="round" size="medium" gap={8} value={mode} onChange={setMode}
-            items={[{ value: 'pool', label: L.poolTitle }, { value: 'elite', label: `⭐ ${L.eliteBtn}` }]} />
+            items={[{ value: 'pool', label: L.poolTitle }, { value: 'elite', label: L.eliteBtn }]} />
           {mode === 'pool' && <>
-            <span style={{ width: 1, height: 20, background: '#E5E7EA', margin: '0 4px' }} />
+            <span style={{ width: 1, height: 20, background: C.border, margin: `0 ${G.xs}px` }} />
             <ActionButton size="medium" color={activeFilters.length ? 'primary' : 'neutral'} type="outline"
               prefixIcon={<RiFilter3Line size={16} />}
               label={activeFilters.length ? `${L.filterBtn} ${activeFilters.length}` : L.filterBtn}
               onClick={() => setFilterOpen(true)} />
             {activeFilters.length > 0 && <>
-              <span style={{ fontSize: 13, color: '#6B7583', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0, maxWidth: 320 }}>
-                <b style={{ color: '#ff6000' }}>{filtered.length}{L.people}</b> · {activeFilters.join(' · ')}
+              {/* 요약 글자는 남는 폭만큼만 차지하고 넘치면 … — 필터가 걸려도 검색·CSV 묶음이 아랫줄로 밀리지 않는다 */}
+              <span style={{ fontSize: 13, color: C.sub, ...ellipsis, flex: '1 1 0', minWidth: 80, maxWidth: 'max-content' }}>
+                <b style={{ color: C.primary, fontWeight: 600, ...num }}>{filtered.length.toLocaleString()}{L.people}</b> · {activeFilters.join(' · ')}
               </span>
-              <ActionButton size="small" color="neutral" type="ghost" label={L.reset} onClick={resetFilters} />
+              <GhostButton label={L.reset} onClick={resetFilters} />
             </>}
             {activeFilters.length === 0 && filtered.length !== pool.length && (
-              <span style={{ fontSize: 13, color: '#ff6000', fontWeight: 600 }}>{L.filtered} {filtered.length}{L.people}</span>
+              <span style={{ fontSize: 13, color: C.primary, fontWeight: 600, ...num }}>{L.filtered} {filtered.length.toLocaleString()}{L.people}</span>
             )}
           </>}
         </div>
         {mode === 'pool' && (
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: G.sm, alignItems: 'center' }}>
             <TextField type="input" size="small" width={240} value={search} onChange={e => setSearch(e.target.value)}
               prefixIcon={<RiSearchLine size={16} />} placeholder={L.searchPh} />
             {(parseTargets.length > 0 || batch) && (
@@ -426,82 +456,70 @@ export default function TalentPoolView({ token, lang }) {
       {mode === 'pool' && <>
       {/* 필터 모달: 직군 → 세부 직무 → 경력 → 스펙 → 근무형태 (클릭 즉시 반영) */}
       {filterOpen && (
-        <div onClick={() => setFilterOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, width: 600, maxWidth: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '20px 22px', boxShadow: '0 12px 40px rgba(15,23,42,0.2)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
-              <div style={{ fontSize: 16, fontWeight: 800 }}>{L.filterBtn} <span style={{ fontSize: 12.5, fontWeight: 600, color: '#9CA3AF' }}>· {filtered.length}{L.people}</span></div>
-              <button onClick={() => setFilterOpen(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 18, color: '#9CA3AF', padding: 0, lineHeight: 1 }}>×</button>
-            </div>
+        <Modal width={600} onClose={() => setFilterOpen(false)}
+          title={<>{L.filterBtn} <span style={{ fontSize: 13, fontWeight: 500, color: C.faint, marginLeft: G.xs, ...num }}>{filtered.length.toLocaleString()}{L.people}</span></>}
+          footer={<>
+            <GhostButton label={L.reset} onClick={resetFilters} />
+            <span style={{ flex: 1 }} />
+            <PrimaryButton label={`${L.done} (${filtered.length.toLocaleString()})`} onClick={() => setFilterOpen(false)} />
+          </>}
+        >
 
-            {fSection(L.lblGroup, (
-              <>
-                <button onClick={() => { setGroupSel([]); setPosFilter('all') }} style={chip(groupSel.length === 0)}>{L.all} <span style={cntStyle}>{pool.length}</span></button>
-                {ADMIN_GROUPS.filter(g => groupCounts[g.key]).map(g => (
-                  <button key={g.key} onClick={() => toggleGroup(g.key)} style={chip(groupSel.includes(g.key))}>
-                    {g.label[langKey]} <span style={cntStyle}>{groupCounts[g.key]}</span>
-                  </button>
-                ))}
-                {groupCounts.etc > 0 && (
-                  <button onClick={() => toggleGroup('etc')} style={chip(groupSel.includes('etc'))}>
-                    {L.unclassified} <span style={cntStyle}>{groupCounts.etc}</span>
-                  </button>
-                )}
-              </>
-            ))}
+          {fSection(L.lblGroup, (
+            <>
+              <Opt on={groupSel.length === 0} onClick={() => { setGroupSel([]); setPosFilter('all') }} count={pool.length}>{L.all}</Opt>
+              {ADMIN_GROUPS.filter(g => groupCounts[g.key]).map(g => (
+                <Opt key={g.key} on={groupSel.includes(g.key)} onClick={() => toggleGroup(g.key)} count={groupCounts[g.key]}>{g.label[langKey]}</Opt>
+              ))}
+              {groupCounts.etc > 0 && (
+                <Opt on={groupSel.includes('etc')} onClick={() => toggleGroup('etc')} count={groupCounts.etc}>{L.unclassified}</Opt>
+              )}
+            </>
+          ))}
 
-            {subRoles.length > 1 && fSection(L.lblRole, (
-              <>
-                <button onClick={() => setPosFilter('all')} style={chip(posFilter === 'all')}>{L.all}</button>
-                {subRoles.map(sr => (
-                  <button key={sr.value || '_none'} onClick={() => setPosFilter(sr.value)} style={chip(posFilter === sr.value)}>
-                    {sr.label} <span style={cntStyle}>{roleCounts[sr.value]}</span>
-                  </button>
-                ))}
-              </>
-            ))}
+          {subRoles.length > 1 && fSection(L.lblRole, (
+            <>
+              <Opt on={posFilter === 'all'} onClick={() => setPosFilter('all')}>{L.all}</Opt>
+              {subRoles.map(sr => (
+                <Opt key={sr.value || '_none'} on={posFilter === sr.value} onClick={() => setPosFilter(sr.value)} count={roleCounts[sr.value]}>{sr.label}</Opt>
+              ))}
+            </>
+          ))}
 
-            {fSection(L.lblLevel, (
-              <>
-                <button onClick={() => setLevelFilter('all')} style={chip(levelFilter === 'all')}>{L.all}</button>
-                {LEVELS.map(l => {
-                  const count = pool.filter(r => levelOf(r.yoe_months) === l.key).length
-                  if (count === 0) return null
-                  return <button key={l.key} onClick={() => setLevelFilter(l.key)} style={chip(levelFilter === l.key)}>{levelLabel(l)} <span style={cntStyle}>{count}</span></button>
-                })}
-              </>
-            ))}
+          {fSection(L.lblLevel, (
+            <>
+              <Opt on={levelFilter === 'all'} onClick={() => setLevelFilter('all')}>{L.all}</Opt>
+              {LEVELS.map(l => {
+                const count = pool.filter(r => levelOf(r.yoe_months) === l.key).length
+                if (count === 0) return null
+                return <Opt key={l.key} on={levelFilter === l.key} onClick={() => setLevelFilter(l.key)} count={count}>{levelLabel(l)}</Opt>
+              })}
+            </>
+          ))}
 
-            {fSection(L.lblCond, (
-              <>
-                <button onClick={() => setPublicOnly(v => !v)} style={chip(publicOnly)}>{L.fPublic} <span style={cntStyle}>{publicCount}</span></button>
-                {topTierCount > 0 && <button onClick={() => setTopOnly(v => !v)} style={chip(topOnly)}>{L.fTop} <span style={cntStyle}>{topTierCount}</span></button>}
-                {overseasCount > 0 && <button onClick={() => setOverseasOnly(v => !v)} style={chip(overseasOnly)}>{L.fOverseas} <span style={cntStyle}>{overseasCount}</span></button>}
-                {koreanCount > 0 && <button onClick={() => setKoreanOnly(v => !v)} style={chip(koreanOnly)}>{L.fKorean} <span style={cntStyle}>{koreanCount}</span></button>}
-              </>
-            ))}
+          {fSection(L.lblCond, (
+            <>
+              <Opt on={publicOnly} onClick={() => setPublicOnly(v => !v)} count={publicCount}>{L.fPublic}</Opt>
+              {topTierCount > 0 && <Opt on={topOnly} onClick={() => setTopOnly(v => !v)} count={topTierCount}>{L.fTop}</Opt>}
+              {overseasCount > 0 && <Opt on={overseasOnly} onClick={() => setOverseasOnly(v => !v)} count={overseasCount}>{L.fOverseas}</Opt>}
+              {koreanCount > 0 && <Opt on={koreanOnly} onClick={() => setKoreanOnly(v => !v)} count={koreanCount}>{L.fKorean}</Opt>}
+            </>
+          ))}
 
-            {workTypes.length > 0 && fSection(L.lblWork, (
-              <>
-                <button onClick={() => setWorkFilter('all')} style={chip(workFilter === 'all')}>{L.all}</button>
-                {workTypes.map(w => (
-                  <button key={w} onClick={() => setWorkFilter(w)} style={chip(workFilter === w)}>
-                    {w} <span style={cntStyle}>{pool.filter(r => r.work_type === w).length}</span>
-                  </button>
-                ))}
-              </>
-            ))}
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 2 }}>
-              <button onClick={resetFilters} style={{ padding: '8px 16px', border: '1px solid #E5E8EB', borderRadius: 8, fontSize: 13, background: '#fff', color: '#6B7280', cursor: 'pointer', fontWeight: 600 }}>{L.reset}</button>
-              <button onClick={() => setFilterOpen(false)} style={{ padding: '8px 18px', border: 'none', borderRadius: 8, fontSize: 13, background: '#ff6000', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>{L.done} ({filtered.length})</button>
-            </div>
-          </div>
-        </div>
+          {workTypes.length > 0 && fSection(L.lblWork, (
+            <>
+              <Opt on={workFilter === 'all'} onClick={() => setWorkFilter('all')}>{L.all}</Opt>
+              {workTypes.map(w => (
+                <Opt key={w} on={workFilter === w} onClick={() => setWorkFilter(w)} count={pool.filter(r => r.work_type === w).length}>{w}</Opt>
+              ))}
+            </>
+          ))}
+        </Modal>
       )}
 
       {/* 인재 카드 그리드 (3열 고정) */}
-      <div className="adm-m-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 14 }}>
-        {filtered.map(r => (
+      <div className="adm-m-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: G.md }}>
+        {filtered.slice(0, visible).map(r => (
           <TalentCard key={r.id} r={r} L={L} vi={vi} ko={ko}
             userRecs={recsByUser[r.id] || []}
             onRecommend={() => setRecTarget(r)}
@@ -510,9 +528,15 @@ export default function TalentPoolView({ token, lang }) {
           />
         ))}
       </div>
-      {filtered.length === 0 && (
-        <div style={{ textAlign: 'center', padding: 40, color: '#999' }}>{L.noMatch}</div>
+      {filtered.length > visible && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: G.sm, marginTop: G.xl }}>
+          <SecondaryButton
+            label={vi ? `Xem thêm ${Math.min(PAGE_SIZE, filtered.length - visible)}` : ko ? `${Math.min(PAGE_SIZE, filtered.length - visible)}명 더 보기` : `Show ${Math.min(PAGE_SIZE, filtered.length - visible)} more`}
+            onClick={() => setVisible(v => v + PAGE_SIZE)} />
+          <span style={{ fontSize: 12, color: C.faint, ...num }}>{Math.min(visible, filtered.length).toLocaleString()} / {filtered.length.toLocaleString()}</span>
+        </div>
       )}
+      {filtered.length === 0 && <State kind="empty" title={L.noMatch} />}
       </>}
 
       {recTarget && (
@@ -533,11 +557,11 @@ export default function TalentPoolView({ token, lang }) {
 // 인재 프로필 카드 — 인재풀 그리드와 최우수 인재 탭이 공유하는 단일 카드.
 // onRecommend 핸들러가 없으면(최우수 탭) 푸터 액션(이메일/공고추천/AI채우기)을 생략한다.
 function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsing }) {
-  // 스펙 패널 행 — 라벨(굵게) : 값, 행 사이 구분선. 스크린샷 디자인(회색 패널) 기준.
-  const panelRow = (label, value, muted, first) => (
-    <div key={label} style={{ display: 'flex', gap: 12, padding: '11px 13px', borderTop: first ? 'none' : '1px solid #ECEEF1', fontSize: 12.5, lineHeight: 1.55 }}>
-      <span style={{ flexShrink: 0, width: vi ? 88 : ko ? 52 : 72, fontWeight: 700, color: '#111', paddingTop: 1 }}>{label}</span>
-      <span style={{ minWidth: 0, flex: 1, color: muted ? '#B6BDC6' : '#374151' }}>{value}</span>
+  // 스펙 행 — 라벨(12/600 회색) : 값(13), 행 사이 얇은 구분선. 글자 크기는 12·13·14 세 단계만 쓴다.
+  const panelRow = (label, value, muted) => (
+    <div key={label} style={{ display: 'flex', gap: G.md, padding: `${G.sm}px 0`, borderTop: `1px solid ${C.line}`, fontSize: 13, lineHeight: 1.55 }}>
+      <span style={{ flexShrink: 0, width: vi ? 88 : ko ? 52 : 72, fontSize: 12, fontWeight: 600, color: C.sub, lineHeight: '20px' }}>{label}</span>
+      <span style={{ minWidth: 0, flex: 1, color: muted ? C.faint : C.body }}>{value}</span>
     </div>
   )
   const skills = asSkills(r.skills)
@@ -554,13 +578,14 @@ function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsi
     : r.yoe_months === 0 ? L.newGrad
     : String(Math.round((r.yoe_months / 12) * 10) / 10)
   const uni = uniOf(r)
-  // 학력 2줄 고정: 대학명(+명문 🎓) / 학위 · 전공
+  // 학력 2줄 고정: 대학명(+명문대 태그) / 학위 · 전공
   const eduNode = (
     <span style={{ display: 'block' }}>
-      <span style={{ ...oneLine, fontWeight: 700, color: uni ? '#111' : '#B6BDC6' }} title={uni}>
-        {uni || '-'}{topTierOf(r) && <span title={L.topNote}> 🎓</span>}
+      <span style={{ display: 'flex', alignItems: 'center', gap: 6, height: 20 }}>
+        <span style={{ ...ellipsis, fontWeight: 600, color: uni ? C.text : C.faint }} title={uni}>{uni || '-'}</span>
+        {topTierOf(r) && <span title={L.topNote} style={{ ...miniChip, height: 20 }}>{L.statTop}</span>}
       </span>
-      <span style={{ ...oneLine, color: '#9CA3AF' }}>{[summary.degree, summary.edu_ko || r.major].filter(Boolean).join(' · ') || '-'}</span>
+      <span style={{ ...oneLine, fontSize: 12, color: C.faint }}>{[summary.degree, summary.edu_ko || r.major].filter(Boolean).join(' · ') || '-'}</span>
     </span>
   )
   // 연봉: 프로필 직접기입(current_salary, 원 단위) > 뱃지 인증(verified_salary, 백만 단위) 폴백.
@@ -574,18 +599,19 @@ function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsi
   const salaryNode = (
     <span style={oneLine} title={salM != null ? `${salM}M/tháng${verM != null && r.verified_salary_at ? ` · ${r.verified_salary_at.slice(0, 10)}` : ''}` : undefined}>
       {salM != null ? (<>
-        <span style={{ fontWeight: 700, color: '#111' }}>₫{salM * 12}M</span>
-        <span style={{ color: '#9CA3AF' }}> ≈ {vndMToKrwText(salM * 12)} · {curM != null ? L.salarySrcProfile : L.salarySrcVerified}</span>
-      </>) : salaryFresher ? <span style={{ color: '#6B7280', fontWeight: 600 }}>{L.newGrad}</span> : '-'}
+        <span style={{ fontWeight: 600, color: C.text, ...num }}>₫{salM * 12}M</span>
+        <span style={{ color: C.faint }}> ≈ {vndMToKrwText(salM * 12)} · {curM != null ? L.salarySrcProfile : L.salarySrcVerified}</span>
+      </>) : salaryFresher ? L.newGrad : '-'}
     </span>
   )
   const hasLang = !!(r.english_cert || r.korean_cert)
   const langNode = (
     <span style={oneLine} title={[r.english_cert, r.korean_cert].filter(Boolean).join(' / ')}>
       {hasLang ? (<>
-        {r.english_cert && <><span style={{ color: '#ff6000', fontWeight: 600 }}>{L.langEn}</span> {r.english_cert}</>}
-        {r.english_cert && r.korean_cert && <span style={{ color: '#CBD5E1' }}> · </span>}
-        {r.korean_cert && <><span style={{ color: '#ff6000', fontWeight: 600 }}>{L.langKo}</span> {r.korean_cert}</>}
+        {r.english_cert && <><span style={{ color: C.sub, fontWeight: 600 }}>{L.langEn}</span> {r.english_cert}</>}
+        {r.english_cert && r.korean_cert && <span style={{ color: C.faint }}> · </span>}
+        {/* 카드의 유일한 강조색 — 한국어 보유는 스태핑에서 가장 먼저 보는 신호 */}
+        {r.korean_cert && <><span style={{ color: C.primary, fontWeight: 600 }}>{L.langKo}</span> {r.korean_cert}</>}
       </>) : '-'}
     </span>
   )
@@ -596,15 +622,13 @@ function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsi
     </span>
   )
   // 칩 행(포폴/기술) 1줄 고정 높이
-  const chipRowStyle = { display: 'flex', gap: 5, height: 24, alignItems: 'center', overflow: 'hidden', flexWrap: 'nowrap' }
-  const chipStyle = { padding: '3px 9px', borderRadius: 6, fontSize: 11.5, background: '#fff', border: '1px solid #E5E8EB', whiteSpace: 'nowrap', flexShrink: 0 }
+  const chipRowStyle = { display: 'flex', gap: G.xs, height: 24, alignItems: 'center', overflow: 'hidden', flexWrap: 'nowrap' }
   const links = Array.isArray(summary.links) ? summary.links : []
   const linkNode = (
     <span style={chipRowStyle}>
       {links.length > 0 ? links.slice(0, 3).map(u => (
-        <a key={u} href={u} target="_blank" rel="noopener noreferrer" title={u}
-          style={{ ...chipStyle, color: '#1A73E8', textDecoration: 'none', fontWeight: 600 }}>
-          {linkLabel(u)} ↗
+        <a key={u} href={u} target="_blank" rel="noopener noreferrer" title={u} style={miniChip}>
+          {linkLabel(u)}<RiExternalLinkLine size={12} />
         </a>
       )) : '-'}
     </span>
@@ -612,35 +636,36 @@ function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsi
   const skillNode = (
     <span style={chipRowStyle} title={skills.join(', ')}>
       {skills.length > 0 ? (<>
-        {skills.slice(0, 3).map(s => <span key={s} style={{ ...chipStyle, color: '#374151' }}>{s}</span>)}
-        {skills.length > 3 && <span style={{ fontSize: 11.5, color: '#9CA3AF', flexShrink: 0 }}>+{skills.length - 3}</span>}
+        {skills.slice(0, 3).map(s => <span key={s} style={miniChip}>{s}</span>)}
+        {skills.length > 3 && <span style={{ fontSize: 12, color: C.faint, flexShrink: 0, ...num }}>+{skills.length - 3}</span>}
       </>) : '-'}
     </span>
   )
+  const appliedN = userRecs.filter(x => x.applied_at).length
+  const recLabel = userRecs.length === 0 ? L.recBtn
+    : `${L.recBtn} ${userRecs.length}${appliedN ? ` · ${L.recApplied} ${appliedN}` : ''}`
   return (
-    <div className="tp-card" style={{ position: 'relative', background: '#fff', border: '1px solid #E5E8EB', borderRadius: 14, padding: '20px 14px 12px', display: 'flex', flexDirection: 'column' }}>
+    <Card padding={G.lg} style={{ position: 'relative', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
       {/* 공개 뱃지 — 우상단 고정(카드 레이아웃에 영향 없게 absolute) */}
-      {r.is_resume_public && (
-        <span style={{ position: 'absolute', top: 12, right: 12, padding: '2px 8px', borderRadius: 6, fontSize: 10.5, fontWeight: 700, background: '#DCFCE7', color: '#15803D' }}>{L.badgePublic}</span>
-      )}
+      {r.is_resume_public && <StatusTag tone="success" style={{ position: 'absolute', top: G.md, right: G.md }}>{L.badgePublic}</StatusTag>}
       {/* 헤더: 중앙 사진 · 이름(호칭) · 직무 — 각 1줄 고정 */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: 14 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: `${G.xs}px 0 ${G.lg}px` }}>
         {r.photo_url ? (
-          <img src={r.photo_url} alt="" referrerPolicy="no-referrer" style={{ width: 72, height: 72, borderRadius: '50%', objectFit: 'cover' }} />
+          <img src={r.photo_url} alt="" referrerPolicy="no-referrer" style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover' }} />
         ) : (
-          <div style={{ width: 72, height: 72, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, color: '#999' }}>
+          <div style={{ width: 64, height: 64, borderRadius: '50%', background: C.line, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontWeight: 500, color: C.faint }}>
             {(r.full_name || '?')[0]}
           </div>
         )}
-        <div title={r.full_name} style={{ marginTop: 10, fontWeight: 700, fontSize: 15.5, lineHeight: 1.3, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {r.full_name || L.noName}{nick && <span style={{ color: '#9CA3AF', fontWeight: 600 }}> ({nick})</span>}
+        <div title={r.full_name} style={{ marginTop: G.md, fontWeight: 600, fontSize: 14, lineHeight: 1.4, color: C.text, maxWidth: '100%', ...ellipsis }}>
+          {r.full_name || L.noName}{nick && <span style={{ color: C.faint, fontWeight: 500 }}> ({nick})</span>}
         </div>
-        <div title={title} style={{ fontSize: 12.5, color: '#6B7280', marginTop: 3, maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{title || L.noRole}</div>
+        <div title={title} style={{ fontSize: 13, lineHeight: 1.4, color: C.sub, marginTop: 2, maxWidth: '100%', ...ellipsis }}>{title || L.noRole}</div>
       </div>
 
-      {/* 스펙 패널: 행 구성·순서·높이 고정 — 카드끼리 같은 위치에 같은 정보. flex:1로 하단 버튼 라인 통일 */}
-      <div style={{ background: '#F8F9FA', borderRadius: 10, flex: 1 }}>
-        {panelRow(L.rowCareer, yoeText || L.unknown, !yoeText, true)}
+      {/* 스펙 행: 행 구성·순서·높이 고정 — 카드끼리 같은 위치에 같은 정보. flex:1로 하단 버튼 라인 통일 */}
+      <div style={{ flex: 1, borderBottom: `1px solid ${C.line}` }}>
+        {panelRow(L.rowCareer, yoeText || L.unknown, !yoeText)}
         {panelRow(L.rowSalary, salaryNode, salM == null && !salaryFresher)}
         {panelRow(L.rowSchool, eduNode, !uni)}
         {panelRow(L.rowHighlights, bulletsNode, bullets.length === 0)}
@@ -649,48 +674,29 @@ function TalentCard({ r, L, vi, ko, userRecs = [], onRecommend, onReparse, parsi
         {panelRow(L.rowSkills, skillNode, skills.length === 0)}
       </div>
 
-      {/* 이력서 보기 — 하단 전체폭 버튼 (원본 PDF). 패널이 flex:1이라 항상 같은 라인에 붙는다 */}
+      {/* 이력서 보기 — 하단 전체폭 버튼 (원본 PDF, 새 탭). 스펙 영역이 flex:1이라 항상 같은 라인에 붙는다 */}
       {r.resume_url && (
-        <a href={r.resume_url} target="_blank" rel="noopener noreferrer"
-          style={{ display: 'block', textAlign: 'center', marginTop: 12, padding: '10px 0', border: '1px solid #E5E8EB', borderRadius: 10, fontSize: 13, fontWeight: 700, color: '#111', textDecoration: 'none', background: '#fff' }}>
-          {L.resume}
-        </a>
+        <SecondaryButton size="small" style={{ width: '100%', marginTop: G.md }} label={L.resume}
+          onClick={() => window.open(r.resume_url, '_blank', 'noopener,noreferrer')} />
       )}
 
       {/* 푸터: 이메일 · 공고추천 · AI 분석 — marginTop auto로 카드 바닥 고정 */}
       {onRecommend && (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, paddingTop: 10, marginTop: 'auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.sm, paddingTop: G.sm, marginTop: 'auto' }}>
           <a href={r.email ? `mailto:${r.email}` : undefined} title={r.email}
-            style={{ fontSize: 11, color: '#9CA3AF', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', textDecoration: 'none' }}>{r.email || '-'}</a>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-            {(() => {
-              const appliedN = userRecs.filter(x => x.applied_at).length
-              const label = userRecs.length === 0 ? L.recBtn
-                : `${L.recBtn} ${userRecs.length}${appliedN ? ` · ${L.recApplied} ${appliedN}` : ''}`
-              return (
-                <button onClick={onRecommend}
-                  style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 11.5, fontWeight: 600, color: userRecs.length > 0 ? '#ff6000' : '#6B7280', padding: 0 }}>
-                  {label}
-                </button>
-              )
-            })()}
-            {summary.parse_failed ? (
-              <button onClick={onReparse} disabled={parsing}
-                title={L.aiTitle}
-                style={{ border: 'none', background: 'none', cursor: parsing ? 'wait' : 'pointer', fontSize: 11.5, fontWeight: 600, color: parsing ? '#9CA3AF' : '#DC2626', padding: 0 }}>
-                {parsing ? L.aiFilling : `${L.parseFail} · ${L.retry}`}
-              </button>
-            ) : bullets.length === 0 && ( // 요약 유무만 본다 — 경력회사 조건은 신입 CV를 영원히 재파싱 대상으로 만든다
-              <button onClick={onReparse} disabled={parsing}
-                title={L.aiTitle}
-                style={{ border: 'none', background: 'none', cursor: parsing ? 'wait' : 'pointer', fontSize: 11.5, fontWeight: 600, color: parsing ? '#9CA3AF' : '#6B7280', padding: 0 }}>
-                {parsing ? L.aiFilling : L.aiFill}
-              </button>
+            style={{ fontSize: 12, color: C.faint, textDecoration: 'none', ...ellipsis }}>{r.email || '-'}</a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: G.xs, flexShrink: 0, marginRight: -G.sm }}>
+            <GhostButton size="small" label={recLabel} onClick={onRecommend} />
+            {summary.parse_failed ? (<>
+              <StatusTag tone="error">{L.parseFail}</StatusTag>
+              <GhostButton size="small" disabled={parsing} title={L.aiTitle} label={parsing ? L.aiFilling : L.retry} onClick={onReparse} />
+            </>) : bullets.length === 0 && ( // 요약 유무만 본다 — 경력회사 조건은 신입 CV를 영원히 재파싱 대상으로 만든다
+              <GhostButton size="small" disabled={parsing} title={L.aiTitle} label={parsing ? L.aiFilling : L.aiFill} onClick={onReparse} />
             )}
           </div>
         </div>
       )}
-    </div>
+    </Card>
   )
 }
 
@@ -734,36 +740,27 @@ function EliteView({ pool, lang, L, vi, ko }) {
   const flatCats = ELITE_CATS.flatMap(g => g.cats)
   const active = catSel || flatCats.find(c => (byCat[c.key] || []).length > 0)?.key || flatCats[0].key
   const list = byCat[active] || []
-  const chip = (on) => ({
-    padding: '5px 12px', borderRadius: 999, fontSize: 12, fontWeight: 600,
-    border: `1px solid ${on ? '#ff6000' : '#E5E8EB'}`, cursor: 'pointer',
-    background: on ? '#ff600014' : '#fff', color: on ? '#ff6000' : '#6B7280',
-    transition: 'all 0.15s',
-  })
-
   return (
     <>
-      <div style={{ fontSize: 12.5, color: '#6B7280', marginBottom: 12 }}>{M.desc}</div>
+      <div style={{ fontSize: 13, color: C.sub, lineHeight: 1.5, marginBottom: G.md }}>{M.desc}</div>
 
       {/* 카테고리 하위탭: 대분류 라벨 + 세부 칩 (개발 | 디자인 | 마케터) */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 16, padding: '10px 14px', background: '#FAFBFC', border: '1px solid #EEF0F2', borderRadius: 10 }}>
+      <Card padding={`${G.md}px ${G.lg}px`} style={{ display: 'flex', alignItems: 'center', gap: `${G.sm}px ${G.lg}px`, flexWrap: 'wrap', marginBottom: G.lg }}>
         {ELITE_CATS.map((g, gi) => (
-          <div key={g.key} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-            {gi > 0 && <span style={{ width: 1, height: 18, background: '#E5E8EB', margin: '0 4px' }} />}
-            <span style={{ fontSize: 11, fontWeight: 800, color: '#9CA3AF' }}>{g.label[langKey]}</span>
+          <div key={g.key} style={{ display: 'flex', alignItems: 'center', gap: G.sm }}>
+            {gi > 0 && <span style={{ width: 1, height: 20, background: C.border, marginRight: G.sm }} />}
+            <span style={{ fontSize: 12, fontWeight: 600, color: C.sub, marginRight: G.xs }}>{g.label[langKey]}</span>
             {g.cats.map(c => (
-              <button key={c.key} onClick={() => setCatSel(c.key)} style={chip(active === c.key)}>
-                {c.label[langKey]} <span style={{ color: '#9CA3AF', fontWeight: 500 }}>{(byCat[c.key] || []).length}</span>
-              </button>
+              <Opt key={c.key} on={active === c.key} onClick={() => setCatSel(c.key)} count={(byCat[c.key] || []).length}>{c.label[langKey]}</Opt>
             ))}
           </div>
         ))}
-      </div>
+      </Card>
 
       {list.length === 0 ? (
-        <div style={{ padding: '40px 12px', border: '1px dashed #E5E8EB', borderRadius: 12, fontSize: 12.5, color: '#B6BDC6', textAlign: 'center' }}>{M.empty}</div>
+        <State kind="empty" title={M.empty} />
       ) : (
-        <div className="adm-m-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 14 }}>
+        <div className="adm-m-1col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: G.md }}>
           {list.map(({ r }) => <TalentCard key={r.id} r={r} L={L} vi={vi} ko={ko} />)}
         </div>
       )}
@@ -815,34 +812,34 @@ function JobSelect({ jobs, value, onChange, sentJobIds, placeholder, sentLabel }
 
   const selected = jobs.find(j => j.id === value)
   const logoBox = (job, size) => job.logo_url
-    ? <img src={job.logo_url} alt="" style={{ width: size, height: size, borderRadius: 6, objectFit: 'contain', background: '#fff', border: '1px solid #EEF0F2', flexShrink: 0 }} />
-    : <div style={{ width: size, height: size, borderRadius: 6, background: '#FFF1E7', color: '#ea580c', fontSize: size * 0.42, fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{(job.company || '?').trim()[0] || '?'}</div>
+    ? <img src={job.logo_url} alt="" style={{ width: size, height: size, borderRadius: 6, objectFit: 'contain', background: '#fff', border: `1px solid ${C.border}`, flexShrink: 0 }} />
+    : <div style={{ width: size, height: size, borderRadius: 6, background: C.line, color: C.sub, fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{(job.company || '?').trim()[0] || '?'}</div>
 
   return (
     <div style={{ position: 'relative' }}>
       <button ref={triggerRef} type="button" onClick={() => setOpen(v => !v)} style={{
-        width: '100%', padding: '9px 11px', border: `1px solid ${open ? '#ff6000' : '#E5E8EB'}`,
+        width: '100%', minHeight: 48, padding: `${G.sm}px ${G.md}px`, border: `1px solid ${open ? C.primary : C.border}`,
         borderRadius: 8, background: '#fff', cursor: 'pointer', textAlign: 'left',
-        display: 'flex', alignItems: 'center', gap: 10, transition: 'border-color .15s', outline: 'none',
+        display: 'flex', alignItems: 'center', gap: G.md, transition: 'border-color .15s', outline: 'none',
       }}>
         {selected ? (
           <>
             {logoBox(selected, 28)}
             <span style={{ minWidth: 0, flex: 1 }}>
-              <span style={{ display: 'block', fontSize: 13, fontWeight: 700, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.title}</span>
-              <span style={{ display: 'block', fontSize: 11.5, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selected.company}</span>
+              <span style={{ display: 'block', fontSize: 13, fontWeight: 600, color: C.text, ...ellipsis }}>{selected.title}</span>
+              <span style={{ display: 'block', fontSize: 12, color: C.sub, ...ellipsis }}>{selected.company}</span>
             </span>
           </>
         ) : (
-          <span style={{ flex: 1, fontSize: 13, color: '#9CA3AF' }}>{placeholder}</span>
+          <span style={{ flex: 1, fontSize: 13, color: C.faint }}>{placeholder}</span>
         )}
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" style={{ flexShrink: 0, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }}><path d="M6 9l6 6 6-6" /></svg>
+        <RiArrowDownSLine size={18} color={C.faint} style={{ flexShrink: 0, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .2s' }} />
       </button>
       {open && coords && createPortal(
         <div ref={menuRef} className="jobsel-dropdown" style={{
           position: 'fixed', top: coords.top, left: coords.left, width: coords.width, zIndex: 200,
-          background: '#fff', border: '1px solid #EEF0F2', borderRadius: 10, padding: 4,
-          maxHeight: coords.maxHeight, overflowY: 'auto', boxShadow: '0 8px 32px rgba(15,23,42,0.12)',
+          background: '#fff', border: `1px solid ${C.border}`, borderRadius: 8, padding: G.xs,
+          maxHeight: coords.maxHeight, overflowY: 'auto', boxShadow: '0 8px 32px rgba(25,31,40,0.12)',
         }}>
           {jobs.map(j => {
             const sent = sentJobIds.has(j.id)
@@ -851,18 +848,18 @@ function JobSelect({ jobs, value, onChange, sentJobIds, placeholder, sentLabel }
               <button key={j.id} type="button" disabled={sent}
                 onClick={() => { if (!sent) { onChange(j.id); setOpen(false) } }}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '8px 10px',
-                  border: 'none', borderRadius: 6, background: active ? '#FFF6F0' : 'transparent',
+                  display: 'flex', alignItems: 'center', gap: G.md, width: '100%', padding: `${G.sm}px ${G.md}px`,
+                  border: 'none', borderRadius: 6, background: active ? C.bg : 'transparent',
                   cursor: sent ? 'not-allowed' : 'pointer', textAlign: 'left', opacity: sent ? 0.5 : 1, transition: 'background .1s',
                 }}
-                onMouseEnter={e => { if (!sent && !active) e.currentTarget.style.background = '#F8FAFC' }}
+                onMouseEnter={e => { if (!sent && !active) e.currentTarget.style.background = C.bg }}
                 onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}>
                 {logoBox(j, 28)}
                 <span style={{ minWidth: 0, flex: 1 }}>
-                  <span style={{ display: 'block', fontSize: 13, fontWeight: 600, color: active ? '#ff6000' : '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{j.title}</span>
-                  <span style={{ display: 'block', fontSize: 11.5, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{j.company}</span>
+                  <span style={{ display: 'block', fontSize: 13, fontWeight: 600, color: active ? C.primary : C.text, ...ellipsis }}>{j.title}</span>
+                  <span style={{ display: 'block', fontSize: 12, color: C.sub, ...ellipsis }}>{j.company}</span>
                 </span>
-                {sent && <span style={{ flexShrink: 0, fontSize: 10.5, fontWeight: 700, color: '#94A3B8' }}>{sentLabel}</span>}
+                {sent && <span style={{ flexShrink: 0, fontSize: 12, fontWeight: 600, color: C.faint }}>{sentLabel}</span>}
               </button>
             )
           })}
@@ -881,21 +878,21 @@ function RecommendModal({ person, jobs, history, token, lang, onClose, onSent })
   const ko = !vi && lang !== 'en'
   const M = vi ? {
     title: 'Email đề xuất việc làm', to: 'Người nhận', selectJob: 'Chọn tin tuyển dụng', selectPh: 'Chọn tin tuyển dụng do công ty đăng...',
-    history: 'Đề xuất đã gửi', applied: 'Đã ứng tuyển', sent: 'Đã gửi', alreadySent: '✓ Đã gửi',
+    history: 'Đề xuất đã gửi', applied: 'Đã ứng tuyển', sent: 'Đã gửi', alreadySent: 'Đã gửi',
     lang: 'Ngôn ngữ email', preview: 'Xem trước email', previewLoading: 'Đang tải bản xem trước...',
     send: 'Gửi', sending: 'Đang gửi...', done: 'Đã gửi', close: 'Đóng',
     noJobs: 'Chưa có tin tuyển dụng do công ty đăng (company_self).', noEmail: 'Tài khoản không có email — không thể gửi',
     dup: 'Đã đề xuất tin tuyển dụng này rồi.',
   } : ko ? {
     title: '공고 추천 메일', to: '받는 사람', selectJob: '공고 선택', selectPh: '기업 등록 공고 선택...',
-    history: '보낸 추천', applied: '지원함', sent: '발송됨', alreadySent: '✓ 발송됨',
+    history: '보낸 추천', applied: '지원함', sent: '발송됨', alreadySent: '발송됨',
     lang: '메일 언어', preview: '메일 미리보기', previewLoading: '미리보기 불러오는 중...',
     send: '보내기', sending: '발송 중...', done: '발송 완료', close: '닫기',
     noJobs: '기업 등록 공고(company_self)가 없습니다.', noEmail: '이메일이 없는 계정입니다 — 발송 불가',
     dup: '이미 이 공고를 추천했습니다.',
   } : {
     title: 'Recommend a job', to: 'To', selectJob: 'Job', selectPh: 'Select a company-posted job...',
-    history: 'Sent recommendations', applied: 'Applied', sent: 'Sent', alreadySent: '✓ Sent',
+    history: 'Sent recommendations', applied: 'Applied', sent: 'Sent', alreadySent: 'Sent',
     lang: 'Email language', preview: 'Email preview', previewLoading: 'Loading preview...',
     send: 'Send', sending: 'Sending...', done: 'Sent', close: 'Close',
     noJobs: 'No company-posted jobs (company_self).', noEmail: 'Account has no email — cannot send',
@@ -957,101 +954,79 @@ function RecommendModal({ person, jobs, history, token, lang, onClose, onSent })
     }
   }
 
-  const label = { fontSize: 11, fontWeight: 700, color: '#9CA3AF', marginBottom: 5 }
+  const blocked = !jobId || !preview || sending || !!sentTo
 
   return (
-    <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-      <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 14, width: 520, maxWidth: '100%', maxHeight: '85vh', overflowY: 'auto', padding: '20px 22px', boxShadow: '0 12px 40px rgba(15,23,42,0.2)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14 }}>
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 800 }}>{M.title}</div>
-            <div style={{ fontSize: 12.5, color: '#6B7280', marginTop: 3 }}>
-              {M.to}: <strong style={{ color: '#374151' }}>{person.full_name || '-'}</strong> · {person.email || M.noEmail}
-            </div>
-          </div>
-          <button onClick={onClose} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 18, color: '#9CA3AF', padding: 0, lineHeight: 1 }}>×</button>
-        </div>
+    <Modal width={520} onClose={onClose} title={M.title}
+      sub={<>{M.to}: <b style={{ color: C.text, fontWeight: 600 }}>{person.full_name || '-'}</b> · {person.email || M.noEmail}</>}
+      footer={<>
+        <span style={{ flex: 1 }} />
+        <SecondaryButton label={M.close} onClick={onClose} />
+        <PrimaryButton disabled={blocked} label={sending ? M.sending : M.send} onClick={send} />
+      </>}
+    >
 
-        {history.length > 0 && (
-          <div style={{ marginBottom: 14 }}>
-            <div style={label}>{M.history}</div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {history.map(h => (
-                <div key={h.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, fontSize: 12.5, background: '#FAFBFC', border: '1px solid #EEF0F2', borderRadius: 8, padding: '7px 10px' }}>
-                  <span style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#374151' }}>
-                    <strong>{h.job_title}</strong> · {h.job_company}
-                  </span>
-                  <span style={{ flexShrink: 0, display: 'flex', gap: 6, alignItems: 'center' }}>
-                    <span style={{ fontSize: 11, color: '#9CA3AF' }}>{h.created_at ? new Date(h.created_at).toLocaleDateString('ko-KR') : ''}</span>
-                    <span style={{ fontSize: 10.5, fontWeight: 700, padding: '1px 7px', borderRadius: 999, background: h.applied_at ? '#DCFCE7' : '#EEF1F4', color: h.applied_at ? '#15803D' : '#64748B' }}>
-                      {h.applied_at ? M.applied : M.sent}
-                    </span>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        <div style={{ marginBottom: 14 }}>
-          <div style={label}>{M.selectJob}</div>
-          {jobs.length === 0 ? (
-            <div style={{ fontSize: 12.5, color: '#9CA3AF' }}>{M.noJobs}</div>
-          ) : (
-            <JobSelect
-              jobs={jobs}
-              value={jobId}
-              onChange={setJobId}
-              sentJobIds={sentJobIds}
-              placeholder={M.selectPh}
-              sentLabel={M.alreadySent}
-            />
-          )}
-        </div>
-
-        <div style={{ marginBottom: 14 }}>
-          <div style={label}>{M.lang}</div>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {[['vi', '🇻🇳 Tiếng Việt'], ['ko', '🇰🇷 한국어'], ['en', '🇺🇸 English']].map(([code, name]) => (
-              <button key={code} onClick={() => setMailLang(code)}
-                style={{ padding: '5px 12px', borderRadius: 999, fontSize: 12, fontWeight: 600, cursor: 'pointer',
-                  border: `1px solid ${mailLang === code ? '#ff6000' : '#E5E8EB'}`,
-                  background: mailLang === code ? '#ff600014' : '#fff', color: mailLang === code ? '#ff6000' : '#6B7280' }}>
-                {name}
-              </button>
+      {history.length > 0 && (
+        <div style={{ marginBottom: G.xl }}>
+          <div style={fieldLabel}>{M.history}</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: G.sm }}>
+            {history.map(h => (
+              <div key={h.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.sm, fontSize: 13, background: C.bg, borderRadius: 8, padding: `${G.sm}px ${G.md}px` }}>
+                <span style={{ ...ellipsis, color: C.body }}>
+                  <b style={{ color: C.text, fontWeight: 600 }}>{h.job_title}</b> · {h.job_company}
+                </span>
+                <span style={{ flexShrink: 0, display: 'flex', gap: G.sm, alignItems: 'center' }}>
+                  <span style={{ fontSize: 12, color: C.faint, ...num }}>{h.created_at ? new Date(h.created_at).toLocaleDateString('ko-KR') : ''}</span>
+                  <StatusTag tone={h.applied_at ? 'success' : 'neutral'}>{h.applied_at ? M.applied : M.sent}</StatusTag>
+                </span>
+              </div>
             ))}
           </div>
         </div>
+      )}
 
-        {jobId && (
-          <div style={{ marginBottom: 14 }}>
-            <div style={label}>{M.preview}</div>
-            {previewLoading ? (
-              <div style={{ fontSize: 12.5, color: '#9CA3AF', padding: '12px 0' }}>{M.previewLoading}</div>
-            ) : preview ? (
-              <div style={{ border: '1px solid #EEF0F2', borderRadius: 8, overflow: 'hidden' }}>
-                <div style={{ fontSize: 12.5, fontWeight: 700, color: '#374151', padding: '9px 12px', borderBottom: '1px solid #EEF0F2', background: '#FAFBFC' }}>{preview.subject}</div>
-                {/* 실제 발송되는 HTML 그대로 렌더 (서버가 만든 자체 템플릿) */}
-                <div style={{ maxHeight: 380, overflowY: 'auto' }} dangerouslySetInnerHTML={{ __html: preview.html }} />
-              </div>
-            ) : null}
-          </div>
+      <div style={{ marginBottom: G.xl }}>
+        <div style={fieldLabel}>{M.selectJob}</div>
+        {jobs.length === 0 ? (
+          <div style={{ fontSize: 13, color: C.faint }}>{M.noJobs}</div>
+        ) : (
+          <JobSelect
+            jobs={jobs}
+            value={jobId}
+            onChange={setJobId}
+            sentJobIds={sentJobIds}
+            placeholder={M.selectPh}
+            sentLabel={M.alreadySent}
+          />
         )}
+      </div>
 
-        {error && <div style={{ fontSize: 12.5, color: '#DC2626', marginBottom: 12 }}>{error}</div>}
-        {sentTo && <div style={{ fontSize: 12.5, color: '#15803D', fontWeight: 700, marginBottom: 12 }}>✓ {M.done} → {sentTo}</div>}
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <button onClick={onClose}
-            style={{ padding: '8px 16px', border: '1px solid #E5E8EB', borderRadius: 8, fontSize: 13, background: '#fff', color: '#6B7280', cursor: 'pointer', fontWeight: 600 }}>
-            {M.close}
-          </button>
-          <button onClick={send} disabled={!jobId || !preview || sending || !!sentTo}
-            style={{ padding: '8px 18px', border: 'none', borderRadius: 8, fontSize: 13, background: (!jobId || !preview || sending || sentTo) ? '#FDBA8C' : '#ff6000', color: '#fff', cursor: (!jobId || !preview || sending || sentTo) ? 'default' : 'pointer', fontWeight: 700 }}>
-            {sending ? M.sending : M.send}
-          </button>
+      <div style={{ marginBottom: G.xl }}>
+        <div style={fieldLabel}>{M.lang}</div>
+        <div style={{ display: 'flex', gap: G.sm }}>
+          {[['vi', 'Tiếng Việt'], ['ko', '한국어'], ['en', 'English']].map(([code, name]) => (
+            <Opt key={code} on={mailLang === code} onClick={() => setMailLang(code)}>{name}</Opt>
+          ))}
         </div>
       </div>
-    </div>
+
+      {jobId && (
+        <div style={{ marginBottom: G.xl }}>
+          <div style={fieldLabel}>{M.preview}</div>
+          {previewLoading ? (
+            <div style={{ fontSize: 13, color: C.faint, padding: `${G.md}px 0` }}>{M.previewLoading}</div>
+          ) : preview ? (
+            <div style={{ border: `1px solid ${C.border}`, borderRadius: 8, overflow: 'hidden' }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: C.text, padding: `${G.sm}px ${G.md}px`, borderBottom: `1px solid ${C.border}`, background: C.bg }}>{preview.subject}</div>
+              {/* 실제 발송되는 HTML 그대로 렌더 (서버가 만든 자체 템플릿) */}
+              <div style={{ maxHeight: 380, overflowY: 'auto' }} dangerouslySetInnerHTML={{ __html: preview.html }} />
+            </div>
+          ) : null}
+        </div>
+      )}
+
+      <Notice tone="error" style={{ marginBottom: G.md }}>{error}</Notice>
+      <Notice tone="success" style={{ marginBottom: G.md }}>{sentTo ? `${M.done} → ${sentTo}` : null}</Notice>
+    </Modal>
   )
 }

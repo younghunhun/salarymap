@@ -45,7 +45,7 @@ function buildNav(lang) {
         { label: L('캠페인 링크', 'Campaign links', 'Link chiến dịch'), pathname: '/admin/jobs', tab: 'collections' },
         { label: L('회사', 'Companies', 'Công ty'), pathname: '/admin/jobs', tab: 'companies' },
         { label: L('공고 지표', 'Job KPI', 'KPI tin đăng'), pathname: '/admin/jobs', tab: 'kpi' },
-        { label: 'Admins', pathname: '/admin/jobs', tab: 'admins' },
+        { label: L('관리자', 'Admins', 'Quản trị viên'), pathname: '/admin/jobs', tab: 'admins' },
       ],
     },
   ]

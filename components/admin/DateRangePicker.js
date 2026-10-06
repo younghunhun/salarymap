@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { vnDate } from '../../utils/dashboard'
 
-// App Store Connect 스타일 날짜 범위 피커 (알약 버튼 + 팝오버: 사전설정/일/주/월/기간)
+// App Store Connect 스타일 날짜 범위 피커 (버튼 + 팝오버: 사전설정/일/주/월/기간). 버튼은 kit SecondaryButton(36px) 과 같은 모양.
 // 활성색은 어드민 브랜드 주황(#ff4400)으로 통일. value={from,to}(YYYY-MM-DD), onChange(from,to).
 
 const MONTHS_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -148,10 +148,10 @@ export default function DateRangePicker({ value, onChange }) {
   return (
     <div ref={ref} style={{ position: 'relative', display: 'inline-block' }}>
       <button onClick={() => setOpen(o => !o)}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '7px 14px', borderRadius: 999, border: '1px solid #E5E8EB', background: '#fff', color: '#191F28', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}>
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 6, height: 36, padding: '0 12px', borderRadius: 4, border: '1px solid var(--color-semantic-border-normal, #D1D6DC)', background: '#fff', color: 'var(--color-semantic-fg-normal, #333D4B)', fontSize: 15, fontWeight: 600, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums', cursor: 'pointer' }}>
         <span>{curLabel}</span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style={{ transition: 'transform .15s', transform: open ? 'rotate(180deg)' : 'none' }}>
-          <path d="M6 9l6 6 6-6" stroke="#86868b" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ transition: 'transform .15s', transform: open ? 'rotate(180deg)' : 'none' }}>
+          <path d="M6 9l6 6 6-6" stroke="#6B7583" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
 

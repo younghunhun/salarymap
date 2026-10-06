@@ -11,14 +11,54 @@ export default async function handler(req, res) {
   if (!admin) return res.status(401).json({ error: 'Unauthorized' })
 
   if (req.method === 'GET') {
+    // 등록자 이메일(created_by → recruiter_users.email)·계정 회사(company_id → recruiter_companies.name)를 붙인다.
+    const enrich = async (jobs) => {
+      const creatorIds = [...new Set(jobs.map(j => j.created_by).filter(Boolean))]
+      let emailMap = {}
+      if (creatorIds.length) {
+        const { data: ru } = await supabase
+          .from('recruiter_users')
+          .select('user_id, email')
+          .in('user_id', creatorIds)
+        emailMap = Object.fromEntries((ru || []).map(u => [u.user_id, u.email]))
+      }
+      const companyIds = [...new Set(jobs.map(j => j.company_id).filter(Boolean))]
+      let companyMap = {}
+      if (companyIds.length) {
+        const { data: rc } = await supabase
+          .from('recruiter_companies')
+          .select('id, name')
+          .in('id', companyIds)
+        companyMap = Object.fromEntries((rc || []).map(c => [c.id, c.name]))
+      }
+      return jobs.map(j => ({
+        ...j,
+        poster_email: emailMap[j.created_by] || null,
+        account_company: companyMap[j.company_id] || null,
+      }))
+    }
+
+    // 단건 전체(?id=) — 수정 폼용. 목록은 아래처럼 가벼운 컬럼만 주므로, 수정은 반드시 이걸로 전체 행을 받아 연다
+    // (가벼운 행으로 폼을 채우면 저장 시 description 등이 빈 값으로 덮어써진다).
+    if (req.query.id) {
+      const { data, error } = await supabase.from('jobs').select('*').eq('id', String(req.query.id)).maybeSingle()
+      if (error) return res.status(500).json({ error: error.message })
+      if (!data) return res.status(404).json({ error: 'not found' })
+      const [job] = await enrich([data])
+      return res.status(200).json(job)
+    }
+
+    // 목록 — 카드·검색·필터·정렬이 읽는 컬럼만. 예전엔 select('*') 라 6,000건에 26MB/4.6초였고
+    // 그중 72%가 목록에서 안 쓰는 description 이었다(10/6 실측). 소비처는 pages/admin/jobs.js 하나.
     // PostgREST는 한 번에 최대 1000행만 반환하므로 range로 끝까지 페이지네이션.
     // (jobs 1,877행 시점에 최신 1000행 밖 KTC 공고 80건이 어드민에서 안 보이던 버그)
+    const LIST_FIELDS = 'id, title, company, location, type, role, salary_min, salary_max, status, is_active, is_featured, source, source_id, company_id, created_by, created_at'
     const PAGE = 1000
     let jobs = []
     for (let offset = 0; ; offset += PAGE) {
       const { data: page } = await supabase
         .from('jobs')
-        .select('*')
+        .select(LIST_FIELDS)
         .order('created_at', { ascending: false })
         .order('id', { ascending: false })
         .range(offset, offset + PAGE - 1)
@@ -26,31 +66,7 @@ export default async function handler(req, res) {
       jobs = jobs.concat(page)
       if (page.length < PAGE) break
     }
-    // 등록자 이메일 매핑 (created_by -> recruiter_users.email)
-    const creatorIds = [...new Set(jobs.map(j => j.created_by).filter(Boolean))]
-    let emailMap = {}
-    if (creatorIds.length) {
-      const { data: ru } = await supabase
-        .from('recruiter_users')
-        .select('user_id, email')
-        .in('user_id', creatorIds)
-      emailMap = Object.fromEntries((ru || []).map(u => [u.user_id, u.email]))
-    }
-    // 계정(회사) 매핑 (company_id -> recruiter_companies.name)
-    const companyIds = [...new Set(jobs.map(j => j.company_id).filter(Boolean))]
-    let companyMap = {}
-    if (companyIds.length) {
-      const { data: rc } = await supabase
-        .from('recruiter_companies')
-        .select('id, name')
-        .in('id', companyIds)
-      companyMap = Object.fromEntries((rc || []).map(c => [c.id, c.name]))
-    }
-    return res.status(200).json(jobs.map(j => ({
-      ...j,
-      poster_email: emailMap[j.created_by] || null,
-      account_company: companyMap[j.company_id] || null,
-    })))
+    return res.status(200).json(await enrich(jobs))
   }
 
   if (req.method === 'POST') {
