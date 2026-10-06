@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useT } from '../../lib/i18n'
+// LIKELION Design System — 어드민 전용으로만 로드(공개 페이지엔 안 실린다). 새 화면은 @likelion-design/ui 컴포넌트로 만든다.
+import '@likelion-design/ui/styles.css'
 
 // 관리자 영역 공유 셸 — 좌측 사이드바 네비게이션(App Store Connect 스타일).
 // dashboard(15탭)와 jobs(7탭)의 모든 화면을 URL(?tab=)로 묶어 "페이지처럼" 전환한다.
@@ -17,17 +19,15 @@ function buildNav(lang) {
       items: [
         { label: L('메인 퍼널', 'Main funnel', 'Phễu chính'), pathname: '/admin/dashboard', tab: 'main' },
         { label: L('추이', 'Trend', 'Xu hướng'), pathname: '/admin/dashboard', tab: 'trend' },
-        { label: L('리텐션', 'Retention', 'Giữ chân'), pathname: '/admin/dashboard', tab: 'retention' },
-        { label: L('지원자', 'Applicants', 'Ứng viên'), pathname: '/admin/dashboard', tab: 'applications' },
-        { label: L('이력서', 'Resumes', 'CV'), pathname: '/admin/dashboard', tab: 'resumes' },
-        { label: L('인재풀', 'Talent', 'Nguồn ứng viên'), pathname: '/admin/dashboard', tab: 'talent' },
+        // 리텐션·지원자·이력서 탭은 안 보게 되어 뺐다(10/6) — 대시보드가 무거워서.
+        // 뷰(RetentionView/ApplicationsView/ResumesView)와 API 는 남아 있고, URL ?tab= 직접 진입도 막혔다.
+        // 인재풀·인재 퀄리티·인재 공급을 '인재' 한 페이지로 합쳤다(10/6) — 안에서 알약으로 전환.
+        { label: L('인재', 'Talent', 'Ứng viên'), pathname: '/admin/dashboard', tab: 'talent' },
         // 승주 작업실 > 콜드메일 하위 탭을 상위로 뺐다(10/2) — 작업실에서 유일하게 매일 보는 표라 두 단계 진입이 낭비.
         { label: L('콜드메일', 'Cold email', 'Email tiếp cận'), pathname: '/admin/dashboard', tab: 'coldmail' },
-        { label: L('인재 퀄리티', 'Quality', 'Chất lượng ƯV'), pathname: '/admin/dashboard', tab: 'quality' },
         // '어학 점수'는 유진 작업실 > 어학 정보 수집 안으로 옮겼다 — 캠페인 카드 바로
         // 아래에서 "그래서 무슨 점수가 들어왔나"를 이어서 보는 흐름이라 여기 두면 끊긴다.
         // /admin/lang-scores URL 은 살아 있다(명단이 길어 전체 화면으로 볼 때).
-        { label: L('인재 공급', 'Supply', 'Cung ứng viên'), pathname: '/admin/dashboard', tab: 'supply' },
         { label: L('광고메일', 'Recommend', 'Email đề xuất'), pathname: '/admin/dashboard', tab: 'recommend' },
         { label: L('블랙리스트', 'Blacklist', 'Danh sách đen'), pathname: '/admin/dashboard', tab: 'blacklist' },
         { label: L('연봉 인증', 'Verifications', 'Xác minh lương'), pathname: '/admin/dashboard', tab: 'verifications' },
@@ -103,6 +103,9 @@ export default function AdminLayout({ children, titleRight = null }) {
   return (
     <div className={`al-shell${open ? ' open' : ''}`}>
       <style>{`
+        /* 디자인 시스템 CSS 가 :root 의 --background/--foreground 를 헥스로 덮어쓴다 — globals.css 의
+           shadcn HSL 값으로 되돌려 둔다(body 안 <style> 이라 head 의 스타일시트보다 뒤에 적용). */
+        :root { --background: 0 0% 100%; --foreground: 0 0% 7%; }
         .al-shell {
           display: flex; min-height: 100vh;
           font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

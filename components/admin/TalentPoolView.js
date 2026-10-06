@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import { ActionButton, TextField, TabGroup } from '@likelion-design/ui'
+import { RiSearchLine, RiFilter3Line, RiDownloadLine, RiSparkling2Line } from '@remixicon/react'
 import { useAdmin } from '../../lib/adminSwr'
 import { isTopTier, overseasOf, classifyUniversity } from '../../lib/topUniversities'
 import { ROLE_GROUPS } from '../../constants/jobs'
@@ -9,9 +11,10 @@ import { vndMToKrwText } from '../../lib/fx'
 // 인재의 학벌 신호 = 도메인 인증 학교(authoritative) ∪ 이력서 자유입력 university.
 // 인증 학교는 verified_school_tier(='top')로 바로 명문대 집계되고, 그 외엔 자유입력
 // 이름을 topUniversities로 분류한다. 둘 중 하나라도 걸리면 해당 버킷으로 센다.
-const topTierOf = r => r.verified_school_tier === 'top' || isTopTier(r.university) || isTopTier(r.verified_school_name)
+// TalentView(통합 인재 페이지)의 요약 줄이 같은 기준으로 세도록 export.
+export const topTierOf = r => r.verified_school_tier === 'top' || isTopTier(r.university) || isTopTier(r.verified_school_name)
 const overseasOfR = r => overseasOf(r.university) || overseasOf(r.verified_school_name)
-const isOverseasR = r => overseasOfR(r) !== null
+export const isOverseasR = r => overseasOfR(r) !== null
 // 카드/CSV에 보여줄 학교명 — 자유입력 우선, 없으면 인증된 학교명.
 const uniOf = r => r.university || r.verified_school_name || ''
 
@@ -314,9 +317,7 @@ export default function TalentPoolView({ token, lang }) {
   const publicCount = pool.filter(r => r.is_resume_public).length
   const koreanCount = pool.filter(r => (r.korean_cert || '').trim()).length
   const topTierCount = pool.filter(topTierOf).length
-  const topTierPct = pool.length ? Math.round((topTierCount / pool.length) * 100) : 0
   const overseasCount = pool.filter(isOverseasR).length
-  const overseasPct = pool.length ? Math.round((overseasCount / pool.length) * 100) : 0
 
   // 필터 모달 — 활성 필터 요약(바 표시)·초기화·섹션 헬퍼
   const activeFilters = []
@@ -380,77 +381,49 @@ export default function TalentPoolView({ token, lang }) {
         .jobsel-dropdown::-webkit-scrollbar-thumb { background: #E5E8EB; border-radius: 3px; }
       `}</style>
 
-      {/* 모드 탭: 인재풀 전체 ↔ 최우수 인재 (인재 스쿼드 쇼케이스) */}
-      <div style={{ display: 'inline-flex', gap: 0, background: '#f3f4f6', borderRadius: 10, padding: 3, marginBottom: 16 }}>
-        {[{ key: 'pool', label: L.poolTitle }, { key: 'elite', label: `⭐ ${L.eliteBtn}` }].map(m => (
-          <button key={m.key} onClick={() => setMode(m.key)}
-            style={{
-              padding: '7px 18px', borderRadius: 8, fontSize: 13, fontWeight: 700,
-              border: 'none', cursor: 'pointer', transition: 'all 0.15s',
-              background: mode === m.key ? '#fff' : 'transparent',
-              color: mode === m.key ? '#111' : '#999',
-              boxShadow: mode === m.key ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
-            }}>
-            {m.label}
-          </button>
-        ))}
+      {/* 컨트롤 한 줄 — 왼쪽: 모드(인재풀 ↔ 최우수) + 필터, 오른쪽: 검색 · AI 채우기 · CSV.
+          예전엔 모드 탭 / 건수+검색 / 필터가 세 줄로 쌓여 있었다(10/6 디자인 시스템 컴포넌트로 정리).
+          전체·공개·학교 합계는 TalentView 요약 줄에 있고, 여기엔 필터가 걸렸을 때의 건수만 남긴다. */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flexWrap: 'wrap' }}>
+          <TabGroup type="round" size="medium" gap={8} value={mode} onChange={setMode}
+            items={[{ value: 'pool', label: L.poolTitle }, { value: 'elite', label: `⭐ ${L.eliteBtn}` }]} />
+          {mode === 'pool' && <>
+            <span style={{ width: 1, height: 20, background: '#E5E7EA', margin: '0 4px' }} />
+            <ActionButton size="medium" color={activeFilters.length ? 'primary' : 'neutral'} type="outline"
+              prefixIcon={<RiFilter3Line size={16} />}
+              label={activeFilters.length ? `${L.filterBtn} ${activeFilters.length}` : L.filterBtn}
+              onClick={() => setFilterOpen(true)} />
+            {activeFilters.length > 0 && <>
+              <span style={{ fontSize: 13, color: '#6B7583', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0, maxWidth: 320 }}>
+                <b style={{ color: '#ff6000' }}>{filtered.length}{L.people}</b> · {activeFilters.join(' · ')}
+              </span>
+              <ActionButton size="small" color="neutral" type="ghost" label={L.reset} onClick={resetFilters} />
+            </>}
+            {activeFilters.length === 0 && filtered.length !== pool.length && (
+              <span style={{ fontSize: 13, color: '#ff6000', fontWeight: 600 }}>{L.filtered} {filtered.length}{L.people}</span>
+            )}
+          </>}
+        </div>
+        {mode === 'pool' && (
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <TextField type="input" size="small" width={240} value={search} onChange={e => setSearch(e.target.value)}
+              prefixIcon={<RiSearchLine size={16} />} placeholder={L.searchPh} />
+            {(parseTargets.length > 0 || batch) && (
+              <ActionButton size="medium" color="neutral" type="outline" prefixIcon={<RiSparkling2Line size={16} />}
+                label={batch
+                  ? `${batch.done}/${batch.total}${batch.fail ? ` · ${L.parseFail} ${batch.fail}` : ''} — ${L.batchStop}`
+                  : `${L.aiFillAll} (${parseTargets.length})`}
+                onClick={runBatchParse} />
+            )}
+            <ActionButton size="medium" color="neutral" type="outline" prefixIcon={<RiDownloadLine size={16} />} label={L.csv} onClick={downloadCsv} />
+          </div>
+        )}
       </div>
 
       {mode === 'elite' && <EliteView pool={pool} lang={lang} L={L} vi={vi} ko={ko} />}
 
       {mode === 'pool' && <>
-      {/* 헤더: 제목 + 통계 스트립 + 검색/CSV */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
-        <div>
-          <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 6px' }}>{L.poolTitle}</h3>
-          <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', fontSize: 13, color: '#6B7280', flexWrap: 'wrap' }}>
-            <span>{L.statTotal} <strong style={{ color: '#0F172A' }}>{pool.length}</strong>{L.people}</span>
-            <span>{L.statPublic} <strong style={{ color: '#0F172A' }}>{publicCount}</strong>{L.people}</span>
-            <span>{L.statTop} <strong style={{ color: '#0F172A' }}>{topTierCount}</strong> ({topTierPct}%)</span>
-            {overseasCount > 0 && <span>{L.statOverseas} <strong style={{ color: '#0F172A' }}>{overseasCount}</strong> ({overseasPct}%)</span>}
-            {koreanCount > 0 && <span>{L.statKorean} <strong style={{ color: '#0F172A' }}>{koreanCount}</strong></span>}
-            {filtered.length !== pool.length && <span style={{ color: '#ff6000', fontWeight: 600 }}>· {L.filtered} {filtered.length}{L.people}</span>}
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <input
-            type="text"
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder={L.searchPh}
-            style={{ padding: '7px 11px', border: '1px solid #d1d5db', borderRadius: 8, fontSize: 13, width: 240 }}
-          />
-          {(parseTargets.length > 0 || batch) && (
-            <button onClick={runBatchParse}
-              style={{ padding: '8px 14px', border: '1px solid #ff6000', borderRadius: 8, fontSize: 13, background: batch ? '#FFF6F0' : '#fff', color: '#ff6000', cursor: 'pointer', fontWeight: 700, whiteSpace: 'nowrap' }}>
-              {batch
-                ? `${batch.done}/${batch.total}${batch.fail ? ` · ${L.parseFail} ${batch.fail}` : ''} — ${L.batchStop}`
-                : `${L.aiFillAll} (${parseTargets.length})`}
-            </button>
-          )}
-          <button onClick={downloadCsv}
-            style={{ padding: '8px 16px', border: 'none', borderRadius: 8, fontSize: 13, background: '#ff6000', color: '#fff', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}>
-            {L.csv}
-          </button>
-        </div>
-      </div>
-
-      {/* 필터 바: 모달 트리거 + 활성 필터 요약 — 인라인 3단 칩이 산만하다는 피드백(8/5)으로 모달化 */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, minWidth: 0 }}>
-        <button onClick={() => setFilterOpen(true)}
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '7px 14px', border: `1px solid ${activeFilters.length ? '#ff6000' : '#E5E8EB'}`, borderRadius: 8, fontSize: 13, fontWeight: 700, background: '#fff', color: activeFilters.length ? '#ff6000' : '#374151', cursor: 'pointer', flexShrink: 0 }}>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" /></svg>
-          {L.filterBtn}
-          {activeFilters.length > 0 && <span style={{ background: '#ff6000', color: '#fff', borderRadius: 999, fontSize: 10.5, fontWeight: 800, padding: '1px 7px' }}>{activeFilters.length}</span>}
-        </button>
-        {activeFilters.length > 0 && (
-          <>
-            <span style={{ fontSize: 12.5, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>{activeFilters.join(' · ')}</span>
-            <button onClick={resetFilters} style={{ border: 'none', background: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 600, color: '#9CA3AF', padding: 0, flexShrink: 0 }}>{L.reset}</button>
-          </>
-        )}
-      </div>
-
       {/* 필터 모달: 직군 → 세부 직무 → 경력 → 스펙 → 근무형태 (클릭 즉시 반영) */}
       {filterOpen && (
         <div onClick={() => setFilterOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>

@@ -106,9 +106,10 @@ export function langTier(raw) {
   const topik = s.match(/topik(?:\s*ii?)?[^0-9]*([1-6])/)
   if (topik) return +topik[1] >= 5 ? 'high' : +topik[1] >= 3 ? 'mid' : 'basic'
   const ielts = s.match(/ielts[^0-9]*(\d(?:\.\d)?)/)
-  if (ielts) return +ielts[1] >= 6.5 ? 'high' : +ielts[1] >= 5 ? 'mid' : 'basic'
+  // 점수 컷은 lib/talentQuality(퀄리티 분포)와 동일하게 — 한 페이지에서 같은 라벨이 다른 숫자를 내지 않도록(10/6)
+  if (ielts) return +ielts[1] >= 7 ? 'high' : +ielts[1] >= 6 ? 'mid' : 'basic'
   const toeic = s.match(/toeic[^0-9]*(\d{3})/)
-  if (toeic) return +toeic[1] >= 800 ? 'high' : +toeic[1] >= 550 ? 'mid' : 'basic'
+  if (toeic) return +toeic[1] >= 850 ? 'high' : +toeic[1] >= 700 ? 'mid' : 'basic'
   if (/\bc[12]\b|native|fluent|advanced|\bproficient\b|full professional|business|thành thạo|cao cấp|모국어|유창/.test(s)) return 'high'
   if (/basic|beginner|elementary|novice|cơ bản|sơ cấp|\ba[12]\b|limited|기초|초급/.test(s)) return 'basic'
   if (/\bb[12]\b|intermediate|professional|working|conversational|communicat|good|giao tiếp|khá|중급/.test(s)) return 'mid'

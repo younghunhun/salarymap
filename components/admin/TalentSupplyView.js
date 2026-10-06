@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { ActionButton } from '@likelion-design/ui'
+import { RiDownloadLine } from '@remixicon/react'
 import { useAdmin } from '../../lib/adminSwr'
 
 // 인재 공급(Talent supply) — FYI 인재풀을 포지션(직군)으로 분해한 스냅샷.
@@ -31,22 +33,6 @@ export default function TalentSupplyView({ token, lang }) {
   const maxAll = Math.max(1, ...rows.map(r => r.all))
   const pct = (n, d) => (d > 0 ? Math.round((n / d) * 100) : 0)
 
-  // 언어 급간(상급/중급/기초) 분포를 카드 서브라인으로 — '?'=언급은 있으나 급간 판별불가
-  const tierSub = (t) => [
-    t.high ? `${L('상급', 'adv', 'cao')} ${t.high}` : null,
-    t.mid ? `${L('중급', 'mid', 'TB')} ${t.mid}` : null,
-    t.basic ? `${L('기초', 'basic', 'cơ bản')} ${t.basic}` : null,
-    t.unknown ? `? ${t.unknown}` : null,
-  ].filter(Boolean).join(' · ')
-
-  const stat = (label, value, sub) => (
-    <div style={{ background: '#fff', border: '1px solid #E5E8EB', borderRadius: 12, padding: '14px 16px', minWidth: 130 }}>
-      <div style={{ fontSize: 12, color: '#6B7280', fontWeight: 600, marginBottom: 4 }}>{label}</div>
-      <div style={{ fontSize: 24, fontWeight: 800, color: '#0F172A', lineHeight: 1 }}>{value}</div>
-      {sub && <div style={{ fontSize: 11.5, color: '#9CA3AF', marginTop: 4 }}>{sub}</div>}
-    </div>
-  )
-
   function downloadCsv() {
     const headers = ['Category', 'Group', 'All', 'Resume', 'Resume public', 'Korean', 'English', 'Active(resume)']
     const body = rows.map(r => [catName(r), GROUP_LABEL[r.group][lang], r.all, r.resume, r.resumePublic ?? '', r.korean ?? '', r.english ?? '', r.active])
@@ -66,31 +52,11 @@ export default function TalentSupplyView({ token, lang }) {
 
   return (
     <div style={{ paddingBottom: 40 }}>
-      {/* 헤더 + CSV */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap', marginBottom: 6 }}>
-        <div>
-          <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 4px' }}>{L('인재 공급 구성', 'Talent supply mix', 'Cơ cấu nguồn ứng viên')}</h3>
-          <div style={{ fontSize: 12.5, color: '#6B7280' }}>
-            {L(
-              '등록 인재풀을 직군으로 분해한 스냅샷 — 기업 수요 포지션 대비 공급 확인용. 매일 갱신.',
-              'Snapshot of the talent pool by role — supply vs. company demand. Refreshes daily.',
-              'Ảnh chụp nguồn ứng viên theo nhóm ngành — đối chiếu cung với nhu cầu doanh nghiệp. Cập nhật hằng ngày.'
-            )}
-          </div>
-        </div>
-        <button onClick={downloadCsv} style={{ padding: '8px 16px', border: 'none', borderRadius: 8, fontSize: 13, background: '#ff6000', color: '#fff', cursor: 'pointer', fontWeight: 600, whiteSpace: 'nowrap' }}>
-          {L('CSV 다운로드', 'Download CSV', 'Tải CSV')}
-        </button>
-      </div>
-
-      {/* 퍼널 요약 카드 */}
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', margin: '14px 0 18px' }}>
-        {stat(L('전체 프로필', 'Profiles', 'Tổng hồ sơ'), totals.profiles, ko ? `포지션 입력 ${totals.withPosition} (${pct(totals.withPosition, totals.profiles)}%)` : `${pct(totals.withPosition, totals.profiles)}% ${L('', 'w/ position', 'có vị trí')}`)}
-        {stat(L('이력서 등록', 'Resume', 'Có CV'), totals.resumeHolders, `${pct(totals.resumeHolders, totals.profiles)}% · ${L('공개', 'public', 'công khai')} ${totals.resumePublic}`)}
-        {stat(L('활성 (전체)', 'Active (all)', 'Hoạt động (tất cả)'), totals.activeAll, L('7일 방문·지원·반복', '7d visit / applied / repeat', 'Truy cập 7 ngày · ứng tuyển · quay lại'))}
-        {stat(L('활성 이력서', 'Active w/ resume', 'CV hoạt động'), totals.activeResume, `${pct(totals.activeResume, totals.resumeHolders)}% ${L('이력서 중', 'of resumes', 'trong số CV')}`)}
-        {language && stat(L('한국어 가능', 'Korean', 'Tiếng Hàn'), language.ko.able, tierSub(language.ko))}
-        {language && stat(L('영어 가능', 'English', 'Tiếng Anh'), language.en.able, tierSub(language.en))}
+      {/* 헤더: CSV 만 — 제목·퍼널 타일(프로필→이력서→활성)은 TalentView 요약 줄로 올라갔고,
+          한국어/영어 타일은 퀄리티 분포와 급간 기준이 달라 혼선을 줘서 뺐다(10/6 통합). 직군별 KO/EN 열은 유지. */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
+        <ActionButton size="medium" color="neutral" type="outline" prefixIcon={<RiDownloadLine size={16} />}
+          label={L('CSV 다운로드', 'Download CSV', 'Tải CSV')} onClick={downloadCsv} />
       </div>
 
       {/* 개발 vs 비개발 공급 비중 — 수요·공급 갭 핵심 신호 */}

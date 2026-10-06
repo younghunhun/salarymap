@@ -9,12 +9,7 @@ import AdminLayout from '../../components/admin/AdminLayout'
 import DateRangePicker from '../../components/admin/DateRangePicker'
 import Icon from '../../components/Icon'
 import MainFunnelView from '../../components/admin/MainFunnelView'
-import RetentionView from '../../components/admin/RetentionView'
-import ApplicationsView from '../../components/admin/ApplicationsView'
-import ResumesView from '../../components/admin/ResumesView'
-import TalentPoolView from '../../components/admin/TalentPoolView'
-import TalentQualityView from '../../components/admin/TalentQualityView'
-import TalentSupplyView from '../../components/admin/TalentSupplyView'
+import TalentView from '../../components/admin/TalentView'
 import KtcSourcesView from '../../components/admin/KtcSourcesView'
 import VerificationsView from '../../components/admin/VerificationsView'
 import CommunityView from '../../components/admin/CommunityView'
@@ -75,7 +70,7 @@ export default function AdminDashboard() {
   const router = useRouter()
   const tab = router.query.tab || 'main'
   // 날짜 범위를 실제로 쓰는 탭에서만 날짜 피커 노출 (이력서/인재풀/연봉인증은 누적 목록이라 무관)
-  const showDatePicker = ['main', 'trend', 'applications', 'community', 'appMetrics', 'ktc-sources'].includes(tab)
+  const showDatePicker = ['main', 'trend', 'community', 'appMetrics', 'ktc-sources'].includes(tab)
   const [chartMode, setChartMode] = useState('1d')
   const [tableView, setTableView] = useState('daily')
   const [tableSection, setTableSection] = useState('basic')
@@ -118,13 +113,9 @@ export default function AdminDashboard() {
   // 키는 각 View 의 useAdmin URL 과 글자까지 동일해야 적중한다.
   useEffect(() => {
     if (!token) return
-    const appParams = new URLSearchParams()
-    if (dateRange.from) appParams.set('from', dateRange.from)
-    if (dateRange.to) appParams.set('to', dateRange.to)
     const effectiveTo = dateRange.to >= yesterday ? todayStr : dateRange.to
     const urls = [
-      '/api/admin/resumes',                                            // resumes + talent (공유)
-      `/api/admin/applications?${appParams}`,                          // applications
+      '/api/admin/resumes',                                            // talent (인재풀)
       `/api/admin/community?from=${dateRange.from}&to=${dateRange.to}`, // community
       `/api/admin/app-metrics?from=${dateRange.from}&to=${effectiveTo}`, // appMetrics
       '/api/salary-verification/admin?status=pending',                 // verifications(기본 필터)
@@ -951,34 +942,10 @@ export default function AdminDashboard() {
         )}
 
 
-        {/* Retention Tab — 전체(웹+앱) 가입 유저 리텐션 전용 */}
-        {tab === 'retention' && (
-          <RetentionView token={token} lang={lang} />
-        )}
-
-        {/* Applications Tab */}
-        {tab === 'applications' && (
-          <ApplicationsView token={token} t={t} dateRange={dateRange} lang={lang} />
-        )}
-
-        {/* Resumes Tab */}
-        {tab === 'resumes' && (
-          <ResumesView token={token} t={t} lang={lang} />
-        )}
-
         {/* Talent Pool Tab — 이력서 보유 인재 전체 (공개 여부는 뷰 내 필터/뱃지) */}
+        {/* 인재 — 명단(인재풀) · 직군 구성(공급) · 퀄리티 분포를 한 페이지로(10/6 통합) */}
         {tab === 'talent' && (
-          <TalentPoolView token={token} lang={lang} />
-        )}
-
-        {/* Talent Quality Tab — 퀄리티 신호 분포 (한국행/VN 현지 두 렌즈) */}
-        {tab === 'quality' && (
-          <TalentQualityView token={token} lang={lang} />
-        )}
-
-        {/* Talent Supply Tab — 직군별 공급 구성 스냅샷 */}
-        {tab === 'supply' && (
-          <TalentSupplyView token={token} lang={lang} />
+          <TalentView token={token} lang={lang} />
         )}
 
         {/* Verifications Tab */}

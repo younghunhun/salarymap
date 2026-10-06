@@ -186,7 +186,6 @@ export default function TalentQualityView({ token, lang }) {
   return (
     <div style={{ paddingBottom: 40 }}>
       <div style={{ marginBottom: 6 }}>
-        <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 4px' }}>{L('인재 퀄리티', 'Talent quality', 'Chất lượng ứng viên')}</h3>
         <div style={{ fontSize: 12.5, color: '#6B7280' }}>
           {L(
             '이력서 보유 인재의 퀄리티 신호 분포 — 좋은 인재의 기준이 시장마다 달라 한국행(한국어·학벌)과 베트남 현지(연차·네임밸류·영어) 두 렌즈로 본다.',
@@ -241,7 +240,6 @@ export default function TalentQualityView({ token, lang }) {
 
       {/* 요약 카드 — 시장별 코어 규모 */}
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', margin: '14px 0 18px' }}>
-        {stat(L('전체 인재풀', 'Pool', 'Tổng'), S.N, `${L('공개', 'public', 'công khai')} ${S.publicN} (${pct(S.publicN)})`)}
         {stat(L('VN 현지 코어 (경력 2y+)', 'VN core (2y+)', 'Core VN (2y+)'), S.vnCore, `${L('유명기업', 'brand', 'cty tên tuổi')} ${S.vnCoreBrand} · ${L('영어 중급+', 'EN mid+', 'T.Anh TB+')} ${S.vnCoreEnMid}`)}
         {stat(L('한국행 코어 (한국어 중급+)', 'KR core (Korean mid+)', 'Core Hàn (T.Hàn TB+)'), S.krCore, `${L('상급', 'adv', 'cao')} ${S.krCoreHigh} · ${L('한국계 경력', 'KR employer', 'cty Hàn')} ${S.krGroupExp}`)}
         {stat(L('유명기업 경력', 'Brand employer', 'Cty tên tuổi'), S.coverage.brand, L('현지 네임밸류 포함', 'incl. VN-local brands', 'gồm thương hiệu VN'))}
