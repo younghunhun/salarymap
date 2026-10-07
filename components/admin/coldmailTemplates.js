@@ -4667,6 +4667,34 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'F', company: 'First Marketing Company', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── Ultra Fashion 10/7 Be.F(AI 캐릭터 컴패니언) 2공고 (scripts/outreach/ultra1007-recommend-coldmail.mjs) — 그룹×프레임 4항목 ──
+  ...[
+    ['des', 'UX/UI Designer', 'R218', 'HCM · Đà Nẵng · Hà Nội · Từ 1 năm kinh nghiệm · 18–25 triệu ₫',
+      '디자인 직군 × 12m+ × Figma AND UX/UI 텍스트 × 공고 3도시(HCM/ĐN/HN) or 미기재(실측 117). Figma·UX/UI 중 하나만(89)·그래픽/영상 전업(148)·신입(92)은 제외.',
+      '<b>Ultra Fashion</b> — doanh nghiệp Hàn Quốc 18 năm kinh nghiệm thương mại điện tử thời trang (800.000 thành viên), đang phát triển <b>Be.F</b> – dịch vụ AI Character Companion — đang tuyển <b>UX/UI Designer</b> qua FYI. Công việc: thiết kế UX/màn hình theo luồng khám phá nhân vật → trò chuyện → mối quan hệ → quay lại; UI, prototype, design system bằng Figma và công cụ AI; dùng ChatGPT/Claude/Cursor để sản xuất – test – cải thiện nhanh. Yêu cầu: UX/UI Web/Mobile và prototyping bằng <b>Figma</b>, User Flow/interaction/design system, dùng AI để nghiên cứu·hoạch định·thiết kế nhanh, UX giữ người dùng. Ưu tiên: dịch vụ AI, character chat, game, cộng đồng, giải trí. Kinh nghiệm từ 1 năm. Lương 18–25 triệu ₫. Địa điểm HCM/Đà Nẵng/Hà Nội, phối hợp trực tuyến với đội Hàn Quốc. Ưu tiên tiếng Anh hoặc tiếng Hàn.',
+      '한국 패션 이커머스 18년 <b>Ultra Fashion</b>, AI 캐릭터 컴패니언 서비스 <b>Be.F</b> 개발 — <b>UX/UI Designer</b>. 캐릭터 탐색→대화→관계 형성→재방문 흐름의 UX·화면 설계, Figma·AI 툴로 UI/프로토타입/디자인시스템 구축, ChatGPT/Claude/Cursor 적극 활용. 필수 Figma 웹/모바일 UX/UI·프로토타이핑, User Flow·인터랙션·디자인시스템, AI 활용 리서치·기획·디자인. 우대 AI/캐릭터챗/게임/커뮤니티/엔터 경험, 영어 or 한국어. 1년+, 월 1,800만~2,500만동, HCM/다낭/하노이, 한국 기획팀과 온라인 협업.',
+      'Ultra Fashion (Korean fashion e-commerce, 18 yrs, 800K members) is building Be.F, an AI character companion service, and hiring a UX/UI Designer. Design the discover → chat → relationship → return flow; build UI, prototypes and design system in Figma with AI tools; use ChatGPT/Claude/Cursor to produce–test–iterate fast. Must: Web/Mobile UX/UI and prototyping in Figma, user flow/interaction/design system, AI-assisted research and design, retention-oriented UX. Nice: AI service, character chat, game, community or entertainment experience; English or Korean. 1+ yrs, 18–25M VND, HCM/Da Nang/Hanoi, online collaboration with the Korean team.'],
+    ['dev', 'Developer', 'R217', 'HCM · Đà Nẵng · Hà Nội · Từ 1 năm kinh nghiệm · 18–25 triệu ₫',
+      '개발 직군(FE/BE/Fullstack/Mobile/Web) × 12m+ × 웹스택 텍스트 × 공고 3도시 or 미기재(실측 892, des 배정자 제외). 가점 LLM API·실시간/채팅·AI 코딩툴. 신입(930)은 제외.',
+      '<b>Ultra Fashion</b> — doanh nghiệp Hàn Quốc 18 năm kinh nghiệm thương mại điện tử thời trang (800.000 thành viên), đang phát triển <b>Be.F</b> – dịch vụ AI Character Companion — đang tuyển <b>Developer</b> tại Việt Nam qua FYI để cùng team Hàn Quốc phát triển AI Character Chat, hội thoại thời gian thực, bộ nhớ người dùng, hệ thống đề xuất, DB/API (Front-end / Back-end / DB / tích hợp API). Dùng ChatGPT/Claude/Cursor để sản xuất – test – cải thiện nhanh. Yêu cầu: kinh nghiệm phát triển web service thực tế, năng lực <b>Front-end hoặc Back-end</b>, hiểu API/DB/đăng nhập/cấu trúc server, dùng AI Coding Tool, nhanh chóng tạo MVP – test – triển khai. Ưu tiên: chat, dịch vụ thời gian thực, tích hợp AI/LLM API. Kinh nghiệm từ 1 năm. Lương 18–25 triệu ₫. Địa điểm HCM/Đà Nẵng/Hà Nội, phối hợp trực tuyến với đội Hàn Quốc. Ưu tiên tiếng Anh hoặc tiếng Hàn.',
+      '한국 패션 이커머스 18년 <b>Ultra Fashion</b>, AI 캐릭터 컴패니언 서비스 <b>Be.F</b> 개발 — 베트남 <b>Developer</b>. 한국 팀과 AI 캐릭터 챗·실시간 대화·유저 메모리·추천·DB/API 등 핵심 기능 개발(FE/BE/DB/API 연동, 운영·고도화), ChatGPT/Claude/Cursor 적극 활용. 필수 웹서비스 실개발 경험, FE 또는 BE 역량, API/DB/인증/서버 구조 이해, AI 코딩툴 활용, MVP 빠른 실행력. 우대 채팅·실시간·AI/LLM API 연동. 1년+, 월 1,800만~2,500만동, HCM/다낭/하노이, 한국 팀과 온라인 협업.',
+      'Ultra Fashion (Korean fashion e-commerce, 18 yrs, 800K members) is building Be.F, an AI character companion service, and hiring a Developer in Vietnam to build AI character chat, real-time conversation, user memory, recommendation, DB/API with the Korean team (front-end / back-end / DB / API integration, operations). Use ChatGPT/Claude/Cursor to produce–test–iterate fast. Must: real web service development experience, front-end or back-end skills, understanding of API/DB/auth/server structure, AI coding tools, fast MVP execution. Nice: chat, real-time services, AI/LLM API integration. 1+ yrs, 18–25M VND, HCM/Da Nang/Hanoi, online collaboration with the Korean team.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^ultra1007-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại Ultra Fashion`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — Ultra Fashion ${title}`, en: `[FYI] You've been nominated — ${title} at Ultra Fashion` },
+      desc: `Ultra Fashion ${title}(${code}) recommend (10/7 Len 게재 당일): 비공개 프레임 — 컷=${cut} 2공고 1인1통 캐스케이드 des→dev, 빈도 게이트 없음. 유저 지시 "공고 내용대로".`,
+      source: 'scripts/outreach/ultra1007-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'U', company: 'Ultra Fashion', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^ultra1007-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi Ultra Fashion — ${title}`, ko: `[FYI] Ultra Fashion 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to Ultra Fashion — ${title}` },
+      desc: `Ultra Fashion ${title}(${code}) recommend (10/7): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/ultra1007-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'U', company: 'Ultra Fashion', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   {
     match: /^systeel0925-recommend-sm-private/,
     subject: {
