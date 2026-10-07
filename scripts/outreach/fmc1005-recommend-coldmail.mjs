@@ -5,6 +5,7 @@
 //   한국어 시그널 25(Design 직군 4, TOPIK4+ 9=전원 비Design) → V217 전원 / Design 직군 × 한국어 없음 223 → V218 코어.
 //   텍스트만 매치 313은 확장층(미발송, 유저 결정 대기).
 // 캐스케이드(1인1통) = ko(V217) → gen(V218). 지역 = HCM권 명시 or 미기재. 빈도 게이트 없음(10/2 지시).
+// 10/7 2차(ko만): 10/5 이후 신규 가입 + 지역 정규식 누락 보정 + FORCE_KO 수동 1명 → --group ko 로 V217 추가 발송.
 // 표준: 1인1통 · unsub 전역 제외 · 공개/비공개 프레임 · 발송 전 coldmailTemplates 등록.
 //
 //   node scripts/outreach/fmc1005-recommend-coldmail.mjs                       # dry-run
@@ -41,19 +42,23 @@ const psRe = /photoshop/i, aiRe = /illustrator/i, idRe = /indesign/i
 const koRe = /(korean|tiếng hàn|topik|한국어)/i
 const koSig = (p) => !!p.korean_cert || koRe.test(p.__t)
 const topik4 = (p) => /(topik\s*(ii\s*)?(level\s*)?[4-6]|topik\s*[4-6]|[4-6]\s*급|advanced|고급|fluent|c1|c2)/i.test(String(p.korean_cert || ''))
-const hcmA = (p) => /(h[ồo]\s*ch[íi]\s*minh|hcm|sài gòn|sai gon|saigon|thủ đức|thu duc|bình thạnh|bình dương|binh duong|đồng nai|dong nai|biên hòa|bien hoa|long an)/i.test(String(p.location || ''))
+// 10/7 보정: 한글 표기(호치민/호찌민)·외곽 구(Hóc Môn, Gò Vấp, Tân Bình…)·'Quận N' 누락으로 한국어 가능자 26명이 타지역 처리되던 것 수정
+const hcmA = (p) => /(h[ồo]\s*ch[íi]\s*minh|hcm|sài gòn|sai gon|saigon|thủ đức|thu duc|bình thạnh|bình dương|binh duong|đồng nai|dong nai|biên hòa|bien hoa|long an|호치민|호찌민|hóc môn|hoc mon|gò vấp|go vap|tân bình|tan binh|tân phú|tan phu|bình tân|binh tan|phú nhuận|phu nhuan|củ chi|cu chi|nhà bè|nha be|bình chánh|binh chanh|quận \d|district \d)/i.test(String(p.location || ''))
 const hcmOk = (p) => hcmA(p) || !String(p.location || '').trim()
 const hasPortfolio = (p) => !!p.portfolio_url || /(portfolio|behance|dribbble)/i.test(p.__t)
 const graphic = (p) => graphicRe.test(p.__t) || adobeRe.test(p.__t)
 const core = (p) => hcmOk(p) && (isDesign(p) || graphic(p))
 const tools = (p) => (psRe.test(p.__t) ? 1 : 0) + (aiRe.test(p.__t) ? 1 : 0) + (idRe.test(p.__t) ? 1 : 0)
 
+// 10/7 수동 ko 편입: korean_cert 빈칸이지만 KTC CV 요약(llm_summary)에 '한국어 우대 요건 충족' — V218 지원자, V217 미수신
+const FORCE_KO = new Set(['nhuhuynhnguyen29@gmail.com'])
+
 // ── 그룹 (캐스케이드 = 위에서부터 1인1통) ──
 const GROUPS = [
   {
     gkey: 'ko', camp: 'fmc1005-recommend-ko', jobKey: 'V217',
     label: { vi: 'Thiết kế đồ họa (Korean Speaking)', ko: '그래픽/디자인 시그널 × HCMC권 × 한국어 시그널(인증 or 텍스트)' },
-    pick: (p) => (core(p) && koSig(p) ? 1 + (topik4(p) ? 3 : p.korean_cert ? 1 : 0) + (isDesign(p) ? 2 : 0) + tools(p) + (hasPortfolio(p) ? 1 : 0) + (hcmA(p) ? 1 : 0) : null),
+    pick: (p) => (core(p) && (koSig(p) || FORCE_KO.has(String(p.email || '').toLowerCase())) ? 1 + (topik4(p) ? 3 : p.korean_cert ? 1 : 0) + (isDesign(p) ? 2 : 0) + tools(p) + (hasPortfolio(p) ? 1 : 0) + (hcmA(p) ? 1 : 0) : null),
   },
   {
     gkey: 'gen', camp: 'fmc1005-recommend-gen', jobKey: 'V218',
