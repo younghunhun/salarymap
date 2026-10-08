@@ -5,11 +5,32 @@
 //   dynamic Vercel domains, so route through Supabase's own OAuth endpoint
 //   (its callback IS registered in Google). Supabase then redirects back to our
 //   /auth/callback, which is allow-listed in Supabase Redirect URLs.
+import supabaseAdmin from '../../../lib/supabaseAdmin';
+import { isInAppUA } from '../../../lib/inApp';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   const proto = req.headers['x-forwarded-proto'] || 'https';
   const host = req.headers.host || '';
   const returnTo = typeof req.query.return === 'string' ? req.query.return : '/';
+
+  // 인앱 브라우저(페이스북·인스타·스레드·잘로)에서는 구글이 OAuth 를 차단한다(403 disallowed_useragent).
+  // 여기서 보내면 구글 오류 화면에서 끝나므로, 대신 외부 브라우저로 같은 페이지를 열도록 안내한다.
+  // 거의 모든 구글 로그인 버튼이 이 경로를 타서 한 곳에서 걸러진다.
+  const ua = String(req.headers['user-agent'] || '');
+  if (isInAppUA(ua)) {
+    const origin = `${proto}://${host}`;
+    const referer = typeof req.headers.referer === 'string' ? req.headers.referer : '';
+    const back = referer.startsWith(origin) ? referer : `${origin}${returnTo.startsWith('/') ? returnTo : '/'}`;
+    try {
+      await supabaseAdmin.from('events').insert([{
+        event: 'oauth_inapp_blocked',
+        page: new URL(back).pathname,
+        client_id: req.cookies?.sm_cid || null,
+        meta: { ua: ua.slice(0, 300), return: returnTo },
+      }]);
+    } catch {}
+    return res.redirect(`/open-in-browser?u=${encodeURIComponent(back)}`);
+  }
 
   const isPreviewOrLocal = host.endsWith('.vercel.app') || host.startsWith('localhost');
 

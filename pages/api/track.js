@@ -39,9 +39,16 @@ export default async function handler(req, res) {
     if (profile?.role === 'hr') return res.json({ ok: true, skipped: true })
   }
 
+  // 진입·로그인 시작 이벤트에는 UA 를 남긴다 — 메타/인스타 인앱 브라우저(구글 OAuth 차단) 비중과
+  // 그 구간의 로그인 왕복 손실(cv_oauth_start→return 23~34%)을 사후에 가를 수 있게.
+  const UA_EVENTS = /^(session_start|click_login|sign_up|one_tap_success|oauth_inapp_blocked)$|_oauth_start$/
+  const finalMeta = UA_EVENTS.test(event)
+    ? { ...(meta || {}), ua: String(req.headers['user-agent'] || '').slice(0, 300) }
+    : meta || null
+
   const { error } = await supabase
     .from('events')
-    .insert([{ event, page: page || null, meta: meta || null, user_id: activeUserId, client_id: clientId || null }])
+    .insert([{ event, page: page || null, meta: finalMeta, user_id: activeUserId, client_id: clientId || null }])
 
   if (error) return res.status(500).json({ error: error.message })
 

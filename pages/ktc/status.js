@@ -4,6 +4,7 @@ import supabaseAdmin from '../../lib/supabaseAdmin'
 import { supabase } from '../../lib/supabaseClient'
 import { verifyToken, leadId } from '../../lib/ktcMailToken'
 import { track } from '../../lib/track'
+import { isInAppBrowser } from '../../lib/inApp'
 
 // KTC 콜드메일 착지점 — 가입 게이트.
 // 콜드메일 수신자는 100% 베트남어권(발송 템플릿도 vi 전용)이라 이 페이지는 vi 고정이다.
@@ -20,6 +21,13 @@ export default function KtcStatus({ email, name, tokenValid }) {
 
   const login = async () => {
     if (busy) return
+    // 인앱 브라우저(잘로·페이스북 등)에서는 구글이 OAuth 를 차단한다 — 외부 브라우저 안내로 보낸다.
+    // (다른 로그인 버튼은 /api/auth/google 이 서버에서 같은 처리를 하지만 여기는 클라이언트 OAuth 직행)
+    if (isInAppBrowser()) {
+      track('oauth_inapp_blocked', { page: '/ktc/status', meta: { lead: leadId(email) } })
+      window.location.href = '/open-in-browser?u=' + encodeURIComponent(window.location.href)
+      return
+    }
     setBusy(true)
     track('ktc_status_login_click', { page: '/ktc/status', meta: { lead: leadId(email) } })
     // 갓 만든 계정이라 지원 현황은 비어 있다 → 바로 지원할 게 있는 공고 목록으로 보낸다.

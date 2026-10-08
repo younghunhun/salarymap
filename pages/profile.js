@@ -6,6 +6,7 @@ import Badge, { badgeLabel } from '../components/Badge'
 import { badgeVisual } from '../lib/badgeVisuals'
 import { useT } from '../lib/i18n'
 import { track, getClientId } from '../lib/track'
+import { uploadProfileFile } from '../lib/uploadProfileFile'
 import { ROLE_GROUPS } from '../constants/jobs'
 import { completionScore } from '../lib/profileScore'
 import EmploymentTab from '../components/profile/EmploymentTab'
@@ -110,14 +111,12 @@ export default function ProfilePage() {
   const profileRefPublic = useRef(false)
   profileRefPublic.current = !!profile?.is_resume_public
 
+  // 탭은 같은 페이지 안의 섹션이라 form 상태가 그대로 살아 있다 — 전환마다 "저장 안 함" 확인을 띄울
+  // 이유가 없고, 실제로 그 모달에서 수정을 버린 사람이 월 20명대였다. 저장 안 한 변경은 탭을 오가도
+  // 유지되고, 페이지를 떠날 때(라우트 이동·탭 닫기) 가드만 남긴다.
   const handleTabChange = (newTab) => {
     if (newTab === tab) return
-    if (isDirty && tab === 'profile') {
-      track('profile_abandon_dirty', { meta: { type: 'tab', target: newTab }, page: '/profile' })
-      setPendingNav({ type: 'tab', target: newTab })
-    } else {
-      setTab(newTab)
-    }
+    setTab(newTab)
   }
 
   // Browser tab close / refresh guard
@@ -333,19 +332,11 @@ export default function ProfilePage() {
       setShowAlert({ text: t('profile.resume.pdfOnly') })
       return
     }
-    const fd = new FormData()
-    fd.append('file', file)
-    fd.append('type', type)
     if (type === 'resume') setUploadingResume(true)
     try {
-      const res = await fetch('/api/profile/upload', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'X-Resume-Source': 'profile' },
-        body: fd,
-      })
-      // 실패해도 화면이 그대로여서 아무 일도 안 일어난 것처럼 보이던 자리.
-      if (!res.ok) return setShowAlert({ text: t('profile.upload.failed') })
-      const { url } = await res.json()
+      // Storage 직접 업로드(4.5MB 함수 한도 회피). 실패는 catch 로 떨어져 알림을 띄운다 —
+      // 예전엔 실패해도 화면이 그대로여서 아무 일도 안 일어난 것처럼 보였다.
+      const { url } = await uploadProfileFile({ token, type, file, source: 'profile' })
       setProfile(prev => {
         const next = { ...prev, [type === 'photo' ? 'photo_url' : 'resume_url']: url }
         window.dispatchEvent(new CustomEvent('profile-updated', { detail: next }))

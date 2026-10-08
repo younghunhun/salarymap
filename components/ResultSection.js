@@ -166,6 +166,9 @@ export default function ResultSection({ salary, role, experience, company, isLog
         sessionStorage.setItem('fyi_rgv', '1')
       } catch {}
       track('result_gate_view', { page: '/' })
+      // 게이트가 보이는 동안 One Tap(클릭 없이 뜸)으로 로그인하면 CTA 마커가 없어 게이트 전환으로
+      // 안 잡혔다(8~9월 gate_login_success 0건 vs 게이트 뒤 가입 752건). 노출 시점에 마커를 깔아 둔다.
+      try { if (!sessionStorage.getItem('fyi_gate_pending')) sessionStorage.setItem('fyi_gate_pending', 'result_view') } catch {}
     }
   }, [result, gateLocked])
 

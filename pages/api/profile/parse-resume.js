@@ -98,9 +98,20 @@ export default async function handler(req, res) {
     if (!pdfRes.ok) return res.status(500).json({ error: 'Failed to download resume' })
     const pdfBuffer = Buffer.from(await pdfRes.arrayBuffer())
 
-    // 3. Extract text
-    const pdfData = await pdf(pdfBuffer)
-    if (!pdfData.text || pdfData.text.trim().length < 50) {
+    // 3. Extract text — 텍스트 레이어가 없는 PDF(스캔본·글자가 이미지로 박힌 템플릿)는 pdf-parse 가
+    // 빈 텍스트를 뱉는다(7~9월 실패 156건, 파싱 오류의 대부분). 이 경우 PDF 를 통째로 vision 입력해
+    // 읽는다 — lib/parseResume.js(어드민/크론 파서)와 같은 방식. base64 가 커지는 15MB 초과만 포기.
+    let pdfText = ''
+    try { pdfText = (await pdf(pdfBuffer)).text || '' } catch {}
+    let userContent
+    if (pdfText.trim().length >= 50) {
+      userContent = `Resume text:\n\n${pdfText.slice(0, 15000)}`
+    } else if (pdfBuffer.subarray(0, 1024).indexOf('%PDF-') !== -1 && pdfBuffer.length < 15 * 1024 * 1024) {
+      userContent = [
+        { type: 'text', text: 'Parse this resume PDF.' },
+        { type: 'file', file: { filename: 'resume.pdf', file_data: `data:application/pdf;base64,${pdfBuffer.toString('base64')}` } },
+      ]
+    } else {
       return res.status(400).json({ error: 'Could not extract text from PDF. The file may be image-based.' })
     }
 
@@ -124,7 +135,7 @@ export default async function handler(req, res) {
       response_format: { type: 'json_object' },
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: `Resume text:\n\n${pdfData.text.slice(0, 15000)}` },
+        { role: 'user', content: userContent },
       ],
       temperature: 0.1,
     })
@@ -159,6 +170,20 @@ export default async function handler(req, res) {
     return res.json({ fields: { ...fields, yoe_months: fields.yoe_months ? String(fields.yoe_months) : '' } })
   } catch (err) {
     console.error('Resume parse error:', err)
+    // AI 크레딧/쿼터 소진은 사용자 잘못이 아니고 전원 실패로 번진다(8/2~8/3 5건, 알림 없이 지나갔다) → 슬랙.
+    if (err?.status === 429 || /credit|quota|insufficient/i.test(err?.message || '')) notifyQuota(err).catch(() => {})
     return res.status(500).json({ error: err.message || 'Failed to parse resume' })
   }
+}
+
+let quotaNotifiedAt = 0
+async function notifyQuota(err) {
+  const url = process.env.SLACK_WEBHOOK_URL
+  if (!url || Date.now() - quotaNotifiedAt < 60 * 60 * 1000) return // 같은 인스턴스에서 1시간에 1번
+  quotaNotifiedAt = Date.now()
+  await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: `:rotating_light: 이력서 AI 파싱(OpenAI) 쿼터/크레딧 오류 — 프로필 AI 채우기가 전부 실패 중\n${String(err?.message || err).slice(0, 300)}` }),
+  })
 }

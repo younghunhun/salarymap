@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import { useT } from '../lib/i18n'
 import { track } from '../lib/track'
+import { uploadProfileFile } from '../lib/uploadProfileFile'
 import { ROLE_GROUPS } from '../constants/jobs'
 import GlobalNav from '../components/GlobalNav'
 
@@ -244,18 +245,7 @@ export default function HongikPage() {
       const { data: { session } } = await supabase.auth.getSession()
       const token = session?.access_token
       if (!token) throw new Error(L('로그인이 필요해요.', 'Please sign in.', 'Vui lòng đăng nhập.'))
-      const fd = new FormData()
-      fd.append('type', 'resume')
-      fd.append('file', file)
-      const r = await fetch('/api/profile/upload', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'X-Resume-Source': 'hongik' },
-        body: fd,
-      })
-      if (!r.ok) {
-        const e = await r.json().catch(() => ({}))
-        throw new Error(e.error || 'Upload failed')
-      }
+      await uploadProfileFile({ token, type: 'resume', file, source: 'hongik' })
       const uid = session.user?.id
       if (uid) await supabase.from('user_profiles').update({ hr_visible: true, job_signal: 'open' }).eq('id', uid)
       fetch('/api/profile/share-resume', {

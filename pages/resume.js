@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import { supabase } from '../lib/supabaseClient'
 import { useT } from '../lib/i18n'
 import { track } from '../lib/track'
+import { uploadProfileFile } from '../lib/uploadProfileFile'
 import { idbPutCv, idbGetCv, idbClearCv } from '../lib/pendingCv'
 import supabaseAdmin from '../lib/supabaseAdmin'
 import QuickApplyJobList from '../components/jobs/QuickApplyJobList'
@@ -214,18 +215,7 @@ export default function ResumePage({ jobCount }) {
       const { data: { session } } = await supabase.auth.getSession()
       const token = session?.access_token
       if (!token) throw new Error(t('cv.err.notLoggedIn'))
-      const fd = new FormData()
-      fd.append('type', 'resume')
-      fd.append('file', fileToUpload)
-      const r = await fetch('/api/profile/upload', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'X-Resume-Source': 'resume' },
-        body: fd,
-      })
-      if (!r.ok) {
-        const e = await r.json().catch(() => ({}))
-        throw new Error(e.error || 'Upload failed')
-      }
+      await uploadProfileFile({ token, type: 'resume', file: fileToUpload, source: 'resume' })
       const uid = (await supabase.auth.getUser()).data.user?.id
       if (uid) {
         await supabase.from('user_profiles').update({ hr_visible: true, job_signal: 'open' }).eq('id', uid)
