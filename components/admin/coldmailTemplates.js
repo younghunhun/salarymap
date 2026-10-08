@@ -1183,6 +1183,43 @@ const REC0818_TEMPLATES = REC0818_GROUPS.flatMap((g) => ['public', 'private'].ma
   }),
 })))
 
+// ── Nexacode 10/8 R205 풀 재오픈 안내 (scripts/outreach/nxreopen1008-coldmail.mjs) — 그룹별 도입부 + 공통 '달라진 점' ──
+const NXREOPEN1008_OPEN = {
+  applied: {
+    vi: 'Tháng trước bạn đã ứng tuyển vị trí <b>AI Native Marketer</b> tại <b>Nexacode</b> qua FYI. Nexacode vừa <b>mở lại vị trí này</b> với tên gọi mới <b>AI Growth Marketer</b> và mô tả công việc được cập nhật. Vì đây là tin tuyển dụng mới, hồ sơ bạn đã nộp trước đó <b>không tự động chuyển sang</b> — nếu bạn vẫn quan tâm, chỉ cần 1 chạm để ứng tuyển lại và hồ sơ của bạn sẽ được gửi đến người phụ trách tuyển dụng trong đợt này.',
+    ko: '지난달 FYI를 통해 <b>Nexacode</b>의 <b>AI Native Marketer</b>에 지원하셨습니다. Nexacode가 이 포지션을 <b>AI Growth Marketer</b>라는 새 이름과 업데이트된 JD로 <b>재오픈</b>했습니다. 새 공고라 이전 지원서는 <b>자동으로 넘어가지 않으니</b>, 여전히 관심 있으시면 1탭으로 다시 지원해 주시면 이번 채용 건으로 담당자에게 전달됩니다.',
+    en: "Last month you applied to <b>AI Native Marketer</b> at <b>Nexacode</b> via FYI. Nexacode has <b>reopened the role</b> as <b>AI Growth Marketer</b> with an updated JD. Since this is a new posting, your earlier application <b>does not carry over</b> — if you're still interested, one tap re-applies and your profile goes to the hiring manager for this round.",
+  },
+  nominated: {
+    vi: 'Tháng trước FYI đã giới thiệu đến bạn vị trí <b>AI Native Marketer</b> tại <b>Nexacode</b>. Nexacode vừa <b>mở lại vị trí này</b> với tên gọi mới <b>AI Growth Marketer</b> và mô tả công việc được cập nhật. FYI đã rà soát lại và <b>tiếp tục chọn bạn vào danh sách đề cử</b> cho đợt tuyển dụng này.',
+    ko: '지난달 FYI가 <b>Nexacode</b>의 <b>AI Native Marketer</b> 포지션을 추천드렸습니다. Nexacode가 이 포지션을 <b>AI Growth Marketer</b>라는 새 이름과 업데이트된 JD로 <b>재오픈</b>했고, FYI가 다시 검토해 이번 채용 건의 <b>추천 명단에도 회원님을 선정</b>했습니다.',
+    en: "Last month FYI recommended the <b>AI Native Marketer</b> role at <b>Nexacode</b> to you. Nexacode has <b>reopened the role</b> as <b>AI Growth Marketer</b> with an updated JD, and FYI has <b>nominated you again</b> for this round.",
+  },
+}
+const NXREOPEN1008_CHANGES = {
+  vi: '<b>Điểm mới so với tin trước:</b> công việc bổ sung mảng <b>thu hút khách hàng B2B tại Hàn Quốc</b> (nghiên cứu khách hàng có nhu cầu bảo trì và thuê ngoài phần mềm, đề xuất phù hợp theo từng khách hàng, thu hút lead tư vấn) và <b>có thể làm việc từ xa khi cần thiết</b> (văn phòng chi nhánh tại Quận 1, TP.HCM). Các mảng còn lại giữ nguyên: bán nội dung số và SaaS (vận hành Threads, Instagram, quảng cáo Meta, blog và SEO/SEM, cải thiện ROAS) và ứng dụng AI vào nghiên cứu khách hàng, sản xuất creative, phân tích hiệu quả và tự động hóa. Phỏng vấn khoảng 60 phút, trong đó khoảng 30 phút kiểm tra năng lực thực tế qua chia sẻ màn hình (được phép dùng công cụ AI). Thử việc khoảng 2 tháng, sau khi lên chính thức có thưởng theo hiệu suất. Lương <b>12–20 triệu ₫/tháng</b>.',
+  ko: '<b>이전 공고와 달라진 점:</b> <b>한국 B2B 고객 확보</b>(유지보수·SW 아웃소싱 수요 고객 리서치, 고객별 맞춤 제안, 상담 리드 확보) 업무가 추가되었고 <b>필요 시 원격 근무 가능</b>(호치민 1군 지사)입니다. 나머지는 동일: 디지털 콘텐츠·SaaS 판매(Threads·Instagram·Meta 광고·블로그·SEO/SEM 운영, ROAS 개선), AI 활용(고객 리서치·크리에이티브 제작·성과 분석·자동화). 면접 약 60분(그중 약 30분 화면 공유 실무 테스트, AI 툴 사용 가능). 수습 약 2개월, 정규 전환 후 성과 보너스. 월 <b>1,200만~2,000만 동</b>.',
+  en: "<b>What's new vs. the previous posting:</b> the role adds <b>acquiring B2B customers in Korea</b> (researching companies needing software maintenance/outsourcing, tailored proposals, consultation leads) and <b>remote work when needed</b> (branch office in District 1, HCMC). The rest is unchanged: selling digital content and SaaS (Threads, Instagram, Meta ads, blog, SEO/SEM, ROAS), and applying AI to research, creative, analysis and automation. ~60-minute interview incl. a ~30-minute hands-on screen-share test (AI tools allowed). ~2 months probation, performance bonus after conversion. <b>12–20M VND/month</b>.",
+}
+const nxreopenIntro = (gkey) => ({
+  vi: `${NXREOPEN1008_OPEN[gkey].vi}<br><br>${NXREOPEN1008_CHANGES.vi}`,
+  ko: `${NXREOPEN1008_OPEN[gkey].ko}<br><br>${NXREOPEN1008_CHANGES.ko}`,
+  en: `${NXREOPEN1008_OPEN[gkey].en}<br><br>${NXREOPEN1008_CHANGES.en}`,
+})
+const NXREOPEN1008_CARD = { initial: 'N', company: 'Nexacode', title: 'AI Growth Marketer', meta: 'Văn phòng Quận 1, TP.HCM · Có thể làm việc từ xa khi cần · 12–20 triệu ₫/tháng' }
+const NXREOPEN1008_SUBJECT = {
+  applied: {
+    vi: '[FYI] Vị trí bạn đã ứng tuyển tại Nexacode vừa mở lại — AI Growth Marketer',
+    ko: '[FYI] 지원하셨던 Nexacode 포지션이 재오픈되었습니다 — AI Growth Marketer',
+    en: '[FYI] The Nexacode role you applied to has reopened — AI Growth Marketer',
+  },
+  nominated: {
+    vi: '[FYI] Nexacode mở lại vị trí — bạn tiếp tục có tên trong danh sách đề cử (AI Growth Marketer)',
+    ko: '[FYI] Nexacode 포지션 재오픈 — 추천 명단에 다시 선정되셨습니다 (AI Growth Marketer)',
+    en: '[FYI] Nexacode reopened the role — you are nominated again (AI Growth Marketer)',
+  },
+}
+
 export const COLDMAIL_TEMPLATES = [
   ...REC0818_TEMPLATES,
   ...KYNDOF_TEMPLATES,
@@ -5055,6 +5092,35 @@ export const COLDMAIL_TEMPLATES = [
       },
       initial: 'N', company: 'Nexacode', title: 'AI Growth Marketer', meta: 'Văn phòng Quận 1, TP.HCM · Có thể làm việc từ xa khi cần · 12–20 triệu ₫/tháng', tail: BENEFIT_PUBLIC,
     }),
+  },
+  // ── Nexacode 10/8 R205 풀 재오픈 안내 (scripts/outreach/nxreopen1008-coldmail.mjs) — R216 AI Growth Marketer ──
+  {
+    match: /^nxreopen1008-applied-.*-private/,
+    subject: NXREOPEN1008_SUBJECT.applied,
+    desc: 'Nexacode(R216) 재오픈 안내 — R205 AI Native Marketer <b>지원자(pending)</b> 대상 (10/8, 21명): 비공개 프레임. 배경: 10/6 nxgrowth1006 은 "미발송 풀만"이라 R205 풀 제외 → 신규 풀 소진(69통·지원 6) 후 유저 결정 "전작 다시 물어봐야 — 재오픈 됐다고 하고". 이전 지원서는 R205 공고에 묶여 있어 R216 으로 넘어오지 않음 → <b>1탭 재지원 요청</b>. 달라진 점(한국 B2B 고객 확보 추가·필요 시 원격·직함 변경)만 명시, 나머지는 R216 본문 그대로. R205 rejected 8 명은 제외.',
+    source: 'scripts/outreach/nxreopen1008-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: nxreopenIntro('applied'), ...NXREOPEN1008_CARD, tail: BENEFIT_PRIVATE }),
+  },
+  {
+    match: /^nxreopen1008-applied-/,
+    subject: NXREOPEN1008_SUBJECT.applied,
+    desc: 'Nexacode(R216) 재오픈 안내 — R205 지원자(pending) 대상 (10/8): 공개 프레임. 대상·카피는 private 항목과 동일.',
+    source: 'scripts/outreach/nxreopen1008-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: nxreopenIntro('applied'), ...NXREOPEN1008_CARD, tail: BENEFIT_PUBLIC }),
+  },
+  {
+    match: /^nxreopen1008-nominated-.*-private/,
+    subject: NXREOPEN1008_SUBJECT.nominated,
+    desc: 'Nexacode(R216) 재오픈 안내 — R205 <b>recommend 수신 × 미지원</b> 대상 (10/8, 40명): 비공개 프레임. 9/17 nxai0917 수신 후 무반응이었던 풀에 "재오픈 + 다시 추천 명단 선정" 프레임으로 1회 재접촉. 달라진 점(한국 B2B 고객 확보 추가·필요 시 원격·직함 변경) 명시.',
+    source: 'scripts/outreach/nxreopen1008-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: nxreopenIntro('nominated'), ...NXREOPEN1008_CARD, tail: BENEFIT_PRIVATE }),
+  },
+  {
+    match: /^nxreopen1008-nominated-/,
+    subject: NXREOPEN1008_SUBJECT.nominated,
+    desc: 'Nexacode(R216) 재오픈 안내 — R205 recommend 수신 × 미지원 대상 (10/8): 공개 프레임. 대상·카피는 private 항목과 동일.',
+    source: 'scripts/outreach/nxreopen1008-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: nxreopenIntro('nominated'), ...NXREOPEN1008_CARD, tail: BENEFIT_PUBLIC }),
   },
 ]
 
