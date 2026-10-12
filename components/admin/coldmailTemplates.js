@@ -4755,6 +4755,52 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'S', company: 'STS', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── CodeBailey 10/12 AI Agent Developer(R220) (scripts/outreach/codebailey1012-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['aiagent', 'AI Agent Developer', 'R220', 'HCM / HN / Đà Nẵng · Onsite · 2 vị trí · Không yêu cầu số năm kinh nghiệm & tiếng Anh · Lương theo năng lực',
+      'AI 시그널(경력 직함 or 직군 AI/ML/DS) × Python|Java 텍스트 보유 × HCM·HN·ĐN권/미기재 × 당일 타 공고 기수신 제외(실측 200 = LLM/RAG/Agent 키워드 113 + 없음 87). 경력·언어 게이트 없음(JD 무관). 확장층 비AI 개발직군×LLM 키워드(167)·Py/Java 미기재(25)·타지역(28) 제외.',
+      '<b>CodeBailey</b> — doanh nghiệp chuyên về AI Agent, thiết kế, xây dựng và vận hành các AI Agent "làm việc trên nền dữ liệu" (thu thập dữ liệu từ ERP, DB, tài liệu, web, email → tri thức hóa RAG → multi-agent thao tác hệ thống nội bộ; nền tảng Bailey RAG chạy 100% on-premise) — đang tuyển <b>AI Agent Developer</b> (2 vị trí) qua FYI. Công việc: phát triển AI Agent; tham gia xây dựng thu thập dữ liệu, RAG, multi-agent theo định hướng dự án; phát triển, kiểm thử và cải thiện chất lượng chức năng được giao; phối hợp triển khai dự án AI cho khách hàng khu vực công, doanh nghiệp, y tế, nghiên cứu. Yêu cầu: có kiến thức về AI; kinh nghiệm/kỹ năng lập trình <b>Python, Java</b>; <b>không yêu cầu số năm kinh nghiệm, không yêu cầu giỏi tiếng Anh</b> — quan trọng nhất là năng lực phát triển thực sự (có bài test). Ưu tiên: kinh nghiệm hoặc quan tâm LLM, RAG, AI Agent; tự học nhanh, chủ động giải quyết vấn đề. Lương theo năng lực (open cho Junior), on-site HCM / Hà Nội / Đà Nẵng.',
+      '<b>CodeBailey</b>(AI 에이전트 전문, ERP·DB·문서·웹·이메일 데이터 수집 → RAG 지식화 → 내부 시스템을 조작하는 멀티 에이전트, Bailey RAG 온프레미스 플랫폼) — <b>AI Agent Developer</b> 2명. AI 에이전트 개발, 데이터 수집·RAG·멀티 에이전트 구성요소 구축, 기능 개발·테스트·품질 개선, 공공·기업·의료·연구 고객 AI 프로젝트 협업. 필수 AI 관련 지식, <b>Python·Java</b> 코딩, <b>경력 연차·영어 무관</b>(실제 개발 역량이 핵심, 코딩 테스트). 우대 LLM/RAG/AI Agent 경험 또는 관심, 빠른 자기학습·주도적 문제 해결. 급여 역량 협의(주니어 오픈), HCM/하노이/다낭 온사이트.',
+      'CodeBailey, an AI Agent company that designs, builds and operates data-driven AI agents (collecting data from ERP, DB, documents, web and email → RAG knowledge → multi-agents operating internal systems; Bailey RAG fully on-premise), is hiring 2 AI Agent Developers. Develop AI agents; build data collection, RAG and multi-agent components; develop, test and improve assigned features; deliver AI projects for public-sector, enterprise, healthcare and research clients. Must: AI knowledge; Python/Java programming; no required years of experience or English level — real development ability matters most (coding test). Nice: experience or interest in LLM, RAG, AI agents; fast self-learner, proactive problem solver. Salary by ability (open to juniors), on-site in HCMC / Hanoi / Da Nang.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^codebailey1012-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại CodeBailey`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — CodeBailey ${title}`, en: `[FYI] You've been nominated — ${title} at CodeBailey` },
+      desc: `CodeBailey ${title}(${code}) recommend (10/12 Len 게재, 10/12 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/12 "200명 발송".`,
+      source: 'scripts/outreach/codebailey1012-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'CodeBailey', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^codebailey1012-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi CodeBailey — ${title}`, ko: `[FYI] CodeBailey 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to CodeBailey — ${title}` },
+      desc: `CodeBailey ${title}(${code}) recommend (10/12): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/codebailey1012-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'CodeBailey', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
+  // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
+      'HR/Admin 시그널(경력 직함 or 직군 HR/Admin) × 12~72m × HCMC권/미기재 × IT 직군만 보유자(System/Web Admin 노이즈 11) 제외 × 당일 타 공고 기수신(16) 제외(실측 148 = 직함 152 포함 기준). 확장층 텍스트 키워드×전공(71)·신입(22)·6y 초과(34)·타지역(50) 제외. 언어는 게이트 아님(가점).',
+      '<b>AUTONSI</b> (TP.HCM) — nhà cung cấp giải pháp Smart Factory & ICT hàng đầu tại Việt Nam — đang tuyển <b>HR & Admin Specialist</b> qua FYI, báo cáo cho Finance & Admin Manager. Công việc: quản lý văn phòng (thiết bị, hợp đồng thuê, điện nước, tài sản); hành chính nhân sự (onboarding/offboarding, chấm công, BHXH); hỗ trợ người nước ngoài (Work Permit, thẻ tạm trú TRC, visa); pháp lý & tuân thủ (hồ sơ doanh nghiệp, hợp đồng, làm việc với cơ quan địa phương); hỗ trợ tài chính (kiểm tra hóa đơn VAT, báo cáo chi phí hàng tháng). Yêu cầu: tốt nghiệp Đại học Quản trị kinh doanh, Ngoại ngữ hoặc ngành liên quan; <b>1–5 năm kinh nghiệm HR/Admin</b> tại Việt Nam; tiếng Anh hoặc tiếng Hàn giao tiếp công việc; nắm vững Luật Lao động Việt Nam và quy định visa/giấy phép lao động cho người nước ngoài. Quyền lợi: lương cạnh tranh theo kinh nghiệm, BHXH – BHYT – BHTN đầy đủ, khám sức khỏe hàng năm, thưởng hiệu quả, team building.',
+      '<b>AUTONSI</b>(호치민, 베트남 스마트팩토리·ICT 솔루션 기업) — <b>HR & Admin Specialist</b>, Finance & Admin Manager 보고. 사무관리(장비·임대·공과금·자산), HR·노무(입퇴사·근태·BHXH), 외국인 직원 지원(Work Permit·TRC·비자), 법무·컴플라이언스(법인 서류·계약·관청 대응), 재무 지원(VAT 인보이스 검증·월 경비 보고). 필수 경영/외국어 등 학사, <b>베트남 HR/Admin 경력 1~5년</b>, 비즈니스 영어 또는 한국어, 베트남 노동법·외국인 비자/노동허가 규정 이해. 경력 기반 급여, 4대보험, 연 건강검진, 성과급, 팀빌딩.',
+      'AUTONSI (HCMC), a leading Smart Factory & ICT solution provider in Vietnam, is hiring an HR & Admin Specialist reporting to the Finance & Admin Manager. Office management (equipment, leases, utilities, assets); HR & labor admin (onboarding/offboarding, attendance, BHXH); expat support (Work Permits, TRC, visas); legal & compliance (corporate documents, contracts, local authority liaison); finance support (VAT invoice verification, monthly expense reports). Must: Bachelor\'s in Business Administration, Foreign Languages or related; 1–5 years HR/Admin experience in Vietnam; business English or Korean; good knowledge of Vietnamese Labor Law and expat visa/work permit regulations. Competitive salary, full SI/HI/UI, annual health checkup, performance bonus, team building.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^autonsi1012-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại AUTONSI (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — AUTONSI ${title}`, en: `[FYI] You've been nominated — ${title} at AUTONSI (HCMC)` },
+      desc: `AUTONSI ${title}(${code}) recommend (10/12 Len 게재·Emma 긴급 요청, 10/12 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/12 "코어로 보내봐".`,
+      source: 'scripts/outreach/autonsi1012-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'A', company: 'AUTONSI', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^autonsi1012-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi AUTONSI — ${title} (TP.HCM)`, ko: `[FYI] AUTONSI 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to AUTONSI — ${title} (HCMC)` },
+      desc: `AUTONSI ${title}(${code}) recommend (10/12): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/autonsi1012-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'A', company: 'AUTONSI', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   // ── First Marketing Company 10/12 Thực tập sinh Sale(V222) (scripts/outreach/fmc1012-sale-intern-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['sale', 'Thực tập sinh Sale', 'V222', 'TP.HCM (19N Nguyễn Hữu Cảnh) · Thực tập 3 tháng · Full-time / Part-time · Phụ cấp + bonus',
