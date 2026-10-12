@@ -27,7 +27,7 @@ const groupOf = (name) =>
   /vku/.test(name) ? 'vku' // VKU Job Matching Weekend(9/30) 계열 — 클레임·가입 유도 모두 전환=가입, 맨 위 별도 섹션
     : /^coldmail-ktc/.test(name) ? 'signup'
     : /^resume-register/.test(name) ? 'register'
-      : /recommend/.test(name) || /^kyndof/.test(name) ? 'recommend'
+      : /recommend/.test(name) || /^kyndof/.test(name) || /^fmc1012-sale-intern/.test(name) ? 'recommend' // fmc1012-sale-intern 은 recommend 발송인데 이름에 recommend 가 빠져 등록(10/12) — 이름 규약 위반 예외
         : /^photo/.test(name) ? 'photo'
           : /^salary/.test(name) ? 'salary'
             : /^screen/.test(name) ? 'screen'
