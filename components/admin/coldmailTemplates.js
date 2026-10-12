@@ -4732,6 +4732,52 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'U', company: 'Ultra Fashion', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── STS 10/9 Kế toán Nội bộ(V221) (scripts/outreach/sts1009-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['acct', 'Kế toán Nội bộ', 'V221', 'TP.HCM · Onsite · Ưu tiên 1–2 năm kinh nghiệm · Lương thỏa thuận',
+      '회계 시그널(경력 직함 or 직군 Finance/회계 or 전공 회계) × 12m+ × HCMC권/미기재(실측 97 = 직함 48 + 직군·전공 49). 텍스트만 매치(40)·신입(32)·타지역(86)은 제외. 빈도 게이트 없음.',
+      '<b>STS</b> (TP.HCM) đang tuyển <b>Kế toán Nội bộ</b> qua FYI. Công việc: theo dõi và kiểm tra thu – chi, tạm ứng, hoàn ứng và thanh toán nội bộ; kiểm tra chứng từ trước khi ghi nhận; theo dõi công nợ phải thu – phải trả và đối chiếu với khách hàng, nhà cung cấp; đối chiếu số dư tiền mặt, ngân hàng; lưu trữ hóa đơn, phiếu thu – chi, hợp đồng; lập báo cáo nội bộ định kỳ (thu – chi, công nợ, doanh thu – chi phí, dòng tiền) và hỗ trợ Kế toán trưởng. Yêu cầu: tốt nghiệp Cao đẳng/Đại học Kế toán, Kiểm toán, Tài chính hoặc liên quan; nắm nguyên tắc kế toán cơ bản và quy trình chứng từ – hóa đơn – thanh toán; sử dụng tốt <b>Excel và phần mềm kế toán</b>; cẩn thận, trung thực. Ưu tiên: 1–2 năm kinh nghiệm kế toán nội bộ / thanh toán / tổng hợp. TP.HCM, thứ 2–6 và sáng thứ 7, thử việc 2 tháng, lương theo năng lực và thỏa thuận, BHXH – BHYT – BHTN.',
+      '<b>STS</b>(호치민) — <b>내부 회계(Kế toán Nội bộ)</b>. 수입·지출, 가지급·정산, 내부 결제 추적 및 증빙 검토, 매출채권·매입채무 관리와 거래처 대사, 현금·은행 잔액 대사, 증빙 보관, 정기 내부 보고(수지·채권채무·매출원가·현금흐름) 및 회계팀장 지원. 필수 회계·감사·재무 전공 전문대/대졸, 기본 회계 원리와 증빙·세금계산서·결제 프로세스 이해, <b>Excel·회계 소프트웨어</b> 숙련, 꼼꼼함·정직성. 우대 내부회계/지급/총계정 1~2년. 호치민 온사이트, 월~금 + 토 오전, 수습 2개월, 급여 협의, 4대보험.',
+      'STS (HCMC) is hiring an Internal Accountant. Track and verify receipts/payments, advances and internal settlements; check vouchers before posting; manage AR/AP and reconcile with customers and suppliers; reconcile cash and bank balances; file invoices and contracts; prepare periodic internal reports (cash flow, receivables/payables, revenue/cost) and support the Chief Accountant. Must: college/university degree in Accounting, Auditing or Finance; basic accounting principles and voucher/invoice/payment process; strong Excel and accounting software; careful and honest. Nice: 1–2 yrs as internal/payment/general accountant. HCMC onsite, Mon–Fri + Sat morning, 2-month probation, negotiable salary, social insurance.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^sts1009-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại STS (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — STS ${title}`, en: `[FYI] You've been nominated — ${title} at STS (HCMC)` },
+      desc: `STS ${title}(${code}) recommend (10/9 Len 게재, 10/12 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/12 "코어 97".`,
+      source: 'scripts/outreach/sts1009-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'S', company: 'STS', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^sts1009-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi STS — ${title} (TP.HCM)`, ko: `[FYI] STS 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to STS — ${title} (HCMC)` },
+      desc: `STS ${title}(${code}) recommend (10/12): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/sts1009-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'S', company: 'STS', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
+  // ── First Marketing Company 10/12 Thực tập sinh Sale(V222) (scripts/outreach/fmc1012-sale-intern-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['sale', 'Thực tập sinh Sale', 'V222', 'TP.HCM (19N Nguyễn Hữu Cảnh) · Thực tập 3 tháng · Full-time / Part-time · Phụ cấp + bonus',
+      '(세일즈 직군 or CS/세일즈 경력 직함) or (인접 직군 마케팅/Non-IT/통역 × 경영·마케팅·관광·외국어 전공) × 12m 미만 × HCMC권/미기재(실측 417 = 157 + 260). 12~24m(212)·타지역·텍스트만 매치 제외. 한국어는 게이트 아님(가점). 빈도 게이트 없음.',
+      '<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> qua FYI — hỗ trợ team kinh doanh tiếp cận, tư vấn và chăm sóc khách hàng, đối tác trong môi trường du lịch – dịch vụ. Công việc: trực tin nhắn Fanpage Messenger; tìm kiếm, liên hệ khách hàng và đối tác (cửa hàng, nhà hàng, spa, khách sạn…); giới thiệu dịch vụ và gói hợp tác; hỗ trợ báo giá, hợp đồng, theo dõi cơ hội bán hàng; chăm sóc sau bán; cập nhật CRM / Google Sheets. Yêu cầu: sinh viên năm 3–4 hoặc mới tốt nghiệp ngành Kinh doanh, Marketing, Du lịch, Ngoại ngữ; giao tiếp, thuyết phục tốt; tiếng Anh giao tiếp cơ bản; Word, Excel/Google Sheets. Ưu tiên: kinh nghiệm CSKH / bán hàng (part-time, thực tập, CTV); biết tiếng Hàn là lợi thế lớn. Quyền lợi: phụ cấp + bonus cuối kỳ, hoa hồng (nếu có), cấp thiết bị, có người hướng dẫn, xem xét lên chính thức, xác nhận thực tập. 3 tháng, full-time / part-time, 19N Nguyễn Hữu Cảnh, TP.HCM.',
+      '<b>First Marketing Company</b>(호치민) — <b>영업 인턴(Thực tập sinh Sale)</b>. 여행·서비스 영업팀 지원: 팬페이지 메신저 응대, 잠재 고객·제휴 파트너(매장/레스토랑/스파/호텔) 발굴·연락, 서비스·제휴 상품 소개, 견적·계약서 작성 지원과 리드 관리, 사후 응대, CRM/Google Sheets 데이터 관리. 자격 경영·마케팅·관광·외국어 전공 3~4학년 또는 졸업자, 커뮤니케이션·설득력, 영어 기본 회화, Word/Excel/Google Sheets. 우대 고객 응대·영업 경험(알바·인턴·CTV 포함), 한국어 가능자. 혜택 인턴 지원금+보너스, 인센티브, 장비 제공, 담당자 멘토링, 정규직 전환 검토, 인턴십 확인서. 3개월 풀/파트타임, 19N Nguyễn Hữu Cảnh.',
+      'First Marketing Company (HCMC) is hiring a Sales Intern to support the sales team in a travel/service environment: answer Fanpage Messenger inquiries, find and contact prospects and partners (shops, restaurants, spas, hotels), introduce services and partnership packages, help with quotes/contracts and lead tracking, after-sales care, CRM / Google Sheets data. Must: 3rd–4th year student or fresh graduate in Business, Marketing, Tourism or Languages; good communication and persuasion; basic English; Word, Excel/Google Sheets. Nice: customer service or sales experience (part-time, internship, collaborator); Korean is a big plus. Benefits: internship allowance + end-of-term bonus, commission (if any), equipment provided, direct mentor, full-time conversion review, internship certificate. 3 months, full-time or part-time, 19N Nguyen Huu Canh, HCMC.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^fmc1012-sale-intern-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại First Marketing Company (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — First Marketing Company ${title}`, en: `[FYI] You've been nominated — ${title} at First Marketing Company (HCMC)` },
+      desc: `First Marketing Company ${title}(${code}) recommend (10/12 Len 게재 당일): 비공개 프레임 — 컷=${cut} 유저 지시 10/12 "417명".`,
+      source: 'scripts/outreach/fmc1012-sale-intern-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'F', company: 'First Marketing Company', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^fmc1012-sale-intern-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi First Marketing Company — ${title} (TP.HCM)`, ko: `[FYI] First Marketing Company 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to First Marketing Company — ${title} (HCMC)` },
+      desc: `First Marketing Company ${title}(${code}) recommend (10/12): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/fmc1012-sale-intern-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'F', company: 'First Marketing Company', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   {
     match: /^systeel0925-recommend-sm-private/,
     subject: {
