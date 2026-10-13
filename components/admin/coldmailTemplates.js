@@ -4755,6 +4755,29 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'S', company: 'STS', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── POSCO DX VIETNAM 10/13 Java Developer(V187) 2차 (scripts/outreach/posco1013-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['java', 'Java Developer', 'V187', 'Onsite · Quận 7, TP.HCM (Cobi Tower I) · T2–T6 · Lương thỏa thuận',
+      'V187 기발송(118)·기지원(70) 제외 × Java/Spring 키워드 × 24m+ × 전지역 = HCMC권/미기재 잔여 19(대부분 9/19 이후 신규 가입) + 타지역 HN/ĐN/기타 100(Quận 7 온사이트 명시로 자기선별) = 119. 1~2년 HCMC(77)는 JD 3년 미달로 제외. 언어 게이트 없음(가점). 당일 타 공고 기수신 제외.',
+      '<b>POSCO DX VIETNAM</b> — trung tâm phát triển offshore (ODC) làm việc trực tiếp với trụ sở Hàn Quốc của tập đoàn POSCO — đang tuyển thêm <b>Java Developer</b> qua FYI (làm việc <b>onsite tại Quận 7, TP.HCM</b>). Công việc: phát triển, kiểm thử và sửa lỗi ứng dụng doanh nghiệp theo tài liệu thiết kế từ HQ Hàn Quốc; phối hợp với PM phía Hàn Quốc và Team Leader tại Việt Nam; dùng GitHub Copilot và Jira. Yêu cầu: <b>tối thiểu 3 năm kinh nghiệm Java &amp; Spring Boot</b>, HTML5/CSS3/JS (ES6+), React.js hoặc Vue.js, REST API, MySQL/PostgreSQL, Git·Jira·Confluence, giao tiếp cơ bản bằng tiếng Anh hoặc tiếng Hàn. Ưu tiên: thiết kế hệ thống IT, AI hỗ trợ code, LLM/LangChain, biết tiếng Hàn. Phúc lợi: thưởng tháng 13, review lương hàng năm, 12 ngày phép, PTI 24/7, khám sức khỏe, cơ hội đào tạo tại Hàn Quốc. Cobi Tower I, số 5 Hoàng Văn Thái, TP.HCM.',
+      'POSCO 그룹 한국 본사와 직접 협업하는 베트남 오프쇼어 개발센터(ODC) <b>POSCO DX VIETNAM</b> — <b>Java Developer</b> 추가 채용(7군 Cobi Tower I 온사이트). 한국 본사 설계 문서 기반 개발·테스트·버그 수정, 한국 PM/현지 팀리더와 협업, GitHub Copilot·Jira 활용. <b>Java+Spring Boot 3년+</b> 필수, HTML5/CSS3/JS(ES6+), React 또는 Vue, REST API, MySQL/PostgreSQL, 영어 또는 한국어 기본 소통. 급여 협의, 13개월차 보너스·연봉 리뷰·연차 12일·PTI 상해보험·한국 연수 기회.',
+      'POSCO DX VIETNAM — the POSCO group offshore development center (ODC) working directly with Korea HQ — is hiring additional Java Developers via FYI (onsite, District 7, HCMC). Develop/test/fix enterprise applications from Korea HQ design docs, work with the Korea PM and local team leader, use GitHub Copilot and Jira. Requires 3+ years of Java & Spring Boot, HTML5/CSS3/JS (ES6+), React or Vue, REST API, MySQL/PostgreSQL, basic English or Korean. Negotiable salary, 13th-month bonus, annual review, 12 days leave, PTI insurance, training opportunities in Korea.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^posco1013-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại POSCO DX VIETNAM (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — POSCO DX VIETNAM ${title}`, en: `[FYI] You've been nominated — ${title} at POSCO DX VIETNAM (HCMC)` },
+      desc: `POSCO DX VIETNAM ${title}(${code}) recommend 2차 (10/13, "3명 더 필요" 요청): 비공개 프레임 — 컷=${cut} 유저 지시 10/13 "더 보내봐 일단 호치민 이주랑 19명 정도".`,
+      source: 'scripts/outreach/posco1013-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'P', company: 'POSCO DX VIETNAM', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^posco1013-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi POSCO DX VIETNAM — ${title} (TP.HCM)`, ko: `[FYI] POSCO DX VIETNAM 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to POSCO DX VIETNAM — ${title} (HCMC)` },
+      desc: `POSCO DX VIETNAM ${title}(${code}) recommend 2차 (10/13): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/posco1013-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'P', company: 'POSCO DX VIETNAM', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   // ── Global8 10/13 Kỹ sư SIEM(R219) (scripts/outreach/global8-1013-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['siem', 'Kỹ sư SIEM', 'R219', 'HCM / HN / Đà Nẵng · Onsite · 15–25 triệu (deal theo năng lực) · Không đánh giá ngoại ngữ',
