@@ -4755,6 +4755,29 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'S', company: 'STS', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── Global8 10/13 Kỹ sư SIEM(R219) (scripts/outreach/global8-1013-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['siem', 'Kỹ sư SIEM', 'R219', 'HCM / HN / Đà Nẵng · Onsite · 15–25 triệu (deal theo năng lực) · Không đánh giá ngoại ngữ',
+      'SIEM/Elastic/ELK/Splunk/SOC 키워드 필수 × (순수 보안 직군·직함 9 or 인프라/DevOps/네트워크 직군·직함 12) × HCM·HN·ĐN권/미기재 × 당일 타 공고 기수신 제외(실측 21). 경력·언어 게이트 없음(JD 무관). 보안 직군 도구 미기재(19)·백엔드 Elastic 검색엔진 용도(86)·타지역(5) 제외.',
+      '<b>Global8</b> (công ty tư vấn bảo mật Hàn Quốc — tư vấn đạt và duy trì chứng nhận ISMS-P, ISO 27001, dịch vụ giám sát an ninh theo môi trường từng khách hàng) đang tuyển <b>Kỹ sư SIEM</b> qua FYI. Công việc: phát triển module thu thập dữ liệu trên <b>Elasticsearch</b>; phân loại và trực quan hóa dữ liệu bằng <b>Kibana</b> dashboard; xây dựng tự động hóa cảnh báo bằng <b>Shuffle</b> (SOAR). Yêu cầu bắt buộc: kinh nghiệm xây dựng hệ thống bằng Elastic Stack; kinh nghiệm thiết lập điều kiện/quy trình qua hệ thống tự động hóa cảnh báo; hiểu sâu Linux/Windows, Apache/Tomcat và cấu hình mạng. <b>Không đánh giá ngoại ngữ</b> — chỉ đánh giá kinh nghiệm thực tế xây dựng SIEM và năng lực kỹ thuật. Lương 15–25 triệu, deal theo năng lực; on-site HCM / Hà Nội / Đà Nẵng.',
+      '<b>Global8</b>(한국 보안 컨설팅 기업, ISMS-P·ISO 27001 인증 취득·유지 컨설팅 및 고객 환경별 보안관제 서비스) — <b>SIEM 엔지니어</b>. Elasticsearch 기반 데이터 수집 모듈 개발, Kibana 대시보드 데이터 분류·시각화, Shuffle(SOAR) 기반 경보 자동화 구축. 필수 Elastic Stack 시스템 구축 경험, 경보 자동화 시스템의 상황별 조건·프로세스 설정 경험, Linux/Windows·Apache/Tomcat·네트워크 환경 구성 이해. <b>외국어 평가 없음</b>, 실제 SIEM 구축 경험과 기술력만 평가. 급여 1,500만~2,500만 VND(역량 협의), HCM/하노이/다낭 온사이트.',
+      'Global8, a Korean security consulting firm (ISMS-P and ISO 27001 certification consulting, customer-tailored security monitoring), is hiring a SIEM Engineer. Build data collection modules on Elasticsearch; classify and visualize data with Kibana dashboards; build alert automation workflows with Shuffle (SOAR). Must: hands-on experience building systems with the Elastic Stack; experience configuring scenario-based conditions and workflows in an alert automation system; deep understanding of Linux/Windows, services (Apache, Tomcat) and network configuration. No language assessment — only real SIEM build experience and technical ability. Salary 15–25M VND, negotiable by ability; on-site in HCMC / Hanoi / Da Nang.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^global8-1013-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại Global8`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — Global8 ${title}`, en: `[FYI] You've been nominated — ${title} at Global8` },
+      desc: `Global8 ${title}(${code}) recommend (10/9 Len 게재, 10/13 요청·발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/13 "코어 보내봐".`,
+      source: 'scripts/outreach/global8-1013-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'G', company: 'Global8', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^global8-1013-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi Global8 — ${title}`, ko: `[FYI] Global8 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to Global8 — ${title}` },
+      desc: `Global8 ${title}(${code}) recommend (10/13): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/global8-1013-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'G', company: 'Global8', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   // ── CodeBailey 10/12 AI Agent Developer(R220) (scripts/outreach/codebailey1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['aiagent', 'AI Agent Developer', 'R220', 'HCM / HN / Đà Nẵng · Onsite · 2 vị trí · Không yêu cầu số năm kinh nghiệm & tiếng Anh · Lương theo năng lực',
