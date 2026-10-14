@@ -4824,6 +4824,136 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'C', company: 'CodeBailey', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── HANKUK CARBON VIETNAM 10/14 설계 엔지니어(V225) + QA(V240) (scripts/outreach/hcarbon1014-recommend-coldmail.mjs) — 그룹 2 × 프레임 2항목 ──
+  ...[
+    ['qa', 'Nhân viên QA', 'V240', 'HCM VINA', 'Onsite · HCM VINA (Việt Nam) · Lương thỏa thuận',
+      '제조 품질 직군·직함(QA/QC/Quality) or 품질 키워드 × 제조 문맥 × 비SW 테스터 × 36m+ × HCMC권/미기재 (코어 7 + 확장 9 = 16) − 수동 제외 5(물류·HR·전기·창고·어학원) = 11. 항공/복합재/AS9100/NADCAP 보유자 전체 0. 당일 타 공고 기수신 제외.',
+      '<b>HCM VINA</b> — công ty thành viên của <b>Hankuk Carbon</b> (tập đoàn vật liệu composite Hàn Quốc, niêm yết KOSPI) trong chuỗi cung ứng hàng không vũ trụ toàn cầu — đang tuyển <b>Nhân viên QA</b> qua FYI. Công việc: kiểm soát chất lượng vật liệu hàng không và linh kiện composite; duy trì và quản lý chứng nhận <b>AS9100</b>; đối ứng audit của khách hàng. Yêu cầu: tốt nghiệp Đại học trở lên ngành Kỹ thuật hoặc liên quan; <b>tối thiểu 3 năm kinh nghiệm</b> liên quan (QA/QC trong sản xuất). Ưu tiên: kinh nghiệm kiểm soát chất lượng vật liệu composite, duy trì chứng nhận <b>NADCAP</b>, chứng chỉ về chất lượng (ISO 9001, IATF, Six Sigma…). Lương thỏa thuận theo năng lực.',
+      '한국카본(KOSPI 상장 복합재 소재 기업) 자회사 <b>HCM VINA</b> — 글로벌 항공우주 공급망 내 <b>QA 담당자</b>. 항공우주 재료·복합재 부품 품질관리, <b>AS9100</b> 인증 유지·관리, 고객 감사 대응. 공학 계열 학사 이상, 관련 경력 3년+(제조 QA/QC). 복합재 품질관리·<b>NADCAP</b> 유지 경험·품질 자격증(ISO 9001·IATF·Six Sigma) 우대. 급여 협의.',
+      'HCM VINA, a subsidiary of Hankuk Carbon (KOSPI-listed Korean composite materials group) in the global aerospace supply chain, is hiring a QA staff member via FYI. Quality control of aerospace materials and composite parts; maintain and manage AS9100 certification; respond to customer audits. Bachelor\'s degree or higher in engineering or related; 3+ years of relevant (manufacturing QA/QC) experience. Preferred: composite quality control, NADCAP maintenance, quality certifications (ISO 9001, IATF, Six Sigma). Negotiable salary.'],
+    ['design', 'Kỹ sư phát triển & thiết kế vật liệu đường sắt', 'V225', 'Đồng Nai', 'Onsite · KCN Becamex-Bình Phước, Chơn Thành (Đồng Nai) · 2 vị trí · Lương thỏa thuận',
+      'CATIA 명시(전체 1, 인도 거주 제외) or 기계 CAD(SolidWorks/NX/Creo/Inventor/AutoCAD) × 기계 직군·직함·전공 or 기계 직군·직함 × 36m+ × HCMC권/미기재 (코어 3 + 확장 3 = 6) − 수동 제외 2(마케팅·풀스택 개발자) − QA 그룹 선배정 1 = 2~3. 복합재/철도 보유 0 · 한국인 20 중 기계 시그널 0. 당일 타 공고 기수신 제외.',
+      '<b>Hankuk Carbon</b> — tập đoàn vật liệu composite Hàn Quốc (niêm yết KOSPI) chuyên cung cấp giải pháp từ vật liệu mới đến linh kiện cho tàu LNG, hàng không vũ trụ và đường sắt — đang tuyển <b>Kỹ sư phát triển &amp; thiết kế sản phẩm composite đường sắt</b> cho nhà máy tại Việt Nam qua FYI (onsite tại <b>KCN Becamex-Bình Phước, Chơn Thành, Đồng Nai</b>). Công việc: thiết kế linh kiện composite nội/ngoại thất tàu đường sắt — bản vẽ 2D/mô hình 3D, review thiết kế và <b>DFM</b> trên <b>CATIA</b>, hỗ trợ chế tạo mẫu, thử nghiệm, chuyển giao sản xuất hàng loạt; quản lý thay đổi thiết kế, BOM, spec; phối hợp đội kỹ thuật Hàn Quốc – nhà máy Việt Nam – khách hàng. Yêu cầu: Đại học trở lên ngành Cơ khí / Ô tô / Hàng không / Vật liệu-Composite; <b>tối thiểu 3 năm thiết kế sản phẩm hoặc cơ khí</b>; thành thạo <b>CATIA</b> và CAD 2D/3D; tiếng Anh cơ bản. Ưu tiên: linh kiện đường sắt, <b>GFRP/CFRP</b>, quy trình sản xuất composite, ECN. Lương thỏa thuận, 2 vị trí.',
+      'LNG선·항공우주·철도용 복합재 소재부터 부품까지 공급하는 KOSPI 상장 <b>한국카본</b> 베트남 공장 — <b>철도 복합재 제품 설계·개발 엔지니어</b>(KCN Becamex-Bình Phước, Chơn Thành 온사이트, 2명). 철도 내·외장 복합재 부품 설계, 2D 도면/3D 모델링, <b>CATIA</b> 기반 설계 검토·DFM, 시제품·시험·양산 이관 지원, 설계 변경·BOM·스펙 관리, 한국 본사–베트남 공장–고객 간 기술 조율. 기계/자동차/항공/재료 전공 학사 이상, <b>제품·기계 설계 3년+</b>, CATIA 필수, 기초 영어. 철도 부품·GFRP/CFRP·복합재 공정·ECN 경험 우대. 한국인 우대. 급여 협의.',
+      'Hankuk Carbon, a KOSPI-listed Korean composite materials group supplying LNG carrier, aerospace and railway components, is hiring a Railway Composite Products Design & Development Engineer for its Vietnam plant (onsite, Becamex-Binh Phuoc IP, Chon Thanh, Dong Nai; 2 openings). Design railway interior/exterior composite parts, 2D drawings/3D models, design review and DFM in CATIA, prototype/testing/mass-production transfer, design change/BOM/spec management, coordination between Korea HQ, the Vietnam plant and customers. Bachelor\'s in mechanical/automotive/aerospace/materials; 3+ years of product or mechanical design; CATIA required; basic English. Railway parts, GFRP/CFRP, composite processes and ECN experience preferred. Negotiable salary.'],
+  ].flatMap(([g, title, code, city, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^hcarbon1014-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại HANKUK CARBON VIETNAM (${city})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — HANKUK CARBON VIETNAM ${title}`, en: `[FYI] You've been nominated — ${title} at HANKUK CARBON VIETNAM (${city})` },
+      desc: `HANKUK CARBON VIETNAM ${title}(${code}) recommend (10/14 Len 게재·남영훈 발굴, 10/14 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/14 "일단 보내봐 확장으로".`,
+      source: 'scripts/outreach/hcarbon1014-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'H', company: 'HANKUK CARBON VIETNAM', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^hcarbon1014-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi HANKUK CARBON VIETNAM — ${title} (${city})`, ko: `[FYI] HANKUK CARBON VIETNAM 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to HANKUK CARBON VIETNAM — ${title} (${city})` },
+      desc: `HANKUK CARBON VIETNAM ${title}(${code}) recommend (10/14): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/hcarbon1014-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'H', company: 'HANKUK CARBON VIETNAM', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
+  // ── NSTAGE 10/14 13건 V226~V238 (scripts/outreach/nstage1014-recommend-coldmail.mjs) — 그룹 13 × 프레임 2항목 ──
+  ...(() => {
+    const ABOUT = { vi: '<b>NSTAGE</b> — công ty game mobile Hàn Quốc vận hành ổn định các game live service, đồng hành cùng hơn 1 triệu người dùng và đã triển khai thành công hơn 45 dự án (từ Hyper casual đến Idle RPG) — văn phòng tại <b>Thanh Xuân, Hà Nội</b>', ko: '<b>NSTAGE</b>(엔스테이지) — 라이브 서비스 게임을 안정 운영하며 100만+ 유저·45개+ 프로젝트를 이끈 한국 모바일 게임사(하이퍼캐주얼~Idle RPG), 하노이 Thanh Xuân 오피스', en: '<b>NSTAGE</b> — a Korean mobile game company running live-service games (hyper casual to idle RPG) with 1M+ users and 45+ shipped projects, Hanoi (Thanh Xuan) office' }
+    const PERK = { vi: 'Phúc lợi: T2–T6, giờ làm linh hoạt, thưởng TET tới 2 tháng, công tác Hàn Quốc, hỗ trợ học ngoại ngữ.', ko: '주5일·자율출근·TET 보너스 최대 2개월·한국 출장 기회·외국어 교육비 지원.', en: 'Mon–Fri, flexible hours, TET bonus up to 2 months, Korea business trips, language training support.' }
+    const META = 'Onsite · Thanh Xuân, Hà Nội · Lương thỏa thuận', METAI = 'Thực tập · Onsite · Thanh Xuân, Hà Nội'
+    const J = [
+      ['comtor', 'IT Comtor', 'V237', META, 'TOPIK 5/6 × IT 직군·직함·전공 or KO 중급+ × IT × Comtor/Bridge 경력 × HN권/미기재 (11)',
+        'đang tuyển <b>IT Comtor</b>: thông dịch họp dự án, hỗ trợ giao tiếp giữa team phát triển và QA, lập/quản lý kế hoạch tiến độ. Yêu cầu <b>TOPIK 5+</b>, <b>2 năm IT Comtor hoặc kinh nghiệm thực tế lĩnh vực IT</b> (chưa làm Comtor vẫn ứng tuyển được). Ưu tiên kinh nghiệm QA, hiểu game casual.',
+        '<b>IT Comtor</b> — 프로젝트 회의 통역, 개발팀–QA팀 커뮤니케이션 지원, 일정 수립·관리. TOPIK 5급+, IT Comtor 2년+ 또는 IT 실무 경험(Comtor 경력 없어도 지원 가능). QA 경험·캐주얼 게임 이해 우대.',
+        '<b>IT Comtor</b>: interpret project meetings, bridge dev and QA teams, manage schedules. TOPIK 5+, 2 years as IT comtor or hands-on IT experience. QA background and casual-game knowledge preferred.'],
+      ['srua', 'Senior UA Marketing', 'V236', META, 'UA/MMP 강시그널 × 마케팅 × 60m+ × HN권/미기재 (1)',
+        'đang tuyển <b>Senior UA Marketing</b>: chiến lược và triển khai Global Marketing &amp; UA, phân tích/tối ưu Performance Marketing. Yêu cầu <b>5+ năm Performance Marketing/UA</b>, quản lý MMP (AppsFlyer, Adjust, Singular) gồm tích hợp SDK và event tracking, ứng dụng AI tự động hóa Marketing.',
+        '<b>Senior UA Marketing</b> — 글로벌 마케팅·UA 전략 수립·집행, 퍼포먼스 분석·최적화. Performance Marketing/UA 5년+, MMP(AppsFlyer·Adjust·Singular) 운영·SDK 연동·이벤트 트래킹, AI 활용 마케팅 자동화.',
+        '<b>Senior UA Marketing</b>: global marketing and UA strategy, performance analysis and optimization. 5+ years performance marketing/UA, MMP management (AppsFlyer, Adjust, Singular) incl. SDK and event tracking, AI-driven marketing automation.'],
+      ['ua', 'UA Marketing - Game Mobile', 'V235', META, 'UA/MMP 강시그널 × 마케팅 × 24m+ (코어) + Google/Meta/TikTok Ads 운영 × 마케팅 × 24m+ (확장) × HN권/미기재 (36)',
+        'đang tuyển <b>UA Marketing (Game Mobile)</b>: chiến lược UA thị trường quốc tế, vận hành/tối ưu <b>Google, Meta, Unity, AppLovin</b>, phân tích dữ liệu. Yêu cầu <b>2+ năm Marketing Mobile Game/App</b>, vận hành quảng cáo quốc tế, dùng MMP (AppsFlyer, Adjust, Singular).',
+        '<b>UA Marketing(모바일 게임)</b> — 글로벌 UA 전략, Google·Meta·Unity·AppLovin 운영·최적화, 데이터 분석. 모바일 게임/앱 마케팅 2년+, 해외 광고 운영, MMP(AppsFlyer·Adjust·Singular) 활용.',
+        '<b>UA Marketing (Mobile Game)</b>: global UA strategy, running and optimizing Google, Meta, Unity and AppLovin, data analysis. 2+ years mobile game/app marketing, international ad ops, MMP (AppsFlyer, Adjust, Singular).'],
+      ['creative', 'Creative Team Lead', 'V231', META, '크리에이티브/마케팅/콘텐츠 리드 직함 × 12m+ × HN권/미기재 (9)',
+        'đang tuyển <b>Creative Team Lead</b>: dẫn dắt team sáng tạo sản xuất video quảng cáo game, kịch bản, ứng dụng AI làm short-form/mini drama. Yêu cầu <b>1+ năm Marketing/Creative Team Lead</b>, 1+ năm dùng công cụ AI (Kling, Seedance…) — <b>bắt buộc nộp video bằng chứng</b>. Ưu tiên Playable Ads.',
+        '<b>Creative Team Lead</b> — 게임 광고 영상 크리에이티브 팀 리드, 스크립트, AI 툴(Kling·Seedance) 기반 숏폼/미니드라마 제작. 마케팅/크리에이티브 리드 1년+, AI 영상 제작 1년+(증빙 영상 필수). Playable Ads 경험 우대.',
+        '<b>Creative Team Lead</b>: lead the creative team producing game ad videos, scripts, AI-made short-form/mini drama. 1+ year as marketing/creative lead, 1+ year with AI video tools (Kling, Seedance) — proof video required. Playable ads preferred.'],
+      ['unity', 'Unity Developer', 'V226', META, 'Unity 키워드 × 개발·게임 직군·직함 × 24m+ × HN권/미기재 (2)',
+        'đang tuyển <b>Unity Developer</b>: build game mobile bằng Unity, phối hợp Game Designer, fix bug/tối ưu. Yêu cầu nền tảng <b>C# &amp; Unity</b>, từng phát hành game trên store, quản lý balance bằng Data Table, hiểu hệ thống cốt lõi <b>Idle RPG</b> (số lớn, thưởng offline, Save/Load), chủ động dùng AI.',
+        '<b>Unity Developer</b> — Unity 모바일 게임 개발, 게임 디자이너 협업, 버그 수정·최적화. C#·Unity 기초, 스토어 출시 경험, Data Table 기반 밸런스 관리, Idle RPG 핵심 시스템(큰 수·오프라인 보상·Save/Load) 이해, AI 툴 활용.',
+        '<b>Unity Developer</b>: build mobile games in Unity with game designers, fix and optimize. Solid C# and Unity, shipped games on stores, data-table-driven balance, idle RPG core systems (big numbers, offline rewards, save/load), AI tools.'],
+      ['hyper', 'Unity Developer (Hyper Casual)', 'V232', META, 'Unity 키워드 × 개발·게임 직군·직함 × 12~24m × HN권/미기재 (3)',
+        'đang tuyển <b>Unity Developer (Hyper Casual)</b>: build prototype game mobile bằng Unity, phối hợp Game Designer. Yêu cầu nền tảng <b>C# &amp; Unity</b>, từng phát hành game (kể cả dự án cá nhân), dùng Unity Asset Store. <b>Chấp nhận ứng viên chưa nhiều kinh nghiệm</b>; tiếng Anh/Hàn là lợi thế.',
+        '<b>Unity Developer(하이퍼캐주얼)</b> — Unity 프로토타입 개발, 게임 디자이너 협업. C#·Unity 기초, 출시 경험(개인 프로젝트 포함), Asset Store 활용. 경력 적어도 가능, 영어/한국어 가능 시 우대.',
+        '<b>Unity Developer (Hyper Casual)</b>: build mobile prototypes in Unity with game designers. C# and Unity basics, shipped games (personal projects count), Unity Asset Store. Junior candidates welcome; English or Korean a plus.'],
+      ['playable', 'Playable Ads Developer', 'V227', META, 'HTML5 게임엔진(Phaser/Pixi/Cocos/Three/Playable) × 12m+ × HN권/미기재 (4, Unity 보유자는 unity/hyper 선배정)',
+        'đang tuyển <b>Playable Ads Developer</b>: tái cấu trúc core loop game Unity thành <b>quảng cáo tương tác HTML5</b>, tương thích in-app webview và các mạng quảng cáo (AppLovin, Unity Ads, ironSource, Mintegral, TikTok, Google). Yêu cầu kinh nghiệm engine HTML5 (<b>Phaser, PixiJS, Cocos2d-x, Three.js</b>) hoặc Unity (C#).',
+        '<b>Playable Ads Developer</b> — Unity 게임 코어루프를 HTML5 인터랙티브 광고로 재구성, 인앱 웹뷰·광고 네트워크(AppLovin·Unity Ads·ironSource·Mintegral·TikTok·Google) 호환. HTML5 엔진(Phaser·PixiJS·Cocos2d-x·Three.js) 또는 Unity 경험.',
+        '<b>Playable Ads Developer</b>: rebuild Unity core loops as high-performance HTML5 playable ads compatible with in-app webviews and ad networks (AppLovin, Unity Ads, ironSource, Mintegral, TikTok, Google). HTML5 engine (Phaser, PixiJS, Cocos2d-x, Three.js) or Unity experience.'],
+      ['gd', 'Game Designer', 'V234', META, 'Game Designer 직함/직군 × 36m+ × HN권/미기재 (2)',
+        'đang tuyển <b>Game Designer</b>: thiết kế hệ thống, nội dung và balance game mobile (Hyper casual / Idle RPG), phối hợp Unity Developer. Yêu cầu hiểu sâu game mobile, từng phát hành game trên store, tư duy logic, quản lý balance bằng Data Table, chủ động dùng AI.',
+        '<b>Game Designer</b> — 모바일 게임(하이퍼캐주얼/Idle RPG) 시스템·콘텐츠·밸런스 설계, Unity 개발자 협업. 모바일 게임 이해, 출시 경험, 논리적 사고, Data Table 기반 밸런스, AI 툴 활용.',
+        '<b>Game Designer</b>: design systems, content and balance for mobile games (hyper casual / idle RPG) with Unity developers. Deep mobile game knowledge, shipped games, logical thinking, data-table balance, AI tools.'],
+      ['anim', '2D Animator & VFX Artist', 'V233', META, 'Spine 명시(HN권 0) + 애니메이터/모션/VFX/2D·게임 아티스트 직함 × HN권/미기재 (12, Spine 포트폴리오 자기선별)',
+        'đang tuyển <b>2D Animator &amp; VFX Artist</b>: sản xuất 2D animation/VFX cho game, làm chủ AI pipeline cùng Unity, tích hợp tài nguyên trong Unity. Yêu cầu <b>3 năm 2D Animation cho game</b> hoặc portfolio tương đương; <b>portfolio bắt buộc có character animation bằng Spine</b>.',
+        '<b>2D Animator &amp; VFX Artist</b> — 게임 2D 애니메이션·VFX 제작, AI 파이프라인·Unity 활용, Unity 내 리소스 통합. 게임 2D 애니메이션 3년+ 또는 동급 포트폴리오, Spine 캐릭터 애니메이션 포트폴리오 필수.',
+        '<b>2D Animator &amp; VFX Artist</b>: produce 2D animation and VFX for games, master AI pipeline with Unity, integrate assets in Unity. 3 years of 2D game animation or equivalent portfolio; Spine character animation in portfolio is mandatory.'],
+      ['unityintern', 'Unity Developer Intern', 'V228', METAI, 'Unity 키워드 × <12m × HN권/미기재 (5)',
+        'đang tuyển <b>Unity Developer Intern</b> (Nguyễn Huy Tưởng, Thanh Xuân): build prototype game mobile bằng Unity, phối hợp Game Designer. Yêu cầu kiến thức nền <b>C# &amp; Unity</b>, từng phát hành game hoặc dùng Unity Asset Store; <b>chấp nhận ứng viên mới</b>; tiếng Anh/Hàn là lợi thế.',
+        '<b>Unity Developer Intern</b> — Unity 프로토타입 개발, 게임 디자이너 협업. C#·Unity 기초, 출시 경험 또는 Asset Store 활용. 신입 가능, 영어/한국어 가능 시 우대.',
+        '<b>Unity Developer Intern</b>: build mobile prototypes in Unity with game designers. C# and Unity basics, shipped games or Asset Store use; fresh graduates welcome; English or Korean a plus.'],
+      ['gdintern', 'Game Designer Intern', 'V230', METAI, 'Game Designer 직함/직군 × <36m × HN권/미기재 (1, Unity 보유자는 unityintern 선배정)',
+        'đang tuyển <b>Game Designer Intern</b> (Nguyễn Huy Tưởng, Thanh Xuân): lên ý tưởng và thiết kế nội dung game mobile, làm prototype cùng Unity Developer. Yêu cầu yêu thích/hiểu game mobile; từng phát hành game hoặc có nền C#/Unity là lợi thế; <b>chấp nhận ứng viên mới</b>.',
+        '<b>Game Designer Intern</b> — 모바일 게임 아이디어·콘텐츠 설계, Unity 개발자와 프로토타입 제작. 모바일 게임 이해, 출시 경험·C#/Unity 기초 우대, 신입 가능.',
+        '<b>Game Designer Intern</b>: ideate and design mobile game content, prototype with Unity developers. Passion for mobile games; shipped games or C#/Unity basics a plus; fresh graduates welcome.'],
+      ['sns', 'Social Media Content Intern', 'V229', METAI, 'SNS/콘텐츠 직함 × <24m × (KO or 게임 키워드) × HN권/미기재 (15)',
+        'đang tuyển <b>Social Media Content Intern</b> (Nguyễn Huy Tưởng, Thanh Xuân): lên ý tưởng và sản xuất video short-form / format phim-drama về game, vận hành kênh SNS. Yêu cầu từng tự xây kênh cá nhân, kinh nghiệm ý tưởng short-form, vận hành nhiều kênh SNS. <b>Ưu tiên tiếng Hàn</b>.',
+        '<b>Social Media Content Intern</b> — 게임 숏폼/드라마 포맷 영상 기획·제작, SNS 채널 운영. 개인 채널 운영 경험, 숏폼 기획 경험, 다중 SNS 운영. 한국어 가능 시 우대.',
+        '<b>Social Media Content Intern</b>: plan and produce short-form / drama-format game videos, run SNS channels. Own-channel experience, short-form ideation, multi-channel SNS ops. Korean preferred.'],
+      ['community', 'Game Community Operations Intern', 'V238', METAI, '커뮤니티/Discord/게임운영 직함·스킬 × <24m × HN권/미기재 (16)',
+        'đang tuyển <b>Game Community Operations Intern</b> (Nguyễn Huy Tưởng, Thanh Xuân): vận hành cộng đồng người chơi, tổ chức sự kiện cộng đồng, quản lý Discord/Naver Lounge, tổng hợp phản hồi. Yêu cầu kinh nghiệm tổ chức sự kiện cộng đồng, từng hoạt động trên Naver Lounge/Discord, <b>tiếng Hàn hoặc ngoại ngữ thứ hai</b>.',
+        '<b>Game Community Operations Intern</b> — 유저 커뮤니티 운영, 커뮤니티 이벤트 기획·운영, Discord/네이버 라운지 관리, 피드백 취합. 커뮤니티 이벤트 경험, 네이버 라운지/Discord 활동 경험, 한국어 또는 제2외국어.',
+        '<b>Game Community Operations Intern</b>: run player communities, plan community events, manage Discord/Naver Lounge, collect feedback. Community event experience, Naver Lounge/Discord activity, Korean or a second foreign language.'],
+    ]
+    return J.flatMap(([g, title, code, meta, cut, vi, ko, en]) => {
+      const intro = { vi: `${ABOUT.vi} — ${vi} ${PERK.vi}`, ko: `${ABOUT.ko} — ${ko} ${PERK.ko}`, en: `${ABOUT.en} — ${en} ${PERK.en}` }
+      return [
+        {
+          match: new RegExp(`^nstage1014-recommend-${g}-private`),
+          subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại NSTAGE (Hà Nội)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — NSTAGE ${title}`, en: `[FYI] You've been nominated — ${title} at NSTAGE (Hanoi)` },
+          desc: `NSTAGE ${title}(${code}) recommend (10/14 Len 게재, 10/14 발송): 비공개 프레임 — 컷=${cut}. 1인1통 그룹 우선순위 comtor→srua→ua→creative→unity→hyper→playable→gd→anim→unityintern→gdintern→sns→community. 유저 지시 10/14 "보낼 수 있는 풀들 공고별로 다 보내고".`,
+          source: 'scripts/outreach/nstage1014-recommend-coldmail.mjs',
+          html: (lang) => recommendShell(lang, { intro, initial: 'N', company: 'NSTAGE', title, meta, tail: BENEFIT_PRIVATE }),
+        },
+        {
+          match: new RegExp(`^nstage1014-recommend-${g}-`),
+          subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi NSTAGE — ${title} (Hà Nội)`, ko: `[FYI] NSTAGE 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to NSTAGE — ${title} (Hanoi)` },
+          desc: `NSTAGE ${title}(${code}) recommend (10/14): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+          source: 'scripts/outreach/nstage1014-recommend-coldmail.mjs',
+          html: (lang) => recommendShell(lang, { intro, initial: 'N', company: 'NSTAGE', title, meta, tail: BENEFIT_PUBLIC }),
+        },
+      ]
+    })
+  })(),
+  // ── The Han 10/14 Service Manager (Korean speaking)(V239) (scripts/outreach/thehan1014-recommend-coldmail.mjs) — 프레임 2항목 ──
+  ...[
+    ['service', 'Service Manager (Korean speaking)', 'V239', 'Onsite · Leonora Hotel, Gò Vấp, TP.HCM · 14:30–23:00 · 15–17 triệu',
+      'F&B/호텔/매장 직함 × KO(any) × HCM/미기재 (18) + F&B 텍스트 × KO 중급+ (11) + F&B/호텔/매장 직함 × EN × 12m+ × 비개발·비디자인 (확장). 매니저급 한국어 가능자 거의 없음 — 주니어 중심.',
+      '<b>The Han</b> — nhà hàng Hàn Quốc sắp khai trương tại <b>Leonora Hotel (37 Nguyễn Văn Dung, Gò Vấp, TP.HCM)</b> — đang tuyển <b>Service Manager (Korean speaking)</b> qua FYI. Công việc: trước khai trương hỗ trợ giám đốc (tìm phương án giảm chi phí F&B, quản lý giấy tờ, nhà cung cấp, báo giá vật dụng); sau khai trương phụ trách toàn bộ dịch vụ sảnh — kiểm tra mở/đóng ca, vệ sinh, tồn kho vật tư, quản lý và đào tạo nhân viên sảnh (lịch làm việc, chấm công, thái độ phục vụ), tiếp đón khách và VIP, xử lý khiếu nại, quản lý đặt bàn (bếp do đầu bếp phụ trách). Yêu cầu: <b>tiếng Hàn hoặc tiếng Anh</b> đủ để giao tiếp và điều hành; nhạy số, quản lý chi phí/giấy tờ; tinh thần dịch vụ; chủ động, trách nhiệm. Làm việc 14:30–23:00 (8,5h), nghỉ 2 ngày/tháng; lương <b>15–17 triệu</b>, thử việc 1 tháng (80%), thưởng KPI sau khi lên chính thức.',
+      '<b>The Han</b> — 호치민 Gò Vấp Leonora Hotel에 오픈 예정인 한식당 — <b>서비스 매니저(한국어 가능)</b>. 오픈 전 대표 업무 보조(F&B 원가 절감·서류·거래처·견적), 오픈 후 홀 서비스 총괄(오픈/마감 점검, 위생, 소모품 발주, 현지 스태프 스케줄·근태·응대 교육, 고객·VIP 응대, 컴플레인·예약 관리). 한국어 또는 영어 소통 가능, 숫자 감각·원가 관리, 서비스 마인드. 14:30~23:00, 월 2회 휴무, 월 1,500만~1,700만 VND, 수습 1개월(80%), 정규 전환 후 KPI 인센티브.',
+      '<b>The Han</b>, a Korean restaurant opening at Leonora Hotel (Go Vap, HCMC), is hiring a Korean-speaking Service Manager via FYI. Pre-opening: assist the owner with F&B cost control, paperwork, vendors and quotes. Post-opening: run hall service (open/close checks, hygiene, supplies, local staff scheduling and training, guest and VIP service, complaints, reservations). Korean or English required; cost and paperwork skills; service mindset. 14:30–23:00, 2 days off per month, 15–17M VND, 1-month probation at 80%, KPI incentives after conversion.'],
+  ].flatMap(([g, title, code, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^thehan1014-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại The Han (Gò Vấp, TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — The Han ${title}`, en: `[FYI] You've been nominated — ${title} at The Han (HCMC)` },
+      desc: `The Han ${title}(${code}) recommend (10/14 Len 게재, 10/14 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/14 "보낼 수 있는 풀들 공고별로 다 보내고".`,
+      source: 'scripts/outreach/thehan1014-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'T', company: 'The Han', title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^thehan1014-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi The Han — ${title} (Gò Vấp, TP.HCM)`, ko: `[FYI] The Han 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to The Han — ${title} (HCMC)` },
+      desc: `The Han ${title}(${code}) recommend (10/14): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/thehan1014-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'T', company: 'The Han', title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
