@@ -5111,6 +5111,36 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   })),
+  // ── NSTAGE V246 Lập trình viên Game H5 - Hyper Casual/Casual 10/15 (scripts/outreach/nstageh5-1015-recommend-coldmail.mjs) — 그룹 3 × 프레임 2항목 ──
+  ...[
+    ['h5', 'H5 게임 엔진(Cocos/Phaser/Pixi)·WebGL·Playable 시그널 × 개발 직군 × 하노이권/미기재 (9)'],
+    ['game', '게임 경력 텍스트 × (Unity/Unreal or JS) × 개발 직군 × 하노이권/미기재 (22)'],
+    ['fe-js', '프론트/풀스택/모바일 직군 × JS/TS 시그널 × 1~5y × 하노이권/미기재 — 자기선별 (189)'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Lập trình viên Game H5 - Hyper Casual/Casual', code = 'V246', company = 'NSTAGE', initial = 'N'
+    const meta = 'Onsite · Center Building, 85 Vũ Trọng Phụng, Thanh Xuân, Hà Nội · HTML5 (Cocos/Phaser) hoặc Unity'
+    const intro = {
+      vi: '<b>NSTAGE</b> — studio game Hàn Quốc vận hành ổn định các game live service, hơn 45 dự án từ Hyper casual đến Idle RPG — đang tuyển <b>Lập trình viên Game H5 (Hyper Casual/Casual)</b> qua FYI tại Center Building, 85 Vũ Trọng Phụng, Thanh Xuân, Hà Nội. Phát triển game hyper-casual trên web di động bằng HTML5: core rule, cơ chế điều khiển, luồng chơi cho phiên chơi ngắn; tối ưu bộ nhớ, FPS, texture, sprite sheet, âm thanh trên iOS Safari, Android Chrome, WebView; dùng AI (Gemini, ChatGPT, Claude) để viết/refactor code. Yêu cầu: kinh nghiệm Cocos Creator, Phaser hoặc Unity (C#); hiểu render DOM/WebGL; xử lý tương thích thiết bị và cảm ứng. Ưu tiên Unity Playworks, Tween/Particle/VFX, tài liệu kỹ thuật, tiếng Hàn hoặc tiếng Anh.',
+      ko: '<b>NSTAGE</b> — 라이브 서비스 게임 45개+ 프로젝트를 운영하는 한국 게임사, 하노이 Thanh Xuân — <b>H5 게임 개발자(하이퍼캐주얼/캐주얼)</b>. HTML5 기반 모바일 웹 하이퍼캐주얼 게임 개발: 코어 룰·조작·짧은 세션 플레이 흐름, iOS Safari·Android Chrome·WebView 성능 최적화(메모리·FPS·텍스처·스프라이트·오디오), AI 툴(Gemini·ChatGPT·Claude)로 코드 작성·리팩토링. Cocos Creator·Phaser 또는 Unity(C#) 게임 개발 경험, DOM/WebGL 렌더링 이해, 기기·브라우저 호환과 터치 처리. Unity Playworks, Tween/파티클/VFX, 기술 문서화, 한국어 또는 영어 우대.',
+      en: 'NSTAGE, a Korean game studio running 45+ live-service projects from hyper-casual to idle RPG, is hiring an H5 Game Developer (Hyper Casual/Casual) via FYI at Center Building, 85 Vu Trong Phung, Thanh Xuan, Hanoi. Build hyper-casual games for mobile web in HTML5: core rules, controls and short-session game flow; optimize memory, FPS, textures, sprite sheets and audio across iOS Safari, Android Chrome and WebView; use AI tools (Gemini, ChatGPT, Claude) to write and refactor code. Experience with Cocos Creator, Phaser or Unity (C#), understanding of DOM/WebGL rendering, device and touch compatibility handling. Unity Playworks, Tween/Particle/VFX, technical documentation, Korean or English preferred.',
+    }
+    return [
+      {
+        match: new RegExp(`^nstageh5-1015-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (Hà Nội)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (Hanoi)` },
+        desc: `${company} ${title}(${code}) recommend (10/15 Len 게재 당일 발송): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "일단 보내자" — 핵심 31 + 하노이 프론트 JS 자기선별 189. 10/14 NSTAGE V226~V238 수신자 제외 안 함.`,
+        source: 'scripts/outreach/nstageh5-1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^nstageh5-1015-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (Hà Nội)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (Hanoi)` },
+        desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/nstageh5-1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
