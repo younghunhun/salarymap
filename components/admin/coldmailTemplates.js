@@ -5049,6 +5049,68 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── DAEHONG COMMUNICATIONS VIETNAM V244 Content Creator / Influencer (Digital Account Intern) 10/15 (scripts/outreach/daehongcontent1015-recommend-coldmail.mjs) — 그룹 4 × 프레임 2항목 ──
+  ...[
+    ['creator', '크리에이터/인플루언서/MC/TikTok/라이브 시그널 × 마케팅·콘텐츠 직군 or 미디어 전공 × HCM권/미기재 × 24m 이하 (370)'],
+    ['mkt-social', '마케팅·콘텐츠 직군/직함 × 소셜·콘텐츠·CapCut/Canva 시그널 × HCM권/미기재 × 24m 이하 (252)'],
+    ['mkt', '마케팅·콘텐츠 직군/직함 × HCM권/미기재 × 24m 이하, 소셜 시그널 없음 (35)'],
+    ['major', '마케팅·미디어·이커머스 전공 × 소셜 시그널 × HCM권/미기재 × 24m 이하, 직군 미기재·비개발·비디자인 (29)'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Content Creator / Influencer (Digital Account Intern)', code = 'V244', company = 'DAEHONG COMMUNICATIONS VIETNAM', initial = 'D'
+    const meta = 'Onsite · Diamond Plaza, TP.HCM · Internship 3–6 tháng (full-time) · 3.000.000 VND/tháng'
+    const intro = {
+      vi: '<b>DAEHONG COMMUNICATIONS VIETNAM</b> — agency quảng cáo tích hợp thuộc tập đoàn Lotte — đang tuyển <b>Content Creator / Influencer (Digital Account Intern)</b> cho Account Solutions Team qua FYI tại Diamond Plaza, TP.HCM. Gương mặt on-camera cho kênh social mới của Lotte Daehong: đưa tin sự kiện thương hiệu (phỏng vấn celebrity, hậu trường), review qua video; lên kế hoạch và sản xuất nội dung Facebook/Instagram/TikTok; hỗ trợ đăng, lên lịch, theo dõi fanpage; phối hợp Creative team; báo cáo tuần/tháng từ Google Analytics, Social Listening, Business Suite. Yêu cầu: sinh viên năm cuối hoặc mới tốt nghiệp Marketing, Digital Media, E-commerce; tự tin trước ống kính; Excel/Google Sheets; tiếng Anh công việc; full-time 5 ngày/tuần, 3–6 tháng. Lợi thế: Photoshop, Canva, CapCut; từng vận hành kênh TikTok/blog. Lương 3.000.000 VND/tháng, chi phí sự kiện được chi trả.',
+      ko: '<b>DAEHONG COMMUNICATIONS VIETNAM</b> — 롯데계 종합 광고 에이전시, 호치민 Diamond Plaza — <b>콘텐츠 크리에이터/인플루언서(디지털 어카운트 인턴)</b>. 롯데 대홍 신규 소셜 채널의 온카메라 얼굴: 브랜드 행사 현장 취재(셀럽 인터뷰·비하인드), 영상 리뷰, Facebook·Instagram·TikTok 콘텐츠 기획·제작, 팬페이지 업로드·스케줄·모니터링, 크리에이티브팀 협업, GA·소셜리스닝·Business Suite 기반 주간·월간 리포트. 마케팅·디지털미디어·이커머스 졸업예정/신졸, 카메라 앞 자신감, Excel/Sheets, 업무 영어, 풀타임 3~6개월. Photoshop·Canva·CapCut, TikTok·블로그 운영 경험 우대. 월 300만 VND, 행사 비용 전액 지원.',
+      en: '<b>DAEHONG COMMUNICATIONS VIETNAM</b>, a Lotte-group integrated ad agency at Diamond Plaza, HCMC, is hiring a Content Creator / Influencer (Digital Account Intern) via FYI. On-camera presence for Lotte Daehong\'s new social channel: cover brand events (celebrity interviews, behind-the-scenes), video reviews, plan and produce Facebook/Instagram/TikTok content, upload, schedule and monitor fanpages, work with the Creative team, weekly and monthly reports from Google Analytics, Social Listening and Business Suite. Final-year students or fresh graduates in Marketing, Digital Media or E-commerce, camera-confident, Excel/Google Sheets, working English, full-time 3–6 months. Photoshop, Canva, CapCut and a personal TikTok/blog are a plus. VND 3,000,000/month, event expenses covered.',
+    }
+    return [
+      {
+        match: new RegExp(`^daehongcontent1015-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15 Len 게재 당일 발송): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "일단 구해보고" — 당일 V242/V243 수신자·10/12 V222 수신자 제외 안 함.`,
+        source: 'scripts/outreach/daehongcontent1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^daehongcontent1015-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/daehongcontent1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
+  // ── First Marketing Company 10/15 Thực tập sinh Sale 2차 V222 Trevity / V223 Gayogayo (scripts/outreach/fmc1012-sale-intern-coldmail.mjs 10/15 확장) — 그룹 2 × 공고 2 × 프레임 2항목 ──
+  ...[
+    ['sale-mid', '10/12 동일 게이트((세일즈 직군 or CS/세일즈 직함) or (인접 직군 × JD 전공)) × 12~24m × HCMC권/미기재 — 10/12에 제외했던 그룹 (226, V222/V223 번갈아 113씩)'],
+    ['major-norole', '직군 미기재 × JD 전공(경영·마케팅·관광·외국어) × 12m 미만 × HCMC권/미기재 (5)'],
+  ].flatMap(([g, cut]) => [['V222', 'Trevity Team'], ['V223', 'Gayogayo Team']].flatMap(([code, team]) => {
+    const title = 'Thực tập sinh Sale', company = 'First Marketing Company', initial = 'F'
+    const meta = 'TP.HCM (19N Nguyễn Hữu Cảnh) · Thực tập 3 tháng · Full-time / Part-time · Phụ cấp + bonus'
+    const intro = code === 'V222'
+      ? { vi: '<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> (Trevity Team) qua FYI — hỗ trợ team kinh doanh tiếp cận, tư vấn và chăm sóc khách hàng, đối tác trong môi trường du lịch – dịch vụ. Trực tin nhắn Fanpage; tìm kiếm, liên hệ khách hàng và đối tác (cửa hàng, nhà hàng, spa, khách sạn…); giới thiệu dịch vụ; hỗ trợ báo giá, hợp đồng; chăm sóc sau bán; CRM / Google Sheets. Sinh viên năm 3–4 hoặc mới tốt nghiệp Kinh doanh, Marketing, Du lịch, Ngoại ngữ; tiếng Anh cơ bản; ưu tiên kinh nghiệm CSKH/bán hàng, biết tiếng Hàn. Phụ cấp + bonus, xem xét lên chính thức. 3 tháng, 19N Nguyễn Hữu Cảnh.',
+          ko: '<b>First Marketing Company</b>(호치민) — <b>영업 인턴</b>(Trevity Team). 여행·서비스 영업팀 지원: 팬페이지 응대, 제휴 파트너(매장/레스토랑/스파/호텔) 발굴·연락, 서비스 소개, 견적·계약 지원, 사후 응대, CRM/Sheets. 경영·마케팅·관광·외국어 전공 3~4학년/졸업자, 영어 기본, 고객 응대·영업 경험·한국어 우대. 지원금+보너스, 정규직 전환 검토. 3개월.',
+          en: 'First Marketing Company (HCMC) is hiring a Sales Intern (Trevity Team) via FYI to support the sales team in a travel/service environment: Fanpage inquiries, prospect and partner outreach (shops, restaurants, spas, hotels), service introduction, quotes/contracts, after-sales care, CRM / Google Sheets. 3rd–4th year or fresh graduate in Business, Marketing, Tourism or Languages, basic English; customer service/sales experience and Korean are a plus. Allowance + bonus, full-time conversion review. 3 months.' }
+      : { vi: '<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> (Gayogayo Team) qua FYI — tìm kiếm và kết nối cơ sở kinh doanh tham gia ứng dụng <b>Gayogayo</b> (ưu đãi cho du khách Hàn Quốc), giới thiệu dịch vụ marketing của Trevity. Liên hệ cửa hàng, nhà hàng, spa, khách sạn qua điện thoại, email, Zalo; mời tham gia ưu đãi, hỗ trợ hoàn tất nội dung lên app; phối hợp làm video ngắn giới thiệu cơ sở; chăm sóc sau khi tham gia; Google Sheets; báo cáo ngày/tuần. Sinh viên năm 3–4 hoặc mới tốt nghiệp Kinh doanh, Marketing, Du lịch, Ngoại ngữ; chủ động, không ngại gọi điện; ưu tiên kinh nghiệm bán hàng/CSKH, biết tiếng Hàn. Phụ cấp + bonus, xem xét lên chính thức. 3 tháng, 19N Nguyễn Hữu Cảnh.',
+          ko: '<b>First Marketing Company</b>(호치민) — <b>영업 인턴</b>(Gayogayo Team). 한국인 관광객 할인 앱 Gayogayo 입점 매장 발굴·연락(전화·메일·Zalo), 입점 안내와 혜택 내용 정리, 매장 소개 숏폼 영상 협업, 입점 후 관리, Google Sheets, 일일·주간 보고. 경영·마케팅·관광·외국어 전공 3~4학년/졸업자, 전화 영업에 거부감 없을 것, 영업·고객 응대 경험·한국어 우대. 지원금+보너스, 정규직 전환 검토. 3개월.',
+          en: 'First Marketing Company (HCMC) is hiring a Sales Intern (Gayogayo Team) via FYI to onboard local businesses onto the Gayogayo app (deals for Korean tourists) and introduce Trevity\'s marketing services. Contact shops, restaurants, spas and hotels by phone, email and Zalo, guide them through the deal listing, help shoot short intro videos, follow up after onboarding, Google Sheets, daily/weekly reports. 3rd–4th year or fresh graduate in Business, Marketing, Tourism or Languages, comfortable with cold calls; sales/customer service experience and Korean are a plus. Allowance + bonus, full-time conversion review. 3 months.' }
+    return [
+      {
+        match: new RegExp(`^fmc1015-sale-intern-${g}-${code}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title} ${team}(${code}) recommend 2차 (10/15): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "남은 224명도 보내봐"(Emma 10/15 CV 추가 요청). 1차 10/12 417명은 지원 6명(1.4%).`,
+        source: 'scripts/outreach/fmc1012-sale-intern-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^fmc1015-sale-intern-${g}-${code}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title} ${team}(${code}) recommend 2차 (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/fmc1012-sale-intern-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  })),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',

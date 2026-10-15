@@ -5,6 +5,7 @@
 //
 //   node scripts/outreach/fmc1012-sale-intern-coldmail.mjs            # dry-run
 //   node scripts/outreach/fmc1012-sale-intern-coldmail.mjs --send     # 417
+// 10/15 추가(유저 지시 "남은 224명도 보내봐"): sale-mid(12~24m 동일 게이트)·major-norole(직군 미기재 × JD 전공 × 12m 미만) 그룹 추가, V222 Trevity / V223 Gayogayo 번갈아 배정. 캠페인 fmc1015-sale-intern-<gkey>-<V코드>-<frame>. Emma 10/15 "push more CV for sales intern".
 import { Resend } from 'resend'
 import { sb, env, fetchAll, fetchBlacklist } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
@@ -44,6 +45,17 @@ const GROUPS = [
     label: { vi: 'Thực tập sinh Sale', ko: '(세일즈 직군 or CS/세일즈 경력 직함) or (인접 직군 × JD 전공) × 12m 미만 × HCMC권/미기재' },
     pick: (p) => (hcmOk(p) && y(p) < 12 && ((salesRole(p) || csSalesTitle(p)) || (adjRole(p) && majorOk(p))) ? 1 + (salesRole(p) ? 2 : 0) + (csSalesTitle(p) ? 3 : 0) + (majorOk(p) ? 1 : 0) + (koOk(p) ? 3 : 0) + (enOk(p) ? 1 : 0) + (office(p) ? 1 : 0) + (student(p) ? 1 : 0) : null),
   },
+  // 10/15 추가 — jobKeys: V222/V223 번갈아 배정
+  {
+    gkey: 'sale-mid', camp: 'fmc1015-sale-intern-sale-mid', jobKeys: ['V222', 'V223'],
+    label: { vi: 'Thực tập sinh Sale', ko: '동일 게이트 × 12~24m × HCMC권/미기재 (10/12 제외했던 그룹)' },
+    pick: (p) => (hcmOk(p) && y(p) >= 12 && y(p) < 24 && ((salesRole(p) || csSalesTitle(p)) || (adjRole(p) && majorOk(p))) ? 1 + (salesRole(p) ? 2 : 0) + (csSalesTitle(p) ? 3 : 0) + (majorOk(p) ? 1 : 0) + (koOk(p) ? 3 : 0) + (enOk(p) ? 1 : 0) : null),
+  },
+  {
+    gkey: 'major-norole', camp: 'fmc1015-sale-intern-major-norole', jobKeys: ['V222', 'V223'],
+    label: { vi: 'Thực tập sinh Sale', ko: '직군 미기재 × JD 전공 × 12m 미만 × HCMC권/미기재' },
+    pick: (p) => (hcmOk(p) && y(p) < 12 && roles(p).length === 0 && majorOk(p) ? 1 + (koOk(p) ? 3 : 0) + (enOk(p) ? 1 : 0) : null),
+  },
 ]
 
 // ── 공고·카피 (vi 실발송) — 공고 본문 그대로 요약 ──
@@ -51,7 +63,11 @@ const CO = 'First Marketing Company'
 const JOBS = {
   V222: {
     id: '34e07af1-38c9-4621-9306-cc977135fbfc', company: CO, initial: 'F', meta: 'TP.HCM (19N Nguyễn Hữu Cảnh) · Thực tập 3 tháng · Full-time / Part-time · Phụ cấp + bonus',
-    intro: `<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> qua FYI — hỗ trợ team kinh doanh tiếp cận, tư vấn và chăm sóc khách hàng, đối tác trong môi trường du lịch – dịch vụ. Công việc: trực và trả lời tin nhắn Fanpage Messenger; tìm kiếm, liên hệ khách hàng và đối tác (cửa hàng, nhà hàng, spa, khách sạn…) qua điện thoại, email, mạng xã hội; giới thiệu dịch vụ và gói hợp tác; hỗ trợ soạn báo giá, hợp đồng và theo dõi cơ hội bán hàng; chăm sóc sau bán; cập nhật dữ liệu khách hàng trên CRM / Google Sheets. <b>Yêu cầu</b>: sinh viên năm 3–4 hoặc mới tốt nghiệp ngành Kinh doanh, Marketing, Du lịch, Ngoại ngữ hoặc liên quan; giao tiếp, thuyết phục tốt, phản hồi nhanh và lịch sự; tiếng Anh giao tiếp cơ bản; thành thạo Word, Excel/Google Sheets, email. <b>Ưu tiên</b>: kinh nghiệm chăm sóc khách hàng hoặc bán hàng (part-time, thực tập, CTV đều được); biết tiếng Hàn là lợi thế lớn. <b>Quyền lợi</b>: phụ cấp thực tập và bonus cuối kỳ, hoa hồng theo kết quả (nếu có), được cấp thiết bị làm việc, có người hướng dẫn trực tiếp, xem xét lên nhân viên chính thức, hỗ trợ xác nhận thực tập. Thực tập 3 tháng, toàn thời gian hoặc bán thời gian, tại 19N Nguyễn Hữu Cảnh, TP.HCM.`,
+    intro: `<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> (Trevity Team) qua FYI — hỗ trợ team kinh doanh tiếp cận, tư vấn và chăm sóc khách hàng, đối tác trong môi trường du lịch – dịch vụ. Công việc: trực và trả lời tin nhắn Fanpage Messenger; tìm kiếm, liên hệ khách hàng và đối tác (cửa hàng, nhà hàng, spa, khách sạn…) qua điện thoại, email, mạng xã hội; giới thiệu dịch vụ và gói hợp tác; hỗ trợ soạn báo giá, hợp đồng và theo dõi cơ hội bán hàng; chăm sóc sau bán; cập nhật dữ liệu khách hàng trên CRM / Google Sheets. <b>Yêu cầu</b>: sinh viên năm 3–4 hoặc mới tốt nghiệp ngành Kinh doanh, Marketing, Du lịch, Ngoại ngữ hoặc liên quan; giao tiếp, thuyết phục tốt, phản hồi nhanh và lịch sự; tiếng Anh giao tiếp cơ bản; thành thạo Word, Excel/Google Sheets, email. <b>Ưu tiên</b>: kinh nghiệm chăm sóc khách hàng hoặc bán hàng (part-time, thực tập, CTV đều được); biết tiếng Hàn là lợi thế lớn. <b>Quyền lợi</b>: phụ cấp thực tập và bonus cuối kỳ, hoa hồng theo kết quả (nếu có), được cấp thiết bị làm việc, có người hướng dẫn trực tiếp, xem xét lên nhân viên chính thức, hỗ trợ xác nhận thực tập. Thực tập 3 tháng, toàn thời gian hoặc bán thời gian, tại 19N Nguyễn Hữu Cảnh, TP.HCM.`,
+  },
+  V223: {
+    id: '943d3779-0e18-4139-8c3a-935428f0724f', company: CO, initial: 'F', meta: 'TP.HCM (19N Nguyễn Hữu Cảnh) · Thực tập 3 tháng · Full-time / Part-time · Phụ cấp + bonus',
+    intro: `<b>First Marketing Company</b> (TP.HCM) đang tuyển <b>Thực tập sinh Sale</b> (Gayogayo Team) qua FYI — tìm kiếm và kết nối các cơ sở kinh doanh tham gia ứng dụng <b>Gayogayo</b> (chương trình ưu đãi dành cho du khách Hàn Quốc), đồng thời giới thiệu dịch vụ marketing của Trevity. Công việc: tìm kiếm, liên hệ khách hàng và đối tác (cửa hàng, nhà hàng, spa, khách sạn…) qua điện thoại, email, Zalo; giới thiệu app Gayogayo và mời cơ sở tham gia ưu đãi; gửi form đăng ký, hỗ trợ cơ sở hoàn tất nội dung ưu đãi để đưa lên app; phối hợp làm video ngắn giới thiệu cơ sở (YouTube, TikTok, Instagram); chăm sóc cơ sở sau khi tham gia; cập nhật dữ liệu trên Google Sheets; báo cáo ngày/tuần. <b>Yêu cầu</b>: sinh viên năm 3–4 hoặc mới tốt nghiệp ngành Kinh doanh, Marketing, Du lịch, Ngoại ngữ hoặc liên quan; chủ động, không ngại gọi điện và trò chuyện với chủ cơ sở; giao tiếp, thuyết phục tốt, nhắn tin tư vấn rõ ràng, lịch sự. <b>Ưu tiên</b>: kinh nghiệm bán hàng hoặc chăm sóc khách hàng; biết tiếng Hàn là lợi thế. <b>Quyền lợi</b>: phụ cấp thực tập và bonus, có người hướng dẫn trực tiếp, xem xét lên nhân viên chính thức, hỗ trợ xác nhận thực tập. Thực tập 3 tháng, toàn thời gian hoặc bán thời gian, tại 19N Nguyễn Hữu Cảnh, TP.HCM.`,
   },
 }
 
@@ -151,6 +167,7 @@ async function main() {
   const seen = new Set()
   const assigned = []
   let skipRec = 0
+  const rr = {}
   for (const p of pool) {
     if (!p.email || /likelion/i.test(p.email)) continue
     const e = p.email.toLowerCase()
@@ -159,10 +176,12 @@ async function main() {
     for (const g of GROUPS) {
       const s = g.pick(p)
       if (s == null) continue
-      const jobId = JOBS[g.jobKey].id
-      if (appliedSet.has(`${p.id}|${jobId}`) || recSet.has(`${p.id}|${jobId}`)) { skipRec++; continue }
+      const keys = g.jobKeys || [g.jobKey]
+      // 두 공고 중 어느 하나라도 기수신/기지원이면 제외(같은 회사·같은 역할 중복 방지)
+      if (keys.some((k) => appliedSet.has(`${p.id}|${JOBS[k].id}`) || recSet.has(`${p.id}|${JOBS[k].id}`))) { skipRec++; continue }
+      const jobKey = keys[(rr[g.gkey] = (rr[g.gkey] || 0) + 1) % keys.length]
       seen.add(e)
-      assigned.push({ p, s, g, frame: p.is_resume_public ? 'public' : 'private' })
+      assigned.push({ p, s, g, jobKey, frame: p.is_resume_public ? 'public' : 'private' })
       break
     }
   }
@@ -171,7 +190,8 @@ async function main() {
   for (const g of GROUPS) {
     const rows = assigned.filter((r) => r.g.gkey === g.gkey)
     const pub = rows.filter((x) => x.frame === 'public').length
-    console.log(`  ${g.gkey} → ${g.jobKey} (${g.label.ko}): ${rows.length}명 (공개 ${pub} / 비공개 ${rows.length - pub})`)
+    const byJob = rows.reduce((m, r) => ((m[r.jobKey] = (m[r.jobKey] || 0) + 1), m), {})
+    console.log(`  ${g.gkey} → ${Object.entries(byJob).map(([k, v]) => `${k} ${v}`).join(' / ') || (g.jobKeys || [g.jobKey]).join('/')} (${g.label.ko}): ${rows.length}명 (공개 ${pub} / 비공개 ${rows.length - pub})`)
   }
   console.log(`  ── 합계: ${assigned.length}명 (제외: 해당 공고 기수신/기지원 ${skipRec})`)
   if (!doSend) {
@@ -186,10 +206,11 @@ async function main() {
   let targets = [...assigned].sort((a, b) => b.s - a.s)
   if (maxN) targets = targets.slice(0, maxN)
   let ok = 0, fail = 0
-  for (const { p, g, frame } of targets) {
-    const jd = JOBS[g.jobKey]
+  const okBy = {}
+  for (const { p, g, jobKey, frame } of targets) {
+    const jd = JOBS[jobKey]
     const job = jobById[jd.id]
-    const camp = `${g.camp}-${frame}`
+    const camp = g.jobKeys ? `${g.camp}-${jobKey}-${frame}` : `${g.camp}-${frame}`
     const u = url(p.id, camp, jd.id), un = unsubFor(p.id, camp)
     const { error } = await resend.emails.send({
       from: RESEND_FROM, to: p.email, subject: SUBJECT[frame](jd.company, g.label.vi),
@@ -205,11 +226,11 @@ async function main() {
       event: 'recommend_sent', page: '/scripts/fmc1012-sale-intern-coldmail',
       meta: { campaign: camp, job_ids: [jd.id], frame, group: g.gkey }, user_id: p.id,
     }])
-    ok++
+    ok++; okBy[jobKey] = (okBy[jobKey] || 0) + 1
     if (ok % 50 === 0) console.log(`  …${ok}/${targets.length}`)
     await sleep(400)
   }
-  console.log(`\n✅ 발송 완료: ${ok}/${targets.length} (실패 ${fail})`)
+  console.log(`\n✅ 발송 완료: ${ok}/${targets.length} (실패 ${fail}) — ${Object.entries(okBy).map(([k, v]) => `${k} ${v}`).join(' · ')}`)
 }
 
 main().catch((e) => { console.error(e); process.exit(1) })
