@@ -4954,6 +4954,39 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial: 'T', company: 'The Han', title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── VN 10/15 지남 공고 잔여 풀 3건 V69·V172·V76 (scripts/outreach/vn1015-recommend-coldmail.mjs) — 그룹 3 × 프레임 2항목 ──
+  ...[
+    ['qaqc', 'Nhân viên QA/QC (an toàn thực phẩm)', 'V69', 'BlueStar Asia', 'B', 'Onsite · Bình Thạnh (cũ), TP.HCM · T2–T7 · 10–12 triệu',
+      '식품안전/급식/HACCP/VSATTP 텍스트 시그널 × HCM권/미기재 × 비개발 (9/7 bluestar-recommend1-qaqc 18명 기수신 제외).',
+      '<b>BlueStar Asia</b> — công ty suất ăn công nghiệp — đang tuyển <b>Nhân viên QA/QC (an toàn thực phẩm)</b> qua FYI, làm việc tại Bình Lợi Trung (Bình Thạnh cũ), TP.HCM. Công việc: định kỳ kiểm tra vệ sinh an toàn thực phẩm tại các canteen và khu vực bếp, làm hồ sơ khám sức khỏe cho nhân viên, khảo sát đánh giá chất lượng bữa ăn, đề xuất công cụ và thiết bị bảo hộ, tiếp đoàn và chuẩn bị hồ sơ kiểm định VSATTP. Yêu cầu: cẩn thận, chịu khó, thành thạo Word/Excel, không say tàu xe; ưu tiên kinh nghiệm suất ăn công nghiệp. T2–T7, lương 10–12 triệu/tháng, lương tháng 13, BHXH sau thử việc.',
+      '<b>BlueStar Asia</b> — 호치민 단체급식 업체 — <b>식품안전 QA/QC 직원</b>. 급식소·주방 위생 정기 점검, 직원 건강검진 서류, 식사 품질 조사, 보호장비 제안, 식품안전 인증 심사 대응. 꼼꼼함, Word/Excel, 차멀미 없을 것(급식소 순회). 월~토 근무, 월 1,000만~1,200만 VND, 13개월 급여.',
+      '<b>BlueStar Asia</b>, an industrial catering company in HCMC, is hiring a Food Safety QA/QC Staff via FYI. Periodic hygiene inspections at canteens and kitchens, employee health-check paperwork, meal quality surveys, PPE proposals, and food-safety audit support. Careful, diligent, Word/Excel, no motion sickness (frequent canteen visits). Mon–Sat, 10–12M VND/month, 13th-month salary.'],
+    ['ejung', 'Kế toán tổng hợp', 'V172', 'E-JUNG', 'E', 'Onsite · Centec Tower, TP.HCM · 1 năm+ kế toán · 10–12 triệu',
+      'Finance 직군 × HCM권/미기재 × 12m+ — SKtax(V76) 기수신자 전원 + 신규 Finance 풀 절반(번갈아 배정). 10/15 현재 이 공고 콜드메일 0건이라 1차 발송.',
+      '<b>E-JUNG</b> — công ty kiểm toán và tư vấn thuế (Centec Tower, 72-74 Nguyễn Thị Minh Khai, TP.HCM) — đang tuyển <b>Kế toán tổng hợp</b> qua FYI. Công việc: dịch vụ kế toán và tư vấn thuế cho khách hàng — ghi sổ và hạch toán, tập hợp chi phí và tính giá thành theo dự án, kê khai thuế GTGT/TNCN, quyết toán thuế TNCN/TNDN, lập báo cáo tài chính, hỗ trợ thanh tra và hoàn thuế. Yêu cầu: Đại học Kế toán – Kiểm toán, từ 1 năm kinh nghiệm kế toán tổng hợp/dịch vụ, tiếng Anh cơ bản. Lương 10–12 triệu/tháng, phép năm cộng thêm, đào tạo chuyên sâu. Hồ sơ: CV tiếng Anh kèm ảnh thẻ.',
+      '<b>E-JUNG</b> — 호치민 회계법인(Centec Tower) — <b>종합회계 담당자</b>. 고객사 기장·결산, 프로젝트별 원가 계산, 부가세·개인소득세 신고, 개인·법인세 정산, 재무제표 작성, 세무조사·환급 지원. 회계·감사 전공 대졸, 종합/서비스 회계 1년 이상, 기초 영어. 월 1,000만~1,200만 VND, 추가 연차, 심화 교육. 영문 CV와 증명사진 필요.',
+      '<b>E-JUNG</b>, an audit and tax advisory firm in HCMC (Centec Tower), is hiring a General Accountant via FYI. Bookkeeping and accounting services for clients, project costing, VAT/PIT filing, PIT/CIT finalization, financial statements, tax-inspection and refund support. Accounting/auditing degree, 1+ year general or service accounting, basic English. 10–12M VND/month, extra leave, in-depth training. English CV with photo required.'],
+    ['sktax', 'Kế toán dịch vụ', 'V76', 'SKtax', 'S', 'Onsite · An Phú, TP.HCM · T2–T6 8:00–17:00 · 13–15 triệu',
+      'Finance 직군 × HCM권/미기재 × 12m+ — 신규 Finance 풀 절반(ejung 과 번갈아 배정). 9/7 sktax-recommend1-acct 19명 기수신 제외.',
+      '<b>SKtax</b> — công ty dịch vụ kế toán – thuế — đang tuyển <b>Kế toán dịch vụ</b> qua FYI, làm việc tại An Phú (Phường Bình Trưng), TP.HCM, Thứ 2 – Thứ 6, 8:00–17:00. Công việc: theo dõi và đối chiếu công nợ, kê khai thuế định kỳ (GTGT, TNCN, TNDN), báo cáo thuế và báo cáo tài chính, nhập liệu chứng từ vào phần mềm kế toán, hạch toán và lưu trữ chứng từ, giải trình với cơ quan thuế. Yêu cầu: Cao đẳng trở lên Kế toán – Tài chính, hơn 1 năm kinh nghiệm kế toán, biết dùng phần mềm kế toán. Lương 13–15 triệu/tháng, thử việc 100% lương, thưởng Lễ/Tết và lương tháng 13.',
+      '<b>SKtax</b> — 호치민 An Phú 세무회계 서비스 회사 — <b>서비스 회계 담당자</b>. 거래처 채권 관리·대사, 정기 세무신고(부가세·개인소득세·법인세), 세무·재무 보고서, 회계 프로그램 전표 입력, 분개·증빙 보관, 세무서 소명 지원. 회계·재무 전문대졸 이상, 회계 1년 이상, 회계 프로그램 사용 가능. 월~금 8~17시, 월 1,300만~1,500만 VND, 수습 100% 급여, 명절 보너스·13개월 급여.',
+      '<b>SKtax</b>, an accounting and tax services firm in An Phú, HCMC, is hiring a Service Accountant via FYI. Receivables tracking and reconciliation, periodic tax filing (VAT, PIT, CIT), tax and financial reports, voucher entry in accounting software, bookkeeping and document archiving, tax-authority support. College degree in accounting/finance, 1+ year accounting, accounting software skills. Mon–Fri 8–17h, 13–15M VND/month, full pay during probation, holiday bonus and 13th-month salary.'],
+  ].flatMap(([g, title, code, company, initial, meta, cut, vi, ko, en]) => [
+    {
+      match: new RegExp(`^vn1015-recommend-${g}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+      desc: `${company} ${title}(${code}) recommend (10/15 지남 공고 잔여 풀 발송): 비공개 프레임 — 컷=${cut} 유저 지시 10/15 "발송 가능한 것들 전부 다 발송".`,
+      source: 'scripts/outreach/vn1015-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^vn1015-recommend-${g}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+      desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+      source: 'scripts/outreach/vn1015-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
