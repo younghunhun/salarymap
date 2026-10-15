@@ -5141,6 +5141,36 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── DA-SH V247 Marketing Intern 10/15 (scripts/outreach/dash1015-recommend-coldmail.mjs) — 그룹 3 × 프레임 2항목 ──
+  ...[
+    ['student-ko', '재학생 × 한국어 시그널 × 마케팅 직군 or 마케팅/경영/어학/한국학 전공 × HCM권/미기재 × 12m 이하 (52, 당일 기수신 제외 후 18)'],
+    ['student-mkt', '재학생 × 마케팅·콘텐츠 직군/직함 × HCM권/미기재 × 12m 이하 (388, 전원 당일 V244 기수신 → 10/15 0, 익일 이후 발송 대상)'],
+    ['student-major', '재학생 × 마케팅/경영/어학 전공 × 직군 미기재·비전문직 × HCM권/미기재 × 12m 이하 (57, 당일 기수신 제외 후 26)'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Marketing Intern', code = 'V247', company = 'DA-SH', initial = 'D'
+    const meta = 'Onsite · COBI Tower 2, Tân Mỹ (Q.7), TP.HCM · Thực tập full-time 3 tháng · 15.000.000 VND/kỳ thực tập'
+    const intro = {
+      vi: '<b>DA-SH</b> — công ty dịch vụ hướng nghiệp tại Seoul (Hello My Me, nextpath) — đang tuyển <b>Marketing Intern</b> full-time 3 tháng qua FYI tại COBI Tower 2, Tân Mỹ, TP.HCM. Nghiên cứu thị trường sinh viên Việt Nam và đối thủ; thu thập thông tin trường đại học, cộng đồng sinh viên, kênh marketing (Google Sheets/Drive); hỗ trợ nội dung social (Facebook, TikTok) và tài liệu quảng bá; đề xuất ý tưởng; hỗ trợ chiến dịch và tiếp cận trường; báo cáo tiến độ hằng ngày. Yêu cầu: đang là sinh viên (hoặc bảo lưu) tại Việt Nam, năm cuối phù hợp; quan tâm marketing, nghiên cứu thị trường, nội dung, localization; Google Drive/Sheets. Ưu tiên tiếng Hàn; Marketing, QTKD, Truyền thông, Hàn Quốc học; kinh nghiệm social/nội dung/dịch thuật; từng làm với công ty Hàn. 15.000.000 VND cho 3 tháng, trả một lần khi hoàn thành.',
+      ko: '<b>DA-SH</b> — 서울 소재 커리어 서비스 회사(Hello My Me, nextpath), 호치민 7군 COBI Tower 2 — <b>마케팅 인턴</b> 풀타임 3개월. 베트남 대학생 시장·경쟁사 리서치, 대학·학생 커뮤니티·마케팅 채널 정보 수집(Sheets/Drive), Facebook·TikTok 콘텐츠와 홍보물 제작 보조, 아이디어 제안, 온·오프라인 캠페인과 대학 아웃리치 지원, 일일 진행 보고. 베트남 대학 재학/휴학생(졸업예정자 가능), 마케팅·리서치·콘텐츠·로컬라이제이션 관심, Drive/Sheets. 한국어, 마케팅·경영·커뮤니케이션·한국학 전공, 소셜 운영·콘텐츠·번역 경험, 한국 기업 경험 우대. 3개월 1,500만 VND, 인턴십 완료 시 일시 지급.',
+      en: 'DA-SH, a Seoul-based career-service company (Hello My Me, nextpath), is hiring a full-time 3-month Marketing Intern via FYI at COBI Tower 2, Tan My, HCMC. Research the Vietnamese university student market and competitors, collect data on universities, student communities and marketing channels (Google Sheets/Drive), support social content (Facebook, TikTok) and promotional materials, suggest ideas, support campaigns and university outreach, report progress daily. Must be currently enrolled (or on leave) at a Vietnamese university, final-year welcome; interested in marketing, market research, content or localization; Google Drive/Sheets. Korean, Marketing/Business/Communications/Korean Studies major, social media or content or translation experience and Korean-company experience are a plus. VND 15,000,000 for the 3-month internship, paid in a lump sum upon completion.',
+    }
+    return [
+      {
+        match: new RegExp(`^dash1015-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15 Len 게재 당일 발송): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "71명 발송"(오늘 메일 안 받은 사람만) — 당일 recommend 기수신자 전원 제외(todaySet) → 실발송 44.`,
+        source: 'scripts/outreach/dash1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^dash1015-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/dash1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
