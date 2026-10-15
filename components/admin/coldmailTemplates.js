@@ -5019,6 +5019,36 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── DAEHONG COMMUNICATIONS VIETNAM V243 Design Intern 10/15 (scripts/outreach/daehongintern1015-recommend-coldmail.mjs) — 그룹 3 × 프레임 2항목 ──
+  ...[
+    ['design-ai', '디자인 직군/직함 × Illustrator/Adobe 시그널 × HCM권/미기재 × 24m 이하 (204)'],
+    ['design', '디자인 직군/직함 × HCM권/미기재 × 24m 이하, Adobe 시그널 없음 (149)'],
+    ['major', '디자인 전공 × Illustrator/Adobe 시그널 × HCM권/미기재 × 24m 이하, 직군 미기재 (21)'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Design Intern', code = 'V243', company = 'DAEHONG COMMUNICATIONS VIETNAM', initial = 'D'
+    const meta = 'Onsite · Diamond Plaza, Lê Duẩn, TP.HCM · Internship · 3.000.000 VND/tháng'
+    const intro = {
+      vi: '<b>DAEHONG COMMUNICATIONS VIETNAM</b> — agency quảng cáo tích hợp thuộc tập đoàn Lotte — đang tuyển <b>Design Intern</b> (Account Solutions Team) qua FYI tại Diamond Plaza, 34 Lê Duẩn, TP.HCM. Công việc: thiết kế social graphics, banner, layout và ấn phẩm thương hiệu bằng Adobe Illustrator; hỗ trợ Key Visual và adapt thiết kế sang nhiều kích thước; chuẩn bị file digital và in ấn; tìm reference, dựng moodboard; làm việc với Art Director và Account team trên chiến dịch thật. Yêu cầu: thành thạo Adobe Illustrator, tỉ mỉ, ham học hỏi. Lương 3.000.000 VND/tháng, cấp độ thực tập.',
+      ko: '<b>DAEHONG COMMUNICATIONS VIETNAM</b> — 롯데계 종합 광고 에이전시, 호치민 Diamond Plaza — <b>디자인 인턴</b>(Account Solutions Team). Adobe Illustrator로 소셜 그래픽·배너·레이아웃·브랜드 제작물 디자인, 키비주얼 보조와 사이즈 변형, 디지털·인쇄 파일 준비, 레퍼런스·무드보드, 아트디렉터·AE와 실제 캠페인 협업. Illustrator 숙련, 꼼꼼함, 학습 의지. 월 300만 VND, 인턴.',
+      en: '<b>DAEHONG COMMUNICATIONS VIETNAM</b>, a Lotte-group integrated ad agency at Diamond Plaza, HCMC, is hiring a Design Intern (Account Solutions Team) via FYI. Produce social graphics, banners, layouts and brand collateral in Adobe Illustrator, support Key Visuals and multi-format adaptations, prep digital and print files, gather references and moodboards, work with Art Directors and Account teams on live campaigns. Adobe Illustrator proficiency, attention to detail, eagerness to learn. VND 3,000,000/month, internship.',
+    }
+    return [
+      {
+        match: new RegExp(`^daehongintern1015-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15 Len 게재 당일 발송): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "중복상관없음" — 당일 NEXON V242 수신자 제외 안 함.`,
+        source: 'scripts/outreach/daehongintern1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^daehongintern1015-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/daehongintern1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
