@@ -4987,6 +4987,38 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi, ko, en }, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── SGS Vietnam V241 Sales Executive(TOPIK 4+) · NEXON DEV VINA V242 UA Graphic Designer 10/15 (scripts/outreach/sgsnexon1015-recommend-coldmail.mjs) — 그룹 5 × 프레임 2항목 ──
+  ...[
+    ['sgs-sales', 'Sales Executive (TOPIK 4+)', 'V241', 'SGS Vietnam', 'S', 'Onsite · KCN Tân Bình, TP.HCM · TOPIK 4+ · 2 năm+ kinh nghiệm', 'TOPIK 4+ × 영업 경력 × HCM권/미기재 × 비개발 (8)'],
+    ['sgs-ko', 'Sales Executive (TOPIK 4+)', 'V241', 'SGS Vietnam', 'S', 'Onsite · KCN Tân Bình, TP.HCM · TOPIK 4+ · 2 năm+ kinh nghiệm', 'TOPIK 4+ × 비개발 × 12m+, 영업 경력 없음 — 자기선별 (41)'],
+    ['sgs-any', 'Sales Executive (TOPIK 4+)', 'V241', 'SGS Vietnam', 'S', 'Onsite · KCN Tân Bình, TP.HCM · TOPIK 4+ · 2 năm+ kinh nghiệm', '한국어 any × 영업 경력 × 24m+ × 비개발, TOPIK 등급 미확인 — 자기선별 (4)'],
+    ['nx-core', 'UA Graphic Designer', 'V242', 'NEXON DEV VINA', 'N', 'Onsite · TP.HCM · Photoshop/Illustrator · Kèm portfolio', '디자인 직군/직함 × 배너·그래픽·포토샵·일러스트 시그널 × HCM권/미기재 (459)'],
+    ['nx-design', 'UA Graphic Designer', 'V242', 'NEXON DEV VINA', 'N', 'Onsite · TP.HCM · Photoshop/Illustrator · Kèm portfolio', '디자인 직군/직함 × HCM권/미기재, 시그널 없음 (76)'],
+  ].flatMap(([g, title, code, company, initial, meta, cut]) => {
+    const intro = code === 'V241'
+      ? { vi: '<b>SGS Vietnam</b> — tập đoàn kiểm định, thử nghiệm và chứng nhận (TIC) hàng đầu thế giới — đang tuyển <b>Sales Executive (yêu cầu TOPIK 4 trở lên)</b> qua FYI, làm việc tại KCN Tân Bình, TP.HCM. Công việc: tìm kiếm và tiếp cận khách hàng để bán dịch vụ kiểm định, thử nghiệm và đánh giá của SGS; duy trì quan hệ khách hàng hiện hữu; chuẩn bị tài liệu bán hàng; phối hợp với Customer Service về báo giá; thu thập thông tin thị trường; báo cáo kinh doanh tuần/tháng. Yêu cầu: tiếng Hàn TOPIK 4 trở lên, kinh nghiệm sales/B2B khoảng 2 năm là lợi thế.',
+          ko: '<b>SGS Vietnam</b> — 글로벌 시험·검사·인증(TIC) 기업 — <b>영업 담당(TOPIK 4급 이상)</b>, 호치민 Tân Bình 공단. 신규 고객 발굴과 SGS 검사·시험·심사 서비스 영업, 기존 고객 관리, 영업 자료 준비, CS팀과 견적·할인 협의, 시장·경쟁사 정보 수집, 주간·월간 영업 보고. 한국어 TOPIK 4급 이상 필수, B2B 영업 2년 내외 우대.',
+          en: '<b>SGS Vietnam</b>, the global testing, inspection and certification (TIC) leader, is hiring a Sales Executive (TOPIK 4+) via FYI at Tan Binh Industrial Zone, HCMC. Prospect and sell SGS inspection, testing and audit services, manage existing accounts, prepare sales kits, coordinate pricing with Customer Service, gather market intelligence, weekly and monthly sales reports. Korean TOPIK 4 or higher required, around 2 years of B2B sales preferred.' }
+      : { vi: '<b>NEXON DEV VINA</b> — studio phát triển game thuộc tập đoàn NEXON (Hàn Quốc) — đang tuyển <b>UA Graphic Designer</b> qua FYI tại TP.HCM. Công việc: thiết kế banner quảng cáo cho game mobile và PC, resize banner theo từng nền tảng, tối ưu và tái sản xuất banner cho marketing UA. Yêu cầu: Photoshop, Illustrator hoặc tương đương, hiểu thiết kế quảng cáo số/banner, sáng tạo, giao tiếp tốt. Ưu tiên: từng làm banner tại công ty quảng cáo/game, xử lý nhanh tác vụ resize lặp lại, kinh nghiệm marketing game/UA. Đính kèm portfolio trong CV.',
+          ko: '<b>NEXON DEV VINA</b> — 넥슨 산하 호치민 게임 개발 스튜디오 — <b>UA 그래픽 디자이너</b>. 모바일·PC 게임 광고 배너 제작, 플랫폼별 사이즈 변형, UA 마케팅 효율을 위한 배너 최적화·재생산. Photoshop·Illustrator 실무, 디지털 광고·배너 디자인 이해, 창의성, 커뮤니케이션. 광고·게임사 배너 경력, 대량 리사이즈 처리, 게임 마케팅·UA 경험 우대. CV에 포트폴리오 첨부.',
+          en: '<b>NEXON DEV VINA</b>, a NEXON game studio in HCMC, is hiring a UA Graphic Designer via FYI. Design ad banners for mobile and PC games, resize banners per platform, optimize and reproduce banners for UA marketing. Photoshop/Illustrator, digital ad and banner design knowledge, creativity, communication. Banner production at an agency or game company, fast handling of repetitive resize work, game marketing or UA experience preferred. Attach a portfolio to your CV.' }
+    return [
+      {
+        match: new RegExp(`^sgsnexon1015-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/14 Len 게재, 10/15 발송): 비공개 프레임 — 컷=${cut}. 유저 지시 10/15 "53명이랑 코어 535명 발송해봐" — 당일 타 공고 기수신자 제외 안 함(유저 결정 "중복 상관 없이").`,
+        source: 'scripts/outreach/sgsnexon1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^sgsnexon1015-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/15): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/sgsnexon1015-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
