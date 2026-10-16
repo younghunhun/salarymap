@@ -6,7 +6,7 @@
 // 표준: 1인1통 · unsub/블랙리스트 전역 제외 · 공개/비공개 프레임 · 발송 전 coldmailTemplates 등록.
 //
 //   node scripts/outreach/hyosung1016-recommend-coldmail.mjs                 # dry-run
-//   node scripts/outreach/hyosung1016-recommend-coldmail.mjs --send [--group <gkey>] [--max N]
+//   node scripts/outreach/hyosung1016-recommend-coldmail.mjs --send [--group <gkey>] [--max N] [--ignore-today]
 import { Resend } from 'resend'
 import { sb, env, fetchAll, fetchBlacklist } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
@@ -16,6 +16,7 @@ const flag = (k, d) => { const i = args.indexOf('--' + k); return i >= 0 ? (args
 const doSend = args.includes('--send')
 const onlyGroup = flag('group', null)
 const maxN = flag('max', null) ? parseInt(flag('max'), 10) : null
+const ignoreToday = args.includes('--ignore-today') // 유저 지시 10/16 "다 그냥 지금 보내" — 당일 DA-SH 기수신 69명도 당일 발송
 const SITE = String(flag('site', env.NEXT_PUBLIC_SITE_URL || 'https://salary-fyi.com')).replace(/\/$/, '')
 const RESEND_FROM = env.RESEND_FROM || 'FYI <hello@salary-fyi.com>'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -187,12 +188,14 @@ async function main() {
   const todaySet = new Set(todayRecs.map((r) => r.user_id))
   const unsubSet = new Set(unsubs.map((r) => r.user_id))
   const recSet = new Set(recs.map((r) => `${r.user_id}|${r.job_id}`)), appliedSet = new Set(apps.map((a) => `${a.user_id}|${a.job_id}`))
+  const recAnySet = new Set(recs.map((r) => r.user_id)) // 이 캠페인 6개 공고 중 하나라도 기수신 → 재실행 시 다른 공고로 재배정 금지(1인1통)
   const seen = new Set(); const assigned = []; let skipRec = 0, skipToday = 0
   for (const p of pool) {
     if (!p.email || /likelion/i.test(p.email)) continue
     const e = p.email.toLowerCase()
     if (seen.has(e) || unsubSet.has(p.id) || bl.has(p)) continue
-    if (todaySet.has(p.id)) { skipToday++; continue }
+    if (recAnySet.has(p.id)) { skipRec++; continue }
+    if (!ignoreToday && todaySet.has(p.id)) { skipToday++; continue }
     p.__t = txt(p)
     for (const g of GROUPS) {
       const s = g.pick(p); if (s == null) continue
