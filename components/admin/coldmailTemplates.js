@@ -5141,6 +5141,38 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── GPCLUB V248 Senior Growth Leader 10/16 (scripts/outreach/gpclub1016-recommend-coldmail.mjs) — 그룹 5 × 프레임 2항목 ──
+  ...[
+    ['platform', '마케팅/그로스 직군 × 4y+ × Shopee/TikTok Shop/Lazada 명시 × HCM권/미기재 (8)'],
+    ['ecom', '마케팅/그로스 직군 × 4y+ × 이커머스/D2C/라이브커머스/GMV 키워드 (19)'],
+    ['perf', '마케팅/그로스 직군 × 4y+ × 퍼포먼스 지표(ROAS/CR/CRM 등)만 — 플랫폼 경험 미확인 (14)'],
+    ['ops-platform', '비마케팅 직군(영업/운영/PO/데이터) × 4y+ × 플랫폼명 명시 (4)'],
+    ['ecom-3y', '마케팅/그로스 직군 × 3~4y × 이커머스 키워드 — 경력 미달 자기선별 (15)'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Senior Growth Leader', code = 'V248', company = 'GPCLUB', initial = 'G'
+    const meta = 'Onsite · 27-29 Nguyễn Cửu Vân, P. Gia Định (Bình Thạnh), TP.HCM · 15–40 triệu/tháng + % bonus tăng trưởng doanh thu · Từ 4 năm E-commerce growth'
+    const intro = {
+      vi: '<b>GPCLUB</b> (gpclub.vn) — thương hiệu B2C bán hàng trên các sàn TMĐT — đang tuyển <b>Senior Growth Leader (B2C)</b> qua FYI tại Bình Thạnh, TP.HCM. Mục tiêu: tăng trưởng GMV kỷ lục, tối ưu CIR. Giải mã thuật toán traffic trên Shopee, TikTok Shop, Lazada để lên Top Search/Top Recommended; A/B testing thumbnail, tiêu đề, Flash Sale, voucher, minigame; scraping giá/tồn kho/khuyến mãi đối thủ; workflow retargeting tự động; LTV/retention qua Chat Broadcast, CRM sàn, Zalo ZNS. Yêu cầu: tư duy dữ liệu (GMV, CR, CTR, CIR, ROAS, LTV); am hiểu On-site Ads, Flash Sale; tối thiểu 4 năm E-commerce growth (D2C/brand lớn/agency là lợi thế); Python/SQL hoặc automation/scraping là điểm cộng lớn. Lương 15–40 triệu + % bonus doanh thu tăng trưởng không giới hạn, ngân sách thử nghiệm riêng, BHXH, thưởng lễ Tết, lương tháng 13. T2–T6 8:30–18:00, T7 8:30–12:30.',
+      ko: '<b>GPCLUB</b>(gpclub.vn, 이커머스 플랫폼 B2C 브랜드) — <b>Senior Growth Leader (B2C)</b>, 호치민 Bình Thạnh 온사이트. GMV 최대 성장 + CIR 최적화. Shopee·TikTok Shop·Lazada 트래픽 알고리즘 해킹으로 Top Search/추천 노출, 썸네일·제목·플래시세일·바우처·미니게임 A/B 테스트, 경쟁사 가격·재고·프로모션 스크래핑, 리타게팅 자동화, Chat Broadcast·플랫폼 CRM·Zalo ZNS로 LTV/리텐션. 데이터 드리븐(GMV·CR·CTR·CIR·ROAS·LTV), 온사이트 광고·플래시세일 메커니즘 이해, 이커머스 그로스 실무 4년+(D2C·대형 브랜드·이커머스 에이전시 우대), Python/SQL·자동화·스크래핑 우대. 월 1,500만~4,000만 VND + 목표 초과 매출 성장분 % 보너스(상한 없음), 테스트 예산 배정, 4대보험, 명절 보너스, 13월차 급여. 월~금 8:30~18:00, 토 8:30~12:30.',
+      en: 'GPCLUB (gpclub.vn), a B2C brand selling on e-commerce marketplaces, is hiring a Senior Growth Leader (B2C) via FYI in Binh Thanh, HCMC. Goal: record GMV growth with strict CIR optimization. Decode traffic algorithms on Shopee, TikTok Shop and Lazada to reach Top Search/Top Recommended; A/B test thumbnails, titles, Flash Sales, vouchers, minigames; scrape competitor prices, stock and promotions; automate retargeting workflows; drive LTV and retention via Chat Broadcast, platform CRM and Zalo ZNS. Data-driven (GMV, CR, CTR, CIR, ROAS, LTV), deep On-site Ads and Flash Sale mechanics, minimum 4 years hands-on e-commerce growth (D2C, major brands or e-commerce agencies preferred); Python/SQL or automation/scraping a huge plus. VND 15–40M/month + uncapped % bonus on growth revenue above target, dedicated testing budget, full social insurance, holiday/Tet bonuses, 13th-month salary. Mon–Fri 8:30–18:00, Sat 8:30–12:30.',
+    }
+    return [
+      {
+        match: new RegExp(`^gpclub1016-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} (B2C) tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/16 Len 게재 당일 발송, 유저 지시 "gpclub 확장 보내"): 비공개 프레임 — 컷=${cut}. HCM권/미기재 · Design 직군 제외 · --ignore-today(당일 타 공고 기수신 허용) → 실발송 60.`,
+        source: 'scripts/outreach/gpclub1016-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^gpclub1016-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (B2C) (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/16): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/gpclub1016-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── HS Hyosung V249~V254 10/16 (scripts/outreach/hyosung1016-recommend-coldmail.mjs) — 공고 6 × 그룹 12 × 프레임 2항목 ──
   ...(() => {
     const company = 'HS Hyosung', initial = 'H'
