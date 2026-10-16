@@ -5141,6 +5141,76 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── HS Hyosung V249~V254 10/16 (scripts/outreach/hyosung1016-recommend-coldmail.mjs) — 공고 6 × 그룹 12 × 프레임 2항목 ──
+  ...(() => {
+    const company = 'HS Hyosung', initial = 'H'
+    const META = 'Onsite · KCN Nhơn Trạch 5, Đồng Nai · T2–T6 8:00–17:00 · Xe đưa đón từ TP.HCM (Văn Thánh, Q.7, Thủ Đức), BR-VT, Đồng Nai · KTX miễn phí'
+    const CO = { vi: '<b>HS Hyosung</b> — tập đoàn Hàn Quốc, nhà máy ngành dệt/vật liệu tại KCN Nhơn Trạch 5, Đồng Nai —', ko: '<b>HS Hyosung</b>(효성 계열 한국 기업, 동나이 Nhơn Trạch 5 공단 섬유/소재 공장) —', en: '<b>HS Hyosung</b>, a Korean group with a textile/materials plant in Nhon Trach 5 IZ, Dong Nai,' }
+    const BEN = {
+      vi: 'Quyền lợi: lương cạnh tranh, xét tăng lương hằng năm; thưởng cuối năm, sản xuất, hiệu suất 180–250% lương cơ bản; phụ cấp ngoại ngữ 500.000–4.500.000 VND/tháng mỗi ngôn ngữ (tối đa 18.000.000); sổ tiết kiệm ~15.800.000 VND mỗi 3 năm; 14 ngày phép; ăn trưa miễn phí; xe đưa đón miễn phí từ Văn Thánh, Q.7, Thủ Đức, BR-VT, Đồng Nai; ký túc xá miễn phí; BHXH đầy đủ; Udemy. T2–T6 8:00–17:00.',
+      ko: '처우: 연 1회 연봉 조정, 연말·생산·성과 보너스 기본급 180~250%, 외국어 수당 언어당 월 50만~450만 VND(최대 1,800만), 3년마다 적립금 약 1,580만 VND, 연차 14일(미사용 현금화), 중식 무료, 호치민(Văn Thánh·7군·Thủ Đức)·BR-VT·동나이 셔틀 무료, 기숙사 무료, 4대보험, Udemy. 월~금 8:00~17:00.',
+      en: 'Benefits: competitive salary with annual review; year-end, production and performance bonuses of 180–250% of base; language allowance VND 0.5–4.5M/month per language (up to 18M); savings account ~VND 15.8M every 3 years; 14 days annual leave; free lunch; free shuttle from Van Thanh, D7, Thu Duc, BR-VT, Dong Nai; free dormitory; full social insurance; Udemy. Mon–Fri 8:00–17:00.',
+    }
+    const J = {
+      V249: { title: 'Korean - speaking staff (Experienced)', meta: META + ' · Từ 2 năm kinh nghiệm · Tiếng Hàn thành thạo',
+        vi: `${CO.vi} đang tuyển <b>Korean-speaking Staff (Experienced)</b> qua FYI. Nghiên cứu quy trình do Trụ sở chính xây dựng; rà soát, điều chỉnh cho phù hợp vận hành tại Việt Nam (mua hàng, bán hàng, tuyển dụng, lương, tồn kho, tài sản, thanh toán, vay, đóng sổ); giám sát tuân thủ; cập nhật và báo cáo cho Trụ sở chính. Yêu cầu: ĐH Kế toán/Kiểm toán/Tài chính/QTKD/Ngôn ngữ Hàn; từ 2 năm kinh nghiệm kiểm toán nội bộ, quản trị rủi ro hoặc liên quan; tiếng Hàn thành thạo; Word/Excel/SAP. Ưu tiên ngành dệt, từng làm tại Hyosung. ${BEN.vi}`,
+        ko: `${CO.ko} <b>한국어 가능 직원(경력)</b>. 본사 수립 프로세스 학습, 베트남 법인 실운영에 맞게 검토·조정(구매·판매·채용·급여·재고·자산·지급·차입·월마감), 준수 모니터링, 본사 보고. 회계/감사/재무/경영/한국어 학사, 내부감사·리스크 관리 2년+, 한국어 능숙, Word/Excel/SAP. 섬유 업계·효성 근무 경험 우대. ${BEN.ko}`,
+        en: `${CO.en} is hiring Korean-speaking Staff (Experienced) via FYI. Study HQ processes, review and adapt them to Vietnam operations (purchasing, sales, recruiting, payroll, inventory, assets, payment, loans, month-end closing), monitor compliance, report to HQ. Bachelor's in Accounting/Auditing/Finance/BA/Korean; 2+ years in internal audit or risk management; proficient Korean; Word/Excel/SAP. Textile or Hyosung experience a plus. ${BEN.en}` },
+      V250: { title: 'Korean - speaking staff (Fresher)', meta: META + ' · Fresher · Tiếng Hàn giao tiếp tốt',
+        vi: `${CO.vi} đang tuyển <b>Korean-speaking Staff (Fresher)</b> qua FYI. Biên dịch tài liệu, email, báo cáo Việt – Hàn; phiên dịch họp, sự kiện; báo cáo cho Quản lý; hỗ trợ công việc văn phòng. Yêu cầu: ĐH Ngôn ngữ Hàn, Hàn Quốc học hoặc Đông phương học; chấp nhận sinh viên mới ra trường; tiếng Hàn giao tiếp tốt; Word/Excel/SAP. ${BEN.vi}`,
+        ko: `${CO.ko} <b>한국어 가능 직원(신입)</b>. 문서·이메일·보고서 한-베 번역, 회의·행사 통역, 관리자 보고, 사무 지원. 한국어/한국학/동방학 학사, 신입 가능, 한국어 소통 원활, Word/Excel/SAP. ${BEN.ko}`,
+        en: `${CO.en} is hiring Korean-speaking Staff (Fresher) via FYI. Translate documents, emails and reports between Vietnamese and Korean, interpret in meetings and events, report to managers, support office tasks. Bachelor's in Korean Language, Korean Studies or Oriental Studies; fresh graduates welcome; good Korean; Word/Excel/SAP. ${BEN.en}` },
+      V251: { title: 'Production Engineer', meta: META + ' · Fresher · Tiếng Anh cơ bản',
+        vi: `${CO.vi} đang tuyển <b>Production Engineer</b> qua FYI. Điều phối nhân sự đảm bảo tiến độ; đào tạo quy trình, tiêu chuẩn; quản lý quy trình sản xuất, năng suất, chất lượng; phân tích sự cố và đề xuất giải pháp; quản lý nguyên vật liệu, lập kế hoạch sản xuất theo đơn hàng; báo cáo cấp trên. Yêu cầu: ĐH Hóa, Vật liệu, Cơ khí, Tự động hóa, Quản lý công nghiệp; chấp nhận sinh viên mới ra trường; tiếng Anh cơ bản; Word/Excel/SAP. ${BEN.vi}`,
+        ko: `${CO.ko} <b>생산 엔지니어</b>. 인력 배치·생산 진도 관리, 작업 표준 교육, 공정·생산성·품질 관리, 이슈 분석·개선, 원자재 관리·주문 기반 생산계획, 보고. 화학/재료/기계/자동화/산업경영 학사, 신입 가능, 기초 영어, Word/Excel/SAP. ${BEN.ko}`,
+        en: `${CO.en} is hiring a Production Engineer via FYI. Coordinate manpower for production schedules, train staff on procedures, manage processes for productivity and quality, analyze issues and propose solutions, manage raw materials and order-based production plans, report to management. Bachelor's in Chemical, Materials, Mechanical, Automation or Industrial Management; fresh graduates welcome; basic English; Word/Excel/SAP. ${BEN.en}` },
+      V252: { title: 'Production Engineer - IP', meta: META + ' · Fresher · Tiếng Anh giao tiếp tốt',
+        vi: `${CO.vi} đang tuyển <b>Production Engineer - IP</b> qua FYI. Quản lý công đoạn đóng gói; theo dõi tỷ lệ lỗi bất thường; quản lý sản lượng đóng gói hằng ngày; quản lý thiết bị, máy móc; theo dõi xuất hàng; kiểm tra mô phỏng. Yêu cầu: ĐH Kỹ thuật sản xuất, Kỹ thuật công nghiệp, Chế tạo, Cơ khí, Quản lý công nghiệp; chấp nhận sinh viên mới ra trường; tiếng Anh giao tiếp tốt; Excel/Word; SAP. ${BEN.vi}`,
+        ko: `${CO.ko} <b>생산 엔지니어 - IP</b>. 포장 공정 관리, 이상 불량률 관리, 일일 포장량 관리, 설비·기계 관리, 일일 출하 현황 추적, 시뮬레이션 점검. 생산/산업/제조/기계공학/산업경영 학사, 신입 가능, 영어 소통 원활, Excel/Word, SAP. ${BEN.ko}`,
+        en: `${CO.en} is hiring a Production Engineer - IP via FYI. Manage packaging processes, abnormal error rates, daily packaging output, equipment and machinery, daily export status and simulation checks. Bachelor's in Production, Industrial, Manufacturing or Mechanical Engineering or Industrial Management; fresh graduates welcome; good English; Excel/Word; SAP. ${BEN.en}` },
+      V253: { title: 'Import Staff', meta: META + ' · Fresher · Tiếng Anh giao tiếp tốt',
+        vi: `${CO.vi} đang tuyển <b>Import Staff</b> qua FYI. Chuẩn bị bộ chứng từ nhập khẩu theo L/C; thủ tục kiểm nghiệm mẫu với cơ quan chức năng; theo dõi lịch tàu, lưu chứng từ, đơn hàng; đặt chỗ với hãng tàu/đại lý; liên hệ nhà cung cấp, khách hàng về giao nhận; báo cáo hằng tháng. Yêu cầu: ĐH Kinh tế, Ngoại thương, Kinh tế quốc tế, XNK, QTKD, Ngôn ngữ Anh; chấp nhận sinh viên mới ra trường; tiếng Anh giao tiếp tốt; Word/Excel/SAP. ${BEN.vi}`,
+        ko: `${CO.ko} <b>수입 담당</b>. L/C 기준 수입 서류 일체 작성, 샘플 검사 당국 절차, 선적 일정·서류·주문 관리, 선사/포워더 부킹 협의, 공급사·고객 납기 연락, 월간 보고. 경제/무역/국제경제/수출입/경영/영어 학사, 신입 가능, 영어 소통 원활, Word/Excel/SAP. ${BEN.ko}`,
+        en: `${CO.en} is hiring an Import Staff via FYI. Prepare full import documentation under L/C, handle sample testing with authorities, track shipping schedules and records, book with shipping lines and forwarders, coordinate with suppliers and customers, report monthly. Bachelor's in Economics, Foreign Trade, International Economics, Import-Export, BA or English; fresh graduates welcome; good English; Word/Excel/SAP. ${BEN.en}` },
+      V254: { title: 'Sales Staff (Chinese speaking)', meta: META + ' · Fresher · Tiếng Anh + tiếng Trung',
+        vi: `${CO.vi} đang tuyển <b>Sales Staff (Chinese speaking)</b> qua FYI, thị trường Đài Loan và Trung Quốc. Đàm phán giá, chất lượng, giao hàng; báo giá, kiểm tra tồn kho, sắp xếp giao hàng; hợp đồng và chứng từ theo L/C; báo cáo sản lượng và kế hoạch bán hàng; thăm khách hàng, hỗ trợ TSC; hội thảo, triển lãm. Yêu cầu: ĐH Kinh tế, Ngoại thương, XNK, QTKD, Ngôn ngữ Trung; chấp nhận sinh viên mới ra trường; giao tiếp tốt tiếng Anh và tiếng Trung; Word/Excel/SAP. ${BEN.vi}`,
+        ko: `${CO.ko} <b>영업 직원(중국어)</b>, 대만·중국 시장. 가격·품질·납기 협상, 견적·재고 확인·선적 조율, L/C 기준 계약·서류, 월간 판매 보고, 고객 방문·TSC 지원, 세미나·전시 기획. 경제/무역/수출입/경영/중국어 학사, 신입 가능, 영어+중국어 소통, Word/Excel/SAP. ${BEN.ko}`,
+        en: `${CO.en} is hiring a Sales Staff (Chinese speaking) via FYI for the Taiwan and China markets. Negotiate price, quality and delivery, prepare quotations and shipment schedules, contracts and documents under L/C, monthly sales reports, customer visits and TSC support, seminars and expos. Bachelor's in Economics, Foreign Trade, Import-Export, BA or Chinese; fresh graduates welcome; good English and Chinese; Word/Excel/SAP. ${BEN.en}` },
+    }
+    const G = [
+      ['ko-exp-core', 'V249', 'KO × 2y+ × 재무/회계/감사/운영/사무 직군·직함 × HCM권/ĐN·BRVT/미기재 (21)'],
+      ['ko-exp-ext', 'V249', 'KO × 2y+ × 기타 비IT 직군 — 사무직 한국어 경력자 (27)'],
+      ['ko-fresh-major', 'V250', '한국어/한국학/동방학 전공 × <2y (77, 당일 DA-SH 기수신 20 제외 → 57)'],
+      ['ko-fresh-topik', 'V250', '비전공 × TOPIK 4+ × <2y × 비IT (9)'],
+      ['ko-fresh-sig', 'V250', 'KO 시그널 × 통번역/사무 직군 × <2y (2)'],
+      ['zh-sales', 'V254', '중국어 시그널 × 영업/무역/물류 직군 (5)'],
+      ['zh-ext', 'V254', '중국어 시그널 × 기타 비IT (5)'],
+      ['impex-core', 'V253', '물류/수출입/구매 직군·직함 × 비IT (87)'],
+      ['impex-kw', 'V253', '수출입/물류 키워드 보유 × 비IT (97)'],
+      ['impex-major', 'V253', '경제/무역/경영/영어 전공 × <2y × 비IT × 비한국어전공 (73)'],
+      ['prod-ip', 'V252', '생산/산업/제조/기계 전공(IT 전공 제외) × 비IT 직군 (19)'],
+      ['prod-eng', 'V251', '화학/재료/자동화/전기 등 공학 전공(IT 전공 제외) × 비IT 직군 (26)'],
+    ]
+    return G.flatMap(([g, code, cut]) => {
+      const j = J[code], title = j.title, meta = j.meta, intro = { vi: j.vi, ko: j.ko, en: j.en }
+      return [
+        {
+          match: new RegExp(`^hyosung1016-recommend-${g}-private`),
+          subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (Đồng Nai)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (Dong Nai)` },
+          desc: `${company} ${title}(${code}) recommend (10/16 Len 게재 당일 발송, 유저 지시 "확장 포함 발송"): 비공개 프레임 — 컷=${cut}. 지역 HCM권/ĐN·BRVT/미기재 · 당일 recommend 기수신(DA-SH 453) 제외 · 1인1통 V249>V250>V254>V253>V252>V251 → 실발송 428.`,
+          source: 'scripts/outreach/hyosung1016-recommend-coldmail.mjs',
+          html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+        },
+        {
+          match: new RegExp(`^hyosung1016-recommend-${g}-`),
+          subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (Đồng Nai)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (Dong Nai)` },
+          desc: `${company} ${title}(${code}) recommend (10/16): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+          source: 'scripts/outreach/hyosung1016-recommend-coldmail.mjs',
+          html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+        },
+      ]
+    })
+  })(),
   // ── DA-SH V247 Marketing Intern 10/15 (scripts/outreach/dash1015-recommend-coldmail.mjs) — 그룹 3 × 프레임 2항목 ──
   ...[
     ['student-ko', '재학생 × 한국어 시그널 × 마케팅 직군 or 마케팅/경영/어학/한국학 전공 × HCM권/미기재 × 12m 이하 (52, 당일 기수신 제외 후 18)'],
