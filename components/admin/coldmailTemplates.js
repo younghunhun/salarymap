@@ -5320,6 +5320,38 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── DA-SH V247 Marketing Intern 10/19 한국어 가능자 2차 (scripts/outreach/dash1019-recommend-coldmail.mjs) — 그룹 2 × 프레임 2항목 ──
+  // 배경: DASH 대표 "다음 주까지 10명 클로즈", Emma "한국어 가능자 필요". 1차(dash1015) 497명 중 한국어 신호 33 → 지원 6(18%). 지원자 39명 중 JD 코어 6명뿐.
+  // 선정은 cv_tags(korean_level 중급+ 또는 TOPIK 4+ × HCMC권 × 졸업연도). 유저 지시 10/19 "130명 발송" — 당일/주간 상한 미적용, 1차 기수신자는 리마인드 문장 추가.
+  ...[
+    ['ko-student', '한국어 중급+/TOPIK4+ × HCMC권 × 졸업연도 2026+ (JD 코어) — 43 (1차 기수신 리마인드 26 + 신규 17)'],
+    ['ko-grad', '한국어 중급+/TOPIK4+ × HCMC권 × 졸업 2020~2025/연도 미상 (JD 재학 요건 미달, 남영훈 지시 "한국어 가능자면 적극 전달") — 69. 2019 이전 졸업·한국 거주·동명 중복 제외'],
+  ].flatMap(([g, cut]) => {
+    const title = 'Marketing Intern (tiếng Hàn)', code = 'V247', company = 'DA-SH', initial = 'D'
+    const meta = 'Onsite · COBI Tower 2, Tân Mỹ (Q.7), TP.HCM · Thực tập full-time 3 tháng · 15.000.000 VND/kỳ · TOPIK 4+'
+    const gradNote = g === 'ko-grad' ? ' Vị trí này ưu tiên sinh viên đang học hoặc bảo lưu; nếu bạn mới tốt nghiệp, FYI vẫn đề cử vì DA-SH đang cần gấp người biết tiếng Hàn và sẵn sàng xem xét hồ sơ phù hợp.' : ''
+    const intro = {
+      vi: '<b>DA-SH</b> — công ty dịch vụ hướng nghiệp có trụ sở tại Seoul (Hello My Me, nextpath) — đang <b>tuyển gấp Marketing Intern biết tiếng Hàn</b> qua FYI, làm việc full-time 3 tháng tại COBI Tower 2, Tân Mỹ, TP.HCM. Công ty dự kiến chốt tuyển <b>trong tuần tới</b>, và yêu cầu quan trọng nhất là <b>tiếng Hàn từ TOPIK 4</b> — FYI thấy hồ sơ của bạn có tiếng Hàn nên gửi đề cử này. Công việc: nghiên cứu thị trường sinh viên Việt Nam và đối thủ; thu thập thông tin trường đại học, cộng đồng sinh viên, kênh marketing (Google Sheets/Drive); hỗ trợ nội dung social (Facebook, TikTok) và tài liệu quảng bá; localization nội dung Hàn–Việt; báo cáo tiến độ hằng ngày. Thù lao <b>15.000.000 VND cho kỳ thực tập 3 tháng</b>, thanh toán một lần khi hoàn thành. Khi ứng tuyển, nếu có chứng chỉ TOPIK, bạn hãy đảm bảo CV đã ghi rõ.' + gradNote,
+      ko: '<b>DA-SH</b> — 서울 소재 커리어 서비스 회사(Hello My Me, nextpath), 호치민 7군 COBI Tower 2 — <b>한국어 가능 마케팅 인턴 긴급 채용</b>, 풀타임 3개월. 다음 주 내 채용 확정 예정이며 핵심 요건은 <b>TOPIK 4 이상 한국어</b>. 베트남 대학생 시장·경쟁사 리서치, 대학·학생 커뮤니티·마케팅 채널 정보 수집(Sheets/Drive), Facebook·TikTok 콘텐츠와 홍보물 제작 보조, 한-베 콘텐츠 로컬라이제이션, 일일 진행 보고. 3개월 1,500만 VND, 완료 시 일시 지급. TOPIK 보유 시 CV에 명기 요청.' + (g === 'ko-grad' ? ' 재학·휴학생 우선이나 한국어 가능자 긴급 수요로 최근 졸업자도 추천.' : ''),
+      en: 'DA-SH, a Seoul-based career-service company (Hello My Me, nextpath), is urgently hiring a Korean-speaking Marketing Intern via FYI, full-time for 3 months at COBI Tower 2, Tan My, HCMC. The company plans to close hiring next week, and the key requirement is Korean at TOPIK 4 or above. Research the Vietnamese student market and competitors, collect data on universities, student communities and marketing channels (Google Sheets/Drive), support social content (Facebook, TikTok) and promotional materials, Korean-Vietnamese content localization, daily progress reports. VND 15,000,000 for the 3-month internship, paid in a lump sum upon completion. Make sure your CV states your TOPIK certificate.' + (g === 'ko-grad' ? ' Enrolled students are preferred, but recent graduates are nominated given the urgent need for Korean speakers.' : ''),
+    }
+    return [
+      {
+        match: new RegExp(`^dash1019-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được đề cử — Marketing Intern biết tiếng Hàn (TOPIK 4+) tại ${company}`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} 한국어 가능 마케팅 인턴`, en: `[FYI] You've been nominated — Korean-speaking Marketing Intern at ${company}` },
+        desc: `${company} ${title}(${code}) 한국어 가능자 2차 recommend (10/19): 비공개 프레임 — 컷=${cut}. 1차 기수신자에게는 "tuần trước đã gửi, công ty tuyển gấp" 리마인드 문장 1줄 추가(스냅샷 미표시).`,
+        source: 'scripts/outreach/dash1019-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^dash1019-recommend-${g}-`),
+        subject: { vi: `[FYI] ${company} tuyển gấp Marketing Intern biết tiếng Hàn (TOPIK 4+) — bạn được đề cử`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — 한국어 가능 마케팅 인턴`, en: `[FYI] You've been nominated to ${company} — Korean-speaking Marketing Intern` },
+        desc: `${company} ${title}(${code}) 한국어 가능자 2차 recommend (10/19): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/dash1019-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── AUTONSI 10/12 HR & Admin Specialist(V224) (scripts/outreach/autonsi1012-recommend-coldmail.mjs) — 프레임 2항목 ──
   ...[
     ['hradmin', 'HR & Admin Specialist', 'V224', 'TP.HCM · Onsite · 1–5 năm kinh nghiệm HR/Admin · Tiếng Anh hoặc tiếng Hàn',
