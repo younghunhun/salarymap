@@ -4,6 +4,8 @@
 // {{...}} 는 발송 시 개인화되는 변수를 그대로 노출한 것(양식 보기가 목적이라 치환 안 함).
 // 실제 발송 원문은 vi — ko/en은 어드민 열람용 번역본이며, 모달이 언어토글(lang)에 맞춰 고른다.
 
+import { KTC1019_JOBS } from '../../lib/coldmail/ktc1019Jobs'
+
 const pickLang = (o, lang) => o[lang] || o.vi
 
 // ── 공용 셸: 단일 공고 추천 계열(nalda 톤) — intro/카드/혜택 문장만 캠페인별로 갈린다 ──
@@ -5754,6 +5756,24 @@ export const COLDMAIL_TEMPLATES = [
     source: 'scripts/outreach/nxreopen1008-coldmail.mjs',
     html: (lang) => recommendShell(lang, { intro: nxreopenIntro('nominated'), ...NXREOPEN1008_CARD, tail: BENEFIT_PUBLIC }),
   },
+  // ── KTC 10/19 모집중·지원 미달 28공고 일괄 recommend (scripts/outreach/ktc1019-recommend-coldmail.mjs) — 공고 × 프레임 2항목 ──
+  // 문안 정본은 lib/coldmail/ktc1019Jobs.js(vi 원문만 — ko/en 번역본 없음, 모달은 vi 로 표시). 선정은 cv_tags(이력서 태그) 기준, 1인1통(희소 공고 우선).
+  ...Object.entries(KTC1019_JOBS).flatMap(([code, j]) => [
+    {
+      match: new RegExp(`^ktc1019-recommend-${code}-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${j.title} tại ${j.company} (${j.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${j.company} ${j.title}`, en: `[FYI] You've been nominated — ${j.title} at ${j.company} (${j.loc})` },
+      desc: `${j.company} ${j.title}(${code}) recommend (10/19 일괄, 유저 지시 "다 발송"): 비공개 프레임 — cv_tags 직군·어학·경력·출근권 매칭, 기발송/기지원/당일 recommend 수신 제외, 1인1통(KO·게임·회계 희소 공고 우선).`,
+      source: 'scripts/outreach/ktc1019-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^ktc1019-recommend-${code}-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${j.company} — ${j.title} (${j.loc})`, ko: `[FYI] ${j.company} 추천 명단에 선정되셨습니다 — ${j.title}`, en: `[FYI] You've been nominated to ${j.company} — ${j.title} (${j.loc})` },
+      desc: `${j.company} ${j.title}(${code}) recommend (10/19 일괄): 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.`,
+      source: 'scripts/outreach/ktc1019-recommend-coldmail.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
