@@ -5141,6 +5141,51 @@ export const COLDMAIL_TEMPLATES = [
       },
     ]
   }),
+  // ── GPCLUB V256 Senior Accountant · V257 Sales Operations Admin (Korean) 10/19 (scripts/outreach/gpclub1019-recommend-coldmail.mjs) — 그룹 9 × 프레임 2항목 ──
+  ...[
+    ['acct-core', 'V256', '회계/재무 직함 × 2~5y × HCM권/미기재 (20)'],
+    ['acct-junior', 'V256', '회계/재무 직함 × 1~2y — 경력 미달 자기선별 (11)'],
+    ['acct-senior', 'V256', '회계/재무 직함 × 5y+ — 경력 초과 (19)'],
+    ['acct-ext', 'V256', 'Finance 직군/회계 전공 × 1y+ × 비개발·비디자인, 회계 직함 없음 (50)'],
+    ['ko-admin-core', 'V257', 'KO × 어드민/영업지원/수출입/통번역 직군·직함 × 1~3y × HCM권/미기재 (38)'],
+    ['ko-admin-senior', 'V257', 'KO × 어드민/영업지원/수출입 직군·직함 × 3y+ (16)'],
+    ['ko-admin-fresh', 'V257', 'KO × 어드민/영업지원 직군·직함 × <1y — 경력 미달 자기선별 (22)'],
+    ['ko-ext', 'V257', 'KO × 기타 비개발·비디자인 × 1y+, 어드민 직군 없음 (51)'],
+    ['ko-major-fresh', 'V257', '한국어/한국학 전공 × <1y × 비개발·비디자인 — 신입 (28)'],
+  ].flatMap(([g, code, cut]) => {
+    const company = 'GPCLUB', initial = 'G'
+    const title = code === 'V256' ? 'Accountant / Senior Accountant' : 'Sales Operations Admin (Korean Speaking)'
+    const meta = code === 'V256'
+      ? 'Onsite · 27-29 Nguyễn Cửu Vân, P. Gia Định (Bình Thạnh), TP.HCM · 22.000.000 VND gross/tháng · 2–4 năm kế toán'
+      : 'Onsite · 27-29 Nguyễn Cửu Vân, P. Gia Định (Bình Thạnh), TP.HCM · 15.000.000 VND/tháng · Tiếng Hàn thành thạo · 1–3 năm'
+    const intro = code === 'V256'
+      ? {
+          vi: '<b>GPCLUB</b> (gpclub.vn) — thương hiệu mỹ phẩm Hàn Quốc kinh doanh B2C/B2B tại Việt Nam — đang tuyển <b>Accountant / Senior Accountant</b> qua FYI tại Bình Thạnh, TP.HCM. Xử lý đề nghị thanh toán và theo dõi giao dịch ngân hàng hằng ngày; xuất hóa đơn VAT, rà soát chứng từ và nghĩa vụ thuế; làm việc với CitiBank, MBbank về hồ sơ doanh nghiệp; tổng hợp số liệu, lập báo cáo tuần/tháng và P&amp;L; chuẩn bị hồ sơ báo cáo khoản vay nước ngoài. Yêu cầu: CĐ/ĐH Kế toán, Tài chính, Kiểm toán; 2–4 năm kế toán thanh toán/tổng hợp/thuế; thành thạo xuất hóa đơn VAT, internet banking doanh nghiệp, Excel; tiếng Anh giao tiếp và đọc hiểu công việc. Lương 22.000.000 VND gross/tháng. T2–T6 8:30–18:00, T7 8:30–12:30.',
+          ko: '<b>GPCLUB</b>(gpclub.vn, 베트남 B2C/B2B 한국 화장품 브랜드) — <b>회계/시니어 회계 담당</b>, 호치민 Bình Thạnh 온사이트. 지급 요청 검토·처리와 일일 은행 거래 모니터링, VAT 세금계산서 발행과 증빙·세무 검토, CitiBank·MBbank 법인 계좌 관리, 주간·월간·P&L 보고, 해외 차입 보고 서류 준비. 회계·재무·감사 전공 전문대 이상, AP/일반/세무 회계 2~4년, VAT 발행·법인 인터넷뱅킹·Excel 숙련, 업무 영어 가능. 월 2,200만 VND gross. 월~금 8:30~18:00, 토 8:30~12:30.',
+          en: 'GPCLUB (gpclub.vn), a Korean cosmetics brand selling B2C/B2B in Vietnam, is hiring an Accountant / Senior Accountant via FYI in Binh Thanh, HCMC. Review and process payment requests and monitor daily bank transactions; issue VAT invoices and audit vouchers and tax obligations; handle CitiBank/MBbank corporate banking admin; consolidate data for weekly, monthly and P&L reports; prepare foreign loan reporting documentation. Bachelor/Associate in Accounting, Finance or Auditing; 2–4 years in AP, general or tax accounting; proficient in VAT invoicing, corporate online banking and Excel; professional English. VND 22,000,000 gross/month. Mon–Fri 8:30–18:00, Sat 8:30–12:30.',
+        }
+      : {
+          vi: '<b>GPCLUB</b> (gpclub.vn) — thương hiệu mỹ phẩm Hàn Quốc kinh doanh B2C/B2B tại Việt Nam — đang tuyển <b>Back Office / Sales Operations Admin (tiếng Hàn)</b> qua FYI tại Bình Thạnh, TP.HCM. Xử lý đơn hàng B2B từ khách hàng và chuỗi bán lẻ (AEON, THAO NGO, MKVN, AHH BEAUTY…), tạo booking, xuất Delivery Order, yêu cầu xuất hóa đơn; đối chiếu vòng quay tồn kho và dữ liệu bán hàng hằng tháng; đối chiếu SKU với C/O, C/I để khai hải quan, theo dõi CFS, LOA từ trụ sở Hàn Quốc, phối hợp forwarder; đầu mối báo cáo bằng tiếng Hàn với HQ, phối hợp ApexLaw và DAV về hồ sơ công bố mỹ phẩm. Yêu cầu: CĐ/ĐH Ngôn ngữ Hàn, QTKD, Ngoại thương; tiếng Hàn thành thạo (nói và viết mức công việc); 1–3 năm Sales Admin/Back Office/Operations Admin/XNK; biết quy trình PO–DO–hóa đơn và chứng từ XNK; Excel tốt. Lương 15.000.000 VND/tháng. T2–T6 8:30–18:00, T7 8:30–12:30.',
+          ko: '<b>GPCLUB</b>(gpclub.vn, 베트남 B2C/B2B 한국 화장품 브랜드) — <b>백오피스/영업운영 어드민(한국어)</b>, 호치민 Bình Thạnh 온사이트. B2B 발주(AEON 등 리테일) 확인·DO 발행·세금계산서 요청, 월별 재고회전·판매 데이터 대사, C/O·C/I SKU 대조와 통관 서류, 한국 본사 발행 CFS·LOA 유효기간 관리, 포워더 협업, 한국 본사 보고 창구, ApexLaw·DAV(베트남 의약품청) 화장품 신고 서류 지원. 한국어·경영·무역 전공 전문대 이상, 한국어 유창(업무 수준 회화·작문), 세일즈어드민/백오피스/수출입 1~3년, PO–DO–인보이스 및 수출입 서류 이해, Excel. 월 1,500만 VND. 월~금 8:30~18:00, 토 8:30~12:30.',
+          en: 'GPCLUB (gpclub.vn), a Korean cosmetics brand selling B2C/B2B in Vietnam, is hiring a Back Office / Sales Operations Admin (Korean speaking) via FYI in Binh Thanh, HCMC. Process B2B purchase orders from customers and retail chains (AEON, THAO NGO, MKVN, AHH BEAUTY), prepare bookings, issue Delivery Orders and invoice requests; reconcile monthly inventory turnover and sales data; match SKUs against C/O and C/I for customs filing, track CFS and LOA validity from Korean HQ, coordinate with forwarders; act as the Korean-language liaison to HQ and support ApexLaw/DAV cosmetic notification files. Bachelor/Associate in Korean, Business or Foreign Trade; fluent business Korean; 1–3 years in Sales Admin, Back Office, Operations Admin or Import-Export; PO–DO–invoicing and import-export documentation; strong Excel. VND 15,000,000/month. Mon–Fri 8:30–18:00, Sat 8:30–12:30.',
+        }
+    return [
+      {
+        match: new RegExp(`^gpclub1019-recommend-${g}-private`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${title} tại ${company} (TP.HCM)`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${company} ${title}`, en: `[FYI] You've been nominated — ${title} at ${company} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/16 Len 게재, 10/19 발송, 유저 지시 "일단 전부 보내야할듯"): 비공개 프레임 — 컷=${cut}. HCM권/미기재 · 1인1통(V256 직함 코어 > V257 KO 코어 > 확장) · 당일 recommend 기수신자 제외. 7일 내 기수신 비율 95%+(E-JUNG/STS/PI Power 회계, Hyosung KO 중복).`,
+        source: 'scripts/outreach/gpclub1019-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PRIVATE }),
+      },
+      {
+        match: new RegExp(`^gpclub1019-recommend-${g}-`),
+        subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${company} — ${title} (TP.HCM)`, ko: `[FYI] ${company} 추천 명단에 선정되셨습니다 — ${title}`, en: `[FYI] You've been nominated to ${company} — ${title} (HCMC)` },
+        desc: `${company} ${title}(${code}) recommend (10/19): 공개 프레임 — FYI 검토 선정·명단에 프로필 동봉·지원 시 우선 검토. 컷은 private 항목과 동일.`,
+        source: 'scripts/outreach/gpclub1019-recommend-coldmail.mjs',
+        html: (lang) => recommendShell(lang, { intro, initial, company, title, meta, tail: BENEFIT_PUBLIC }),
+      },
+    ]
+  }),
   // ── GPCLUB V248 Senior Growth Leader 10/16 (scripts/outreach/gpclub1016-recommend-coldmail.mjs) — 그룹 5 × 프레임 2항목 ──
   ...[
     ['platform', '마케팅/그로스 직군 × 4y+ × Shopee/TikTok Shop/Lazada 명시 × HCM권/미기재 (8)'],
