@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 import OpenAI from 'openai'
 import pdf from 'pdf-parse'
 import crypto from 'crypto'
+import { tagResume, cvTagsColumns } from '../../../lib/cvTags'
 
 const supabase = createClient(
   (process.env.NEXT_PUBLIC_SUPABASE_URL || '').trim(),
@@ -129,16 +130,20 @@ export default async function handler(req, res) {
       }
     }
 
-    // 5. OpenAI
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: userContent },
-      ],
-      temperature: 0.1,
-    })
+    // 5. OpenAI — 매칭용 세부 태그(cv_tags, lib/cvTags.js)는 병렬로 같은 원문을 한 번 더 읽는다.
+    //    태그 실패는 삼킨다(화면에 안 나가는 값이고, 백필 스크립트가 나중에 채울 수 있다).
+    const [completion, tagged] = await Promise.all([
+      openai.chat.completions.create({
+        model: 'gpt-4o-mini',
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'user', content: userContent },
+        ],
+        temperature: 0.1,
+      }),
+      tagResume({ text: pdfText, buffer: pdfBuffer }).catch((e) => { console.error('cv_tags failed:', e?.message || e); return null }),
+    ])
 
     const parsed = JSON.parse(completion.choices[0].message.content)
 
@@ -163,6 +168,7 @@ export default async function handler(req, res) {
     const dbUpdate = {
       ...fields,
       skills: parsed.skills || [],
+      ...(tagged && cvTagsColumns(tagged.tags)),
       updated_at: new Date().toISOString(),
     }
     await supabase.from('user_profiles').update(dbUpdate).eq('id', user.id)

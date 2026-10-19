@@ -26,7 +26,7 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 // full_name·email·resume_url 은 일부러 없다. 카드에 안 그리는 값이다.
 const COLUMNS = 'id, headline, position, yoe_months, university, verified_school_name, major, ' +
-  'photo_url, skills, experiences, english_cert, korean_cert, resume_summary, role'
+  'photo_url, skills, experiences, english_cert, korean_cert, resume_summary, role, cv_tags'
 
 /* 모델이 실제로 읽는 인원. 24 였다가 48 로 올렸다 — 1차는 키워드 매칭이라 표기가 다른
    사람을 놓치는데, 여기서 잘리면 모델이 볼 기회 자체가 없다. 병렬이라 시간은 그대로고
