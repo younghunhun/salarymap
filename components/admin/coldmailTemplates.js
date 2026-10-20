@@ -5,8 +5,7 @@
 // 실제 발송 원문은 vi — ko/en은 어드민 열람용 번역본이며, 모달이 언어토글(lang)에 맞춰 고른다.
 
 import { KTC1019_JOBS } from '../../lib/coldmail/ktc1019Jobs'
-import { YOULCHON1020_JOB } from '../../lib/coldmail/youlchon1020Job'
-import { GOLFZON1020_JOB } from '../../lib/coldmail/golfzon1020Job'
+import { RECOMMEND_JOBS } from '../../lib/coldmail/recommendJobs'
 
 const pickLang = (o, lang) => o[lang] || o.vi
 
@@ -5808,36 +5807,23 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
-  // ── YOUL CHON VINA(V258) 시장개발 영업 recommend 10/20 (scripts/outreach/youlchon1020-recommend-coldmail.mjs) — 문안 정본 lib/coldmail/youlchon1020Job.js ──
-  {
-    match: /^youlchon1020-recommend-private/,
-    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${YOULCHON1020_JOB.title} tại ${YOULCHON1020_JOB.company} (${YOULCHON1020_JOB.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${YOULCHON1020_JOB.company} ${YOULCHON1020_JOB.title}`, en: `[FYI] You've been nominated — ${YOULCHON1020_JOB.title} at ${YOULCHON1020_JOB.company} (${YOULCHON1020_JOB.loc})` },
-    desc: 'YOUL CHON VINA 시장개발 영업(V258) recommend 10/20: 비공개 프레임 — cv_tags B2B 영업/BD 주직무 × 2y+ × HCM권 × 22~40세(포장업계 → 제조 B2B → 타산업 순), V177(9/16 동일 공고) 지원자·V258 기발송 제외. 7일 쿨다운 미적용(유저 지시).',
-    source: 'scripts/outreach/youlchon1020-recommend-coldmail.mjs',
-    html: (lang) => recommendShell(lang, { intro: { vi: YOULCHON1020_JOB.intro }, initial: YOULCHON1020_JOB.initial, company: YOULCHON1020_JOB.company, title: YOULCHON1020_JOB.title, meta: YOULCHON1020_JOB.meta, tail: BENEFIT_PRIVATE }),
-  },
-  {
-    match: /^youlchon1020-recommend-/,
-    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${YOULCHON1020_JOB.company} — ${YOULCHON1020_JOB.title} (${YOULCHON1020_JOB.loc})`, ko: `[FYI] ${YOULCHON1020_JOB.company} 추천 명단에 선정되셨습니다 — ${YOULCHON1020_JOB.title}`, en: `[FYI] You've been nominated to ${YOULCHON1020_JOB.company} — ${YOULCHON1020_JOB.title} (${YOULCHON1020_JOB.loc})` },
-    desc: 'YOUL CHON VINA 시장개발 영업(V258) recommend 10/20: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.',
-    source: 'scripts/outreach/youlchon1020-recommend-coldmail.mjs',
-    html: (lang) => recommendShell(lang, { intro: { vi: YOULCHON1020_JOB.intro }, initial: YOULCHON1020_JOB.initial, company: YOULCHON1020_JOB.company, title: YOULCHON1020_JOB.title, meta: YOULCHON1020_JOB.meta, tail: BENEFIT_PUBLIC }),
-  },
-  // ── GOLFZON(V259) Sales Manager – Special Sales recommend 10/20 (scripts/outreach/golfzon1020-recommend-coldmail.mjs) — 문안 정본 lib/coldmail/golfzon1020Job.js ──
-  {
-    match: /^golfzon1020-recommend-private/,
-    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${GOLFZON1020_JOB.title} tại ${GOLFZON1020_JOB.company} (${GOLFZON1020_JOB.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${GOLFZON1020_JOB.company} ${GOLFZON1020_JOB.title}`, en: `[FYI] You've been nominated — ${GOLFZON1020_JOB.title} at ${GOLFZON1020_JOB.company} (${GOLFZON1020_JOB.loc})` },
-    desc: 'GOLFZON Sales Manager – Special Sales(V259) recommend 10/20: 비공개 프레임 — cv_tags 영업 주직무 × 5y+(8y+ 우선) × 하노이권 × 럭셔리/자동차/골프/부동산 키워드·팀관리 가점. 풀이 얇아 5~8y 포함(유저 결정). 7일 쿨다운 미적용.',
-    source: 'scripts/outreach/golfzon1020-recommend-coldmail.mjs',
-    html: (lang) => recommendShell(lang, { intro: { vi: GOLFZON1020_JOB.intro }, initial: GOLFZON1020_JOB.initial, company: GOLFZON1020_JOB.company, title: GOLFZON1020_JOB.title, meta: GOLFZON1020_JOB.meta, tail: BENEFIT_PRIVATE }),
-  },
-  {
-    match: /^golfzon1020-recommend-/,
-    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${GOLFZON1020_JOB.company} — ${GOLFZON1020_JOB.title} (${GOLFZON1020_JOB.loc})`, ko: `[FYI] ${GOLFZON1020_JOB.company} 추천 명단에 선정되셨습니다 — ${GOLFZON1020_JOB.title}`, en: `[FYI] You've been nominated to ${GOLFZON1020_JOB.company} — ${GOLFZON1020_JOB.title} (${GOLFZON1020_JOB.loc})` },
-    desc: 'GOLFZON Sales Manager – Special Sales(V259) recommend 10/20: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.',
-    source: 'scripts/outreach/golfzon1020-recommend-coldmail.mjs',
-    html: (lang) => recommendShell(lang, { intro: { vi: GOLFZON1020_JOB.intro }, initial: GOLFZON1020_JOB.initial, company: GOLFZON1020_JOB.company, title: GOLFZON1020_JOB.title, meta: GOLFZON1020_JOB.meta, tail: BENEFIT_PUBLIC }),
-  },
+  // ── 단건 recommend 공용(scripts/outreach/recommend-send.mjs --copy KEY) — 문안·선정 플래그 정본 lib/coldmail/recommendJobs.js, 키마다 프레임 2항목 ──
+  ...Object.entries(RECOMMEND_JOBS).flatMap(([key, j]) => [
+    {
+      match: new RegExp(`^${key}-recommend-private`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${j.title} tại ${j.company} (${j.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${j.company} ${j.title}`, en: `[FYI] You've been nominated — ${j.title} at ${j.company} (${j.loc})` },
+      desc: `${j.company} ${j.title}(${j.code}) recommend: 비공개 프레임 — ${j.desc} 선정 플래그: ${j.flags}`,
+      source: 'scripts/outreach/recommend-send.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PRIVATE }),
+    },
+    {
+      match: new RegExp(`^${key}-recommend-`),
+      subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${j.company} — ${j.title} (${j.loc})`, ko: `[FYI] ${j.company} 추천 명단에 선정되셨습니다 — ${j.title}`, en: `[FYI] You've been nominated to ${j.company} — ${j.title} (${j.loc})` },
+      desc: `${j.company} ${j.title}(${j.code}) recommend: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.`,
+      source: 'scripts/outreach/recommend-send.mjs',
+      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PUBLIC }),
+    },
+  ]),
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
