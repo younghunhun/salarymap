@@ -6,6 +6,7 @@
 
 import { KTC1019_JOBS } from '../../lib/coldmail/ktc1019Jobs'
 import { YOULCHON1020_JOB } from '../../lib/coldmail/youlchon1020Job'
+import { GOLFZON1020_JOB } from '../../lib/coldmail/golfzon1020Job'
 
 const pickLang = (o, lang) => o[lang] || o.vi
 
@@ -5821,6 +5822,21 @@ export const COLDMAIL_TEMPLATES = [
     desc: 'YOUL CHON VINA 시장개발 영업(V258) recommend 10/20: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.',
     source: 'scripts/outreach/youlchon1020-recommend-coldmail.mjs',
     html: (lang) => recommendShell(lang, { intro: { vi: YOULCHON1020_JOB.intro }, initial: YOULCHON1020_JOB.initial, company: YOULCHON1020_JOB.company, title: YOULCHON1020_JOB.title, meta: YOULCHON1020_JOB.meta, tail: BENEFIT_PUBLIC }),
+  },
+  // ── GOLFZON(V259) Sales Manager – Special Sales recommend 10/20 (scripts/outreach/golfzon1020-recommend-coldmail.mjs) — 문안 정본 lib/coldmail/golfzon1020Job.js ──
+  {
+    match: /^golfzon1020-recommend-private/,
+    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${GOLFZON1020_JOB.title} tại ${GOLFZON1020_JOB.company} (${GOLFZON1020_JOB.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${GOLFZON1020_JOB.company} ${GOLFZON1020_JOB.title}`, en: `[FYI] You've been nominated — ${GOLFZON1020_JOB.title} at ${GOLFZON1020_JOB.company} (${GOLFZON1020_JOB.loc})` },
+    desc: 'GOLFZON Sales Manager – Special Sales(V259) recommend 10/20: 비공개 프레임 — cv_tags 영업 주직무 × 5y+(8y+ 우선) × 하노이권 × 럭셔리/자동차/골프/부동산 키워드·팀관리 가점. 풀이 얇아 5~8y 포함(유저 결정). 7일 쿨다운 미적용.',
+    source: 'scripts/outreach/golfzon1020-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: { vi: GOLFZON1020_JOB.intro }, initial: GOLFZON1020_JOB.initial, company: GOLFZON1020_JOB.company, title: GOLFZON1020_JOB.title, meta: GOLFZON1020_JOB.meta, tail: BENEFIT_PRIVATE }),
+  },
+  {
+    match: /^golfzon1020-recommend-/,
+    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${GOLFZON1020_JOB.company} — ${GOLFZON1020_JOB.title} (${GOLFZON1020_JOB.loc})`, ko: `[FYI] ${GOLFZON1020_JOB.company} 추천 명단에 선정되셨습니다 — ${GOLFZON1020_JOB.title}`, en: `[FYI] You've been nominated to ${GOLFZON1020_JOB.company} — ${GOLFZON1020_JOB.title} (${GOLFZON1020_JOB.loc})` },
+    desc: 'GOLFZON Sales Manager – Special Sales(V259) recommend 10/20: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.',
+    source: 'scripts/outreach/golfzon1020-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: { vi: GOLFZON1020_JOB.intro }, initial: GOLFZON1020_JOB.initial, company: GOLFZON1020_JOB.company, title: GOLFZON1020_JOB.title, meta: GOLFZON1020_JOB.meta, tail: BENEFIT_PUBLIC }),
   },
 ]
 
