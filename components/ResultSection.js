@@ -181,7 +181,7 @@ export default function ResultSection({ salary, role, experience, company, isLog
     </div>
   )
 
-  const { percentile, userSalary, marketMedian, diff } = result
+  const { percentile, userSalary, marketMedian, diff, sampleSize } = result
   // 표시용 직군 라벨 — 비개발 대분류는 언어별 라벨, 매칭/저장은 raw 값 그대로
   const roleText = submitRoleLabel(role, lang)
   const isPositive = diff >= 0
@@ -254,9 +254,14 @@ export default function ResultSection({ salary, role, experience, company, isLog
             {percentile <= 50 ? `Top ${percentile}%` : `Bottom ${100 - percentile}%`}
           </span>
         </div>
-        <div style={{ textAlign:'center', fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom:'24px' }}>
+        <div style={{ textAlign:'center', fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom: sampleSize > 0 ? '6px' : '24px' }}>
           {t('result.among', { role: roleText, experience })}
         </div>
+        {sampleSize > 0 && (
+          <div style={{ textAlign:'center', fontSize:'12px', color:'rgba(255,255,255,0.3)', marginBottom:'24px' }}>
+            {t('result.sampleSize', { count: sampleSize })}
+          </div>
+        )}
 
         {/* 3 stat boxes */}
         <div className="rs-stat-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'8px', marginBottom:'20px' }}>

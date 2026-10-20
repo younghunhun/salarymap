@@ -5,6 +5,7 @@ import ResultSection from '../ResultSection';
 import supabaseClient from '../../lib/supabaseClient';
 import { track } from '../../lib/track';
 import { SUBMIT_CATEGORIES, submitCatGridLabel } from '../../constants/jobs';
+import { roleMedian } from '../../constants/salaryMedians';
 
 function SubmitSection({
   wizardStep, setWizardStep,
@@ -23,7 +24,8 @@ function SubmitSection({
   const [ratingWorklife, setRatingWorklife] = useState(0);
   const [ratingSalary, setRatingSalary] = useState(0);
   // 연봉 슬라이더를 실제로 건드렸는지 — 미건드림 통과(기본값 박힘) 방지
-  const [salaryTouched, setSalaryTouched] = useState(false);
+  // 급여 단계 진입 시 직무×연차 시장 중위값을 기본으로 채워 둔다 — 슬라이더를 안 만져도 바로 다음으로 갈 수 있게.
+  useEffect(() => { if (wizardStep === 3 && wRole && wExp) setWSalary(roleMedian(wRole, wExp)); }, [wizardStep]); // eslint-disable-line react-hooks/exhaustive-deps
   const [ratingGrowth, setRatingGrowth] = useState(0);
   const [ratingSubmitting, setRatingSubmitting] = useState(false);
   const [acResults, setAcResults] = useState([]);
@@ -57,12 +59,14 @@ function SubmitSection({
   const sal = Number(wSalary);
   const salPct = Math.round(((sal - 5) / (200 - 5)) * 100);
 
-  const handleSubmit = async () => {
-    if (!wCompany.trim() || submitting) return;
+  // skip=true: 회사 미입력 제출 — 회사 평가(step 5)는 건너뛰고 결과로. 연봉 데이터보다 인재 유입이 목적이라 회사 입력을 강제하지 않는다.
+  const handleSubmit = async ({ skip = false } = {}) => {
+    if ((!skip && !wCompany.trim()) || submitting) return;
+    if (skip) setWCompany('');
     setSubmitting(true);
-    await onSubmit();
+    await onSubmit(skip ? { company: '' } : undefined);
     setSubmitting(false);
-    setWizardStep(5);
+    setWizardStep(skip ? 6 : 5);
     // GA4 event
     if (typeof gtag === 'function') gtag('event', 'submit_salary', { event_category: 'engagement', event_label: wRole });
     // Meta Pixel event
@@ -359,22 +363,20 @@ function SubmitSection({
             <div>
               <BlurredTeaser />
               <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-                <span style={{ fontSize: '56px', fontWeight: 900, fontStyle: 'italic', color: salaryTouched ? '#fff' : 'rgba(255,255,255,0.3)', lineHeight: 1 }}>{salaryTouched ? sal : '—'}</span>
+                <span style={{ fontSize: '56px', fontWeight: 900, fontStyle: 'italic', color: '#fff', lineHeight: 1 }}>{sal}</span>
                 <span style={{ fontSize: '16px', color: 'rgba(255,255,255,0.25)', marginLeft: '8px' }}>{t('wizard.salaryUnit')}</span>
               </div>
               <input type="range" min="5" max="200" value={sal}
-                onChange={e => { setWSalary(Number(e.target.value)); setSalaryTouched(true); }}
+                onChange={e => setWSalary(Number(e.target.value))}
                 style={{ width: '100%', accentColor: '#ff4400', height: '4px', marginBottom: '24px' }}
               />
               <div style={{ textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.18)', marginBottom: '20px' }}>
-                {salaryTouched ? t('wizard.salaryPrivacy') : t('wizard.salaryHint')}
+                {t('wizard.salaryPrivacy')}
               </div>
-              <button onClick={() => { if (!salaryTouched) return; if(typeof gtag==='function') gtag('event','wizard_step_3',{salary:wSalary}); track('wizard_step_3', { meta: { salary: wSalary }, page: '/' }); setWizardStep(4); }}
-                disabled={!salaryTouched}
-                style={{ ...ctaStyle, ...(salaryTouched ? {} : { opacity: 0.4, cursor: 'not-allowed' }) }}>
+              <button onClick={() => { if(typeof gtag==='function') gtag('event','wizard_step_3',{salary:wSalary}); track('wizard_step_3', { meta: { salary: wSalary }, page: '/' }); setWizardStep(4); }}
+                style={ctaStyle}>
                 {t('wizard.almostDone')}
               </button>
-              <button onClick={() => setWizardStep(2)} style={{ ...quizBtn, marginTop: '12px', background: 'none', color: 'rgba(255,255,255,0.25)', fontSize: '12px', display: 'block', width: '100%', textAlign: 'center' }}>{t('wizard.back')}</button>
             </div>
           )}
 
@@ -458,7 +460,10 @@ function SubmitSection({
               <div style={{ textAlign: 'center', fontSize: '11px', color: 'rgba(255,255,255,0.18)', marginTop: '12px' }}>
                 {t('wizard.anonymous')}
               </div>
-              <button onClick={() => setWizardStep(3)} style={{ ...quizBtn, marginTop: '12px', background: 'none', color: 'rgba(255,255,255,0.25)', fontSize: '12px', display: 'block', width: '100%', textAlign: 'center' }}>{t('wizard.back')}</button>
+              <button onClick={() => handleSubmit({ skip: true })} disabled={submitting}
+                style={{ ...quizBtn, marginTop: '12px', background: 'none', color: 'rgba(255,255,255,0.45)', fontSize: '13px', display: 'block', width: '100%', textAlign: 'center' }}>
+                {t('wizard.skip')}
+              </button>
             </div>
           )}
 

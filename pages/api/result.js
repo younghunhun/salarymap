@@ -117,6 +117,7 @@ export default async function handler(req, res) {
       diff: seedDiff,
       diffPct: Math.round((seedDiff / seedMedian) * 100),
       topCompanies: seedTopCompanies(role, experience, userSalary, company, 4),
+      sampleSize: peers.length,
     });
   }
 
@@ -166,5 +167,6 @@ export default async function handler(req, res) {
     diff,
     diffPct,
     topCompanies,
+    sampleSize: clean.length, // 결과 화면 "같은 직무·연차 N명 기준" — 이상치 제거 후 코호트 크기
   });
 }

@@ -1084,7 +1084,7 @@ export default function Home({ initialCompanies = [] }) {
         submissionId={submissionId}
         freshSubmit={freshSubmit}
         heroCat={heroCat}
-        onSubmit={async () => {
+        onSubmit={async ({ company = wCompany } = {}) => { // 건너뛰기면 ''(부분 입력값이 회사명으로 저장되지 않게)
           setFreshSubmit(true);
           try {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -1095,7 +1095,7 @@ export default function Home({ initialCompanies = [] }) {
                 role: wRole,
                 experience: wExp,
                 salary: wSalary,
-                company: wCompany,
+                company,
                 user_id: session?.user?.id || null,
                 email: session?.user?.email || null,
                 source: readUtm('utm_source') || (window.location.hostname === 'localhost' ? 'qa-local' : 'direct'),
@@ -1113,7 +1113,7 @@ export default function Home({ initialCompanies = [] }) {
           } catch(e) {}
           window.onUnlockSuccess?.();
           try {
-            const res = await fetch(`/api/percentile?role=${encodeURIComponent(wRole)}&experience=${encodeURIComponent(wExp)}&salary=${wSalary}&company=${encodeURIComponent(wCompany)}`);
+            const res = await fetch(`/api/percentile?role=${encodeURIComponent(wRole)}&experience=${encodeURIComponent(wExp)}&salary=${wSalary}&company=${encodeURIComponent(company)}`);
             const data = await res.json();
             setPercentileData(data);
           } catch(e) { setPercentileData(null); }
@@ -1121,7 +1121,7 @@ export default function Home({ initialCompanies = [] }) {
           localStorage.setItem('fyi_role', wRole);
           localStorage.setItem('fyi_exp', wExp);
           localStorage.setItem('fyi_salary', String(wSalary));
-          localStorage.setItem('fyi_company', wCompany);
+          localStorage.setItem('fyi_company', company);
           sessionStorage.setItem('fyi_fresh_submit', 'true');
           setTimeout(() => setShowSocialPrompt(true), 3000);
         }}
