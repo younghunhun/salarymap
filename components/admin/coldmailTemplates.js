@@ -5,6 +5,7 @@
 // 실제 발송 원문은 vi — ko/en은 어드민 열람용 번역본이며, 모달이 언어토글(lang)에 맞춰 고른다.
 
 import { KTC1019_JOBS } from '../../lib/coldmail/ktc1019Jobs'
+import { YOULCHON1020_JOB } from '../../lib/coldmail/youlchon1020Job'
 
 const pickLang = (o, lang) => o[lang] || o.vi
 
@@ -5806,6 +5807,21 @@ export const COLDMAIL_TEMPLATES = [
       html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PUBLIC }),
     },
   ]),
+  // ── YOUL CHON VINA(V258) 시장개발 영업 recommend 10/20 (scripts/outreach/youlchon1020-recommend-coldmail.mjs) — 문안 정본 lib/coldmail/youlchon1020Job.js ──
+  {
+    match: /^youlchon1020-recommend-private/,
+    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${YOULCHON1020_JOB.title} tại ${YOULCHON1020_JOB.company} (${YOULCHON1020_JOB.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${YOULCHON1020_JOB.company} ${YOULCHON1020_JOB.title}`, en: `[FYI] You've been nominated — ${YOULCHON1020_JOB.title} at ${YOULCHON1020_JOB.company} (${YOULCHON1020_JOB.loc})` },
+    desc: 'YOUL CHON VINA 시장개발 영업(V258) recommend 10/20: 비공개 프레임 — cv_tags B2B 영업/BD 주직무 × 2y+ × HCM권 × 22~40세(포장업계 → 제조 B2B → 타산업 순), V177(9/16 동일 공고) 지원자·V258 기발송 제외. 7일 쿨다운 미적용(유저 지시).',
+    source: 'scripts/outreach/youlchon1020-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: { vi: YOULCHON1020_JOB.intro }, initial: YOULCHON1020_JOB.initial, company: YOULCHON1020_JOB.company, title: YOULCHON1020_JOB.title, meta: YOULCHON1020_JOB.meta, tail: BENEFIT_PRIVATE }),
+  },
+  {
+    match: /^youlchon1020-recommend-/,
+    subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${YOULCHON1020_JOB.company} — ${YOULCHON1020_JOB.title} (${YOULCHON1020_JOB.loc})`, ko: `[FYI] ${YOULCHON1020_JOB.company} 추천 명단에 선정되셨습니다 — ${YOULCHON1020_JOB.title}`, en: `[FYI] You've been nominated to ${YOULCHON1020_JOB.company} — ${YOULCHON1020_JOB.title} (${YOULCHON1020_JOB.loc})` },
+    desc: 'YOUL CHON VINA 시장개발 영업(V258) recommend 10/20: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.',
+    source: 'scripts/outreach/youlchon1020-recommend-coldmail.mjs',
+    html: (lang) => recommendShell(lang, { intro: { vi: YOULCHON1020_JOB.intro }, initial: YOULCHON1020_JOB.initial, company: YOULCHON1020_JOB.company, title: YOULCHON1020_JOB.title, meta: YOULCHON1020_JOB.meta, tail: BENEFIT_PUBLIC }),
+  },
 ]
 
 // 발송 전 초안 캠페인 — 이벤트가 없어도 콜드메일 탭 표에 '미발송' 행으로 띄워 양식을 검수한다.
