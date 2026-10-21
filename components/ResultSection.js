@@ -4,7 +4,6 @@ import { track } from '../lib/track'
 import { useT } from '../lib/i18n'
 import { formatSalaryCard } from '../utils/salary'
 import { useFlags } from '../lib/flags'
-import supabaseClient from '../lib/supabaseClient'
 import { classifyJobTitle, jobAdGroup, submitRoleLabel, submitRoleCategory } from '../constants/jobs'
 
 // 제출 소분류 → job role 정밀 매핑(개발·데이터·기획·디자인). 첫 항목 = 정확 매칭(1점), 이후 = 유사(0.6점).
@@ -138,23 +137,6 @@ export default function ResultSection({ salary, role, experience, company, isLog
   // hard_gate 플래그로 원클릭 롤백 — 기본 잠금이라 플래그 로드 전 결과가 새지 않음.
   const { flags } = useFlags()
   const gateLocked = !isLoggedIn && flags.hard_gate
-  // 가입 직후 이력서 CTA 노출 여부 — null(미확인) 이면 숨김. 이력서가 없는 로그인 유저에게만.
-  const [hasResume, setHasResume] = useState(null)
-  useEffect(() => {
-    if (!isLoggedIn) { setHasResume(null); return }
-    let alive = true
-    ;(async () => {
-      try {
-        const { data: { session } } = await supabaseClient.auth.getSession()
-        if (!session?.access_token) return
-        const r = await fetch('/api/profile/talent', { headers: { Authorization: `Bearer ${session.access_token}` } })
-        if (!r.ok) return
-        const d = await r.json()
-        if (alive) setHasResume(!!d.profile?.resume_url)
-      } catch {}
-    })()
-    return () => { alive = false }
-  }, [isLoggedIn])
   const gateViewFired = useRef(false)
 
   useEffect(() => {
@@ -304,19 +286,6 @@ export default function ResultSection({ salary, role, experience, company, isLog
 
       </div>
 
-
-      {/* 가입 직후: 이력서 없으면 공고 위에 이력서 CTA — 제출 플로우에 이력서 단계가 없어 로그인자 71%가 여기서 빠졌다 */}
-      {isLoggedIn && hasResume === false && (
-        <div style={{ marginTop:'24px', background:'rgba(255,68,0,0.08)', border:'1px solid rgba(255,68,0,0.3)', borderRadius:'18px', padding:'20px 18px' }}>
-          <div style={{ fontSize:'21px', fontWeight:900, color:'#fff', lineHeight:1.2, letterSpacing:'-.01em', marginBottom:'8px' }}>{t('result.resumeHead')}</div>
-          <div style={{ fontSize:'15px', color:'rgba(255,255,255,0.65)', lineHeight:1.5, marginBottom:'16px' }}>{t('result.resumeSub')}</div>
-          <button onClick={() => { track('result_resume_cta_click', { page: '/' }); router.push('/cv?from=result') }}
-            style={{ width:'100%', background:'#ff4400', color:'#fff', border:'none', borderRadius:'14px', padding:'15px 24px',
-              fontSize:'16px', fontWeight:800, cursor:'pointer', fontFamily:"'Be Vietnam Pro',sans-serif", boxShadow:'0 8px 32px rgba(255,68,0,0.35)' }}>
-            {t('result.resumeCta')}
-          </button>
-        </div>
-      )}
 
       {/* Job suggestions */}
       {jobData && jobData.tier !== 'empty' && (() => {
