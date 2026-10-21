@@ -118,6 +118,7 @@ export default async function handler(req, res) {
       diffPct: Math.round((seedDiff / seedMedian) * 100),
       topCompanies: seedTopCompanies(role, experience, userSalary, company, 4),
       sampleSize: peers.length,
+      roleSampleSize: exact.length >= 3 ? exact.length : (poolData || []).length,
     });
   }
 
@@ -167,6 +168,7 @@ export default async function handler(req, res) {
     diff,
     diffPct,
     topCompanies,
-    sampleSize: clean.length, // 결과 화면 "같은 직무·연차 N명 기준" — 이상치 제거 후 코호트 크기
+    sampleSize: clean.length, // 결과 화면 — 이상치 제거 후 비교 코호트(소분류+연차) 크기
+    roleSampleSize: exact.length >= 3 ? exact.length : (poolData || []).length, // 소분류 전체(연차 무관) 표본 — 화면에 "N건 중 M건과 비교"로 표기
   });
 }

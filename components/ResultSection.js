@@ -4,6 +4,7 @@ import { track } from '../lib/track'
 import { useT } from '../lib/i18n'
 import { formatSalaryCard } from '../utils/salary'
 import { useFlags } from '../lib/flags'
+import supabaseClient from '../lib/supabaseClient'
 import { classifyJobTitle, jobAdGroup, submitRoleLabel, submitRoleCategory } from '../constants/jobs'
 
 // 제출 소분류 → job role 정밀 매핑(개발·데이터·기획·디자인). 첫 항목 = 정확 매칭(1점), 이후 = 유사(0.6점).
@@ -118,6 +119,16 @@ function buildJobSuggestions(allJobs, salaryVnd, role, experience) {
   return { tier: 'empty', jobs: [], total: 0 }
 }
 
+// 비가입 게이트: 핵심 숫자·회사명만 블러 — 결과 레이아웃은 그대로 보여 '뭘 얻는지'가 보이게.
+const Masked = ({ children, block, style }) => (
+  <span aria-hidden="true" style={{ display: block ? 'block' : 'inline-block', filter:'blur(7px)', userSelect:'none', pointerEvents:'none', ...style }}>{children}</span>
+)
+const openGate = () => {
+  if (typeof window === 'undefined') return
+  if (window.openLoginGate) window.openLoginGate('result')
+  else if (window.openAuthModal) window.openAuthModal('gate')
+}
+
 export default function ResultSection({ salary, role, experience, company, isLoggedIn, anchor }) {
   const { t, lang } = useT()
   const [result, setResult] = useState(null)
@@ -127,6 +138,23 @@ export default function ResultSection({ salary, role, experience, company, isLog
   // hard_gate 플래그로 원클릭 롤백 — 기본 잠금이라 플래그 로드 전 결과가 새지 않음.
   const { flags } = useFlags()
   const gateLocked = !isLoggedIn && flags.hard_gate
+  // 가입 직후 이력서 CTA 노출 여부 — null(미확인) 이면 숨김. 이력서가 없는 로그인 유저에게만.
+  const [hasResume, setHasResume] = useState(null)
+  useEffect(() => {
+    if (!isLoggedIn) { setHasResume(null); return }
+    let alive = true
+    ;(async () => {
+      try {
+        const { data: { session } } = await supabaseClient.auth.getSession()
+        if (!session?.access_token) return
+        const r = await fetch('/api/profile/talent', { headers: { Authorization: `Bearer ${session.access_token}` } })
+        if (!r.ok) return
+        const d = await r.json()
+        if (alive) setHasResume(!!d.profile?.resume_url)
+      } catch {}
+    })()
+    return () => { alive = false }
+  }, [isLoggedIn])
   const gateViewFired = useRef(false)
 
   useEffect(() => {
@@ -177,33 +205,15 @@ export default function ResultSection({ salary, role, experience, company, isLog
       <div style={{ width:60, height:60, borderRadius:'50%', border:'3px solid #ff4400', borderTopColor:'transparent',
         animation:'spin .8s linear infinite', margin:'40px auto 16px' }} />
       <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
-      <div style={{ fontSize:14, color:'rgba(255,255,255,0.4)' }}>{t('result.loading')}</div>
+      <div style={{ fontSize:14, color:'rgba(255,255,255,0.6)' }}>{t('result.loading')}</div>
     </div>
   )
 
-  const { percentile, userSalary, marketMedian, diff, sampleSize } = result
+  const { percentile, userSalary, marketMedian, diff, sampleSize, roleSampleSize } = result
   // 표시용 직군 라벨 — 비개발 대분류는 언어별 라벨, 매칭/저장은 raw 값 그대로
   const roleText = submitRoleLabel(role, lang)
   const isPositive = diff >= 0
-  const state = percentile <= 33 ? 'high' : percentile <= 66 ? 'mid' : 'low'
 
-  const verdictMap = {
-    high: { bg: 'rgba(34,197,94,0.1)', border: 'rgba(34,197,94,0.25)', color: '#4ade80', icon: '✦', text: t('result.high') },
-    mid: { bg: 'rgba(250,204,21,0.1)', border: 'rgba(250,204,21,0.25)', color: '#facc15', icon: '◎', text: t('result.mid') },
-    low: { bg: 'rgba(255,68,0,0.1)', border: 'rgba(255,68,0,0.25)', color: '#ff6b35', icon: '↓', text: t('result.low') },
-  }
-  const verdict = verdictMap[state]
-  const pctPosition = Math.max(5, Math.min(95, 100 - percentile))
-
-  // Salary distribution bars (simulated from percentile)
-  const bars = Array.from({ length: 12 }, (_, i) => {
-    const pos = (i + 0.5) / 12
-    const userPos = pctPosition / 100
-    const dist = Math.abs(pos - 0.5)
-    const h = Math.max(15, 100 - dist * 160)
-    const isUser = Math.abs(pos - userPos) < 0.05
-    return { h, isUser, belowUser: pos < userPos }
-  })
 
   const salaryVnd = salary * 1000000
 
@@ -229,37 +239,33 @@ export default function ResultSection({ salary, role, experience, company, isLog
     <div style={{ fontFamily: "'Be Vietnam Pro','Barlow',sans-serif", WebkitFontSmoothing: 'antialiased', position: 'relative' }}>
       <style>{`
         @keyframes fadeSlideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes glowPulse { 0%,100% { box-shadow:0 0 12px rgba(255,68,0,0.4); } 50% { box-shadow:0 0 24px rgba(255,68,0,0.6); } }
         .rs-stat-box { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px 12px; text-align:center; }
-        .rs-co-row { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid rgba(255,255,255,0.08); border-radius:12px; background:rgba(255,255,255,0.03); }
         @media(max-width:480px) { .rs-stat-grid { gap:6px !important; } .rs-big-pct { font-size:56px !important; } }
       `}</style>
 
-      {/* 하드 게이트: 로그인 전엔 결과를 블러 티저로만 노출 */}
-      <div aria-hidden={gateLocked} style={gateLocked
-        ? { filter: 'blur(14px)', pointerEvents: 'none', userSelect: 'none', maxHeight: '460px', overflow: 'hidden' }
-        : undefined}>
+      {/* 비가입 게이트: 핵심 숫자만 블러(Masked), 레이아웃은 그대로 */}
+      <div>
 
       {/* Hero */}
       <div style={{ background:'linear-gradient(180deg,#161616 0%,#0d0d0d 100%)', padding:'clamp(20px,4vw,32px) clamp(16px,4vw,24px)', borderRadius:'20px', animation:'fadeSlideUp .5s ease' }}>
 
         {/* Eyebrow */}
-        <div style={{ fontSize:'10px', fontWeight:700, letterSpacing:'.1em', color:'rgba(255,255,255,0.25)', textTransform:'uppercase', textAlign:'center', marginBottom:'16px' }}>
+        <div style={{ fontSize:'12px', fontWeight:700, letterSpacing:'.1em', color:'rgba(255,255,255,0.5)', textTransform:'uppercase', textAlign:'center', marginBottom:'16px' }}>
           {t('result.eyebrow', { role: roleText, experience })}
         </div>
 
         {/* Big percentile */}
-        <div style={{ textAlign:'center', marginBottom:'8px' }}>
+        <div style={{ textAlign:'center', marginBottom:'18px' }}>
           <span className="rs-big-pct" style={{ fontSize:'80px', fontWeight:900, fontStyle:'italic', color:'#ff4400', textShadow:'0 0 60px rgba(255,68,0,0.3)', lineHeight:1 }}>
-            {percentile <= 50 ? `Top ${percentile}%` : `Bottom ${100 - percentile}%`}
+            {gateLocked ? <Masked>Top ??%</Masked> : (percentile <= 50 ? `Top ${percentile}%` : `Bottom ${100 - percentile}%`)}
           </span>
         </div>
-        <div style={{ textAlign:'center', fontSize:'13px', color:'rgba(255,255,255,0.4)', marginBottom: sampleSize > 0 ? '6px' : '24px' }}>
+        <div style={{ textAlign:'center', fontSize:'15px', color:'rgba(255,255,255,0.6)', marginBottom: sampleSize > 0 ? '6px' : '24px' }}>
           {t('result.among', { role: roleText, experience })}
         </div>
         {sampleSize > 0 && (
-          <div style={{ textAlign:'center', fontSize:'12px', color:'rgba(255,255,255,0.3)', marginBottom:'24px' }}>
-            {t('result.sampleSize', { count: sampleSize })}
+          <div style={{ textAlign:'center', fontSize:'14px', color:'rgba(255,255,255,0.5)', marginBottom:'24px' }}>
+            {t('result.sampleSize', { count: sampleSize.toLocaleString(), total: Math.max(roleSampleSize || 0, sampleSize).toLocaleString(), role: roleText })}
           </div>
         )}
 
@@ -267,102 +273,47 @@ export default function ResultSection({ salary, role, experience, company, isLog
         <div className="rs-stat-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:'8px', marginBottom:'20px' }}>
           <div className="rs-stat-box">
             <div style={{ fontSize:'24px', fontWeight:900, color:'#fff' }}>{userSalary}M</div>
-            <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.35)', marginTop:'4px' }}>{t('result.yourSalary')}</div>
+            <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.5)', marginTop:'4px' }}>{t('result.yourSalary')}</div>
           </div>
           <div className="rs-stat-box">
-            <div style={{ fontSize:'24px', fontWeight:900, color:'#fff' }}>{marketMedian}M</div>
-            <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.35)', marginTop:'4px' }}>{t('result.marketMedian')}</div>
+            <div style={{ fontSize:'24px', fontWeight:900, color:'#fff' }}>{gateLocked ? <Masked>{marketMedian}M</Masked> : `${marketMedian}M`}</div>
+            <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.5)', marginTop:'4px' }}>{t('result.marketMedian')}</div>
           </div>
           <div className="rs-stat-box" style={{ background:'rgba(255,68,0,0.08)', border:'1px solid rgba(255,68,0,0.25)' }}>
-            <div style={{ fontSize:'24px', fontWeight:900, color: isPositive ? '#4ade80' : '#ff4400' }}>
-              {isPositive ? '+' : ''}{diff}M
+            <div style={{ fontSize:'24px', fontWeight:900, color: gateLocked ? '#fff' : isPositive ? '#4ade80' : '#ff4400' }}>
+              {gateLocked ? <Masked>{isPositive ? '+' : ''}{diff}M</Masked> : `${isPositive ? '+' : ''}${diff}M`}
             </div>
-            <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.35)', marginTop:'4px' }}>{isPositive ? t('result.aboveMedian') : t('result.belowMedian')}</div>
+            <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.5)', marginTop:'4px' }}>
+              {isPositive ? t('result.aboveMedian') : t('result.belowMedian')}
+            </div>
           </div>
         </div>
 
-        {/* Verdict badge */}
-        <div style={{ display:'flex', justifyContent:'center', marginBottom:'24px' }}>
-          <div style={{ background:verdict.bg, border:`1px solid ${verdict.border}`, borderRadius:'100px',
-            padding:'8px 20px', fontSize:'13px', fontWeight:700, color:verdict.color }}>
-            {verdict.icon} {verdict.text}
+        {/* 비가입 CTA — 첫 화면(퍼센타일·3박스) 바로 아래. 클릭 계측/귀속은 openLoginGate('result') */}
+        {gateLocked && (
+          <div style={{ textAlign:'center', marginBottom:'24px' }}>
+            <button onClick={openGate}
+              style={{ width:'100%', background:'#ff4400', color:'#fff', border:'none', borderRadius:'14px',
+                padding:'15px 24px', fontSize:'15px', fontWeight:800, cursor:'pointer',
+                fontFamily:"'Be Vietnam Pro',sans-serif", boxShadow:'0 8px 32px rgba(255,68,0,0.35)' }}>
+              {t('result.gateCta')}
+            </button>
           </div>
-        </div>
+        )}
 
-        {/* Percentile bar */}
-        <div style={{ marginBottom:'20px' }}>
-          <div style={{ position:'relative', height:'6px', background:'rgba(255,255,255,0.07)', borderRadius:'3px' }}>
-            <div style={{ position:'absolute', left:0, top:0, height:'100%', width:`${pctPosition}%`,
-              background:'linear-gradient(90deg,rgba(255,68,0,0.3),#ff4400)', borderRadius:'3px' }} />
-            <div style={{ position:'absolute', left:`${pctPosition}%`, top:'50%', transform:'translate(-50%,-50%)',
-              width:'12px', height:'12px', borderRadius:'50%', background:'#ff4400',
-              animation:'glowPulse 2s ease-in-out infinite' }} />
-          </div>
-          <div style={{ display:'flex', justifyContent:'space-between', marginTop:'6px' }}>
-            <span style={{ fontSize:'9px', color:'rgba(255,255,255,0.2)' }}>{t('result.lowest')}</span>
-            <span style={{ fontSize:'9px', color:'rgba(255,255,255,0.2)' }}>{t('result.median')}</span>
-            <span style={{ fontSize:'9px', color:'rgba(255,255,255,0.2)' }}>{t('result.highest')}</span>
-          </div>
-        </div>
 
-        {/* Salary distribution bars */}
-        <div style={{ display:'flex', alignItems:'flex-end', gap:'3px', height:'60px', marginBottom:'24px' }}>
-          {bars.map((b, i) => (
-            <div key={i} style={{ flex:1, height:`${b.h}%`, borderRadius:'2px 2px 0 0', transition:'all .3s',
-              background: b.isUser ? '#ff4400' : b.belowUser ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
-              boxShadow: b.isUser ? '0 0 8px rgba(255,68,0,0.4)' : 'none' }} />
-          ))}
-        </div>
       </div>
 
-      {/* 나보다 더 주는 회사 — /api/result topCompanies. 클릭 → 회사 상세 패널(가입 게이트 연동) */}
-      {result.topCompanies?.length > 0 && (
-        <div style={{ marginTop:'24px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)', borderRadius:'18px', padding:'18px 16px' }}>
-          <div style={{ fontSize:'21px', fontWeight:900, color:'#fff', lineHeight:1.2, letterSpacing:'-.01em', marginBottom:'8px' }}>
-            {t('result.topCoHead')}
-          </div>
-          <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.55)', marginBottom:'16px' }}>
-            {t('result.topCoSub', { role: roleText })}
-          </div>
-          <div style={{ display:'flex', flexDirection:'column', gap:'8px' }}>
-            {result.topCompanies.map((co, i) => (
-              <div key={co.name + i} className="rs-co-row" role="button" tabIndex={0}
-                onClick={() => {
-                  track('result_company_card_click', { meta: { company: co.name } })
-                  if (typeof window !== 'undefined' && window.openCompanyPanel) window.openCompanyPanel(co.name)
-                }}
-                style={{ cursor:'pointer', transition:'border-color .12s' }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,68,0,0.4)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}>
-                <div style={{ width:38, height:38, borderRadius:'9px', background:'rgba(255,255,255,0.06)',
-                  border:'1px solid rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center',
-                  fontSize:'12px', fontWeight:800, color:'rgba(255,255,255,0.45)', flexShrink:0, overflow:'hidden' }}>
-                  {co.domain
-                    ? <img src={`https://www.google.com/s2/favicons?domain=${co.domain}&sz=128`} alt=""
-                        style={{ width:'100%', height:'100%', objectFit:'contain', background:'#fafaf8' }}
-                        onError={e => { e.target.style.display = 'none' }} />
-                    : co.name.slice(0, 2).toUpperCase()}
-                </div>
-                <div style={{ flex:1, minWidth:0 }}>
-                  <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{co.name}</div>
-                  <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.4)', marginTop:'2px' }}>{roleText} · {t('result.median')}</div>
-                </div>
-                <div style={{ textAlign:'right', flexShrink:0 }}>
-                  <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', whiteSpace:'nowrap' }}>{co.median}M</div>
-                  <div style={{ fontSize:'11px', fontWeight:700, color:'#4ade80', marginTop:'2px' }}>+{co.premiumPct}%</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <button onClick={() => {
-              track('result_company_card_click', { meta: { company: '_view_all' } })
-              const grid = document.querySelector('.cards-section') || document.getElementById('company-grid-root')
-              grid?.scrollIntoView({ behavior:'smooth' })
-            }}
-            style={{ width:'100%', marginTop:'14px', background:'rgba(255,255,255,0.05)', color:'#fff',
-              border:'1px solid rgba(255,255,255,0.12)', borderRadius:'12px', padding:'13px', fontSize:'13px', fontWeight:700,
-              cursor:'pointer', fontFamily:"'Be Vietnam Pro',sans-serif" }}>
-            {t('result.topCoAll')}
+
+      {/* 가입 직후: 이력서 없으면 공고 위에 이력서 CTA — 제출 플로우에 이력서 단계가 없어 로그인자 71%가 여기서 빠졌다 */}
+      {isLoggedIn && hasResume === false && (
+        <div style={{ marginTop:'24px', background:'rgba(255,68,0,0.08)', border:'1px solid rgba(255,68,0,0.3)', borderRadius:'18px', padding:'20px 18px' }}>
+          <div style={{ fontSize:'21px', fontWeight:900, color:'#fff', lineHeight:1.2, letterSpacing:'-.01em', marginBottom:'8px' }}>{t('result.resumeHead')}</div>
+          <div style={{ fontSize:'15px', color:'rgba(255,255,255,0.65)', lineHeight:1.5, marginBottom:'16px' }}>{t('result.resumeSub')}</div>
+          <button onClick={() => { track('result_resume_cta_click', { page: '/' }); router.push('/cv?from=result') }}
+            style={{ width:'100%', background:'#ff4400', color:'#fff', border:'none', borderRadius:'14px', padding:'15px 24px',
+              fontSize:'16px', fontWeight:800, cursor:'pointer', fontFamily:"'Be Vietnam Pro',sans-serif", boxShadow:'0 8px 32px rgba(255,68,0,0.35)' }}>
+            {t('result.resumeCta')}
           </button>
         </div>
       )}
@@ -384,14 +335,14 @@ export default function ResultSection({ salary, role, experience, company, isLog
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4400" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" /></svg>
               </span>
-              <span style={{ fontSize:'10px', fontWeight:800, letterSpacing:'.12em', textTransform:'uppercase', color:'#ff4400' }}>
+              <span style={{ fontSize:'12px', fontWeight:800, letterSpacing:'.12em', textTransform:'uppercase', color:'#ff4400' }}>
                 {t('result.jobsEyebrow')}
               </span>
             </div>
             <div style={{ fontSize:'21px', fontWeight:900, color:'#fff', lineHeight:1.2, letterSpacing:'-.01em', marginBottom:'8px' }}>
               {t(headKey, { role: roleText })}
             </div>
-            <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.55)', marginBottom:'16px' }}>
+            <div style={{ fontSize:'15px', color:'rgba(255,255,255,0.65)', marginBottom:'16px' }}>
               {t(subKey, { count: total, role: roleText })}
             </div>
             <div style={{ display:'flex', flexDirection:'column' }}>
@@ -409,29 +360,29 @@ export default function ResultSection({ salary, role, experience, company, isLog
                     onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
                     <div style={{ width:38, height:38, borderRadius:'9px', background:'rgba(255,255,255,0.06)',
                       border:'1px solid rgba(255,255,255,0.1)', display:'flex', alignItems:'center', justifyContent:'center',
-                      fontSize:'12px', fontWeight:800, color:'rgba(255,255,255,0.45)', flexShrink:0, overflow:'hidden' }}>
+                      fontSize:'14px', fontWeight:800, color:'rgba(255,255,255,0.65)', flexShrink:0, overflow:'hidden' }}>
                       {job.logo_url
                         ? <img src={job.logo_url} alt="" style={{ width:'100%', height:'100%', objectFit:'cover' }} />
                         : (job.company_initials || job.company?.slice(0, 2) || '–').toUpperCase()}
                     </div>
                     <div style={{ flex:1, minWidth:0 }}>
-                      <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{job.company}</div>
-                      <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.4)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', marginTop:'2px' }}>
+                      <div style={{ fontSize:'16px', fontWeight:700, color:'#fff', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{job.company}</div>
+                      <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.6)', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', marginTop:'2px' }}>
                         {job.title}{job.location ? ` · ${job.location}` : ''}
                       </div>
                     </div>
                     <div style={{ textAlign:'right', flexShrink:0 }}>
-                      <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', whiteSpace:'nowrap' }}>{sal.negotiable ? t('jobs.salaryNegotiable') : `${min}–${max}M`}</div>
+                      <div style={{ fontSize:'16px', fontWeight:700, color:'#fff', whiteSpace:'nowrap' }}>{sal.negotiable ? t('jobs.salaryNegotiable') : `${min}–${max}M`}</div>
                       {showBump && bump > 0
-                        ? <div style={{ fontSize:'11px', fontWeight:700, color:'#ff4400', marginTop:'2px' }}>+{bump}%</div>
-                        : !sal.negotiable && <div style={{ fontSize:'10px', color:'rgba(255,255,255,0.3)', marginTop:'2px' }}>{t('result.perMonth')}</div>}
+                        ? <div style={{ fontSize:'13px', fontWeight:700, color:'#ff4400', marginTop:'2px' }}>+{bump}%</div>
+                        : !sal.negotiable && <div style={{ fontSize:'12px', color:'rgba(255,255,255,0.5)', marginTop:'2px' }}>{t('result.perMonth')}</div>}
                     </div>
                   </div>
                 )
               })}
             </div>
             <button onClick={goToJobs} style={{ width:'100%', marginTop:'14px', background:'#ff4400', color:'#fff',
-              border:'none', borderRadius:'12px', padding:'13px', fontSize:'13px', fontWeight:700, cursor:'pointer',
+              border:'none', borderRadius:'12px', padding:'13px', fontSize:'15px', fontWeight:700, cursor:'pointer',
               fontFamily:"'Be Vietnam Pro',sans-serif" }}>
               {moreCount > 0 ? t('result.seeMoreJobs', { count: moreCount }) : t('result.jobsEmptyCta')}
             </button>
@@ -443,10 +394,10 @@ export default function ResultSection({ salary, role, experience, company, isLog
       {jobData && jobData.tier === 'empty' && (
         <div style={{ marginTop:'20px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.08)',
           borderRadius:'14px', padding:'20px', textAlign:'center' }}>
-          <div style={{ fontSize:'14px', fontWeight:700, color:'#fff', marginBottom:'4px' }}>{t('result.jobsEmptyHead')}</div>
-          <div style={{ fontSize:'12px', color:'rgba(255,255,255,0.4)', marginBottom:'14px' }}>{t('result.jobsEmptySub', { role: roleText })}</div>
+          <div style={{ fontSize:'16px', fontWeight:700, color:'#fff', marginBottom:'4px' }}>{t('result.jobsEmptyHead')}</div>
+          <div style={{ fontSize:'14px', color:'rgba(255,255,255,0.6)', marginBottom:'14px' }}>{t('result.jobsEmptySub', { role: roleText })}</div>
           <button onClick={goToJobs} style={{ width:'100%', background:'rgba(255,68,0,0.1)', color:'#ff4400',
-            border:'1px solid rgba(255,68,0,0.25)', borderRadius:'12px', padding:'13px', fontSize:'13px', fontWeight:700,
+            border:'1px solid rgba(255,68,0,0.25)', borderRadius:'12px', padding:'13px', fontSize:'15px', fontWeight:700,
             cursor:'pointer', fontFamily:"'Be Vietnam Pro',sans-serif" }}>
             {t('result.jobsEmptyCta')}
           </button>
@@ -454,32 +405,6 @@ export default function ResultSection({ salary, role, experience, company, isLog
       )}
       </div>
 
-      {/* 하드 게이트 오버레이 — CTA 클릭 계측/귀속은 openLoginGate('result')가 담당 */}
-      {gateLocked && (
-        <div style={{ position:'absolute', inset:0, zIndex:5, display:'flex', flexDirection:'column',
-          alignItems:'center', justifyContent:'center', gap:'10px', padding:'24px', textAlign:'center',
-          background:'linear-gradient(180deg, rgba(8,8,8,0.15) 0%, rgba(8,8,8,0.55) 100%)', borderRadius:'20px' }}>
-          <div style={{ width:44, height:44, borderRadius:'50%', background:'rgba(255,68,0,0.15)',
-            border:'1px solid rgba(255,68,0,0.35)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ff4400" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
-          </div>
-          <div style={{ fontSize:'22px', fontWeight:900, color:'#fff', letterSpacing:'-.01em' }}>{t('result.gateTitle')}</div>
-          <div style={{ fontSize:'13px', color:'rgba(255,255,255,0.6)', lineHeight:1.5, maxWidth:'320px' }}>{t('result.gateSub')}</div>
-          <button onClick={() => {
-              if (typeof window !== 'undefined') {
-                if (window.openLoginGate) window.openLoginGate('result')
-                else if (window.openAuthModal) window.openAuthModal('gate')
-              }
-            }}
-            style={{ marginTop:'6px', background:'#ff4400', color:'#fff', border:'none', borderRadius:'14px',
-              padding:'15px 28px', fontSize:'15px', fontWeight:800, cursor:'pointer',
-              fontFamily:"'Be Vietnam Pro',sans-serif", boxShadow:'0 8px 32px rgba(255,68,0,0.35)' }}>
-            {t('result.gateCta')}
-          </button>
-          <div style={{ fontSize:'11px', color:'rgba(255,255,255,0.35)' }}>{t('result.gateHint')}</div>
-        </div>
-      )}
     </div>
   )
 }

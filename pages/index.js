@@ -609,7 +609,8 @@ export default function Home({ initialCompanies = [] }) {
   // Submitted anonymously — company data stays locked until sign-in
   const needsLogin = isSubmitted && !isLoggedIn;
 
-  // 가입 게이트 진입: 클릭 계측 + 로그인 성공 귀속 마커 + 인증 모달
+  // 가입 게이트 진입: 클릭 계측 + 로그인 성공 귀속 마커 + 바로 Google 로그인
+  // (제공자 선택 모달 생략 — 게이트 클릭→로그인 56% 이탈 구간을 한 단계 줄인다. 2026-10-21)
   // source: 'card'(회사 카드 게이트) | 'result'(결과 하드 게이트) — 마커에 실어 성공 이벤트까지 귀속
   const openLoginGate = (source) => {
     try {
@@ -617,8 +618,7 @@ export default function Home({ initialCompanies = [] }) {
       localStorage.removeItem('fyi_login_return'); // 이전 채용 CTA가 남긴 리턴 경로가 게이트 로그인을 가로채지 않게
     } catch {}
     track('company_gate_click', { meta: { source }, page: '/' });
-    setAuthCtx('gate');
-    setShowAuthModal(true);
+    window.location.href = '/api/auth/google?return=' + encodeURIComponent(window.location.pathname);
   };
 
   // Stable refs for PRE/POST dangerouslySetInnerHTML
