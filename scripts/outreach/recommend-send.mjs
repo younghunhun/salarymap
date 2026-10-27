@@ -5,7 +5,8 @@
 //   node scripts/outreach/recommend-send.mjs --job V258 --copy youlchon1020 --main "Sales (B2B),Business Development" --yoe 24- --region HCM --age 22-40            # dry-run
 //   node scripts/outreach/recommend-send.mjs --job V258 --copy youlchon1020 ... --send [--max N] [--ignore-today] [--exclude-job V177] [--preview <path>]
 //   --exclude-job CODE,CODE   다른 공고(이전 동일 공고 등) 기지원자도 제외
-import { writeFileSync } from 'node:fs'
+//   --emails PATH             줄마다 이메일 하나인 파일 — 대상을 그 목록으로 한정(공고 간 배분처럼 플래그로 표현 안 되는 선정용)
+import { readFileSync, writeFileSync } from 'node:fs'
 import { Resend } from 'resend'
 import { sb, env, fetchAll } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
@@ -19,6 +20,8 @@ const doSend = args.includes('--send'), ignoreToday = args.includes('--ignore-to
 const maxN = f.flag('max', null) ? parseInt(f.flag('max'), 10) : null
 const previewPath = f.flag('preview', null)
 const copyKey = f.flag('copy', null)
+const emailsPath = f.flag('emails', null)
+const onlyEmails = emailsPath && emailsPath !== true ? new Set(readFileSync(emailsPath, 'utf8').split('\n').map((s) => s.trim().toLowerCase()).filter(Boolean)) : null
 const excludeJobs = String(f.flag('exclude-job', '') || '').split(',').map((s) => s.trim().toUpperCase()).filter(Boolean)
 if (!f.job || !copyKey || copyKey === true) { console.error('--job CODE 와 --copy KEY 는 필수'); process.exit(1) }
 const JD = RECOMMEND_JOBS[copyKey]
@@ -106,7 +109,7 @@ async function main() {
     for (const j of ex || []) for (const a of await fetchAll(() => sb.from('job_applications').select('user_id').eq('job_id', j.id).order('id'))) exApplied.add(a.user_id)
   }
   const pick = makePick(f)
-  const hit = base.filter(pick)
+  const hit = base.filter((p) => pick(p) && (!onlyEmails || onlyEmails.has((p.email || '').toLowerCase())))
   let skipSent = 0, skipApp = 0, skipEx = 0, skipToday = 0
   const targets = []
   for (const p of hit) {
