@@ -18,7 +18,8 @@ export default async function handler(req, res) {
     if (process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL) {
       try { jobCodes = await syncKtcJobCodes() } catch (e) { console.error('syncKtcJobCodes:', e.message) }
     }
-    const push = await pushFyiToKtc()
+    // 증분: 최근 3일 지원 건만 (전체 스캔·누락 보정은 일일 ktc-sync 가 한다)
+    const push = await pushFyiToKtc({ since: new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString() })
     const screening = await triggerFyiScreening({ since: new Date(Date.now() - 24 * 3600 * 1000).toISOString() })
     res.json({ ok: true, jobCodes: jobCodes ? jobCodes.set : null, fyiPushed: push.pushed, screening })
   } catch (e) {
