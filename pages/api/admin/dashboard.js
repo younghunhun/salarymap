@@ -43,7 +43,34 @@ export default async function handler(req, res) {
     return all
   }
 
+  // 집계 RPC — 결과가 1000행 상한에 잘리지 않게 정렬을 고정해 페이지로 받고, 일시 오류는 재시도한다.
+  // 실패하면 아래 폴백이 이벤트 원본(page_view 11만+ 행)을 1000행씩 순서대로 받아 1분 가까이 걸렸다(2026-10-30).
+  async function rpcAll(fn, orderCols) {
+    for (let attempt = 1; ; attempt++) {
+      try {
+        const all = []
+        for (let from = 0; ; from += 1000) {
+          let q = supabase.rpc(fn, { p_start: startISO, p_end: endISO })
+          for (const c of orderCols) q = q.order(c)
+          const { data, error } = await q.range(from, from + 999)
+          if (error) throw error
+          all.push(...(data || []))
+          if (!data || data.length < 1000) return all
+        }
+      } catch (e) {
+        console.error(`[admin/dashboard] ${fn} 실패(${attempt}회차):`, e.message)
+        if (attempt >= 3) throw e
+        await new Promise(r => setTimeout(r, 300))
+      }
+    }
+  }
+
   const EVENT_NAMES = ['click_jobs_cta', 'click_job_card', 'view_jobs_page', 'click_apply_button', 'save_job', 'click_for_companies', 'click_contact_owner', 'click_post_job', 'landing']
+
+  // 임시 계측: 누적 기간 로딩 지연 원인 파악용 — 쿼리별 완료 시각을 런타임 로그로 남긴다
+  const t0 = Date.now(), timings = []
+  const QUERY_NAMES = ['submissions', 'signups', 'jobApps', 'eventDaily', 'utmPv', 'resumeUsers', 'resumeRegs', 'companySignups', 'pendingJobs']
+  const timed = (i, p) => p.then(v => { timings.push(`${QUERY_NAMES[i]}=${Date.now() - t0}ms/${Array.isArray(v) ? v.length : v}`); return v })
 
   // 모든 쿼리 병렬 실행. 이벤트는 DB에서 집계(RPC)해 수만 행 전송을 없앰. (직렬 await → Promise.all)
   const [submissionsRaw, signups, jobApps, eventDaily, utmPv, resumeUsers, resumeRegs, companySignups, pendingJobs] = await Promise.all([
@@ -75,9 +102,8 @@ export default async function handler(req, res) {
     // 이벤트 일별 카운트 — DB 집계 RPC (실패 시 행 fetch 폴백)
     (async () => {
       try {
-        const { data, error } = await supabase.rpc('admin_event_daily', { p_start: startISO, p_end: endISO })
-        if (error) throw error
-        return (data || []).map(r => ({ d: r.d, event: r.event, cnt: Number(r.cnt) }))
+        const data = await rpcAll('admin_event_daily', ['d', 'event'])
+        return data.map(r => ({ d: r.d, event: r.event, cnt: Number(r.cnt) }))
       } catch (e) {
         const rows = await fetchAll(supabase.from('events').select('event, created_at')
           .in('event', EVENT_NAMES).gte('created_at', startISO).lte('created_at', endISO)).catch(() => [])
@@ -89,9 +115,8 @@ export default async function handler(req, res) {
     // UTM 차원별 page_view 카운트 — DB 집계 RPC (실패 시 행 fetch 폴백)
     (async () => {
       try {
-        const { data, error } = await supabase.rpc('admin_utm_pageviews', { p_start: startISO, p_end: endISO })
-        if (error) throw error
-        return (data || []).map(r => ({ d: r.d, utm_source: r.utm_source, utm_campaign: r.utm_campaign, utm_content: r.utm_content, cnt: Number(r.cnt) }))
+        const data = await rpcAll('admin_utm_pageviews', ['d', 'utm_source', 'utm_campaign', 'utm_content'])
+        return data.map(r => ({ d: r.d, utm_source: r.utm_source, utm_campaign: r.utm_campaign, utm_content: r.utm_content, cnt: Number(r.cnt) }))
       } catch (e) {
         const rows = await fetchAll(supabase.from('events').select('meta, created_at')
           .in('event', ['page_view', 'view_jobs_page']).gte('created_at', startISO).lte('created_at', endISO)).catch(() => [])
@@ -128,7 +153,7 @@ export default async function handler(req, res) {
         return count || 0
       } catch (e) { return 0 }
     })(),
-  ])
+  ].map((p, i) => timed(i, p)))
 
   // Apply data quality filters: exclude internal/garbage entries and dedupe
   const submissions = dedupeSubmissions(submissionsRaw.filter(s => !isExcludedSubmission(s)))
@@ -381,5 +406,6 @@ export default async function handler(req, res) {
     totalPageViews: utmPv.reduce((a, r) => a + r.cnt, 0),
   }
 
+  console.log('[admin-timing] dashboard', startDate, endDate, `total=${Date.now() - t0}ms`, timings.join(' '))
   res.json({ summary, daily, intent, topCompanies, utm })
 }

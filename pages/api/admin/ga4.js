@@ -90,6 +90,11 @@ export default async function handler(req, res) {
 
   const { from, to } = req.query
 
+  // 임시 계측: 누적 기간 로딩 지연 원인 파악용 — 리포트별 완료 시각을 런타임 로그로 남긴다
+  const t0 = Date.now(), timings = []
+  const REPORT_NAMES = ['daily', 'channels', 'devices', 'landingPages', 'totals', 'today', 'utmReport']
+  const timed = (i, p) => p.then(v => { timings.push(`${REPORT_NAMES[i]}=${Date.now() - t0}ms`); return v })
+
   try {
     const [daily, channels, devices, landingPages, totals, today, utmReport] = await Promise.all([
       // Daily sessions
@@ -195,8 +200,9 @@ export default async function handler(req, res) {
         bounceRate: parseFloat(r.metricValues[4].value),
         avgDuration: parseFloat(r.metricValues[5].value),
       }))),
-    ])
+    ].map((p, i) => timed(i, p)))
 
+    console.log('[admin-timing] ga4', from, to, `total=${Date.now() - t0}ms`, timings.join(' '))
     res.json({ daily, channels, devices, landingPages, totals, today, utmReport })
   } catch (e) {
     console.error('GA4 API error:', e.message)
