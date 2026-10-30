@@ -811,37 +811,37 @@ function AugustGoalPanel({ g, ko, onRefresh, generatedAt, lang }) {
 // 숫자를 세로로 비교할 수 없다. 그룹 판정은 API(groupOf)가 하고 여기선 라벨만 붙인다.
 const CAMPAIGN_GROUPS = [
   {
-    key: 'vku', ko: 'VKU Job Matching Weekend (9/30 다낭)', en: 'VKU Job Matching Weekend (Sep 30, Da Nang)',
-    koDesc: '행사 면접 신청자 CV 클레임(coldmail-ktc-cv-vku1001) + 박람회 참가자 가입 유도(coldmail-vku-signup-1001) · 전환 = FYI 가입',
-    enDesc: 'Event interview applicants (CV claim) + fair attendees (signup) · convert = FYI signup',
-    convKo: '가입', convEn: 'Signups',
-  },
-  {
-    key: 'signup', ko: '1. 회원 가입 유도', en: '1. Signup',
-    koDesc: 'FYI 계정이 없는 KTC 지원자 대상 · 전환 = FYI 가입',
-    enDesc: 'KTC applicants without an FYI account · convert = signup',
-    convKo: '가입', convEn: 'Signups',
-  },
-  {
-    key: 'register', ko: '2. 이력서 등록 유도', en: '2. Resume upload',
-    koDesc: '가입했지만 이력서가 없는 회원 대상 · 전환 = 이력서 등록(파일 업로드)',
-    enDesc: 'Members with an account but no resume · convert = uploaded a file',
-    convKo: '등록', convEn: 'Uploaded',
-  },
-  {
-    key: 'resume', ko: '3. 이력서 공개 전환', en: '3. Resume public',
-    koDesc: '이미 가입한 회원 중 이력서 비공개자 대상 · 전환 = 이력서 공개',
-    enDesc: 'Existing members with a private resume · convert = made public',
-    convKo: '공개 전환', convEn: 'Converted',
-  },
-  {
-    key: 'recommend', ko: '4. 공고 추천 → 지원', en: '4. Job recommend',
+    key: 'recommend', ko: '1. 공고 추천 → 지원', en: '1. Job recommend',
     koDesc: '이력서 공개 회원에게 맞는 공고 추천 · 전환 = 해당 공고 지원',
     enDesc: 'Matched job recommendations to public-resume members · convert = applied',
     convKo: '지원자', convEn: 'Applicants',
     // 이 그룹의 전환은 coldmail_public_convert 가 아니라 지원(coldmail_job_apply)이다.
     // 같은 컬럼에 convert 를 넣으면 전부 0으로 보인다.
     convertFrom: 'apply',
+  },
+  {
+    key: 'vku', ko: 'VKU Job Matching Weekend (9/30 다낭)', en: 'VKU Job Matching Weekend (Sep 30, Da Nang)',
+    koDesc: '행사 면접 신청자 CV 클레임(coldmail-ktc-cv-vku1001) + 박람회 참가자 가입 유도(coldmail-vku-signup-1001) · 전환 = FYI 가입',
+    enDesc: 'Event interview applicants (CV claim) + fair attendees (signup) · convert = FYI signup',
+    convKo: '가입', convEn: 'Signups',
+  },
+  {
+    key: 'signup', ko: '2. 회원 가입 유도', en: '2. Signup',
+    koDesc: 'FYI 계정이 없는 KTC 지원자 대상 · 전환 = FYI 가입',
+    enDesc: 'KTC applicants without an FYI account · convert = signup',
+    convKo: '가입', convEn: 'Signups',
+  },
+  {
+    key: 'register', ko: '3. 이력서 등록 유도', en: '3. Resume upload',
+    koDesc: '가입했지만 이력서가 없는 회원 대상 · 전환 = 이력서 등록(파일 업로드)',
+    enDesc: 'Members with an account but no resume · convert = uploaded a file',
+    convKo: '등록', convEn: 'Uploaded',
+  },
+  {
+    key: 'resume', ko: '4. 이력서 공개 전환', en: '4. Resume public',
+    koDesc: '이미 가입한 회원 중 이력서 비공개자 대상 · 전환 = 이력서 공개',
+    enDesc: 'Existing members with a private resume · convert = made public',
+    convKo: '공개 전환', convEn: 'Converted',
   },
   {
     key: 'photo', ko: '5. 프로필 사진 등록', en: '5. Profile photo',
@@ -911,6 +911,7 @@ function CmHead({ g, ko }) {
 
 function ColdmailPublicTab({ data, loading, error, ko, lang }) {
   const [mailPreview, setMailPreview] = useState(null) // { campaign, tpl } — 캠페인명 클릭 시 발송 메일 양식 모달
+  const [showOthers, setShowOthers] = useState(false) // 공고 추천 외 캠페인 그룹 펼침
   // 토글 언어로 subject/html 해석 — vi=발송 원문, ko/en=열람용 번역본.
   const mailTpl = mailPreview ? localizeTemplate(mailPreview.tpl, lang) : null
   if (loading || !data) return <State kind="loading">{ko ? '불러오는 중…' : 'Loading…'}</State>
@@ -919,68 +920,83 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
 
   const pct = (v) => `${Math.round(v * 100)}%`
 
+  const renderGroup = (g) => {
+    const rows = data.campaigns.filter((c) => (c.group || 'resume') === g.key)
+    // 발송 전 초안 캠페인도 행으로 띄운다(양식 검수용) — 발송이 시작되면 실측 행이 대체.
+    const drafts = DRAFT_CAMPAIGNS
+      .filter((d) => d.group === g.key && !data.campaigns.some((c) => c.campaign === d.campaign))
+      .map((d) => ({ campaign: d.campaign, group: d.group, sent: 0, clicked: 0, converted: 0, clickRate: 0, convertRate: 0, applies: 0, appliers: 0, firstSentDay: null, lastSentDay: null, draft: true }))
+    if (!rows.length && !drafts.length) return null
+    // recommend 는 캠페인 버킷이 200개+ 라 평면 표로는 못 읽는다 — 발송일 접기 + 프레임 짝 병합.
+    if (g.key === 'recommend') {
+      return <RecommendGroupSection key={g.key} g={g} rows={rows} drafts={drafts} ko={ko}
+        pct={pct}
+        onPreview={(campaign, tpl) => setMailPreview({ campaign, tpl })} />
+    }
+    // 소계는 캠페인별 비율의 평균이 아니라 합계끼리 나눈다 — 발송량이 다른 캠페인을 섞어야 해서.
+    const sum = rows.reduce((a, c) => ({
+      sent: a.sent + c.sent, clicked: a.clicked + c.clicked,
+      converted: a.converted + convertedOf(c, g), applies: a.applies + c.applies,
+      appliers: a.appliers + c.appliers,
+    }), { sent: 0, clicked: 0, converted: 0, applies: 0, appliers: 0 })
+    return (
+      <div key={g.key} style={{ marginBottom: G.xl }}>
+        <SectionTitle sub={ko ? g.koDesc : g.enDesc} style={{ marginBottom: G.md }}>{ko ? g.ko : g.en}</SectionTitle>
+        <TableCard minWidth={920}>
+          <CmHead g={g} ko={ko} />
+          <tbody>
+            {[...rows, ...drafts].map((c) => {
+              const conv = convertedOf(c, g)
+              const tpl = templateFor(c.campaign)
+              return (
+              <tr key={c.campaign}>
+                <td style={{ ...T.td, fontWeight: 600 }}>
+                  {tpl ? (
+                    <span onClick={() => setMailPreview({ campaign: c.campaign, tpl })} title={ko ? '발송 메일 양식 보기' : 'View email template'}
+                      style={cmNameLink}>{c.campaign}</span>
+                  ) : c.campaign}
+                  {c.firstSentDay && <span style={cmMeta}> · {c.firstSentDay.slice(5)}{c.lastSentDay && c.lastSentDay !== c.firstSentDay ? `~${c.lastSentDay.slice(5)}` : ''}</span>}
+                  {c.draft && cmDraft(ko)}
+                </td>
+                <td style={T.tdNum}>{c.sent}</td>
+                <td style={{ ...cmCount, color: CM.click }}>{c.clicked}</td>
+                <td style={T.tdNum}>{c.sent ? pct(c.clickRate) : '—'}</td>
+                <td style={{ ...cmCount, color: CM.conv }}>{conv}</td>
+                <td style={T.tdNum}>{c.sent ? pct(conv / c.sent) : '—'}</td>
+                <td style={{ ...cmCount, color: c.applies ? C.text : C.faint }}>
+                  {c.applies ? `${c.applies}${ko ? '건' : ''}` : '—'}
+                </td>
+              </tr>
+              )
+            })}
+            {rows.length > 1 && (
+              <tr style={cmSumRow}>
+                <td style={{ ...T.td, fontWeight: 700 }}>{ko ? '소계' : 'Subtotal'}</td>
+                {cmNumCells({ sent: sum.sent, clicked: sum.clicked, conv: sum.converted, applies: sum.applies }, ko, pct, true)}
+              </tr>
+            )}
+          </tbody>
+        </TableCard>
+      </div>
+    )
+  }
+  // 요즘 보는 건 공고 추천뿐이라 나머지 그룹(VKU·가입·이력서·사진·연봉·스크리닝)은 접어 둔다.
+  const hasCampaigns = (data.campaigns || []).length > 0
+  const otherGroups = CAMPAIGN_GROUPS.filter((g) => g.key !== 'recommend')
+
   return (
     <div>
-      {(data.campaigns || []).length > 0 && CAMPAIGN_GROUPS.map((g) => {
-        const rows = data.campaigns.filter((c) => (c.group || 'resume') === g.key)
-        // 발송 전 초안 캠페인도 행으로 띄운다(양식 검수용) — 발송이 시작되면 실측 행이 대체.
-        const drafts = DRAFT_CAMPAIGNS
-          .filter((d) => d.group === g.key && !data.campaigns.some((c) => c.campaign === d.campaign))
-          .map((d) => ({ campaign: d.campaign, group: d.group, sent: 0, clicked: 0, converted: 0, clickRate: 0, convertRate: 0, applies: 0, appliers: 0, firstSentDay: null, lastSentDay: null, draft: true }))
-        if (!rows.length && !drafts.length) return null
-        // recommend 는 캠페인 버킷이 200개+ 라 평면 표로는 못 읽는다 — 발송일 접기 + 프레임 짝 병합.
-        if (g.key === 'recommend') {
-          return <RecommendGroupSection key={g.key} g={g} rows={rows} drafts={drafts} ko={ko}
-            pct={pct}
-            onPreview={(campaign, tpl) => setMailPreview({ campaign, tpl })} />
-        }
-        // 소계는 캠페인별 비율의 평균이 아니라 합계끼리 나눈다 — 발송량이 다른 캠페인을 섞어야 해서.
-        const sum = rows.reduce((a, c) => ({
-          sent: a.sent + c.sent, clicked: a.clicked + c.clicked,
-          converted: a.converted + convertedOf(c, g), applies: a.applies + c.applies,
-          appliers: a.appliers + c.appliers,
-        }), { sent: 0, clicked: 0, converted: 0, applies: 0, appliers: 0 })
-        return (
-          <div key={g.key} style={{ marginBottom: G.xl }}>
-            <SectionTitle sub={ko ? g.koDesc : g.enDesc} style={{ marginBottom: G.md }}>{ko ? g.ko : g.en}</SectionTitle>
-            <TableCard minWidth={920}>
-              <CmHead g={g} ko={ko} />
-              <tbody>
-                {[...rows, ...drafts].map((c) => {
-                  const conv = convertedOf(c, g)
-                  const tpl = templateFor(c.campaign)
-                  return (
-                  <tr key={c.campaign}>
-                    <td style={{ ...T.td, fontWeight: 600 }}>
-                      {tpl ? (
-                        <span onClick={() => setMailPreview({ campaign: c.campaign, tpl })} title={ko ? '발송 메일 양식 보기' : 'View email template'}
-                          style={cmNameLink}>{c.campaign}</span>
-                      ) : c.campaign}
-                      {c.firstSentDay && <span style={cmMeta}> · {c.firstSentDay.slice(5)}{c.lastSentDay && c.lastSentDay !== c.firstSentDay ? `~${c.lastSentDay.slice(5)}` : ''}</span>}
-                      {c.draft && cmDraft(ko)}
-                    </td>
-                    <td style={T.tdNum}>{c.sent}</td>
-                    <td style={{ ...cmCount, color: CM.click }}>{c.clicked}</td>
-                    <td style={T.tdNum}>{c.sent ? pct(c.clickRate) : '—'}</td>
-                    <td style={{ ...cmCount, color: CM.conv }}>{conv}</td>
-                    <td style={T.tdNum}>{c.sent ? pct(conv / c.sent) : '—'}</td>
-                    <td style={{ ...cmCount, color: c.applies ? C.text : C.faint }}>
-                      {c.applies ? `${c.applies}${ko ? '건' : ''}` : '—'}
-                    </td>
-                  </tr>
-                  )
-                })}
-                {rows.length > 1 && (
-                  <tr style={cmSumRow}>
-                    <td style={{ ...T.td, fontWeight: 700 }}>{ko ? '소계' : 'Subtotal'}</td>
-                    {cmNumCells({ sent: sum.sent, clicked: sum.clicked, conv: sum.converted, applies: sum.applies }, ko, pct, true)}
-                  </tr>
-                )}
-              </tbody>
-            </TableCard>
-          </div>
-        )
-      })}
+      {hasCampaigns && CAMPAIGN_GROUPS.filter((g) => g.key === 'recommend').map(renderGroup)}
+      {hasCampaigns && (
+        <div style={{ marginBottom: G.xl }}>
+          <GhostButton size="small" onClick={() => setShowOthers((v) => !v)}
+            prefixIcon={showOthers ? <RiArrowDownSLine size={16} /> : <RiArrowRightSLine size={16} />}
+            label={showOthers
+              ? (ko ? '다른 캠페인 접기' : 'Hide other campaigns')
+              : (ko ? `다른 캠페인 ${otherGroups.length}개 보기 (VKU·가입·이력서·사진·연봉·스크리닝)` : `Show ${otherGroups.length} other campaign groups`)} />
+        </div>
+      )}
+      {hasCampaigns && showOthers && otherGroups.map(renderGroup)}
 
       {mailPreview && (
         <div onClick={() => setMailPreview(null)}
@@ -1015,28 +1031,6 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
             )}
           </div>
         </div>
-      )}
-
-      {data.daily.length > 0 && (
-        <>
-          <SectionTitle style={{ marginBottom: G.md }}>{ko ? '일별 (클릭·전환 — 인원 기준, 첫 발생일)' : 'Daily (unique people, first occurrence)'}</SectionTitle>
-          <TableCard minWidth={360}>
-            <thead><tr>
-              <th style={T.th}>{ko ? '날짜' : 'Date'}</th>
-              <th style={cmThNum}>{ko ? '클릭' : 'Clicks'}</th>
-              <th style={cmThNum}>{ko ? '공개 전환' : 'Converts'}</th>
-            </tr></thead>
-            <tbody>
-              {[...data.daily].reverse().map((d) => (
-                <tr key={d.day}>
-                  <td style={{ ...T.tdSub, fontVariantNumeric: 'tabular-nums' }}>{d.day.slice(5)}</td>
-                  <td style={{ ...cmCount, color: CM.click }}>{d.clicks || ''}</td>
-                  <td style={{ ...cmCount, color: CM.conv }}>{d.converts || ''}</td>
-                </tr>
-              ))}
-            </tbody>
-          </TableCard>
-        </>
       )}
     </div>
   )
