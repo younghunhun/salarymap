@@ -5,6 +5,7 @@
 //   node scripts/outreach/recommend-send.mjs --job V258 --copy youlchon1020 --main "Sales (B2B),Business Development" --yoe 24- --region HCM --age 22-40            # dry-run
 //   node scripts/outreach/recommend-send.mjs --job V258 --copy youlchon1020 ... --send [--max N] [--ignore-today] [--exclude-job V177] [--preview <path>]
 //   --exclude-job CODE,CODE   다른 공고(이전 동일 공고 등) 기지원자도 제외
+//   --resend                  그 공고 기수신자도 다시 보낸다(공고 근무지·조건이 바뀌어 재안내할 때) — 기지원자는 계속 제외
 //   --emails PATH             줄마다 이메일 하나인 파일 — 대상을 그 목록으로 한정(공고 간 배분처럼 플래그로 표현 안 되는 선정용)
 import { readFileSync, writeFileSync } from 'node:fs'
 import { Resend } from 'resend'
@@ -16,7 +17,7 @@ import { parseFilters, makePick, loadPool, T, yoe, expSummary, printSummary } fr
 
 const args = process.argv.slice(2)
 const f = parseFilters(args)
-const doSend = args.includes('--send'), ignoreToday = args.includes('--ignore-today')
+const doSend = args.includes('--send'), ignoreToday = args.includes('--ignore-today'), resendSent = args.includes('--resend')
 const maxN = f.flag('max', null) ? parseInt(f.flag('max'), 10) : null
 const previewPath = f.flag('preview', null)
 const copyKey = f.flag('copy', null)
@@ -102,7 +103,9 @@ async function main() {
   if (!job.is_active) { console.error(`공고 비활성: ${job.source_id}`); process.exit(1) }
   const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0)
   const todayRecs = await fetchAll(() => sb.from('job_recommendations').select('user_id').gte('created_at', todayStart.toISOString()).order('id'))
-  const todaySet = new Set(todayRecs.map((r) => r.user_id))
+  // --resend 는 기존 job_recommendations 행을 덮지 않으므로(ignoreDuplicates) 오늘 재발송분은 events 로 잡는다
+  const todayEvents = await fetchAll(() => sb.from('events').select('user_id').eq('event', 'recommend_sent').gte('created_at', todayStart.toISOString()).order('id'))
+  const todaySet = new Set([...todayRecs, ...todayEvents].map((r) => r.user_id))
   const exApplied = new Set()
   if (excludeJobs.length) {
     const { data: ex } = await sb.from('jobs').select('id,source_id').eq('source', 'ktc').in('source_id', excludeJobs)
@@ -113,7 +116,7 @@ async function main() {
   let skipSent = 0, skipApp = 0, skipEx = 0, skipToday = 0
   const targets = []
   for (const p of hit) {
-    if (sent.has(p.id)) { skipSent++; continue }
+    if (sent.has(p.id) && !resendSent) { skipSent++; continue }
     if (applied.has(p.id)) { skipApp++; continue }
     if (exApplied.has(p.id)) { skipEx++; continue }
     if (!ignoreToday && todaySet.has(p.id)) { skipToday++; continue }
