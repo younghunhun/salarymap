@@ -1,32 +1,77 @@
-import { useState, Fragment } from 'react'
-import { IconButton } from '@likelion-design/ui'
-import { RiCloseLine } from '@remixicon/react'
+import { useState, useMemo, Fragment } from 'react'
+import { IconButton, ChipGroup } from '@likelion-design/ui'
+import { RiCloseLine, RiArrowLeftRightLine, RiAddLine } from '@remixicon/react'
 import { useAdmin } from '../../lib/adminSwr'
-import { G, C, num, ellipsis, Card, SectionTitle, FilterTabs, StatusTag, SecondaryButton, T, TableCard } from './ui'
+import { G, C, num, ellipsis, Card, SectionTitle, FilterTabs, StatusTag, SecondaryButton, GhostButton, SearchField, StatGrid, StatTile, T, TableCard } from './ui'
+import { Dropdown, BTN, POP, LINE, INK, ARROW, useClickOutside } from './FormControls'
 
 // 행동 퍼널 (Amplitude 의미론) — 계산은 Postgres RPC(funnel), 여기는 표시만.
-// · 단계 드롭다운은 서버 list_events 가 채운다 (하드코딩 아님). ko 라벨은 표시용 오버레이.
-// · 전환 윈도우(t0 기준 누적)와 순서 모드(this/any/exact)가 항상 화면에 보인다.
-// · 리본: 두께 ∝ 잔존율, 이탈은 해칭 렌즈 — 클릭하면 이탈 유저 목록(funnel-users) 모달.
+// · 단계 목록은 서버 list_events 가 채운다 (하드코딩 아님). ko 라벨·그룹은 표시용 오버레이.
+// · 단계 선택은 검색 + 카테고리 그룹 팝오버. 자주 보는 퍼널은 프리셋 칩으로 한 번에.
+// · 전환 윈도우(t0 기준 누적)와 순서 모드(this/any/exact)는 평이한 말로 표시.
+// · API 가 같은 조건의 순서무관(any) 결과를 함께 주면, 순서 때문에 잘린 단계를 경고하고 순서 교체 버튼을 띄운다.
+// · 차트 이탈 블록·표 이탈 숫자 클릭 → 이탈 유저 목록(funnel-users) 모달.
 
 const KO_LABELS = {
-  session_start: '웹 진입(전체)', landing: '홈 랜딩', hero_cta_click: '히어로 CTA', wizard_step_1: '위저드 시작', wizard_step_2: '위저드 2',
-  wizard_step_3: '위저드 3', wizard_step_4: '위저드 완료', submit_application: '제출(연봉·지원 공용)',
-  result_gate_view: '게이트 노출', result_company_card_click: '결과 회사카드 클릭', search_company: '회사 검색',
+  session_start: '웹 진입(전체)', landing: '홈 랜딩', page_view: '광고 페이지뷰', hero_cta_click: '히어로 CTA',
+  view_open_in_browser: '브라우저로 열기 안내', oauth_inapp_blocked: '인앱 OAuth 차단',
+  wizard_cat_click: '위저드 직군 클릭', wizard_step_1: '연봉 위저드 시작', wizard_step_2: '연봉 위저드 2 (경력)',
+  wizard_step_3: '연봉 위저드 3 (연봉 입력)', wizard_step_4: '연봉 제출(위저드 완료)',
+  result_gate_view: '결과 게이트 노출', result_company_card_click: '결과 회사카드 클릭', search_company: '회사 검색',
+  company_gate_click: '회사 게이트 클릭', company_gate_login_success: '게이트 로그인',
   view_jobs_page: '공고 목록 뷰', click_job_card: '공고 카드 클릭', view_job_detail: '공고 상세 뷰',
-  click_apply_button: '지원 버튼 클릭', save_job: '공고 저장', view_similar_jobs_modal: '유사공고 모달',
-  cv_view: 'CV 페이지 뷰', cv_click_cta: 'CV CTA 클릭', cv_attach_file: 'CV 파일 첨부',
-  cv_oauth_start: 'CV OAuth 시작', cv_register_success: 'CV 등록 완료',
-  sign_up: '가입(sign_up)', one_tap_success: 'One Tap 가입', company_gate_login_success: '게이트 로그인',
-  view_community: '커뮤니티 뷰', click_app_download: '앱 다운로드 클릭', page_view: '광고 페이지뷰',
+  click_apply_button: '지원 버튼 클릭', submit_application: '공고 지원 제출', cancel_application: '지원 취소',
+  save_job: '공고 저장', unsave_job: '공고 저장 해제', view_similar_jobs_modal: '유사공고 모달', apply_similar_job: '유사공고 지원',
+  click_jobs_cta: '공고 CTA 클릭', ktc_view: 'KTC 랜딩 뷰', ktc_hero_cta: 'KTC 히어로 CTA', ktc_jobs_view: 'KTC 공고 목록 뷰',
+  ktc_job_click: 'KTC 공고 클릭', click_ktc_nav: 'KTC 메뉴 클릭',
+  view_login_page: '로그인 페이지 뷰', click_login: '로그인 버튼 클릭', sign_up: '가입(sign_up)', one_tap_success: 'One Tap 가입',
+  profile_view: '프로필 뷰', profile_edit_start: '프로필 편집 시작', profile_save_success: '프로필 저장 완료',
+  profile_ai_parse_start: 'AI 이력서 파싱 시작', profile_ai_parse_done: 'AI 이력서 파싱 완료',
+  resume_upload: '이력서 업로드', resume_registered: '이력서 등록 완료',
+  view_community: '커뮤니티 뷰', view_community_post: '커뮤니티 글 뷰', click_app_download: '앱 다운로드 클릭',
+  view_app_promo_modal: '앱 유도 모달 노출', app_open: '앱 실행', app_session_duration: '앱 체류시간',
+  recommend_sent: '추천메일 발송', recommend_click: '추천메일 클릭', push_sent: '푸시 발송', push_click: '푸시 클릭',
+  jobs_autoboost_on: '공고 자동부스트', coldmail_job_apply: '콜드메일 공고 지원',
 }
+const label = (ev) => KO_LABELS[ev] || ev
 
-const WINDOWS = [[1800, '30분'], [10800, '3시간'], [86400, '1일'], [604800, '7일'], [2592000, '30일']]
-const ORDERS = [['this', '순차 (this)'], ['any', '순서무관 (any)'], ['exact', '엄격 (exact)']]
+// 단계 선택 팝오버의 그룹 — 위에서부터 첫 매칭. 시스템(서버 자동 발송)은 유저 행동이 아니라 맨 아래.
+const GROUPS = [
+  ['system', ['시스템 자동 발송 — 유저 행동 아님', 'System (not user actions)', 'Hệ thống (không phải hành vi)'], e => /_sent$|^cron_|^jobs_autoboost_on$/.test(e)],
+  ['email', ['이메일 클릭 (콜드메일·추천메일)', 'Email clicks', 'Nhấp email'], e => /^coldmail_|^recommend_click$/.test(e)],
+  ['entry', ['진입', 'Entry', 'Vào trang'], e => ['session_start', 'landing', 'page_view', 'hero_cta_click', 'click_salary_hero', 'view_open_in_browser', 'oauth_inapp_blocked', 'ktc_view', 'ktc_hero_cta', 'click_for_companies'].includes(e)],
+  ['auth', ['로그인·가입', 'Login · sign-up', 'Đăng nhập · đăng ký'], e => /login|sign_up|one_tap|claim_/.test(e)],
+  ['salary', ['연봉 위저드·결과', 'Salary wizard · result', 'Wizard lương · kết quả'], e => /^wizard_|^result_|^company_gate_|^search_company$|^submit_salary$/.test(e)],
+  ['profile', ['프로필·이력서', 'Profile · resume', 'Hồ sơ · CV'], e => /^profile_|^resume_|cv_|^photo_claim/.test(e)],
+  ['community', ['커뮤니티', 'Community', 'Cộng đồng'], e => /community/.test(e)],
+  ['app', ['앱·푸시', 'App · push', 'Ứng dụng · push'], e => /^app_|app_download|app_promo|^push_click$|notification/.test(e)],
+  ['jobs', ['공고·지원', 'Jobs · apply', 'Việc làm · ứng tuyển'], e => /job|apply|application|ktc_nav|follow_company|contact_owner/.test(e)],
+]
+const OTHER = ['기타', 'Other', 'Khác']
+const GROUP_ORDER = ['entry', 'salary', 'jobs', 'auth', 'profile', 'community', 'app', 'email', 'other', 'system']
+
+// 자주 보는 퍼널 — 11/10 기준 실데이터로 단계 순서 검증(순서무관 대비 손실 없음 또는 작음)
+const PRESETS = [
+  { key: 'salary', label: ['연봉 제출 → 가입', 'Salary → sign-up', 'Lương → đăng ký'], steps: ['landing', 'wizard_step_1', 'wizard_step_4', 'sign_up'] },
+  { key: 'apply', label: ['공고 지원', 'Job apply', 'Ứng tuyển'], steps: ['view_jobs_page', 'click_job_card', 'click_apply_button', 'submit_application'] },
+  { key: 'ktc', label: ['KTC 공고 지원', 'KTC apply', 'Ứng tuyển KTC'], steps: ['ktc_jobs_view', 'ktc_job_click', 'submit_application'] },
+  { key: 'login', label: ['로그인 → 가입', 'Login → sign-up', 'Đăng nhập → đăng ký'], steps: ['view_login_page', 'click_login', 'sign_up'] },
+  { key: 'profile', label: ['프로필 편집', 'Profile edit', 'Sửa hồ sơ'], steps: ['profile_view', 'profile_edit_start', 'profile_save_success'] },
+]
+
+const WINDOWS = [
+  [1800, ['30분 이내', 'Within 30 min', 'Trong 30 phút']], [10800, ['3시간 이내', 'Within 3 h', 'Trong 3 giờ']],
+  [86400, ['1일 이내', 'Within 1 day', 'Trong 1 ngày']], [604800, ['7일 이내', 'Within 7 days', 'Trong 7 ngày']],
+  [2592000, ['30일 이내', 'Within 30 days', 'Trong 30 ngày']],
+]
+const ORDERS = [
+  ['this', ['순서대로', 'In order', 'Theo thứ tự'], ['단계를 순서대로 거쳐야 합니다. 사이에 다른 행동이 있어도 됩니다.', 'Steps must happen in order; other events in between are allowed.', 'Các bước phải theo thứ tự; cho phép hành động khác ở giữa.']],
+  ['any', ['순서 무관', 'Any order', 'Không theo thứ tự'], ['순서와 상관없이 기간 안에 각 단계를 했는지만 봅니다.', 'Only checks each step happened within the window, in any order.', 'Chỉ kiểm tra mỗi bước có xảy ra trong cửa sổ, không cần thứ tự.']],
+  ['exact', ['바로 이어서', 'Strict', 'Liên tiếp'], ['단계 사이에 퍼널 밖 이벤트가 하나라도 있으면 이탈로 봅니다. 세션 시작·모달 노출 같은 자동 이벤트도 포함돼 대부분 0에 가깝습니다.', 'Any event outside the funnel between steps (incl. automatic ones) counts as a drop — usually near zero.', 'Bất kỳ sự kiện ngoài phễu giữa các bước (kể cả sự kiện tự động) đều tính là rời bỏ — thường gần bằng 0.']],
+]
 
 const LOSS = C.negative
 
-const label = (ev) => KO_LABELS[ev] || ev
 const fmtDur = (sec) => {
   if (sec === null || sec === undefined) return '—'
   if (sec < 60) return `${Math.round(sec)}초`
@@ -35,6 +80,78 @@ const fmtDur = (sec) => {
   return `${(sec / 86400).toFixed(1)}일`
 }
 const vnTime = (iso) => (iso ? new Date(new Date(iso).getTime() + 7 * 36e5).toISOString().slice(0, 16).replace('T', ' ') : '—')
+const pct = (a, b) => (b > 0 ? `${((a / b) * 100).toFixed(1)}%` : '—')
+
+// 단계 선택기 — DS 입력 모양 트리거 + 검색·그룹 팝오버. 이미 고른 이벤트는 비활성.
+function StepPicker({ value, events, taken, onPick, placeholder, pickLang, L, width = 220 }) {
+  const [open, setOpen] = useState(false)
+  const [alignRight, setAlignRight] = useState(false) // 오른쪽 끝 트리거면 팝오버를 오른쪽 정렬
+  const [q, setQ] = useState('')
+  const ref = useClickOutside(open, setOpen)
+  const groups = useMemo(() => {
+    const needle = q.trim().toLowerCase()
+    const hit = events.filter(e => !needle || e.event_name.toLowerCase().includes(needle) || label(e.event_name).toLowerCase().includes(needle))
+    const buckets = [...GROUPS.map(([key, lb]) => ({ key, label: lb, items: [] })), { key: 'other', label: OTHER, items: [] }]
+    hit.forEach(e => {
+      const gi = GROUPS.findIndex(([, , test]) => test(e.event_name))
+      buckets[gi === -1 ? buckets.length - 1 : gi].items.push(e)
+    })
+    // 매칭 순서와 별개로, 화면에는 퍼널 흐름 순서로 보여주고 시스템은 맨 아래
+    return GROUP_ORDER.map(k => buckets.find(b => b.key === k)).filter(b => b.items.length > 0)
+  }, [events, q])
+
+  return (
+    <div ref={ref} style={{ position: 'relative', width }}>
+      <button type="button" onClick={e => {
+          setAlignRight(e.currentTarget.getBoundingClientRect().left + 376 > window.innerWidth)
+          setOpen(v => !v); setQ('')
+        }}
+        style={{ ...BTN, fontSize: 14, borderColor: open ? INK : LINE, fontWeight: value ? 600 : 400 }}>
+        <span style={{ ...ellipsis, color: value ? INK : C.sub }}>{value ? label(value) : placeholder}</span>
+        {ARROW}
+      </button>
+      {open && (
+        <div style={{ ...POP, ...(alignRight ? { left: 'auto', right: 0 } : {}), width: 360, maxWidth: '86vw', maxHeight: 420, padding: 0 }}>
+          <div style={{ position: 'sticky', top: 0, background: '#fff', padding: G.sm, borderBottom: `1px solid ${C.line}`, zIndex: 1 }}>
+            <SearchField width="100%" value={q} autoFocus onChange={e => setQ(e.target.value)}
+              placeholder={L('이벤트 검색 (한글·영문)', 'Search events', 'Tìm sự kiện')} />
+          </div>
+          <div style={{ padding: G.xs }}>
+            {groups.length === 0 && (
+              <div style={{ fontSize: 13, color: C.faint, padding: G.md }}>{L('검색 결과가 없습니다.', 'No results.', 'Không có kết quả.')}</div>
+            )}
+            {groups.map(g => (
+              <div key={g.key}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: g.key === 'system' ? C.negative : C.faint, padding: `${G.sm}px ${G.md}px ${G.xs}px` }}>{pickLang(g.label)}</div>
+                {g.items.map(e => {
+                  const on = e.event_name === value
+                  const dis = !on && taken.includes(e.event_name)
+                  return (
+                    <button key={e.event_name} type="button" disabled={dis}
+                      onClick={() => { onPick(e.event_name); setOpen(false) }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: G.sm, width: '100%', padding: `${G.sm}px ${G.md}px`,
+                        border: 'none', borderRadius: 4, textAlign: 'left', fontFamily: 'inherit', cursor: dis ? 'default' : 'pointer',
+                        background: on ? C.bg : 'transparent', opacity: dis ? 0.4 : 1,
+                      }}
+                      onMouseEnter={ev => { if (!on && !dis) ev.currentTarget.style.background = C.bg }}
+                      onMouseLeave={ev => { if (!on) ev.currentTarget.style.background = 'transparent' }}>
+                      <span style={{ flex: 1, minWidth: 0 }}>
+                        <span style={{ display: 'block', fontSize: 14, fontWeight: on ? 600 : 500, color: C.text, ...ellipsis }}>{label(e.event_name)}</span>
+                        {KO_LABELS[e.event_name] && <span style={{ display: 'block', fontSize: 12, color: C.faint, ...ellipsis }}>{e.event_name}</span>}
+                      </span>
+                      <span style={{ fontSize: 12, color: C.faint, flexShrink: 0, ...num }}>{Number(e.cnt).toLocaleString()}{L('건', '', '')}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
 
 // 암플리튜드식 퍼널 차트 — 스텝별 세로 막대(높이 = 1단계 대비 %), 막대 위에
 // 직전 단계와의 차이만큼 빗금 이탈 블록. 이탈 블록 클릭 = 이탈 유저 목록(Microscope).
@@ -127,7 +244,8 @@ export function AmpChart({ vals, steps, onLossClick }) {
 
 export default function BehaviorFunnel({ token, lang, dateRange }) {
   const L = (ko, en, vi) => (lang === 'vi' ? (vi ?? en) : lang === 'ko' ? ko : en)
-  const [steps, setSteps] = useState(['view_jobs_page', 'click_job_card', 'click_apply_button'])
+  const pickLang = (arr) => L(arr[0], arr[1], arr[2])
+  const [steps, setSteps] = useState(PRESETS[1].steps)
   const [mode, setMode] = useState('users')
   const [windowSec, setWindowSec] = useState(86400)
   const [order, setOrder] = useState('this')
@@ -137,9 +255,9 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
   const base = `from=${dateRange.from}&to=${dateRange.to}`
   const { data: catalog } = useAdmin(`/api/admin/funnel-explore?catalog=1&${base}`, token)
   const url = steps.length >= 2
-    ? `/api/admin/funnel-explore?steps=${steps.join(',')}&${base}&mode=${mode}&window=${windowSec}&order=${order}`
+    ? `/api/admin/funnel-explore?steps=${steps.join(',')}&${base}&mode=${mode}&window=${windowSec}&order=${order}&checkOrder=1`
     : null
-  const { data, error, isLoading } = useAdmin(url, token)
+  const { data, error } = useAdmin(url, token)
   const drillUrl = drill
     ? `/api/admin/funnel-users?steps=${steps.join(',')}&${base}&window=${windowSec}&order=${order}&reached=${drill.reached}${drill.butNot ? `&butNot=${drill.butNot}` : ''}`
     : null
@@ -148,24 +266,25 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
     timelineKey ? `/api/admin/user-timeline?key=${encodeURIComponent(timelineKey)}&${base}` : null, token)
 
   const catalogEvents = catalog?.events || []
-  const vals = (data?.steps || []).map(s => (mode === 'users' ? s.users : s.count) ?? 0)
+  // 응답이 현재 단계 구성과 같을 때만 표시 (keepPreviousData 로 이전 퍼널이 잠깐 남는 것 방지)
+  const fresh = data?.steps && data.steps.length === steps.length && data.steps.every((s, i) => s.event === steps[i]) && data.mode === mode
+  const vals = fresh ? data.steps.map(s => (mode === 'users' ? s.users : s.count) ?? 0) : []
   const first = vals[0] || 0
-  // 최대 이탈 단계 (절대 인원 기준) 자동 강조
+  const last = vals[vals.length - 1] || 0
+  // 최대 이탈 단계 (절대 인원 기준)
   let maxDropIdx = -1, maxDrop = -1
   vals.forEach((v, i) => { if (i > 0 && vals[i - 1] - v > maxDrop) { maxDrop = vals[i - 1] - v; maxDropIdx = i } })
+  // 순서 때문에 잘린 단계: 순서무관(any)으로는 도달했는데 현재 순서로는 절반도 못 잡힌 경우
+  const orderWarnings = fresh && mode === 'users'
+    ? data.steps.map((s, i) => ({ i, s })).filter(({ i, s }) =>
+        i > 0 && s.anyUsers != null && s.anyUsers - s.users >= 10 && s.users < s.anyUsers * 0.5)
+    : []
+  const activePreset = PRESETS.find(p => p.steps.length === steps.length && p.steps.every((s, i) => s === steps[i]))?.key || ''
+  const orderInfo = ORDERS.find(o => o[0] === order)
 
-  // 네이티브 select — kit 입력창(36px·radius 4·gray-300 테두리)과 같은 모양
-  const selStyle = {
-    height: 36, padding: '0 8px', borderRadius: 4, border: '1px solid var(--color-semantic-border-normal, #D1D6DC)', background: '#fff',
-    fontSize: 13.5, fontWeight: 500, color: C.text, cursor: 'pointer', maxWidth: 200,
-  }
-  const hint = { color: C.faint, fontSize: 13, paddingTop: G.sm }
-  const stepOptions = (exceptIdx) => catalogEvents.map(e => (
-    <option key={e.event_name} value={e.event_name}
-      disabled={steps.includes(e.event_name) && steps[exceptIdx] !== e.event_name}>
-      {label(e.event_name)} ({Number(e.cnt).toLocaleString()})
-    </option>
-  ))
+  const swap = (a, b) => setSteps(steps.map((s, i) => (i === a ? steps[b] : i === b ? steps[a] : s)))
+  const hint = { color: C.faint, fontSize: 13, padding: `${G.xl}px 0` }
+  const fieldLabel = { fontSize: 12, fontWeight: 600, color: C.sub, marginBottom: G.xs }
 
   const downloadCsv = () => {
     const rows = drillData?.users || []
@@ -180,56 +299,82 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
 
   return (
     <Card style={{ marginBottom: G.xl }}>
-      {/* 헤더 + 항상 보이는 윈도우/순서 컨트롤 */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: G.md, marginBottom: G.lg }}>
-        <SectionTitle style={{ marginBottom: 0 }}
-          sub={L('유저 단위 · t0 기준 누적 윈도우 · 1단계만 기간 내 필수', 'Per-user · window from t0 · only step 1 must be in range', 'Theo người dùng · cửa sổ tính từ t0 · chỉ bước 1 cần nằm trong khoảng thời gian')}>
-          {L('행동 퍼널', 'Behavior funnel', 'Phễu hành vi')}
-        </SectionTitle>
-        <span className="adm-m-wrap" style={{ display: 'flex', gap: G.sm, alignItems: 'center' }}>
-          <label style={{ fontSize: 12, color: C.sub, fontWeight: 600 }}>{L('전환 윈도우', 'Window', 'Cửa sổ chuyển đổi')}</label>
-          <select value={windowSec} onChange={e => setWindowSec(Number(e.target.value))} style={selStyle}>
-            {WINDOWS.map(([s, lb]) => <option key={s} value={s}>{lb}</option>)}
-          </select>
-          <select value={order} onChange={e => setOrder(e.target.value)} style={selStyle}>
-            {ORDERS.map(([o, lb]) => <option key={o} value={o}>{lb}</option>)}
-          </select>
-          <FilterTabs value={mode} onChange={setMode}
-            items={[{ value: 'users', label: L('유저 퍼널', 'Users', 'Người dùng') }, { value: 'count', label: L('건수', 'Events', 'Số sự kiện') }]} />
-        </span>
+      <SectionTitle
+        sub={L(`고른 단계를 거친 사람 수를 셉니다 · 1단계 기준 기간 ${dateRange.from} ~ ${dateRange.to}`,
+               `Counts people who went through the steps · step 1 in ${dateRange.from} ~ ${dateRange.to}`,
+               `Đếm số người đi qua các bước · bước 1 trong ${dateRange.from} ~ ${dateRange.to}`)}
+        right={<FilterTabs value={mode} onChange={setMode}
+          items={[{ value: 'users', label: L('사람 수', 'Users', 'Người dùng') }, { value: 'count', label: L('이벤트 건수', 'Events', 'Số sự kiện') }]} />}>
+        {L('행동 퍼널', 'Behavior funnel', 'Phễu hành vi')}
+      </SectionTitle>
+
+      {/* 자주 보는 퍼널 */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: G.md, flexWrap: 'wrap', marginBottom: G.lg }}>
+        <span style={{ fontSize: 13, fontWeight: 600, color: C.sub }}>{L('자주 보는 퍼널', 'Presets', 'Phễu mẫu')}</span>
+        <ChipGroup type="outline" variant="primary" size="medium" value={activePreset}
+          items={PRESETS.map(p => ({ value: p.key, label: pickLang(p.label) }))}
+          onChange={v => { const p = PRESETS.find(x => x.key === v); if (p) setSteps(p.steps) }}
+          style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm }} />
       </div>
 
-      {/* 단계 드롭다운 (서버 카탈로그 기반) */}
-      <div className="adm-m-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm, alignItems: 'center' }}>
-        {steps.map((ev, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: G.xs }}>
-            {i > 0 && <span style={{ fontSize: 13, color: C.faint, marginRight: G.xs }}>→</span>}
-            <span style={{ fontSize: 13, fontWeight: 600, color: C.sub, ...num }}>{i + 1}.</span>
-            <select value={ev} style={selStyle}
-              onChange={e => setSteps(steps.map((s, si) => (si === i ? e.target.value : s)))}>
-              {!catalogEvents.some(c => c.event_name === ev) && <option value={ev}>{label(ev)}</option>}
-              {stepOptions(i)}
-            </select>
-            <IconButton size="small" type="solid" color="secondary" icon={<RiCloseLine size={16} />} aria-label="remove"
-              onClick={() => setSteps(steps.filter((_, si) => si !== i))} />
-          </div>
-        ))}
-        {steps.length < 10 && (
-          <select value="" style={{ ...selStyle, color: C.sub }}
-            onChange={e => { if (e.target.value) setSteps([...steps, e.target.value]) }}>
-            <option value="">{L('+ 단계 추가', '+ Add step', '+ Thêm bước')}</option>
-            {stepOptions(-1)}
-          </select>
-        )}
-        {steps.length > 0 && (
-          <SecondaryButton label={L('초기화', 'Clear', 'Đặt lại')} onClick={() => setSteps([])} />
+      {/* 구성 패널: 단계 + 전환 기준 */}
+      <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 8, padding: G.lg }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: G.xs }}>
+          <div style={{ ...fieldLabel, marginBottom: 0 }}>{L('단계', 'Steps', 'Các bước')}</div>
+          {steps.length > 0 && (
+            <GhostButton size="small" label={L('모두 지우기', 'Clear', 'Xóa hết')} onClick={() => setSteps([])} />
+          )}
+        </div>
+        <div className="adm-m-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm, alignItems: 'center' }}>
+          {steps.map((ev, i) => (
+            <Fragment key={i}>
+              {i > 0 && (
+                <span title={L('앞 단계와 순서 바꾸기', 'Swap with previous', 'Đổi chỗ với bước trước')}>
+                  <IconButton size="small" type="outline" color="neutral" icon={<RiArrowLeftRightLine size={14} />}
+                    aria-label={L('앞 단계와 순서 바꾸기', 'Swap with previous', 'Đổi chỗ với bước trước')} onClick={() => swap(i - 1, i)} />
+                </span>
+              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: G.xs, background: '#fff', border: `1px solid ${C.border}`, borderRadius: 8, padding: G.xs }}>
+                <span style={{ width: 22, height: 22, borderRadius: 11, background: '#2563EB', color: '#fff', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, ...num }}>{i + 1}</span>
+                <StepPicker value={ev} events={catalogEvents} taken={steps} L={L} pickLang={pickLang} width={200}
+                  onPick={v => setSteps(steps.map((s, si) => (si === i ? v : s)))} />
+                <IconButton size="small" type="outline" color="neutral" icon={<RiCloseLine size={14} />}
+                  aria-label={L('단계 삭제', 'Remove step', 'Xóa bước')} onClick={() => setSteps(steps.filter((_, si) => si !== i))} />
+              </div>
+            </Fragment>
+          ))}
+          {steps.length < 10 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: G.xs }}>
+              <RiAddLine size={16} style={{ color: C.faint }} />
+              <StepPicker value="" events={catalogEvents} taken={steps} L={L} pickLang={pickLang} width={160}
+                placeholder={L('단계 추가', 'Add step', 'Thêm bước')} onPick={v => setSteps([...steps, v])} />
+            </div>
+          )}
+        </div>
+
+        {mode === 'users' && (
+          <>
+            <div style={{ ...fieldLabel, marginTop: G.lg }}>{L('전환 기준', 'Conversion rule', 'Quy tắc chuyển đổi')}</div>
+            <div className="adm-m-wrap" style={{ display: 'flex', flexWrap: 'wrap', gap: G.sm, alignItems: 'center' }}>
+              <span style={{ fontSize: 13, color: C.body }}>{L('1단계 후', 'After step 1,', 'Sau bước 1,')}</span>
+              <div style={{ width: 150 }}>
+                <Dropdown value={String(windowSec)} onChange={v => setWindowSec(Number(v))}
+                  options={WINDOWS.map(([s, lb]) => ({ value: String(s), label: pickLang(lb) }))} />
+              </div>
+              <div style={{ width: 150 }}>
+                <Dropdown value={order} onChange={setOrder}
+                  options={ORDERS.map(([o, lb]) => ({ value: o, label: pickLang(lb) }))} />
+              </div>
+              <span style={{ fontSize: 13, color: C.sub }}>{orderInfo && pickLang(orderInfo[2])}</span>
+            </div>
+          </>
         )}
       </div>
 
       {/* 결과 영역 — 최소 높이 고정 (단계 추가/삭제 시 레이아웃 점프 방지) */}
       <div style={{ minHeight: 320, marginTop: G.lg }}>
         {steps.length < 2 && (
-          <div style={hint}>{L('단계를 2개 이상 고르면 퍼널이 그려집니다.', 'Pick 2+ steps.', 'Chọn từ 2 bước trở lên để vẽ phễu.')}</div>
+          <div style={hint}>{L('단계를 2개 이상 고르거나, 위의 자주 보는 퍼널을 눌러 주세요.', 'Pick 2+ steps or a preset above.', 'Chọn từ 2 bước trở lên hoặc một phễu mẫu ở trên.')}</div>
         )}
         {steps.length >= 2 && error && (
           <div style={{ ...hint, color: C.negative }}>
@@ -240,21 +385,49 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
               : L(`불러오기 실패 (${error.status || ''})`, `Failed (${error.status || ''})`, `Tải thất bại (${error.status || ''})`)}
           </div>
         )}
-        {steps.length >= 2 && !error && isLoading && !data && (
-          <div style={hint}>{L('계산 중…', 'Computing…', 'Đang tính…')}</div>
+        {steps.length >= 2 && !error && !fresh && (
+          <div style={hint}>{L('계산 중입니다…', 'Computing…', 'Đang tính…')}</div>
         )}
-        {steps.length >= 2 && data && (
+        {steps.length >= 2 && fresh && (
           <>
+            {orderWarnings.map(({ i, s }) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: G.md, flexWrap: 'wrap', background: '#FFF7ED', border: '1px solid #FED7AA', borderRadius: 8, padding: `${G.md}px ${G.lg}px`, marginBottom: G.md }}>
+                <div style={{ fontSize: 13, color: '#9A3412', lineHeight: 1.6, flex: '1 1 360px' }}>
+                  <b>{L(`${i + 1}단계 '${label(s.event)}' 순서를 확인해 주세요.`, `Check the order of step ${i + 1} '${s.event}'.`, `Hãy kiểm tra thứ tự bước ${i + 1} '${s.event}'.`)}</b>{' '}
+                  {L(`지금 순서로는 ${s.users.toLocaleString()}명이지만, 순서를 무시하면 ${s.anyUsers.toLocaleString()}명이 도달합니다. 이 행동이 앞 단계보다 먼저 일어나는 경우가 많습니다.`,
+                     `${s.users} in this order vs ${s.anyUsers} ignoring order — it often happens before the previous step.`,
+                     `${s.users} theo thứ tự này, ${s.anyUsers} nếu bỏ qua thứ tự — hành động này thường xảy ra trước bước trước.`)}
+                </div>
+                <SecondaryButton size="small" label={L(`${i}↔${i + 1}단계 바꾸기`, `Swap ${i}↔${i + 1}`, `Đổi ${i}↔${i + 1}`)} onClick={() => swap(i - 1, i)} />
+              </div>
+            ))}
+
+            {mode === 'users' && (
+              <StatGrid min={140} style={{ marginBottom: G.sm }}>
+                <StatTile label={L('1단계 진입', 'Entered', 'Vào phễu')} value={first.toLocaleString()} sub={label(steps[0])} />
+                <StatTile label={L('마지막 단계 도달', 'Completed', 'Hoàn thành')} value={last.toLocaleString()} sub={label(steps[steps.length - 1])} />
+                <StatTile label={L('전체 전환율', 'Overall conversion', 'Tỷ lệ chuyển đổi')} value={pct(last, first)} accent={C.primary}
+                  sub={L(`${steps.length}단계 · ${pickLang(WINDOWS.find(w => w[0] === windowSec)?.[1] || ['', '', ''])}`, `${steps.length} steps`, `${steps.length} bước`)} />
+                {maxDropIdx > 0 && (
+                  <StatTile label={L('가장 큰 이탈', 'Biggest drop', 'Rời bỏ lớn nhất')}
+                    value={pct(maxDrop, vals[maxDropIdx - 1])} accent={C.negative}
+                    sub={L(`${maxDropIdx}→${maxDropIdx + 1}단계 · −${maxDrop.toLocaleString()}명`, `Step ${maxDropIdx}→${maxDropIdx + 1} · −${maxDrop}`, `Bước ${maxDropIdx}→${maxDropIdx + 1} · −${maxDrop}`)} />
+                )}
+              </StatGrid>
+            )}
+
             {mode === 'users' && <AmpChart vals={vals} steps={steps} onLossClick={(reached, butNot) => setDrill({ reached, butNot })} />}
             <TableCard minWidth={560} style={{ marginTop: G.md }}>
               <thead>
                 <tr>
                   <th style={T.th}>{L('단계', 'Step', 'Bước')}</th>
                   <th style={T.thNum}>{mode === 'users' ? L('도달(명)', 'Users', 'Người dùng đạt') : L('건수', 'Count', 'Số lượng')}</th>
-                  <th style={T.thNum}>{L('전환율', 'Conv', 'Tỷ lệ chuyển đổi')}</th>
-                  <th style={T.thNum}>{L('이탈', 'Drop', 'Rời bỏ')}</th>
-                  <th style={T.thNum}>{L('1단계 대비', 'Of step 1', 'So với bước 1')}</th>
-                  {mode === 'users' && <th style={T.thNum}>{L('중앙 소요', 'Median', 'Thời gian trung vị')}</th>}
+                  {mode === 'users' && <>
+                    <th style={T.thNum}>{L('직전 대비', 'From prev', 'So với bước trước')}</th>
+                    <th style={T.thNum}>{L('이탈(명)', 'Drop', 'Rời bỏ')}</th>
+                    <th style={T.thNum}>{L('1단계 대비', 'Of step 1', 'So với bước 1')}</th>
+                    <th style={T.thNum}>{L('중앙 소요', 'Median', 'Thời gian trung vị')}</th>
+                  </>}
                 </tr>
               </thead>
               <tbody>
@@ -271,19 +444,21 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
                         {isMaxDrop && <StatusTag tone="error" style={{ marginLeft: G.sm }}>{L('최대 이탈', 'Max drop', 'Rời bỏ nhiều nhất')}</StatusTag>}
                       </td>
                       <td style={{ ...T.tdNum, fontWeight: 700 }}>{v.toLocaleString()}</td>
-                      <td style={{ ...T.tdNum, fontWeight: 700, color: conv === null ? C.faint : conv >= 50 ? C.positive : conv >= 20 ? '#B45309' : C.negative }}>
-                        {i === 0 ? '100%' : conv === null ? '—' : `${conv.toFixed(1)}%`}
-                      </td>
-                      <td style={{ ...T.tdNum, color: LOSS }}>
-                        {drop === null ? '—' : mode === 'users' ? (
-                          <button onClick={() => setDrill({ reached: i, butNot: i + 1 })}
-                            style={{ border: 'none', background: 'transparent', color: LOSS, cursor: 'pointer', fontSize: 13.5, fontWeight: 600, textDecoration: 'underline', padding: 0, ...num }}>
-                            −{drop.toLocaleString()}
-                          </button>
-                        ) : `−${drop.toLocaleString()}`}
-                      </td>
-                      <td style={T.tdNum}>{first > 0 ? `${((v / first) * 100).toFixed(1)}%` : '—'}</td>
-                      {mode === 'users' && <td style={T.tdNum}>{fmtDur(s.medianSec)}</td>}
+                      {mode === 'users' && <>
+                        <td style={{ ...T.tdNum, fontWeight: 700, color: conv === null ? C.faint : conv >= 50 ? C.positive : conv >= 20 ? '#B45309' : C.negative }}>
+                          {i === 0 ? '—' : conv === null ? '—' : `${conv.toFixed(1)}%`}
+                        </td>
+                        <td style={{ ...T.tdNum, color: LOSS }}>
+                          {drop === null ? '—' : (
+                            <button onClick={() => setDrill({ reached: i, butNot: i + 1 })} title={L('이탈한 사람 목록 보기', 'Show dropped users', 'Xem danh sách')}
+                              style={{ border: 'none', background: 'transparent', color: LOSS, cursor: 'pointer', fontSize: 13.5, fontWeight: 600, textDecoration: 'underline', padding: 0, ...num }}>
+                              −{drop.toLocaleString()}
+                            </button>
+                          )}
+                        </td>
+                        <td style={T.tdNum}>{pct(v, first)}</td>
+                        <td style={T.tdNum}>{fmtDur(s.medianSec)}</td>
+                      </>}
                     </tr>
                   )
                 })}
@@ -291,10 +466,10 @@ export default function BehaviorFunnel({ token, lang, dateRange }) {
             </TableCard>
             <div style={{ fontSize: 12, color: C.faint, marginTop: G.sm, lineHeight: 1.6 }}>
               {mode === 'users'
-                ? L(`유저 = user_id·client_id 식별 방문자. t0(1단계 최초 발생) 기준 ${WINDOWS.find(w => w[0] === windowSec)?.[1]} 안에 도달해야 카운트됩니다. 이탈 숫자 클릭 → 유저 목록. 공고면 client_id 계측은 7/16 배포부터 — 이전 기간은 과소집계됩니다.`,
-                   `Users identified by user_id/client_id; steps must occur within the window from t0. Click drop → user list.`,
-                   `Người dùng xác định bằng user_id/client_id; các bước phải xảy ra trong cửa sổ tính từ t0. Nhấn vào số rời bỏ → danh sách người dùng.`)
-                : L('건수 = 순서·유저 무시, 기간 내 이벤트 발생 횟수.', 'Raw event counts, order ignored.', 'Số lượng = đếm sự kiện trong khoảng thời gian, bỏ qua thứ tự và người dùng.')}
+                ? L('사람 = 회원은 회원 ID(로그인 전 같은 브라우저 기록·앱 이벤트 포함), 비회원은 브라우저 기준입니다. 이탈 숫자나 차트의 빗금을 누르면 이탈한 사람 목록이 열립니다. 순서 무관 모드에서는 중앙 소요를 표시하지 않습니다.',
+                   'People = member ID for members (incl. pre-login browser history and app events), browser for anonymous visitors. Click a drop number or hatched block for the user list.',
+                   'Người dùng = ID thành viên với thành viên (gồm lịch sử trước khi đăng nhập và sự kiện ứng dụng), trình duyệt với khách ẩn danh. Nhấn số rời bỏ hoặc vùng gạch chéo để xem danh sách.')
+                : L('건수 = 순서·사람 무시, 기간 내 이벤트 발생 횟수입니다. 단계 간 연결이 없어 전환율·이탈은 계산하지 않습니다.', 'Raw event counts, order ignored. No conversion/drop — steps are not linked.', 'Số lượng = đếm sự kiện trong khoảng thời gian, bỏ qua thứ tự và người dùng. Các bước không liên kết nên không tính tỷ lệ chuyển đổi/rời bỏ.')}
             </div>
           </>
         )}

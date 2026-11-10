@@ -7,23 +7,23 @@ import { G, C } from './ui'
 // 모양은 디자인 시스템 입력(TextField size="small")에 맞춘다: 높이 36 · 모서리 4 · 1px 테두리 · 글자 15.
 // 칩은 DS ChipGroup(outline·primary) 그대로 — 높이 30, 선택 시 주황 테두리 + 옅은 주황 배경.
 
-const LINE = 'var(--color-gray-300, #D1D6DC)' // DS 입력 테두리(TextField 와 같은 값)
-const INK = 'var(--color-gray-800, #333D4B)'  // DS 입력 글자색
+export const LINE = 'var(--color-gray-300, #D1D6DC)' // DS 입력 테두리(TextField 와 같은 값)
+export const INK = 'var(--color-gray-800, #333D4B)'  // DS 입력 글자색
 const TINT = 'rgba(255, 96, 0, 0.08)'         // DS 칩 선택 배경
 const LBL = { display: 'block', fontSize: 13, lineHeight: 1.6, marginBottom: G.xs } // DS TextField title 과 같은 크기·줄높이(21px)
-const BTN = {
+export const BTN = {
   width: '100%', height: 36, textAlign: 'left', fontSize: 15, padding: `0 ${G.sm}px 0 ${G.md}px`, boxSizing: 'border-box',
   border: `1px solid ${LINE}`, borderRadius: 4, background: '#fff', cursor: 'pointer', color: INK, fontFamily: 'inherit',
   display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: G.sm,
 }
-const POP = {
+export const POP = {
   position: 'absolute', top: `calc(100% + ${G.xs}px)`, left: 0, zIndex: 50, minWidth: '100%',
   background: '#fff', border: `1px solid ${C.border}`, borderRadius: 8, boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
   padding: G.xs, maxHeight: 320, overflowY: 'auto',
 }
-const ARROW = <RiArrowDownSLine size={18} style={{ color: C.faint, flexShrink: 0 }} />
+export const ARROW = <RiArrowDownSLine size={18} style={{ color: C.faint, flexShrink: 0 }} />
 
-function useClickOutside(open, setOpen) {
+export function useClickOutside(open, setOpen) {
   const ref = useRef(null)
   useEffect(() => {
     if (!open) return

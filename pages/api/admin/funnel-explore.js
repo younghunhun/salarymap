@@ -6,6 +6,7 @@ import { verifyAdminOrDevStub } from './check'
 //  ?catalog=1&from&to                            → 이벤트 카탈로그 (list_events)
 //  ?steps=a,b,c&from&to&window=86400&order=this  → Amplitude 의미론 퍼널 (funnel)
 //     window: 전환 윈도우(초, t0 기준 누적), order: this|any|exact
+//     &checkOrder=1 → 같은 조건 any 결과를 steps[].anyUsers 로 함께 반환 (순서 경고용)
 //  &mode=count                                   → 순서 무시 이벤트 건수만
 
 const supabase = createClient(
@@ -52,25 +53,31 @@ export default async function handler(req, res) {
     const windowSec = Math.max(1, Math.min(parseInt(req.query.window, 10) || 86400, 366 * 86400))
     const order = ['this', 'any', 'exact'].includes(req.query.order) ? req.query.order : 'this'
 
-    const { data, error } = await supabase.rpc('funnel', {
+    const runFunnel = (ord) => supabase.rpc('funnel', {
       p_steps: steps.map(event => ({ event })),
       p_from: startISO,
       p_to: endISO,
       p_window: `${windowSec} seconds`,
-      p_order: order,
+      p_order: ord,
     })
-    if (error) throw error
+    // 순서 검증용: 같은 조건을 순서무관(any)으로도 돌려, 순서 때문에 잘린 인원을 UI 가 경고할 수 있게 한다.
+    const checkOrder = req.query.checkOrder === '1' && order !== 'any'
+    const [main, anyRun] = await Promise.all([runFunnel(order), checkOrder ? runFunnel('any') : null])
+    if (main.error) throw main.error
 
-    const rows = (data || []).sort((a, b) => a.step_index - b.step_index)
+    const byIdx = (d) => (d || []).sort((a, b) => a.step_index - b.step_index)
+    const anyRows = anyRun && !anyRun.error ? byIdx(anyRun.data) : null
     return res.status(200).json({
       mode: 'users',
       order,
       windowSec,
-      steps: rows.map(r => ({
+      steps: byIdx(main.data).map((r, i) => ({
         event: r.step_name,
         users: Number(r.users),
-        medianSec: r.median_sec,
-        avgSec: r.avg_sec,
+        // any 모드는 단계 간 순서가 없어 t[i]-t[i-1] 이 음수가 될 수 있다 → 소요시간 미표시
+        medianSec: order === 'any' ? null : r.median_sec,
+        avgSec: order === 'any' ? null : r.avg_sec,
+        anyUsers: anyRows ? Number(anyRows[i]?.users ?? 0) : null,
       })),
     })
   } catch (e) {
