@@ -455,7 +455,7 @@ export default function ProfilePage() {
       <Head><title>Profile — FYI</title></Head>
       <style>{`
         body { background: #f7f7f5; }
-        .pw { max-width: 580px; margin: 0 auto; padding: 32px 20px 80px; font-family: 'Barlow', system-ui, sans-serif; }
+        .pw { max-width: 580px; margin: 0 auto; padding: 32px 20px 80px; font-family: inherit; }
         .pw-hero { margin-bottom: 20px; }
         .pw-hero-top { display: flex; align-items: center; gap: 16px; }
         .pw-avatar-wrap { position: relative; flex-shrink: 0; cursor: pointer; }
@@ -559,7 +559,7 @@ export default function ProfilePage() {
         .pw-logout { display: none; }
         @media (max-width: 768px) {
           .pw-resume-cta { display: flex; align-items: center; gap: 10px; padding: 14px 16px; margin-bottom: 16px; background: linear-gradient(135deg, #ff4400, #ff7a1a); border-radius: 12px; color: #fff; font-size: 13px; cursor: pointer; box-shadow: 0 2px 12px rgba(255,68,0,0.3); }
-          .pw-logout { display: block; width: 100%; padding: 14px; margin-top: 32px; margin-bottom: 20px; background: none; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; font-size: 14px; font-weight: 600; color: #999; cursor: pointer; font-family: 'Barlow', sans-serif; }
+          .pw-logout { display: block; width: 100%; padding: 14px; margin-top: 32px; margin-bottom: 20px; background: none; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; font-size: 14px; font-weight: 600; color: #999; cursor: pointer; font-family: inherit; }
         }
       `}</style>
 
@@ -823,7 +823,7 @@ export default function ProfilePage() {
               </div>
             </div>
             {/* id="language" — 어학 콜드메일 CTA 가 /profile#language 로 여기에 바로 착지한다.
-                scroll-margin-top 은 sticky 헤더(56px)에 제목이 가리지 않을 만큼. */}
+                scroll-margin-top 은 sticky 헤더(64px)에 제목이 가리지 않을 만큼. */}
             <div id="language" style={{ scrollMarginTop: 80 }}>
               <LanguageCard form={form} set={set} lang={lang} onClear={clearLang} />
             </div>
@@ -1011,7 +1011,7 @@ export default function ProfilePage() {
       {/* AI 자동 채움 제안 — 이력서는 있는데 프로필이 빈 유저 */}
       {showAiFill && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 20, maxWidth: 400, width: '100%', padding: '30px 24px 22px', fontFamily: "'Barlow', system-ui", boxShadow: '0 20px 60px rgba(0,0,0,0.15)', textAlign: 'center' }}>
+          <div style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.06)', borderRadius: 20, maxWidth: 400, width: '100%', padding: '30px 24px 22px', fontFamily: 'inherit', boxShadow: '0 20px 60px rgba(0,0,0,0.15)', textAlign: 'center' }}>
             <div style={{ fontSize: 38, marginBottom: 10 }} aria-hidden>📄</div>
             <h3 style={{ margin: '0 0 8px', fontSize: 19, fontWeight: 800, color: '#1a1612' }}>{t('profile.aifill.title')}</h3>
             {aiParsing ? (
@@ -1046,7 +1046,7 @@ export default function ProfilePage() {
       {showAlert && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
           onClick={() => setShowAlert(null)}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 16, maxWidth: 360, width: '100%', padding: '32px 28px', textAlign: 'center', fontFamily: "'Barlow', system-ui", boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', border: '1px solid rgba(0,0,0,0.08)', borderRadius: 16, maxWidth: 360, width: '100%', padding: '32px 28px', textAlign: 'center', fontFamily: 'inherit', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
             <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,68,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4400" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             </div>
@@ -1063,7 +1063,7 @@ export default function ProfilePage() {
       {showSharePrompt && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
           onClick={() => setShowSharePrompt(false)}>
-          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, maxWidth: 380, width: '100%', padding: '32px 28px', textAlign: 'center', fontFamily: "'Barlow', system-ui", boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: '#fff', borderRadius: 16, maxWidth: 380, width: '100%', padding: '32px 28px', textAlign: 'center', fontFamily: 'inherit', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
             <div style={{ width: 48, height: 48, borderRadius: '50%', background: 'rgba(255,68,0,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg>
             </div>
@@ -1098,7 +1098,7 @@ export default function ProfilePage() {
 
       {pendingNav && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 1100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div style={{ background: '#fff', borderRadius: 16, maxWidth: 340, width: '100%', padding: '28px 24px', textAlign: 'center', fontFamily: "'Barlow', system-ui", boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
+          <div style={{ background: '#fff', borderRadius: 16, maxWidth: 340, width: '100%', padding: '28px 24px', textAlign: 'center', fontFamily: 'inherit', boxShadow: '0 20px 60px rgba(0,0,0,0.15)' }}>
             <div style={{ fontSize: 15, fontWeight: 700, color: '#111', marginBottom: 6 }}>{t('profile.leave.title')}</div>
             <div style={{ fontSize: 13, color: 'rgba(0,0,0,0.45)', marginBottom: 20, lineHeight: 1.5 }}>{t('profile.leave.desc')}</div>
             <div style={{ display: 'flex', gap: 8 }}>

@@ -90,7 +90,7 @@ export default function LoginPage() {
         </footer>
       </div>
       <style>{`
-        .lg { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; font-family: 'Barlow', sans-serif; overflow: hidden;
+        .lg { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 24px; font-family: inherit; overflow: hidden;
           background: radial-gradient(130% 90% at 50% -10%, #fff2ea 0%, #fdf6f2 32%, #fafaf8 60%); }
         /* 상단 중앙 부드러운 주황 글로우 */
         .lg::before { content: ''; position: absolute; top: -140px; left: 50%; transform: translateX(-50%); width: 620px; height: 520px; max-width: 130vw; background: radial-gradient(ellipse at center, rgba(255,96,0,0.16), rgba(255,96,0,0) 68%); pointer-events: none; z-index: 0; }
@@ -110,7 +110,7 @@ export default function LoginPage() {
         .lg-title { font-size: 32px; font-weight: 900; letter-spacing: -1px; color: #111; line-height: 1.18; margin: 0 0 14px; white-space: pre-line; word-break: keep-all; }
         .lg-sub { font-size: 15px; color: #8a8a8a; line-height: 1.6; margin: 0 0 40px; word-break: keep-all; }
         .lg-btns { display: flex; flex-direction: column; gap: 12px; }
-        .lg-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Barlow', sans-serif; border: 1px solid transparent; }
+        .lg-btn { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; border: 1px solid transparent; }
         .lg-ic { font-weight: 900; font-size: 17px; }
         .lg-linkedin { background: #0A66C2; color: #fff; }
         .lg-google { background: #fff; color: #111; border-color: #e2e2df; }
@@ -120,15 +120,15 @@ export default function LoginPage() {
         .lg-foot-links { display: flex; gap: 16px; }
         .lg-foot-links a { font-size: 12px; color: #999; text-decoration: none; }
         .lg-foot-links a:hover { text-decoration: underline; }
-        .lg-copy { font-size: 11px; color: #bbb; font-family: 'Barlow', sans-serif; }
+        .lg-copy { font-size: 11px; color: #bbb; font-family: inherit; }
         .lg-lang { position: relative; }
         .lg-lang-backdrop { position: fixed; inset: 0; z-index: 1; }
-        .lg-lang-btn { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e2e2df; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; color: #555; font-family: 'Barlow', sans-serif; cursor: pointer; }
+        .lg-lang-btn { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #e2e2df; border-radius: 10px; padding: 9px 14px; font-size: 13px; font-weight: 600; color: #555; font-family: inherit; cursor: pointer; }
         .lg-lang-btn:hover { background: #f7f7f5; }
         .lg-lang-caret { color: #999; transition: transform .18s ease; }
         .lg-lang-caret.up { transform: rotate(180deg); }
         .lg-lang-menu { position: absolute; z-index: 2; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); min-width: 150px; background: #fff; border: 1px solid #ececea; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.12); padding: 6px; }
-        .lg-lang-opt { display: flex; align-items: center; width: 100%; gap: 8px; background: none; border: none; border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 500; color: #555; font-family: 'Barlow', sans-serif; cursor: pointer; text-align: left; white-space: nowrap; }
+        .lg-lang-opt { display: flex; align-items: center; width: 100%; gap: 8px; background: none; border: none; border-radius: 8px; padding: 10px 12px; font-size: 13px; font-weight: 500; color: #555; font-family: inherit; cursor: pointer; text-align: left; white-space: nowrap; }
         .lg-lang-opt:hover { background: #f5f5f3; }
         .lg-lang-opt.on { color: #ff4400; font-weight: 700; }
         .lg-lang-check { margin-left: auto; }

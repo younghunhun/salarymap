@@ -59,10 +59,10 @@ export default function KtcLanding() {
            sticky 라 자리를 직접 차지하므로 나타날 때 본문이 밀리는 점프가 없다.
            .ktc-anchor 오프셋은 항상 헤더 + 탭바 높이와 같아야 앵커 점프 시 제목이 안 가린다.
            (모바일 상단 여백은 globals.css 의 body padding-top:52px 이 담당) */
-        .ktc-sectiontabs { position: sticky; top: 56px; z-index: 190; }
+        .ktc-sectiontabs { position: sticky; top: 64px; z-index: 190; }
         /* 가운데 정렬. 모바일은 가로 스크롤이라 center 로 두면 앞쪽 탭이 잘려 못 누른다 → 아래 768 블록에서 해제 */
         .ktc-tabs-row { height: 46px; justify-content: center; }
-        .ktc-anchor { scroll-margin-top: 102px; }   /* 56 + 46 */
+        .ktc-anchor { scroll-margin-top: 110px; }   /* 64 + 46 */
 
         /* 히어로 배경 사진은 쓰지 않는다 — 잘려서 맥락 없이 보이고 글자 대비만 떨어진다.
            오렌지 글로우 베일만 남긴다. 요소는 남겨둬서 다시 켜기 쉽게. */

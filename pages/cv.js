@@ -122,7 +122,7 @@ const IconCoin = () => (
     {/* Coin inner ring */}
     <circle cx="32" cy="30" r="17" fill="#ff6000" stroke="#1a1612" strokeWidth="1.5"/>
     {/* ₫ symbol (Vietnamese dong) */}
-    <text x="32" y="39" textAnchor="middle" fontSize="22" fontWeight="900" fill="#fff7ee" style={{ fontFamily: 'Barlow, sans-serif' }}>₫</text>
+    <text x="32" y="39" textAnchor="middle" fontSize="22" fontWeight="900" fill="#fff7ee" style={{ fontFamily: 'inherit' }}>₫</text>
     {/* Sparkle accents */}
     <path d="M52 14 L53 17 L56 18 L53 19 L52 22 L51 19 L48 18 L51 17 Z" fill="#ffd1a0"/>
     <path d="M10 18 L10.7 20 L13 20.5 L10.7 21 L10 23 L9.3 21 L7 20.5 L9.3 20 Z" fill="#ffd1a0"/>
@@ -1382,7 +1382,7 @@ export default function CvLanding() {
         }
         .cv-trust-item { display: flex; flex-direction: column; gap: 3px; }
         .cv-trust-num {
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 19px;
           font-weight: 800;
           color: #faf6f0;
@@ -1643,7 +1643,7 @@ export default function CvLanding() {
            같이 돌아와야 하나로 읽힌다 — 숨을 때도 헤더 높이만큼 더 올려 완전히 뺀다. */
         .cv-eventbar {
           position: sticky;
-          top: 56px;
+          top: 64px;
           z-index: 190;
           width: 100%;
           border: 0;
@@ -1993,7 +1993,7 @@ export default function CvLanding() {
           position: absolute;
           left: 42px;
           top: 14px;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 26px;
           font-weight: 900;
           color: #fff;
@@ -2017,7 +2017,7 @@ export default function CvLanding() {
           border-radius: 50%;
           background: linear-gradient(135deg, #ffbe7a, #ff6000);
           color: #fff;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 22px;
           font-weight: 900;
           z-index: 4;
@@ -2198,7 +2198,7 @@ export default function CvLanding() {
           position: absolute;
           left: 24px;
           top: 17px;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 34px;
           font-weight: 900;
           color: #fff;
@@ -2214,7 +2214,7 @@ export default function CvLanding() {
           border-radius: 50%;
           background: linear-gradient(135deg, #ffbe7a, #ff6000);
           color: #fff;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 24px;
           font-weight: 900;
           box-shadow: inset 0 0 0 4px rgba(255,255,255,0.2), 0 14px 26px rgba(255,96,0,0.22);
@@ -2866,7 +2866,7 @@ export default function CvLanding() {
           border-radius: 50%;
           background: #ff6000;
           color: #fff;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-size: 12px;
           font-weight: 800;
           letter-spacing: 0;
@@ -3154,7 +3154,7 @@ export default function CvLanding() {
           background: rgba(255,96,0,0.12);
           border-color: rgba(255,96,0,0.32);
           display: flex; align-items: center; justify-content: center;
-          font-family: 'Barlow', sans-serif;
+          font-family: inherit;
           font-weight: 800;
           font-size: 15px;
           color: #ff8a40;

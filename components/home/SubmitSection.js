@@ -205,9 +205,10 @@ function SubmitSection({
       // Google goes through our own /api/auth/google to keep the OAuth screen
       // showing salary-fyi.com instead of the Supabase URL.
       if (provider === 'google') {
-        window.location.href = '/api/auth/google?return=' + encodeURIComponent('/');
+        window.location.href = '/api/auth/google?return=' + encodeURIComponent('/salary');
         return;
       }
+      try { localStorage.setItem('fyi_login_return', '/salary') } catch {} // 연봉 탭(/salary)으로 복귀 — 기본 착지(/)는 새 메인
       const { error } = await supabaseClient.auth.signInWithOAuth({
         provider,
         options: { redirectTo: window.location.origin + '/auth/callback' },

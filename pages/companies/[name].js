@@ -229,7 +229,7 @@ export default function CompanyPage({ companyName, domain, krStats }) {
       <Head><title>{companyName} · Salary FYI</title></Head>
       <style>{`
         .cpg-page { background: #fff; min-height: 100vh; }
-        .cpg { max-width: 760px; margin: 0 auto; padding: 0 16px 80px; color: #111; font-family: 'Barlow', sans-serif; }
+        .cpg { max-width: 760px; margin: 0 auto; padding: 0 16px 80px; color: #111; font-family: inherit; }
         .cpg-hero { display: flex; align-items: center; gap: 16px; padding: 28px 0 20px; }
         .cpg-logo { width: 64px; height: 64px; border-radius: 16px; background: linear-gradient(135deg,#ff6000,#ff8a3d); display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; color: #fff; flex-shrink: 0; overflow: hidden; }
         .cpg-logo.has-img { background: #fff; border: 1px solid #ececec; }
@@ -258,12 +258,12 @@ export default function CompanyPage({ companyName, domain, krStats }) {
         .cpg-headline { text-align: center; padding: 24px 0; border: 1px solid #ececec; border-radius: 14px; margin-bottom: 16px; background: #fafafa; }
         .cpg-headline-n { font-size: 40px; font-weight: 800; color: #ff6000; line-height: 1; }
         .cpg-headline-l { font-size: 13px; color: #888; margin-top: 8px; }
-        .cpg-back { display: inline-flex; align-items: center; gap: 5px; margin: 16px 0 0; padding: 6px 12px 6px 8px; border: 1px solid #ececec; border-radius: 999px; background: #fff; color: #666; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Barlow', sans-serif; }
+        .cpg-back { display: inline-flex; align-items: center; gap: 5px; margin: 16px 0 0; padding: 6px 12px 6px 8px; border: 1px solid #ececec; border-radius: 999px; background: #fff; color: #666; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; }
         .cpg-back:hover { border-color: #ddd; color: #111; }
         .cpg-chart-cap { font-size: 13px; font-weight: 700; color: #444; margin: 4px 0 14px; }
         .cpg-rolefilter { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 18px; -webkit-overflow-scrolling: touch; }
         .cpg-rolefilter::-webkit-scrollbar { display: none; }
-        .cpg-chip { flex-shrink: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid #ddd; background: #fff; color: #666; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: 'Barlow', sans-serif; }
+        .cpg-chip { flex-shrink: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid #ddd; background: #fff; color: #666; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; font-family: inherit; }
         .cpg-chip.on { background: #ff6000; border-color: #ff6000; color: #fff; }
         .cpg-chart { display: flex; align-items: flex-end; gap: 12px; padding: 8px 0 4px; }
         .cpg-col { flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 0; }

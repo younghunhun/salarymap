@@ -962,7 +962,7 @@ export default function JobsPage({ collection = null }) {
            '마감된 공고 제외'만 오른쪽 끝. 아래 .jf-bar 는 건수(좌) / 정렬(우) 두 덩어리. */
         /* 건수·정렬 바 + 필터 행을 한 덩어리로 상단 고정 — 스크롤 중에도 필터를 바로 만진다 */
         /* 아래 간격은 margin 이 아니라 padding — margin 은 투명해서 스크롤되는 카드가 틈으로 비친다 */
-        .jf-sticky { position: sticky; top: 56px; z-index: 15; background: #f7f7f5; padding-bottom: 24px; }
+        .jf-sticky { position: sticky; top: 64px; z-index: 15; background: #f7f7f5; padding-bottom: 24px; }
         .jf { display: flex; gap: 10px; padding-bottom: 16px; border-bottom: 1px solid #ececea; flex-wrap: wrap; align-items: center; }
         /* 칩 높이 통일 38px — 출처칩·드롭다운·상세필터가 각자 다른 padding 이라 한 줄에
            놓으면 들쭉날쭉했다. 드롭다운(.fd-btn)은 styled-jsx 로 스코프돼 있어 여기서 못 건드리므로
@@ -1754,7 +1754,7 @@ export default function JobsPage({ collection = null }) {
       {appliedInfo && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',zIndex:1100,display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'}}
           onClick={e => { if(e.target===e.currentTarget) { if(appliedInfo.resumeUrl && !hasProfileResume){setShowAiProfilePrompt({resumeUrl:appliedInfo.resumeUrl})} setAppliedInfo(null); window.history.replaceState(null, '', '/jobs'); } }}>
-          <div style={{background:'#fff',borderRadius:'20px',padding:'40px 36px',maxWidth:'420px',width:'100%',fontFamily:"'Barlow',sans-serif",textAlign:'center'}}>
+          <div style={{background:'#fff',borderRadius:'20px',padding:'40px 36px',maxWidth:'420px',width:'100%',fontFamily: 'inherit',textAlign:'center'}}>
             <div className="applied-check">
               <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <path className="applied-check-path" d="M4 12.5l5.5 5.5L20 7" />
@@ -1799,7 +1799,7 @@ export default function JobsPage({ collection = null }) {
               </div>
             )}
             <button onClick={() => { if(appliedInfo.resumeUrl && !hasProfileResume){setShowAiProfilePrompt({resumeUrl:appliedInfo.resumeUrl})} setAppliedInfo(null); window.history.replaceState(null, '', '/jobs'); }}
-              style={{background:'#ff4400',color:'#fff',fontSize:'14px',fontWeight:700,padding:'14px 32px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily:"'Barlow',sans-serif"}}>
+              style={{background:'#ff4400',color:'#fff',fontSize:'14px',fontWeight:700,padding:'14px 32px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily: 'inherit'}}>
               {t('jobs.confirm')}
             </button>
           </div>
@@ -1809,7 +1809,7 @@ export default function JobsPage({ collection = null }) {
       {showAiProfilePrompt && (
         <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.6)',zIndex:1100,display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'}}
           onClick={e => { if(e.target===e.currentTarget && !aiParsing) setShowAiProfilePrompt(null); }}>
-          <div style={{background:'#fff',borderRadius:'20px',padding:'40px 36px',maxWidth:'420px',width:'100%',fontFamily:"'Barlow',sans-serif",textAlign:'center'}}>
+          <div style={{background:'#fff',borderRadius:'20px',padding:'40px 36px',maxWidth:'420px',width:'100%',fontFamily: 'inherit',textAlign:'center'}}>
             {aiParsing ? (
               <>
                 <div style={{fontSize:'40px',marginBottom:'16px'}}>&#10024;</div>
@@ -1827,7 +1827,7 @@ export default function JobsPage({ collection = null }) {
                 <div style={{fontSize:'14px',color:'#666',lineHeight:1.6,marginBottom:'24px'}}>{t('jobs.aiProfileDesc')}</div>
                 <div style={{display:'flex',gap:'10px'}}>
                   <button onClick={() => setShowAiProfilePrompt(null)}
-                    style={{flex:1,background:'#f0f0f0',color:'#555',fontSize:'14px',fontWeight:700,padding:'14px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily:"'Barlow',sans-serif"}}>
+                    style={{flex:1,background:'#f0f0f0',color:'#555',fontSize:'14px',fontWeight:700,padding:'14px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily: 'inherit'}}>
                     {t('jobs.aiProfileSkip')}
                   </button>
                   <button onClick={async () => {
@@ -1860,7 +1860,7 @@ export default function JobsPage({ collection = null }) {
                       setShowAiProfilePrompt(null)
                     }
                   }}
-                    style={{flex:1,background:'#ff4400',color:'#fff',fontSize:'14px',fontWeight:700,padding:'14px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily:"'Barlow',sans-serif"}}>
+                    style={{flex:1,background:'#ff4400',color:'#fff',fontSize:'14px',fontWeight:700,padding:'14px',borderRadius:'10px',border:'none',cursor:'pointer',fontFamily: 'inherit'}}>
                     {t('jobs.aiProfileConfirm')}
                   </button>
                 </div>

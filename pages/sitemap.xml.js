@@ -7,6 +7,7 @@ const BASE = 'https://salary-fyi.com'
 const STATIC_PATHS = [
   { loc: '/', changefreq: 'daily', priority: '1.0' },
   { loc: '/jobs', changefreq: 'daily', priority: '0.9' },
+  { loc: '/salary', changefreq: 'daily', priority: '0.8' },
   { loc: '/community', changefreq: 'hourly', priority: '0.8' },
   { loc: '/how-it-works', changefreq: 'monthly', priority: '0.6' },
   { loc: '/for-companies', changefreq: 'monthly', priority: '0.5' },

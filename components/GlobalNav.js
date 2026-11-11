@@ -95,37 +95,26 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
   return (
     <>
       <style>{`
-        .gnav { position: sticky; top: 0; z-index: 200; height: 56px; background: #0c0c0b; border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; padding: 0 52px; font-family: 'Barlow', sans-serif; }
-        .gnav-l { display: flex; align-items: center; gap: 36px; }
-        .gnav-l-menu { display: flex; align-items: center; gap: 22px; }
+        .gnav { position: sticky; top: 0; z-index: 200; height: 64px; background: rgba(12,12,11,0.82); -webkit-backdrop-filter: saturate(180%) blur(14px); backdrop-filter: saturate(180%) blur(14px); /* 스크롤 시 뒤 콘텐츠 색이 살짝 비치게 */ border-bottom: 1px solid rgba(255,255,255,0.07); display: flex; align-items: center; justify-content: space-between; padding: 0 max(5%, calc((100% - 1400px) / 2)); /* 본문 컨테이너(90%, 최대 1400px)와 좌우 끝을 맞춘다 */ font-family: inherit; }
+        .gnav-l { display: flex; align-items: center; gap: 40px; }
+        .gnav-l-menu { display: flex; align-items: center; gap: 28px; }
         @media (max-width: 768px) { .gnav-l-menu { display: none; } }
-        .gnav-logo { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 400; color: #f2f0eb; text-decoration: none; cursor: pointer; }
-        .gnav-logo img { height: 24px; width: auto; object-fit: contain; }
+        .gnav-logo { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #f2f0eb; text-decoration: none; cursor: pointer; }
+        .gnav-logo img { height: 28px; width: auto; object-fit: contain; }
         .gnav-logo em { color: #ff6000; font-style: normal; }
         .gnav-r { display: flex; align-items: center; gap: 24px; }
-        .gnav-link { font-size: 14px; color: rgba(242,240,235,0.42); text-decoration: none; background: none; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; padding: 0; transition: color .2s; position: relative; }
+        .gnav-link { font-size: 14.5px; font-weight: 600; color: rgba(242,240,235,0.62); text-decoration: none; background: none; border: none; cursor: pointer; font-family: inherit; padding: 0; transition: color .2s; position: relative; }
         .gnav-link:hover { color: #f0ece4; }
         .gnav-link.on { color: #f0ece4; }
-        .gnav-link-accent { color: #ff6000 !important; font-weight: 400; }
+        .gnav-link-accent { color: #ff6000 !important; font-weight: 600; }
         .gnav-link-accent:hover { color: #ff8a40 !important; }
-        .gnav-link-light { color: #f2f0eb !important; font-weight: 400; }
+        .gnav-link-light { color: #f2f0eb !important; font-weight: 600; }
         .gnav-link-light:hover { color: #f2f0eb !important; opacity: 0.85; }
-        /* '관' 성격의 별도 존 링크(K-Tech College 등) — 평문 메뉴와 구분되도록
-           아웃라인 칩으로 처리한다. 주황 솔리드 CTA와는 채도로 층을 나눔. */
-        .gnav-zone {
-          display: inline-flex; align-items: center;
-          padding: 5px 13px !important;
-          border-radius: 100px;
-          border: 1px solid rgba(255,96,0,0.45);
-          background: rgba(255,96,0,0.10);
-          color: #ff8f4d !important;
-          font-size: 13px; font-weight: 600; letter-spacing: 0.1px;
-          transition: background .15s, border-color .15s, color .15s;
-        }
-        .gnav-zone:hover { background: rgba(255,96,0,0.19); border-color: rgba(255,96,0,0.75); color: #ffa76e !important; opacity: 1; }
-        /* 칩은 배경이 채워져 현재 위치가 드러나므로, gnav-link.on 의 주황 밑줄은 끈다(이중 강조). */
-        .gnav-zone.on { background: #ff6000; border-color: #ff6000; color: #fff !important; }
-        .gnav-zone.on::after { display: none; }
+        /* K-company — 예전 주황 아웃라인 칩(7/29~)을 2026-11-10 헤더 정리 때 다른 메뉴와 같은 텍스트로
+           통일하고 색만 주황으로 구분한다. 데스크톱 클릭→가입 전환이 헤더 메뉴 중 가장 높아(11.3%)
+           강조를 완전히 빼지는 않는다. 되돌릴지 판단 기준: click_ktc_nav(source=web) 일 ~10회 기준선. */
+        .gnav-zone { color: #ff7a26 !important; font-weight: 600; }
+        .gnav-zone:hover { color: #ff9a55 !important; }
         /* 모바일/웹앱뷰 전용 K-Tech 칩 — gnav-l-menu 가 768px 이하에서 숨겨져
            데스크톱 칩이 사라지므로, 상단바 로고 옆에 축약형으로 하나 더 둔다. */
         .gnav-zone-m { display: none; }
@@ -179,18 +168,18 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
         .gnav-jobs-icon { display: inline-flex; align-items: center; flex-shrink: 0; }
         .gnav-jobs-icon svg { width: 14px; height: 14px; }
 
-        .gnav-login { font-size: 14px; font-weight: 400; color: #f2f0eb; background: none; border: 1px solid #f2f0eb; padding: 7px 16px; border-radius: 100px; cursor: pointer; font-family: 'Barlow', sans-serif; transition: background .15s, color .15s; }
+        .gnav-login { font-size: 14px; font-weight: 600; color: #f2f0eb; background: none; border: 1px solid #f2f0eb; padding: 7px 16px; border-radius: 100px; cursor: pointer; font-family: inherit; transition: background .15s, color .15s; }
         .gnav-login:hover { background: #f2f0eb; color: #0c0c0b; }
 
         .gnav-lang { position: relative; flex-shrink: 0; }
-        .gnav-lang-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; background: none; border: 1px solid #f2f0eb; border-radius: 8px; color: #f2f0eb; cursor: pointer; font-family: 'Barlow', sans-serif; transition: background .15s, color .15s; }
+        .gnav-lang-btn { display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 10px; background: none; border: 1px solid #f2f0eb; border-radius: 8px; color: #f2f0eb; cursor: pointer; font-family: inherit; transition: background .15s, color .15s; }
         .gnav-lang-btn:hover { background: #f2f0eb; color: #0c0c0b; }
         .gnav-lang-code { font-size: 11px; font-weight: 400; letter-spacing: 1px; }
         .gnav-lang-menu { position: absolute; top: calc(100% + 6px); right: 0; min-width: 160px; background: #141414; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px; box-shadow: 0 12px 32px rgba(0,0,0,0.45); z-index: 600; }
-        .gnav-lang-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 12px; background: none; border: none; border-radius: 6px; cursor: pointer; font-family: 'Barlow', sans-serif; font-size: 13px; color: rgba(242,240,235,0.7); text-align: left; transition: background .12s, color .12s; }
+        .gnav-lang-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 12px; background: none; border: none; border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 13px; color: rgba(242,240,235,0.7); text-align: left; transition: background .12s, color .12s; }
         .gnav-lang-item:hover { background: rgba(242,240,235,0.06); color: #f2f0eb; }
         .gnav-lang-item.on { background: rgba(255,96,0,0.14); color: #ff8a40; font-weight: 400; }
-        .gnav-submit { font-size: 12px; font-weight: 600; background: #ff6000; color: #fff; border: none; padding: 8px 18px; border-radius: 2px; cursor: pointer; font-family: 'Barlow', sans-serif; }
+        .gnav-submit { font-size: 12px; font-weight: 600; background: #ff6000; color: #fff; border: none; padding: 8px 18px; border-radius: 2px; cursor: pointer; font-family: inherit; }
         .gnav-user { display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.12); cursor: pointer; flex-shrink: 0; }
         .gnav-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
         .gnav-avatar-ini { width: 24px; height: 24px; border-radius: 50%; background: #ff6000; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: black; }
@@ -202,13 +191,13 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
         @keyframes gnav-aiBounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
         .gnav-menu { position: absolute; top: calc(100% + 8px); right: 0; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 6px; min-width: 160px; z-index: 500; box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
         .gnav-menu-email { padding: 10px 14px; font-size: 12px; color: rgba(255,255,255,0.35); border-bottom: 1px solid rgba(255,255,255,0.06); margin-bottom: 4px; }
-        .gnav-menu-item { display: block; width: 100%; padding: 10px 14px; border-radius: 8px; border: none; background: none; color: rgba(255,255,255,0.6); font-size: 13px; cursor: pointer; text-align: left; text-decoration: none; font-family: 'Barlow', sans-serif; transition: background .1s; }
+        .gnav-menu-item { display: block; width: 100%; padding: 10px 14px; border-radius: 8px; border: none; background: none; color: rgba(255,255,255,0.6); font-size: 13px; cursor: pointer; text-align: left; text-decoration: none; font-family: inherit; transition: background .1s; }
         .gnav-menu-item:hover { background: rgba(255,255,255,0.06); }
         .gnav-menu-admin { color: #ff6000; }
         .gnav-saved-link { display: flex; align-items: center; justify-content: space-between; }
         .gnav-saved-badge { font-size: 10px; font-weight: 700; color: #fff; background: #ff4400; min-width: 18px; height: 18px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 5px; }
         .gnav-toggle { display: flex; align-items: center; gap: 0; background: rgba(255,255,255,0.06); border-radius: 100px; padding: 2px; border: 1px solid rgba(255,255,255,0.08); }
-        .gnav-toggle-opt { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px; cursor: pointer; border: none; background: none; color: rgba(255,255,255,0.3); font-family: 'Barlow', sans-serif; transition: all .2s; white-space: nowrap; }
+        .gnav-toggle-opt { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 100px; cursor: pointer; border: none; background: none; color: rgba(255,255,255,0.3); font-family: inherit; transition: all .2s; white-space: nowrap; }
         .gnav-toggle-opt.active { background: rgba(255,96,0,0.2); color: #ff6000; }
         .gnav-toggle-opt:hover:not(.active) { color: rgba(255,255,255,0.5); }
         .gnav-r-mobile { display: none; }
@@ -220,9 +209,9 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
           .gnav-r-mobile { display: flex; align-items: center; gap: 10px; }
           /* 로고 옆 K-Tech 칩이 붙도록 데스크톱 36px 간격을 좁힌다. */
           .gnav-l { gap: 12px; }
-          .gnav-zone-m { display: inline-flex; font-size: 11.5px; padding: 4px 11px !important; }
+          .gnav-zone-m { display: inline; font-size: 13px; }
         }
-        .gnav-mobile-login { font-size: 12px; font-weight: 700; color: #f2f0eb; background: none; border: 1px solid rgba(242,240,235,0.6); padding: 6px 14px; border-radius: 100px; cursor: pointer; font-family: 'Barlow', sans-serif; }
+        .gnav-mobile-login { font-size: 12px; font-weight: 700; color: #f2f0eb; background: none; border: 1px solid rgba(242,240,235,0.6); padding: 6px 14px; border-radius: 100px; cursor: pointer; font-family: inherit; }
         .gnav-mobile-search-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: none; background: none; cursor: pointer; padding: 0; }
         .gnav-mobile-search-btn svg { width: 16px; height: 16px; color: rgba(255,255,255,0.5); }
       `}</style>
@@ -231,7 +220,6 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
         <div className="gnav-l">
           <Link href="/" className="gnav-logo">
             <img src="/fyi-logo.png" alt="FYI" />
-            <span dangerouslySetInnerHTML={{ __html: t('nav.brandTagline') }} />
           </Link>
           <Link href="/ktc" className={`gnav-link gnav-zone gnav-zone-m${activePage === 'ktc' ? ' on' : ''}`} onClick={() => track('click_ktc_nav', { meta: { source: 'mobile' }, page: activePage || null })}>K-company</Link>
           <div className="gnav-l-menu">
@@ -241,6 +229,8 @@ export default function GlobalNav({ activePage, onLogin, onJobsClick, mobileSear
             <Link href="/jobs" className={`gnav-link gnav-link-light${activePage === 'jobs' ? ' on' : ''}`} onClick={() => onJobsClick?.()}>{t('nav.jobs')}</Link>
             {/* 입사 축하금(/cv) 링크 제거 — 축하금 이벤트 중단 결정(9/11)으로 라우트를
                next.config.mjs 에서 닫았다. 되살릴 일이 생기면 리다이렉트와 같이 되돌린다. */}
+            {/* 연봉 기능은 메인에서 분리해 별도 탭으로 둔다(2026-11-10 메인 개편) */}
+            <Link href="/salary" className={`gnav-link gnav-link-light${activePage === 'salary' ? ' on' : ''}`} onClick={() => track('click_salary_nav', { meta: { source: 'web' }, page: activePage || null })}>{t('nav.salaryCompare')}</Link>
             <Link href="/community" className={`gnav-link gnav-link-light${activePage === 'community' ? ' on' : ''}`} onClick={() => track('click_community_nav', { meta: { source: 'web' }, page: activePage || null })}>{t('nav.community')}</Link>
             {/* K-Tech College 랜딩(/ktc)은 자체 내비를 쓰므로 activePage 가 없다 — on 상태 없이 링크만. */}
             <Link href="/ktc" className={`gnav-link gnav-zone${activePage === 'ktc' ? ' on' : ''}`} onClick={() => track('click_ktc_nav', { meta: { source: 'web' }, page: activePage || null })}>K-company</Link>

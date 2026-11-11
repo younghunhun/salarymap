@@ -15,6 +15,7 @@ import { persistUtmFromUrl } from '../lib/utm';
    renders at all (company/admin/standalone pages have their own headers). */
 function activePageFor(pathname) {
   if (pathname === '/') return 'home';
+  if (pathname === '/salary') return 'salary';
   if (pathname === '/cv') return 'cv';
   if (pathname === '/resume') return 'resume';
   if (pathname === '/jobs' || pathname === '/jobs/[id]' || pathname === '/l/[slug]') return 'jobs';
@@ -30,20 +31,20 @@ function GlobalFooter() {
   const { t } = useT();
   return (
     /* marginTop — 본문과 푸터 사이 여백은 각 페이지가 아니라 여기서 한 번에 준다.
-       (푸터가 어두운 배경이라 안쪽 padding 을 키우면 검은 띠만 두꺼워지고 간격은 안 생긴다) */
+       (안쪽 padding 을 키우면 푸터 띠만 두꺼워지고 본문과의 간격은 안 생긴다) */
     <footer className="gfooter" style={{
-      background: '#0a0a09', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: 56,
-      padding: '24px 40px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap',
+      background: '#ffffff', borderTop: '1px solid #e4e4e7', marginTop: 56,
+      padding: '24px max(5%, calc((100% - 1400px) / 2))', /* 헤더·본문(90%, 최대 1400px)과 좌우 끝을 맞춘다 */ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24, flexWrap: 'wrap',
     }}>
-      <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 12, color: 'rgba(242,240,235,0.42)' }}>
+      <div style={{ fontFamily: "'Geist Mono', monospace", fontSize: 12, color: '#8b8b93' }}>
         {t('footer.copyright')}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
         <LanguageSwitcher />
         <a href="/app" style={{ fontSize: 13, color: '#ff6000', textDecoration: 'none', fontWeight: 600 }}>📱 {t('footer.downloadApp')}</a>
-        <a href="/how-it-works" style={{ fontSize: 13, color: 'rgba(242,240,235,0.42)', textDecoration: 'none' }}>{t('footer.howItWorks')}</a>
-        <a href="/privacy" style={{ fontSize: 13, color: 'rgba(242,240,235,0.42)', textDecoration: 'none' }}>{t('footer.privacy')}</a>
-        <a href="/terms" style={{ fontSize: 13, color: 'rgba(242,240,235,0.42)', textDecoration: 'none' }}>{t('footer.terms')}</a>
+        <a href="/how-it-works" style={{ fontSize: 13, color: '#71717a', textDecoration: 'none' }}>{t('footer.howItWorks')}</a>
+        <a href="/privacy" style={{ fontSize: 13, color: '#71717a', textDecoration: 'none' }}>{t('footer.privacy')}</a>
+        <a href="/terms" style={{ fontSize: 13, color: '#71717a', textDecoration: 'none' }}>{t('footer.terms')}</a>
       </div>
     </footer>
   );

@@ -127,7 +127,7 @@ export default function AdminKoreanCv() {
     <>
       <Head><title>한국식 이력서 요청 | Admin</title></Head>
       <style>{`
-        .akcv { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: 'Barlow', -apple-system, sans-serif; padding: 32px 16px 90px; }
+        .akcv { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: inherit; padding: 32px 16px 90px; }
         .akcv-wrap { max-width: 900px; margin: 0 auto; }
         .akcv-h { font-size: 22px; font-weight: 800; margin: 0 0 18px; }
         .akcv-err { background: rgba(239,68,68,0.07); border: 1px solid rgba(239,68,68,0.3); color: #b91c1c; font-size: 13.5px; border-radius: 10px; padding: 11px 16px; margin-bottom: 14px; }

@@ -330,7 +330,7 @@ export default function HongikPage() {
       <style>{`
         /* 현장 QR 랜딩 — 모바일 헤더의 K-company 칩은 숨긴다(이탈 경로 최소화). */
         .gnav-zone-m { display: none !important; }
-        .hk-page { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: 'Barlow', -apple-system, sans-serif; padding: 72px 0 90px; overflow-x: hidden; }
+        .hk-page { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: inherit; padding: 72px 0 90px; overflow-x: hidden; }
         .hk-wrap { max-width: 560px; margin: 0 auto; padding: 0 18px; }
 
         /* ─ 히어로 ─ */

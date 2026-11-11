@@ -283,7 +283,7 @@ export default function KoreanCvPage() {
       <style>{`
         /* 광고 랜딩 — 모바일 헤더의 K-company 칩은 이 페이지에서 숨긴다(이탈 경로 최소화). */
         .gnav-zone-m { display: none !important; }
-        .kcv-page { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: 'Barlow', -apple-system, sans-serif; padding-bottom: 90px; }
+        .kcv-page { min-height: 100vh; background: #f4f2ee; color: #1a1612; font-family: inherit; padding-bottom: 90px; }
         .kcv-wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
         .kcv-hero { text-align: center; padding: 64px 0 24px; position: relative; }
         /* 배경 글로우 — 밋밋한 단색 위에 브랜드 오렌지 온기를 깐다 */

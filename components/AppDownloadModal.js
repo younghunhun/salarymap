@@ -45,7 +45,7 @@ export default function AppDownloadModal() {
   return (
     <div
       onClick={e => { if (e.target === e.currentTarget) dismiss(); }}
-      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', opacity: open ? 1 : 0, transition:'opacity .28s ease', zIndex:100000, display:'flex', alignItems:'flex-end', justifyContent:'center', fontFamily:"'Barlow',sans-serif" }}
+      style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.45)', opacity: open ? 1 : 0, transition:'opacity .28s ease', zIndex:100000, display:'flex', alignItems:'flex-end', justifyContent:'center', fontFamily: 'inherit' }}
     >
       <div style={{ position:'relative', overflow:'hidden', background:'#fff', borderRadius:'24px 24px 0 0', padding:'30px 26px calc(22px + env(safe-area-inset-bottom))', width:'100%', maxWidth:'480px', textAlign:'center', boxShadow:'0 -12px 40px rgba(0,0,0,0.22)', transform: open ? 'translateY(0)' : 'translateY(100%)', transition:'transform .32s cubic-bezier(.22,1,.36,1)' }}>
         {/* 상단 주황 글로우 — 앱 아이콘에서 브랜드 색이 은은히 퍼지는 배경 */}
@@ -77,7 +77,7 @@ export default function AppDownloadModal() {
 
           <button
             onClick={dismiss}
-            style={{ background:'none', border:'none', color:'#b0b0b0', fontSize:'13px', cursor:'pointer', fontFamily:"'Barlow',sans-serif", width:'100%', padding:'14px 4px 2px' }}
+            style={{ background:'none', border:'none', color:'#b0b0b0', fontSize:'13px', cursor:'pointer', fontFamily: 'inherit', width:'100%', padding:'14px 4px 2px' }}
           >{t('appPromo.later')}</button>
         </div>
       </div>

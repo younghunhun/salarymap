@@ -6,6 +6,7 @@
 
 import { KTC1019_JOBS } from '../../lib/coldmail/ktc1019Jobs'
 import { RECOMMEND_JOBS } from '../../lib/coldmail/recommendJobs'
+import { recommendEmailHtml } from '../../lib/coldmail/recommendEmail'
 
 const pickLang = (o, lang) => o[lang] || o.vi
 
@@ -5814,14 +5815,14 @@ export const COLDMAIL_TEMPLATES = [
       subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử — ${j.title} tại ${j.company} (${j.loc})`, ko: `[FYI] 추천 후보 명단에 선정되셨습니다 — ${j.company} ${j.title}`, en: `[FYI] You've been nominated — ${j.title} at ${j.company} (${j.loc})` },
       desc: `${j.company} ${j.title}(${j.code}) recommend: 비공개 프레임 — ${j.desc} 선정 플래그: ${j.flags}`,
       source: 'scripts/outreach/recommend-send.mjs',
-      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PRIVATE }),
+      html: () => recommendEmailHtml(j, { name: '{{name}}', frame: 'private' }), // 실발송과 같은 렌더러(원문 vi — 언어 토글 무관)
     },
     {
       match: new RegExp(`^${key}-recommend-`),
       subject: { vi: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${j.company} — ${j.title} (${j.loc})`, ko: `[FYI] ${j.company} 추천 명단에 선정되셨습니다 — ${j.title}`, en: `[FYI] You've been nominated to ${j.company} — ${j.title} (${j.loc})` },
       desc: `${j.company} ${j.title}(${j.code}) recommend: 공개 프레임 — 명단에 프로필 동봉·지원 시 우선 검토. 선정 기준은 private 항목과 동일.`,
       source: 'scripts/outreach/recommend-send.mjs',
-      html: (lang) => recommendShell(lang, { intro: { vi: j.intro }, initial: j.initial, company: j.company, title: j.title, meta: j.meta, tail: BENEFIT_PUBLIC }),
+      html: () => recommendEmailHtml(j, { name: '{{name}}', frame: 'public' }),
     },
   ]),
 ]

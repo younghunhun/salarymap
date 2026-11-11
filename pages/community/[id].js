@@ -336,7 +336,7 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
 
       <style>{`
         .cp-page { background: #fff; min-height: 100vh; }
-        .cp-outer { max-width: 1080px; margin: 0 auto; padding: 64px 40px 60px; display: grid; grid-template-columns: 1fr 300px; gap: 32px; font-family: 'Barlow', sans-serif; }
+        .cp-outer { max-width: 1080px; margin: 0 auto; padding: 64px 40px 60px; display: grid; grid-template-columns: 1fr 300px; gap: 32px; font-family: inherit; }
         .cp-container { min-width: 0; }
         .cp-loading { text-align: center; padding: 80px 0; color: #999; font-size: 14px; }
 
@@ -376,7 +376,7 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
         .cp-poll-tag { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 800; color: #ff6000; }
         .cp-poll-time { font-size: 12px; font-weight: 600; color: #999; }
         .cp-poll-vote { display: flex; align-items: stretch; gap: 10px; }
-        .cp-poll-btn { flex: 1; padding: 18px 14px; border-radius: 12px; border: 2px solid #ffcdb0; background: #fff; color: #333; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Barlow', sans-serif; transition: all 0.15s; word-break: break-word; }
+        .cp-poll-btn { flex: 1; padding: 18px 14px; border-radius: 12px; border: 2px solid #ffcdb0; background: #fff; color: #333; font-size: 15px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; word-break: break-word; }
         .cp-poll-btn:hover:not(:disabled) { border-color: #ff6000; background: #fff1e8; color: #ff6000; }
         .cp-poll-btn:disabled { opacity: 0.6; cursor: default; }
         .cp-poll-vs { display: flex; align-items: center; font-size: 13px; font-weight: 800; color: #ff6000; flex-shrink: 0; }
@@ -391,7 +391,7 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
         .cp-poll-res-pct { font-size: 15px; font-weight: 800; color: #ff6000; flex-shrink: 0; margin-left: 10px; }
         .cp-poll-total { font-size: 12px; color: #999; margin-top: 12px; text-align: right; }
         .cp-actions { display: flex; gap: 12px; padding: 14px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; margin-bottom: 32px; }
-        .cp-action { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; border: none; background: transparent; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'Barlow', sans-serif; transition: all 0.15s; }
+        .cp-action { display: flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px; border: none; background: transparent; color: #888; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit; transition: all 0.15s; }
         .cp-action:hover { background: #f5f5f5; color: #111; }
         .cp-action.liked { color: #ff6000; }
         .cp-action svg { width: 18px; height: 18px; }
@@ -400,7 +400,7 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
         .cp-more-btn { background: none; border: none; cursor: pointer; padding: 4px; color: #999; display: flex; align-items: center; }
         .cp-more-btn:hover { color: #555; }
         .cp-more-menu { position: absolute; top: 100%; right: 0; background: #fff; border: 1px solid #eee; border-radius: 10px; padding: 4px; min-width: 120px; box-shadow: 0 4px 16px rgba(0,0,0,0.1); z-index: 10; }
-        .cp-more-item { display: block; width: 100%; padding: 10px 14px; border: none; background: none; color: #333; font-size: 13px; font-weight: 500; text-align: left; cursor: pointer; border-radius: 6px; font-family: 'Barlow', sans-serif; }
+        .cp-more-item { display: block; width: 100%; padding: 10px 14px; border: none; background: none; color: #333; font-size: 13px; font-weight: 500; text-align: left; cursor: pointer; border-radius: 6px; font-family: inherit; }
         .cp-more-item:hover { background: #f5f5f5; }
         .cp-more-item.danger { color: #ef4444; }
         .cp-more-item.danger:hover { background: #fef2f2; }
@@ -421,12 +421,12 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
         .cp-comment.best { background: #fff8f3; border: 1px solid #ffe0cc; border-radius: 10px; padding: 14px; }
         .cp-best-badge { font-size: 10px; font-weight: 800; color: #fff; background: #ff6000; border-radius: 4px; padding: 2px 6px; letter-spacing: 0.5px; line-height: 1.4; flex-shrink: 0; }
         .cp-comment-actions { margin-top: 8px; }
-        .cp-clike { display: inline-flex; align-items: center; gap: 4px; padding: 4px 0; background: none; border: none; color: #aaa; font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'Barlow', sans-serif; transition: color 0.15s; }
+        .cp-clike { display: inline-flex; align-items: center; gap: 4px; padding: 4px 0; background: none; border: none; color: #aaa; font-size: 12px; font-weight: 600; cursor: pointer; font-family: inherit; transition: color 0.15s; }
         .cp-clike:hover { color: #ff6000; }
         .cp-clike.liked { color: #ff6000; }
         .cp-clike:disabled { cursor: default; }
         .cp-clike svg { width: 14px; height: 14px; }
-        .cp-comment-delete { margin-left: auto; font-size: 11px; color: #bbb; background: none; border: none; cursor: pointer; font-family: 'Barlow', sans-serif; }
+        .cp-comment-delete { margin-left: auto; font-size: 11px; color: #bbb; background: none; border: none; cursor: pointer; font-family: inherit; }
         .cp-comment-delete:hover { color: #ef4444; }
         .cp-no-comments { color: #bbb; font-size: 13px; padding: 24px 0; text-align: center; }
 
@@ -434,7 +434,7 @@ export default function CommunityPostPage({ initialPost = null, indexable = fals
         .cp-input-row { display: flex; gap: 10px; align-items: center; }
         .cp-anon { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #888; white-space: nowrap; cursor: pointer; }
         .cp-anon input { width: 14px; height: 14px; accent-color: #ff6000; }
-        .cp-comment-input { flex: 1; padding: 10px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #111; font-size: 14px; font-family: 'Barlow', sans-serif; outline: none; }
+        .cp-comment-input { flex: 1; padding: 10px 16px; border-radius: 8px; border: 1px solid #ddd; background: #fff; color: #111; font-size: 14px; font-family: inherit; outline: none; }
         .cp-comment-input:focus { border-color: #ff6000; }
         .cp-send { width: 36px; height: 36px; border-radius: 50%; border: none; background: #ff6000; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .cp-send:disabled { opacity: 0.3; }

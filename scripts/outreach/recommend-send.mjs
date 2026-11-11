@@ -12,6 +12,7 @@ import { Resend } from 'resend'
 import { sb, env, fetchAll } from './lib.mjs'
 import { makeToken } from '../../lib/campaignToken.js'
 import { RECOMMEND_JOBS } from '../../lib/coldmail/recommendJobs.js'
+import { recommendEmailHtml, recommendEmailText, recommendSubject } from '../../lib/coldmail/recommendEmail.js'
 import { provinceOf } from '../../lib/cvTagsMatch.js'
 import { parseFilters, makePick, loadPool, T, yoe, expSummary, printSummary } from './cvPool.mjs'
 
@@ -31,72 +32,12 @@ if (JD.code !== f.job) { console.error(`문안 ${copyKey} 는 ${JD.code} 용인�
 const SITE = String(f.flag('site', env.NEXT_PUBLIC_SITE_URL || 'https://salary-fyi.com')).replace(/\/$/, '')
 const RESEND_FROM = env.RESEND_FROM || 'FYI <hello@salary-fyi.com>'
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
-const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
-const firstName = (n) => String(n || '').trim().split(/\s+/).slice(-1)[0] || 'bạn'
-const strip = (s) => String(s).replace(/<[^>]+>/g, '')
 
-// ── 메일 셸(ktc1019-recommend-coldmail.mjs 와 동일) ──
-const HOOK = 'Đội ngũ FYI đã xem xét toàn bộ hồ sơ đã đăng ký và <b>chọn bạn vào danh sách đề cử</b> cho vị trí dưới đây — hồ sơ của bạn phù hợp với yêu cầu của vị trí này.'
-const BENEFIT = {
-  public: (company) => `<b>Trong tuần này</b>, FYI sẽ gửi danh sách đề cử trực tiếp cho người phụ trách tuyển dụng của ${company}. Hồ sơ của bạn đang ở chế độ công khai nên sẽ được gửi kèm danh sách. Nếu bạn ứng tuyển ngay, CV của bạn sẽ được <b>ưu tiên xem xét</b> cùng lời giới thiệu từ FYI.`,
-  private: (company) => `<b>Trong tuần này</b>, FYI sẽ gửi danh sách đề cử trực tiếp cho người phụ trách tuyển dụng của ${company}. Hồ sơ của bạn đang ở chế độ riêng tư — nếu bạn ứng tuyển ngay, CV của bạn sẽ được gửi kèm lời giới thiệu từ FYI và được <b>ưu tiên xem xét</b>.`,
-}
-const ONETAP = 'Chỉ cần <b>1 chạm</b> — CV đã đăng ký của bạn sẽ được gửi tự động.'
-const SUBJECT = {
-  public: `[FYI] Bạn được chọn vào danh sách đề cử gửi ${JD.company} — ${JD.title} (${JD.loc})`,
-  private: `[FYI] Bạn được chọn vào danh sách đề cử — ${JD.title} tại ${JD.company} (${JD.loc})`,
-}
-function jobCard(job) {
-  const logo = job.logo_url
-    ? `<img src="${esc(job.logo_url)}" width="44" height="44" alt="" style="width:44px;height:44px;border-radius:10px;object-fit:cover;background:#f0ebe3;display:block">`
-    : `<div style="width:44px;height:44px;border-radius:10px;background:#fff0e6;color:#ff6000;font-weight:800;font-size:16px;text-align:center;line-height:44px">${JD.initial}</div>`
-  return `<table width="100%" cellpadding="0" cellspacing="0" style="background:#fff;border:1px solid #eee5da;border-radius:14px;margin-bottom:8px"><tr>
-    <td width="44" style="padding:14px 0 14px 14px;vertical-align:middle">${logo}</td>
-    <td style="padding:14px 14px 14px 12px;vertical-align:middle">
-      <div style="font-size:12px;color:#8a8073;margin-bottom:3px">${esc(JD.company)}</div>
-      <div style="font-size:14.5px;font-weight:700;color:#1a1612;line-height:1.35">${esc(JD.title)}</div>
-      <div style="font-size:12px;color:#b0691a;margin-top:3px">${esc(JD.meta)}</div>
-    </td>
-  </tr></table>`
-}
-function emailHtml(name, url, unsubUrl, job, frame) {
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
-<body style="margin:0;background:#faf9f7;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:#1a1612">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#faf9f7"><tr><td align="center" style="padding:28px 16px">
-<table width="100%" cellpadding="0" cellspacing="0" style="max-width:520px">
-  <tr><td style="padding-bottom:18px"><img src="https://salary-fyi.com/fyi-logo.png" height="24" alt="FYI" style="height:24px;width:auto;display:block"></td></tr>
-  <tr><td style="font-size:15px;line-height:1.6;color:#1a1612;padding-bottom:6px">Chào ${esc(firstName(name))},</td></tr>
-  <tr><td style="font-size:14px;line-height:1.65;color:#4a443c;padding-bottom:14px">${JD.intro}</td></tr>
-  <tr><td style="font-size:14px;line-height:1.65;color:#4a443c;padding-bottom:14px">${HOOK}</td></tr>
-  <tr><td style="padding-bottom:10px">${jobCard(job)}</td></tr>
-  <tr><td style="font-size:14px;line-height:1.65;color:#4a443c;padding-top:4px">${BENEFIT[frame](JD.company)} ${ONETAP}</td></tr>
-  <tr><td align="center" style="padding:16px 0 6px">
-    <a href="${url}" style="display:inline-block;background:#ff6000;color:#fff;font-weight:700;font-size:15px;text-decoration:none;padding:14px 30px;border-radius:12px">Ứng tuyển 1 chạm →</a>
-  </td></tr>
-  <tr><td align="center" style="font-size:12.5px;padding-bottom:4px"><a href="${SITE}/ktc/jobs/${job.id}" style="color:#8a8073">Xem mô tả công việc đầy đủ →</a></td></tr>
-  <tr><td style="font-size:11.5px;color:#a89f92;text-align:center;line-height:1.5;padding-top:20px">
-    Bạn nhận được email này vì đã đăng ký hồ sơ trên FYI.<br>— Đội ngũ FYI · <a href="https://salary-fyi.com/jobs" style="color:#a89f92">salary-fyi.com/jobs</a>
-    &nbsp;·&nbsp;<a href="${unsubUrl}" style="color:#a89f92;text-decoration:underline">Hủy đăng ký</a>
-  </td></tr>
-</table></td></tr></table></body></html>`
-}
-function emailText(name, url, unsubUrl, job, frame) {
-  return `Chào ${firstName(name)},
-
-${strip(JD.intro)}
-
-${strip(HOOK)}
-
-- ${JD.title} (${JD.company}) — ${JD.meta} — ${SITE}/ktc/jobs/${job.id}
-
-${strip(BENEFIT[frame](JD.company))} ${strip(ONETAP)}
-
-${url}
-
-Bạn nhận được email này vì đã đăng ký hồ sơ trên FYI.
-— Đội ngũ FYI · salary-fyi.com/jobs
-Hủy đăng ký: ${unsubUrl}`
-}
+// 메일 본문은 lib/coldmail/recommendEmail.js(어드민 미리보기와 공용)
+const SUBJECT = { public: recommendSubject(JD, 'public'), private: recommendSubject(JD, 'private') }
+const mailOpts = (name, url, unsubUrl, job, frame) => ({ name, url, unsubUrl, frame, jdUrl: `${SITE}/ktc/jobs/${job.id}`, logoUrl: job.logo_url })
+const emailHtml = (...a) => recommendEmailHtml(JD, mailOpts(...a))
+const emailText = (...a) => recommendEmailText(JD, mailOpts(...a))
 
 async function main() {
   const { base, job, sent, applied } = await loadPool(f)
