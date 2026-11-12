@@ -278,53 +278,69 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           </div>
         </section>
 
-        {/* ── 02 오시는 길 ── */}
+        {/* ── 02 오시는 길 — 위: 탑승지→행사장 이동 경로(다크) / 아래: 안내 영상 · 지도 · 알아두세요 ── */}
         <section className="mw-sec mw-warm">
-          <div className="mw-in mw-venue">
+          <div className="mw-in">
             <Reveal>
               <Eyebrow n="02">Getting there</Eyebrow>
               <h2 className="mw-title">{t('mw.venue.title')}</h2>
               <p className="mw-lead">{t('mw.venue.sub')}</p>
-              {/* 셔틀 탑승지 → 행사장 */}
-              <div className="mw-route">
-                <a href={VENUE.shuttle.url} target="_blank" rel="noopener noreferrer" className="mw-stop" onClick={() => track('mw_map_click', { meta: { to: 'shuttle' }, page: '/matching-week' })}>
-                  <span className="mw-stop-ico"><Bus /></span>
-                  <span className="mw-stop-txt"><em>{t('mw.venue.shuttleLabel')}</em><b>{VENUE.shuttle.name}</b><small>{VENUE.shuttle.address}</small></span>
-                  <span className="mw-stop-go">Google Maps ↗</span>
-                </a>
-                <div className="mw-route-line"><span>{t('mw.venue.shuttleRide')}</span></div>
-                <a href={VENUE.venue.url} target="_blank" rel="noopener noreferrer" className="mw-stop mw-stop-end" onClick={() => track('mw_map_click', { meta: { to: 'venue' }, page: '/matching-week' })}>
-                  <span className="mw-stop-ico"><Pin /></span>
-                  <span className="mw-stop-txt"><em>{t('mw.venue.venueLabel')}</em><b>{VENUE.venue.name}</b><small>{VENUE.venue.address}</small></span>
-                  <span className="mw-stop-go">Google Maps ↗</span>
-                </a>
-              </div>
-              {/* 셔틀 시간표 */}
-              <div className="mw-times">
-                <div className="mw-times-row">
-                  <span className="mw-times-k">{t('mw.venue.go')}<small>COBI Tower 2 → COBI Home</small></span>
-                  <span className="mw-times-v">{VENUE.departures.map((d) => <b key={d}>{d}</b>)}</span>
-                </div>
-                <div className="mw-times-row">
-                  <span className="mw-times-k">{t('mw.venue.back')}<small>COBI Home → COBI Tower 2</small></span>
-                  <span className="mw-times-v"><i>{t('mw.venue.backDesc')}</i></span>
-                </div>
-              </div>
-              <ul className="mw-checks">
-                {[1, 2, 3, 4].map((n) => <li key={n}>{t(`mw.venue.check${n}`)}</li>)}
-              </ul>
             </Reveal>
-            <Reveal delay={100} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <a href={VENUE.videoUrl} target="_blank" rel="noopener noreferrer" className="mw-video"
-                onClick={() => track('mw_video_click', { page: '/matching-week' })}>
-                <span className="mw-video-bg" aria-hidden="true" />
-                <span className="mw-play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
-                <span className="mw-video-txt">
-                  <b>{t('mw.venue.videoTitle')}</b>
-                  <span>{t('mw.venue.videoDesc')}</span>
-                </span>
-              </a>
-              <div className="mw-map"><iframe src={VENUE.mapEmbed} title="COBI Home map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+            <Reveal delay={80}>
+              <div className="mw-journey">
+                <a href={VENUE.shuttle.url} target="_blank" rel="noopener noreferrer" className="mw-jstop" onClick={() => track('mw_map_click', { meta: { to: 'shuttle' }, page: '/matching-week' })}>
+                  <span className="mw-jstop-ico"><Bus /></span>
+                  <em>{t('mw.venue.shuttleLabel')}</em>
+                  <b>{VENUE.shuttle.name}</b>
+                  <small>{VENUE.shuttle.address}</small>
+                  <span className="mw-jstop-go">Google Maps ↗</span>
+                </a>
+                <div className="mw-ride">
+                  <div className="mw-ride-go">
+                    <span className="mw-ride-k">{t('mw.venue.go')}</span>
+                    <span className="mw-ride-times">{VENUE.departures.map((d) => <b key={d}>{d}</b>)}</span>
+                  </div>
+                  <div className="mw-ride-line" aria-hidden="true"><span className="mw-ride-bus"><Bus /></span></div>
+                  <div className="mw-ride-back">
+                    <span className="mw-ride-k">{t('mw.venue.back')}</span>
+                    <span className="mw-ride-desc">{t('mw.venue.backDesc')}</span>
+                  </div>
+                </div>
+                <a href={VENUE.venue.url} target="_blank" rel="noopener noreferrer" className="mw-jstop mw-jstop-end" onClick={() => track('mw_map_click', { meta: { to: 'venue' }, page: '/matching-week' })}>
+                  <span className="mw-jstop-ico"><Pin /></span>
+                  <em>{t('mw.venue.venueLabel')}</em>
+                  <b>{VENUE.venue.name}</b>
+                  <small>{VENUE.venue.address}</small>
+                  <span className="mw-jstop-go">Google Maps ↗</span>
+                </a>
+              </div>
+            </Reveal>
+            <Reveal delay={140}>
+              <div className="mw-venue-grid">
+                <a href={VENUE.videoUrl} target="_blank" rel="noopener noreferrer" className="mw-video"
+                  onClick={() => track('mw_video_click', { page: '/matching-week' })}>
+                  <span className="mw-video-bg" aria-hidden="true" />
+                  <span className="mw-video-tag">Reels</span>
+                  <span className="mw-play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+                  <span className="mw-video-txt">
+                    <b>{t('mw.venue.videoTitle')}</b>
+                    <span>{t('mw.venue.videoDesc')}</span>
+                  </span>
+                </a>
+                <div className="mw-venue-side">
+                  <div className="mw-map"><iframe src={VENUE.mapEmbed} title="COBI Home map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
+                  <div className="mw-perks">
+                    <div className="mw-perk">
+                      <span className="mw-perk-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="13" rx="2" /><path d="M12 8v13M3 12h18M12 8S10.5 3 8 3a2.5 2.5 0 000 5M12 8s1.5-5 4-5a2.5 2.5 0 010 5" /></svg></span>
+                      <span><b>{t('mw.venue.perk1.title')}</b><small>{t('mw.venue.perk1.desc')}</small></span>
+                    </div>
+                    <div className="mw-perk">
+                      <span className="mw-perk-ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2" /><path d="M16 2v4M8 2v4M3 10h18M9 15l2 2 4-4" /></svg></span>
+                      <span><b>{t('mw.venue.perk2.title')}</b><small>{t('mw.venue.perk2.desc')}</small></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </Reveal>
           </div>
         </section>
@@ -642,41 +658,49 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
         @keyframes mw-marquee { to { transform: translateX(-50%); } }
 
         /* 02 오시는 길 */
-        .mw-venue { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: start; }
-        .mw-route { margin-top: 28px; display: flex; flex-direction: column; }
-        .mw-stop { display: flex; align-items: center; gap: 14px; padding: 16px 18px; border-radius: 18px; background: #fff; border: 1px solid #f0e2d6; box-shadow: 0 6px 20px rgba(255,96,0,0.06); text-decoration: none; color: inherit; transition: border-color .15s, transform .15s; }
-        .mw-stop:hover { border-color: #ffb27f; transform: translateY(-2px); }
-        .mw-stop-ico { flex: none; width: 44px; height: 44px; border-radius: 14px; background: #fff1e6; color: #ff6000; display: flex; align-items: center; justify-content: center; }
-        .mw-stop-end .mw-stop-ico { background: #ff6000; color: #fff; }
-        .mw-stop-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; }
-        .mw-stop-txt em { font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #e85600; }
-        .mw-stop-txt b { font-size: 17px; margin-top: 1px; }
-        .mw-stop-txt small { font-size: 13px; color: #71717a; margin-top: 2px; line-height: 1.45; }
-        .mw-stop-go { flex: none; font-size: 12.5px; font-weight: 700; color: #a1a1aa; white-space: nowrap; }
-        .mw-stop:hover .mw-stop-go { color: #e85600; }
-        .mw-route-line { position: relative; height: 44px; margin-left: 39px; border-left: 2px dashed #ffb27f; }
-        .mw-times { margin-top: 18px; border-radius: 18px; background: #171717; color: #fff; padding: 6px 20px; }
-        .mw-times-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 0; }
-        .mw-times-row + .mw-times-row { border-top: 1px solid rgba(255,255,255,0.1); }
-        .mw-times-k { display: flex; flex-direction: column; font-size: 15px; font-weight: 700; }
-        .mw-times-k small { margin-top: 2px; font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.55); }
-        .mw-times-v { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; text-align: right; }
-        .mw-times-v b { padding: 6px 12px; border-radius: 10px; background: #ff6000; font-size: 17px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: 0.3px; }
-        .mw-times-v i { font-style: normal; font-size: 13.5px; color: rgba(255,255,255,0.8); line-height: 1.45; max-width: 260px; }
-        .mw-route-line span { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 12.5px; font-weight: 700; color: #e85600; white-space: nowrap; }
-        .mw-checks { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-direction: column; gap: 12px; }
-        .mw-checks li { display: flex; gap: 12px; align-items: flex-start; font-size: 15.5px; color: #27272a; line-height: 1.5; }
-        .mw-checks li::before { content: '✓'; flex: none; width: 24px; height: 24px; border-radius: 50%; background: #ff6000; color: #fff; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center; margin-top: -1px; }
-        .mw-video { position: relative; display: flex; align-items: flex-end; min-height: 340px; padding: 28px; border-radius: 24px; overflow: hidden; text-decoration: none; color: #fff; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
-        .mw-video-bg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 30%, rgba(0,0,0,0.8)), url(/matching-week/video-thumb.jpg) center 52%/cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+        /* 이동 경로 카드 */
+        .mw-journey { margin-top: 40px; display: grid; grid-template-columns: 1fr 1.25fr 1fr; align-items: stretch; gap: 0; padding: 14px; border-radius: 28px; background: radial-gradient(ellipse at 50% 0%, rgba(255,96,0,0.22), transparent 60%), #141413; box-shadow: 0 30px 70px rgba(0,0,0,0.18); color: #fff; }
+        .mw-jstop { position: relative; display: flex; flex-direction: column; align-items: flex-start; padding: 24px; border-radius: 20px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); text-decoration: none; color: inherit; transition: background .2s, border-color .2s; }
+        .mw-jstop:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,138,61,0.5); }
+        .mw-jstop-ico { width: 46px; height: 46px; border-radius: 14px; background: rgba(255,96,0,0.15); color: #ff8a3d; display: flex; align-items: center; justify-content: center; }
+        .mw-jstop-end .mw-jstop-ico { background: #ff6000; color: #fff; box-shadow: 0 8px 24px rgba(255,96,0,0.45); }
+        .mw-jstop em { margin-top: 18px; font-style: normal; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #ff8a3d; }
+        .mw-jstop b { margin-top: 4px; font-size: 24px; font-weight: 800; letter-spacing: -0.5px; }
+        .mw-jstop small { margin-top: 6px; font-size: 13.5px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+        .mw-jstop-go { margin-top: auto; padding-top: 16px; font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5); transition: color .2s; }
+        .mw-jstop:hover .mw-jstop-go { color: #ff8a3d; }
+        .mw-ride { display: flex; flex-direction: column; justify-content: center; gap: 14px; padding: 18px 28px; }
+        .mw-ride-go, .mw-ride-back { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+        .mw-ride-k { font-size: 12.5px; font-weight: 700; letter-spacing: 0.4px; color: rgba(255,255,255,0.55); }
+        .mw-ride-times { display: flex; gap: 8px; }
+        .mw-ride-times b { padding: 8px 16px; border-radius: 12px; background: #ff6000; font-size: 22px; font-weight: 800; letter-spacing: 0.5px; font-variant-numeric: tabular-nums; box-shadow: 0 8px 24px rgba(255,96,0,0.35); }
+        .mw-ride-desc { font-size: 13.5px; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 300px; }
+        .mw-ride-line { position: relative; height: 34px; }
+        /* 점선·화살촉 모두 세로 중앙(50%)에 정확히 맞춘다 — 선은 2px 띠를 -1px 끌어올려 중심을 50%에, 화살촉 끝이 선 끝과 만나게 */
+        .mw-ride-line::before { content: ''; position: absolute; left: 0; right: 3px; top: 50%; height: 2px; margin-top: -1px; background: repeating-linear-gradient(90deg, rgba(255,138,61,0.6) 0 7px, transparent 7px 12px); }
+        .mw-ride-line::after { content: ''; position: absolute; right: 2px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-top: 2px solid #ff8a3d; border-right: 2px solid #ff8a3d; box-sizing: border-box; transform: rotate(45deg); }
+        .mw-ride-bus { position: absolute; top: 50%; left: 0; width: 34px; height: 34px; margin-top: -17px; border-radius: 50%; background: #fff; color: #ff6000; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(0,0,0,0.35); animation: mw-bus 5s ease-in-out infinite; }
+        @keyframes mw-bus { 0% { left: 0; } 50% { left: calc(100% - 34px); } 100% { left: 0; } }
+        @media (prefers-reduced-motion: reduce) { .mw-ride-bus { animation: none; left: calc(50% - 17px); } }
+        /* 영상 · 지도 · 알아두세요 */
+        .mw-venue-grid { margin-top: 16px; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 16px; }
+        .mw-video { position: relative; display: flex; align-items: flex-end; min-height: 460px; padding: 28px; border-radius: 28px; overflow: hidden; text-decoration: none; color: #fff; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+        .mw-video-tag { position: absolute; top: 18px; left: 18px; padding: 5px 11px; border-radius: 999px; background: rgba(0,0,0,0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 12px; font-weight: 700; letter-spacing: 0.4px; }
+        .mw-video-bg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.85)), url(/matching-week/video-thumb.jpg) center 52%/cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
         .mw-video:hover .mw-video-bg { transform: scale(1.05); }
-        .mw-play { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%); width: 78px; height: 78px; border-radius: 50%; background: #ff6000; color: #fff; display: flex; align-items: center; justify-content: center; padding-left: 4px; box-shadow: 0 0 0 10px rgba(255,96,0,0.25), 0 12px 30px rgba(0,0,0,0.3); transition: transform .2s; }
-        .mw-video:hover .mw-play { transform: translate(-50%, -60%) scale(1.08); }
+        .mw-play { position: absolute; top: 46%; left: 50%; transform: translate(-50%, -50%); width: 78px; height: 78px; border-radius: 50%; background: #ff6000; color: #fff; display: flex; align-items: center; justify-content: center; padding-left: 4px; box-shadow: 0 0 0 10px rgba(255,96,0,0.25), 0 12px 30px rgba(0,0,0,0.3); transition: transform .2s; }
+        .mw-video:hover .mw-play { transform: translate(-50%, -50%) scale(1.08); }
         .mw-video-txt { position: relative; display: flex; flex-direction: column; gap: 4px; }
-        .mw-video-txt b { font-size: 20px; }
-        .mw-video-txt span { font-size: 14px; color: rgba(255,255,255,0.8); }
-        .mw-map { border-radius: 16px; overflow: hidden; border: 1px solid #e4e4e7; }
-        .mw-map iframe { width: 100%; height: 280px; border: 0; display: block; }
+        .mw-video-txt b { font-size: 21px; }
+        .mw-video-txt span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+        .mw-venue-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+        .mw-map { flex: 1; min-height: 280px; border-radius: 28px; overflow: hidden; border: 1px solid #ececef; background: #f4f4f5; }
+        .mw-map iframe { width: 100%; height: 100%; min-height: 280px; border: 0; display: block; }
+        .mw-perks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .mw-perk { display: flex; gap: 14px; align-items: flex-start; padding: 20px; border-radius: 22px; background: #fff; border: 1px solid #f0e2d6; box-shadow: 0 6px 20px rgba(255,96,0,0.06); }
+        .mw-perk-ico { flex: none; width: 42px; height: 42px; border-radius: 13px; background: #fff1e6; color: #ff6000; display: flex; align-items: center; justify-content: center; }
+        .mw-perk b { display: block; font-size: 15.5px; }
+        .mw-perk small { display: block; margin-top: 3px; font-size: 13px; color: #71717a; line-height: 1.5; }
 
         /* 03 참여 방법 */
         .mw-steps { margin: 44px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
@@ -760,7 +784,14 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           .mw-hero-in { flex-direction: column; align-items: stretch; }
           .mw-panel { width: auto; max-width: 520px; }
           .mw-cos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-          .mw-venue, .mw-faq { grid-template-columns: 1fr; gap: 32px; }
+          .mw-faq { grid-template-columns: 1fr; gap: 32px; }
+          .mw-journey { grid-template-columns: 1fr; }
+          .mw-ride-line { width: 34px; height: 64px; margin: 0 auto; }
+          .mw-ride-line::before { left: 50%; right: auto; top: 0; bottom: 3px; width: 2px; height: auto; margin: 0 0 0 -1px; background: repeating-linear-gradient(180deg, rgba(255,138,61,0.6) 0 7px, transparent 7px 12px); }
+          .mw-ride-line::after { right: auto; left: 50%; top: auto; bottom: 2px; margin: 0 0 0 -5px; transform: rotate(135deg); }
+          .mw-ride-bus { left: 0 !important; top: 0; margin-top: 0; animation-name: mw-bus-v; }
+          @keyframes mw-bus-v { 0% { top: 0; } 50% { top: calc(100% - 34px); } 100% { top: 0; } }
+          .mw-venue-grid { grid-template-columns: 1fr; }
           .mw-albums { grid-template-columns: repeat(2, 1fr); }
         }
         @media (max-width: 760px) {
@@ -802,13 +833,14 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           .mw-lb-thumbs button { width: 56px; height: 42px; }
           .mw-marquee { margin-top: 36px; }
           .mw-marquee-track img { height: 100px; }
-          .mw-video { min-height: 260px; padding: 22px; }
-          .mw-stop { padding: 14px; gap: 12px; }
-          .mw-stop-go { display: none; }
-          .mw-times { padding: 4px 16px; }
-          .mw-times-row { flex-direction: column; align-items: flex-start; gap: 8px; }
-          .mw-times-v { justify-content: flex-start; text-align: left; }
-          .mw-route-line { margin-left: 35px; }
+          .mw-journey { margin-top: 28px; padding: 10px; border-radius: 22px; }
+          .mw-jstop { padding: 18px; }
+          .mw-jstop b { font-size: 20px; }
+          .mw-ride { padding: 16px 8px; }
+          .mw-video { min-height: 380px; padding: 22px; border-radius: 22px; }
+          .mw-map { border-radius: 22px; }
+          .mw-perks { grid-template-columns: 1fr; gap: 10px; }
+          .mw-perk { padding: 16px; }
           .mw-play { width: 64px; height: 64px; }
           .mw-step { padding: 24px 22px; }
           .mw-step-n { font-size: 44px; }
