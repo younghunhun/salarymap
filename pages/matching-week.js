@@ -83,109 +83,162 @@ const CONTENT_ICONS = {
   mentoring: <><path d="M3 5h18v11H8l-5 4V5z" /><path d="M8 10h8M8 13h5" /></>,
 };
 
-/* ── v2 축제(포스터) 스킨 — 핫핑크·일렉트릭블루 물결, 박스 타이포, 두꺼운 테두리+오프셋 그림자 ── */
-const WAVE = (bg, a, b) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='44' viewBox='0 0 160 44'><rect width='160' height='44' fill='${bg}'/><path d='M0 11 Q20 -1 40 11 T80 11 T120 11 T160 11' stroke='${a}' stroke-width='7' fill='none'/><path d='M0 30 Q20 18 40 30 T80 30 T120 30 T160 30' stroke='${b}' stroke-width='7' fill='none'/></svg>`)}")`;
-const FX = { pink: '#ff2d95', blue: '#2b2bff', ink: '#0d0a33', lime: '#d4ff3a', white: '#ffffff' };
+/* ── v2 '나이트 페스티벌' 스킨 — 축제의 에너지는 살리되 유치하지 않게(컨퍼런스·음악 페스티벌 공식 사이트 톤).
+   이전 시도: 워터밤 복제(X, 레퍼런스는 분위기만) → 색종이·스티커·이모지(X, 유치함).
+   짙은 바탕 + 브랜드 주황→마젠타→바이올렛 글로우, 그라데이션 타이포, 그레인, 유리 카드. ── */
+const FX = { orange: '#ff6000', magenta: '#ff2e7e', violet: '#7b3cff', base: '#0a0a0f', panel: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.1)' };
+const FX_GRAD = `linear-gradient(100deg, ${FX.orange} 0%, ${FX.magenta} 55%, ${FX.violet} 100%)`;
+const GRAIN = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(#n)' opacity='0.5'/></svg>`)}")`;
 const FEST_CSS = `
-.mw.fest { background: ${FX.ink}; color: #fff; }
-.mw.fest .mw-title, .mw.fest .mw-hero h1, .mw.fest .mw-subtitle, .mw.fest .mw-end h2 { font-family: 'Anton', 'Pretendard', sans-serif; font-weight: 400; letter-spacing: 0.3px; text-transform: uppercase; }
-.mw.fest .mw-title { font-size: 52px; line-height: 1.08; }
-.mw.fest .mw-lead { color: rgba(255,255,255,0.85); }
-.mw.fest .mw-eyebrow { display: inline-flex; padding: 6px 12px; background: ${FX.lime}; color: ${FX.ink}; border: 3px solid ${FX.ink}; box-shadow: 4px 4px 0 ${FX.ink}; letter-spacing: 1.5px; transform: rotate(-2deg); }
-.mw.fest .mw-eyebrow span { border-color: ${FX.ink}; }
-.mw.fest .mw-accent { color: ${FX.lime}; }
+.mw.fest { background: ${FX.base}; color: #fff; }
+.mw.fest .mw-sec, .mw.fest .mw-dark, .mw.fest .mw-warm, .mw.fest .mw-gray { background: transparent; color: #fff; }
+.mw.fest .mw-sec { position: relative; overflow: hidden; }
+/* 섹션마다 은은한 빛 번짐 */
+.mw.fest .mw-sec::before { content: ''; position: absolute; width: 720px; height: 720px; border-radius: 50%; filter: blur(140px); opacity: 0.22; pointer-events: none; top: -240px; right: -200px; background: ${FX.magenta}; }
+.mw.fest .mw-warm::before { left: -240px; right: auto; background: ${FX.orange}; }
+.mw.fest .mw-gray::before { background: ${FX.violet}; }
+.mw.fest .mw-sec > .mw-in { position: relative; }
+.mw.fest .mw-title { background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.72)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-accent { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-lead, .mw.fest .mw-warm .mw-lead { color: rgba(255,255,255,0.66); }
+.mw.fest .mw-eyebrow { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-eyebrow span { border-color: rgba(255,255,255,0.25); }
+.mw.fest .mw-subtitle { color: #fff; }
 
-/* 히어로: 사진 위에 핑크→블루 듀오톤 + 물결 테두리 */
-.mw.fest .mw-hero { border: 16px solid transparent; border-image: ${WAVE(FX.pink, FX.white, FX.blue)} 16 round; min-height: max(700px, 84vh); }
-.mw.fest .mw-hero-slide { filter: saturate(1.15) contrast(1.05); }
-.mw.fest .mw-hero::after { background: linear-gradient(160deg, rgba(255,45,149,0.55) 0%, rgba(43,43,255,0.35) 45%, rgba(13,10,51,0.95) 100%); }
-.mw.fest .fx-poster { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.mw.fest .fx-box { display: inline-block; padding: 6px 14px; background: ${FX.blue}; border: 3px solid #fff; font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 1px; line-height: 1.1; }
-.mw.fest .fx-box-sm { font-size: 15px; padding: 3px 10px; background: ${FX.pink}; }
-.mw.fest .fx-big { margin-top: 10px; font-family: 'Anton', sans-serif; font-size: 112px; line-height: 0.9; color: #fff; -webkit-text-stroke: 0; text-shadow: 6px 6px 0 ${FX.blue}, 12px 12px 0 ${FX.pink}; }
-.mw.fest .fx-date { margin-top: 18px; display: inline-flex; align-items: baseline; gap: 8px; padding: 4px 14px; background: #fff; color: ${FX.blue}; font-family: 'Anton', sans-serif; font-size: 40px; line-height: 1.1; box-shadow: 6px 6px 0 ${FX.pink}; }
-.mw.fest .fx-date small { font-size: 20px; }
-.mw.fest .mw-hero h1 { margin-top: 22px; font-size: 30px; line-height: 1.2; text-shadow: none; }
-.mw.fest .mw-btn { border-radius: 0; text-transform: uppercase; font-weight: 800; border: 3px solid #fff; }
-.mw.fest .mw-btn-primary { background: ${FX.pink}; box-shadow: 6px 6px 0 ${FX.blue}; }
-.mw.fest .mw-btn-primary:hover { background: ${FX.pink}; transform: translate(-2px,-2px); box-shadow: 8px 8px 0 ${FX.blue}; }
-.mw.fest .mw-btn-ghost { background: ${FX.blue}; box-shadow: 6px 6px 0 ${FX.pink}; -webkit-backdrop-filter: none; backdrop-filter: none; }
-.mw.fest .mw-btn-ghost:hover { background: ${FX.blue}; transform: translate(-2px,-2px); }
-.mw.fest .mw-panel { background: #fff; color: ${FX.ink}; border: 4px solid ${FX.ink}; border-radius: 0; box-shadow: 10px 10px 0 ${FX.pink}; -webkit-backdrop-filter: none; backdrop-filter: none; transform: rotate(1.5deg); }
-.mw.fest .mw-stat { border-color: rgba(13,10,51,0.15); }
-.mw.fest .mw-stat dt, .mw.fest .mw-row dt { color: rgba(13,10,51,0.6); }
-.mw.fest .mw-stat dd { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 58px; background: none; -webkit-text-fill-color: ${FX.pink}; color: ${FX.pink}; }
-.mw.fest .mw-row + .mw-row { border-color: rgba(13,10,51,0.12); }
-.mw.fest .mw-hero-dots button.on { background: ${FX.lime}; }
+/* 히어로 */
+.mw.fest .mw-hero::after { background: radial-gradient(ellipse at 80% 100%, rgba(123,60,255,0.45), transparent 55%), radial-gradient(ellipse at 10% 100%, rgba(255,46,126,0.38), transparent 50%), linear-gradient(180deg, rgba(10,10,15,0.35) 0%, rgba(10,10,15,0.1) 35%, rgba(10,10,15,0.75) 75%, ${FX.base} 100%); }
+.mw.fest .mw-hero::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: ${GRAIN}; opacity: 0.18; mix-blend-mode: overlay; }
+.mw.fest .fx-stickers { display: flex; flex-wrap: wrap; gap: 8px; }
+.mw.fest .fx-sticker { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: 0.4px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.08); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
+.mw.fest .fx-sticker.s1 { background: ${FX_GRAD}; border-color: transparent; }
+.mw.fest .mw-hero h1 { font-size: 72px; line-height: 1.02; letter-spacing: -2.4px; font-weight: 800; background: linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.75)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+.mw.fest .mw-btn-primary { background: ${FX_GRAD}; box-shadow: 0 12px 40px rgba(255,46,126,0.4); }
+.mw.fest .mw-btn-primary:hover { background: ${FX_GRAD}; box-shadow: 0 16px 50px rgba(255,46,126,0.55); }
+.mw.fest .mw-panel { background: rgba(10,10,15,0.5); border: 1px solid rgba(255,255,255,0.14); }
+.mw.fest .mw-stat dd { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-hero-dots button.on { background: ${FX.magenta}; }
 
-/* 티커 띠 */
-.mw.fest .fx-ticker { overflow: hidden; background: ${FX.pink}; border-top: 4px solid ${FX.ink}; border-bottom: 4px solid ${FX.ink}; transform: rotate(-1.2deg); margin: -14px -10px 0; position: relative; z-index: 3; box-shadow: 0 8px 0 ${FX.blue}; }
-.mw.fest .fx-ticker-track { display: flex; width: max-content; animation: mw-marquee 28s linear infinite; }
-.mw.fest .fx-ticker-track span { display: flex; }
-.mw.fest .fx-ticker b { display: inline-flex; align-items: center; gap: 18px; padding: 12px 18px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 24px; letter-spacing: 1px; color: #fff; white-space: nowrap; }
-.mw.fest .fx-ticker i { font-style: normal; color: ${FX.lime}; }
+.mw.fest .mw-orgs { background: #fff; }
 
-/* 주최 띠 */
-.mw.fest .mw-orgs { border-bottom: 0; padding-top: 18px; }
-.mw.fest .mw-orgs-in p { color: ${FX.ink}; font-weight: 800; }
-
-/* 섹션 배경 교차 + 위쪽 물결 띠 */
-.mw.fest .mw-sec { padding-top: 136px; }
-.mw.fest .mw-sec::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 44px; background: ${WAVE(FX.pink, FX.white, FX.blue)}; background-size: 160px 44px; }
-.mw.fest .mw-dark { background: ${FX.ink}; }
-.mw.fest .mw-warm { background: ${FX.pink}; }
-.mw.fest .mw-warm::before { background: ${WAVE(FX.blue, FX.white, FX.pink)}; background-size: 160px 44px; }
-.mw.fest .mw-gray { background: ${FX.blue}; }
-.mw.fest .mw-sec:not(.mw-dark):not(.mw-warm):not(.mw-gray) { background: ${FX.ink}; }
-.mw.fest .mw-warm .mw-lead, .mw.fest .mw-gray .mw-lead { color: #fff; }
-
-/* 카드 공통: 흰 바탕 + 두꺼운 잉크 테두리 + 오프셋 그림자 */
-.mw.fest .mw-album, .mw.fest .mw-content { border: 3px solid #fff; border-radius: 18px; box-shadow: 8px 8px 0 ${FX.pink}; }
-.mw.fest .mw-album:not(:disabled):hover, .mw.fest .mw-content:hover { transform: translate(-3px,-3px); box-shadow: 11px 11px 0 ${FX.pink}; border-color: #fff; }
-.mw.fest .mw-album.next { box-shadow: 8px 8px 0 ${FX.lime}; border-color: ${FX.lime}; }
-.mw.fest .mw-album-go, .mw.fest .mw-content-ico { background: ${FX.pink}; }
-.mw.fest .mw-content-body em { color: ${FX.lime}; }
-.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { border: 3px solid ${FX.ink}; border-radius: 16px; box-shadow: 7px 7px 0 ${FX.pink}; }
-.mw.fest .mw-gray .mw-co { box-shadow: 7px 7px 0 ${FX.ink}; }
-.mw.fest .mw-step:hover, .mw.fest .mw-co:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 ${FX.pink}; border-color: ${FX.ink}; }
-.mw.fest .mw-gray .mw-co:hover { box-shadow: 10px 10px 0 ${FX.ink}; }
-.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { color: ${FX.ink}; }
-.mw.fest .mw-step-n { -webkit-text-stroke: 0; color: ${FX.pink}; font-family: 'Anton', sans-serif; font-weight: 400; }
-.mw.fest .mw-co-top { background: ${WAVE('#ffe3f1', '#ffffff', '#dcdcff')}; background-size: 120px 33px; }
-.mw.fest .mw-co-foot { color: ${FX.pink}; }
-.mw.fest .mw-note { background: ${FX.lime}; color: ${FX.ink}; border: 3px solid ${FX.ink}; border-radius: 0; font-weight: 600; }
-.mw.fest .mw-filters { border: 3px solid ${FX.ink}; box-shadow: 5px 5px 0 ${FX.ink}; }
-.mw.fest .mw-filter.on { background: ${FX.pink}; }
-
-/* 오시는 길 */
-.mw.fest .mw-journey { border: 4px solid ${FX.ink}; border-radius: 22px; box-shadow: 10px 10px 0 ${FX.blue}; }
-.mw.fest .mw-ride-times b { border-radius: 0; background: ${FX.blue}; border: 3px solid #fff; font-family: 'Anton', sans-serif; font-weight: 400; box-shadow: 4px 4px 0 ${FX.pink}; }
-.mw.fest .mw-video, .mw.fest .mw-map { border: 4px solid ${FX.ink}; border-radius: 22px; box-shadow: 10px 10px 0 ${FX.blue}; }
-.mw.fest .mw-perk-ico, .mw.fest .mw-jstop-end .mw-jstop-ico { background: ${FX.pink}; color: #fff; }
-
-/* FAQ */
-.mw.fest .mw-faq-list, .mw.fest .mw-faq details { border-color: rgba(255,255,255,0.18); }
+/* 카드: 유리 + 호버 시 그라데이션 테두리 */
+.mw.fest .mw-album, .mw.fest .mw-content { border-color: ${FX.line}; }
+.mw.fest .mw-album:not(:disabled):hover, .mw.fest .mw-content:hover { border-color: rgba(255,46,126,0.6); box-shadow: 0 24px 60px rgba(255,46,126,0.18); }
+.mw.fest .mw-album.next { border-color: rgba(255,46,126,0.6); box-shadow: 0 0 60px rgba(255,46,126,0.2); }
+.mw.fest .mw-album.next .mw-album-m { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-album:hover .mw-album-go, .mw.fest .mw-content-ico { background: ${FX_GRAD}; }
+.mw.fest .mw-content-ico { box-shadow: 0 8px 24px rgba(255,46,126,0.35); }
+.mw.fest .mw-content-body em { color: #ff8fb6; }
+.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { background: ${FX.panel}; border: 1px solid ${FX.line}; color: #fff; box-shadow: none; }
+.mw.fest .mw-step:hover, .mw.fest .mw-co:hover { border-color: rgba(255,46,126,0.55); box-shadow: 0 20px 50px rgba(255,46,126,0.15); }
+.mw.fest .mw-step p, .mw.fest .mw-co-jobs li, .mw.fest .mw-perk small { color: rgba(255,255,255,0.62); }
+.mw.fest .mw-step-n { -webkit-text-stroke: 0; background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-co-top { background: rgba(255,255,255,0.03); border-bottom-color: ${FX.line}; }
+.mw.fest .mw-co-foot { border-top-color: ${FX.line}; color: #ff8fb6; }
+.mw.fest .mw-co-jobs .mw-more { color: rgba(255,255,255,0.4); }
+.mw.fest .mw-filters { background: ${FX.panel}; border-color: ${FX.line}; }
+.mw.fest .mw-filter { color: rgba(255,255,255,0.65); }
+.mw.fest .mw-filter:hover { color: #fff; }
+.mw.fest .mw-filter.on { background: ${FX_GRAD}; color: #fff; }
+.mw.fest .mw-filter.on em { color: rgba(255,255,255,0.85); }
+.mw.fest .mw-journey { background: ${FX.panel}; border: 1px solid ${FX.line}; box-shadow: none; }
+.mw.fest .mw-ride-times b { background: ${FX_GRAD}; box-shadow: 0 8px 24px rgba(255,46,126,0.35); }
+.mw.fest .mw-jstop-end .mw-jstop-ico, .mw.fest .mw-perk-ico { background: ${FX_GRAD}; color: #fff; }
+.mw.fest .mw-video, .mw.fest .mw-map { border: 1px solid ${FX.line}; }
+.mw.fest .mw-faq-list, .mw.fest .mw-faq details { border-color: ${FX.line}; }
 .mw.fest .mw-faq summary { color: #fff; }
-.mw.fest .mw-q { color: ${FX.lime}; }
-.mw.fest .mw-faq details p { color: rgba(255,255,255,0.78); }
+.mw.fest .mw-q { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-faq details p { color: rgba(255,255,255,0.66); }
+
+/* ── 주황 잔재 제거: v2 는 그라데이션(주황→마젠타→바이올렛) + 마젠타 포인트로 통일 ── */
+.mw.fest .mw-album.next { background: radial-gradient(circle at 30% 0%, rgba(255,46,126,0.5), transparent 60%), linear-gradient(160deg, #1d0f2e, #0f0a18); }
+.mw.fest .mw-album-txt em.live { color: #ff8fb6; }
+.mw.fest .mw-album-txt em.live::before { background: ${FX.magenta}; animation-name: fx-pulse; }
+@keyframes fx-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,46,126,0.7); } 50% { box-shadow: 0 0 0 6px rgba(255,46,126,0); } }
+.mw.fest .mw-jstop:hover { border-color: rgba(255,46,126,0.55); }
+.mw.fest .mw-jstop-ico { background: rgba(255,46,126,0.14); color: #ff8fb6; }
+.mw.fest .mw-jstop em, .mw.fest .mw-jstop:hover .mw-jstop-go { color: #ff8fb6; }
+.mw.fest .mw-ride-line::before { background: repeating-linear-gradient(90deg, rgba(255,46,126,0.65) 0 7px, transparent 7px 12px); }
+.mw.fest .mw-ride-line::after { border-color: ${FX.magenta}; }
+.mw.fest .mw-ride-bus { color: ${FX.magenta}; }
+.mw.fest .mw-ride-dur { color: #ff8fb6; }
+.mw.fest .mw-note { background: rgba(255,46,126,0.08); border-color: rgba(255,46,126,0.35); color: #ffb3cf; }
+.mw.fest .mw-faq details[open] summary::after { color: ${FX.magenta}; }
+/* 안내 영상(릴스) 컨트롤 */
+.mw.fest .mw-mute:hover { background: ${FX.magenta}; }
+.mw.fest .mw-vbar { background: linear-gradient(90deg, ${FX.orange} 0%, ${FX.magenta} var(--p), rgba(255,255,255,0.3) var(--p)); }
+.mw.fest .mw-vbar::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(255,46,126,0.6); }
+.mw.fest .mw-vbar::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(255,46,126,0.6); }
+.mw.fest .mw-vbtns .mw-vplay, .mw.fest .mw-vbtns .mw-vplay:hover { background: ${FX_GRAD}; }
+/* 팝업·갤러리(페이지 밖 레이어) */
+.fx-root .mw-sheet-head { background: radial-gradient(circle at 0% 0%, #ffe6f0, #fff 60%); }
+.fx-root .mw-sheet-title > span, .fx-root .mw-job-go { color: #e0246c; }
+.fx-root .mw-job:hover { background: #fff2f7; }
+.fx-root .mw-gal-slide:hover { border-color: ${FX.magenta}; color: #e0246c; }
+.fx-root .mw-gal-tabs button.on { color: #e0246c; }
+.fx-root .mw-gal-tabs button.on::after { background: ${FX_GRAD}; }
+.fx-root .mw-lb-nav:hover { background: ${FX.magenta}; }
+.fx-root .mw-lb-thumbs button.on { border-color: ${FX.magenta}; }
+
+/* ── 움직임 ── */
+/* 히어로 첫 등장: 아래에서 차례로 올라온다 */
+.mw.fest .mw-hero-l > * { opacity: 0; transform: translateY(28px); animation: fx-rise .9s cubic-bezier(.16,1,.3,1) forwards; }
+.mw.fest .mw-hero-l > *:nth-child(2) { animation-delay: .12s; }
+.mw.fest .mw-hero-l > *:nth-child(3) { animation-delay: .24s; }
+.mw.fest .mw-hero-l > *:nth-child(4) { animation-delay: .36s; }
+.mw.fest .mw-hero-l > *:nth-child(5) { animation-delay: .48s; }
+.mw.fest .mw-panel { opacity: 0; animation: fx-rise .9s .55s cubic-bezier(.16,1,.3,1) forwards; }
+@keyframes fx-rise { to { opacity: 1; transform: none; } }
+/* 그라데이션 글자·버튼에 빛이 흐른다 */
+.mw.fest .mw-stat dd, .mw.fest .mw-accent, .mw.fest .mw-step-n, .mw.fest .fx-kb-row.fill b { background-size: 220% 100%; animation: fx-shine 5s ease-in-out infinite alternate; }
+@keyframes fx-shine { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
+.mw.fest .mw-btn-primary { position: relative; overflow: hidden; }
+.mw.fest .mw-btn-primary::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent); transform: skewX(-20deg); animation: fx-sweep 3.2s ease-in-out infinite; }
+@keyframes fx-sweep { 0%, 55% { left: -60%; } 100% { left: 130%; } }
+/* 배경 빛 번짐이 천천히 떠다닌다 */
+.mw.fest .mw-sec::before { animation: fx-drift 16s ease-in-out infinite alternate; }
+@keyframes fx-drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(-120px, 140px) scale(1.25); } }
+/* 11월 카드 숨쉬듯 빛남 */
+.mw.fest .mw-album.next { animation: fx-glow 2.6s ease-in-out infinite; }
+@keyframes fx-glow { 0%, 100% { box-shadow: 0 0 30px rgba(255,46,126,0.15); } 50% { box-shadow: 0 0 70px rgba(255,46,126,0.45); } }
+
+/* 카운트다운 */
+.mw.fest .fx-count { display: flex; gap: 10px; margin-top: 26px; }
+.mw.fest .fx-count-cell { min-width: 78px; padding: 12px 10px 10px; border-radius: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); text-align: center; }
+.mw.fest .fx-count-cell b { display: block; font-size: 38px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px; animation: fx-flip .5s cubic-bezier(.16,1,.3,1); }
+.mw.fest .fx-count-cell:last-child b { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .fx-count-cell span { display: block; margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,0.55); }
+@keyframes fx-flip { from { opacity: 0; transform: translateY(-40%); } to { opacity: 1; transform: none; } }
+
+/* 대형 키네틱 타이포 띠 */
+.mw.fest .fx-kb { overflow: hidden; padding: 28px 0; border-top: 1px solid ${FX.line}; border-bottom: 1px solid ${FX.line}; background: ${FX.base}; }
+.mw.fest .fx-kb-row { display: flex; width: max-content; }
+.mw.fest .fx-kb-row span { display: flex; }
+.mw.fest .fx-kb-row b { display: inline-flex; align-items: center; gap: 36px; padding-right: 36px; font-size: 92px; font-weight: 900; line-height: 1.08; letter-spacing: -2px; white-space: nowrap; text-transform: uppercase; }
+.mw.fest .fx-kb-row i { font-style: normal; font-size: 40px; color: ${FX.magenta}; -webkit-text-stroke: 0; }
+.mw.fest .fx-kb-row.outline { animation: mw-marquee 38s linear infinite; }
+.mw.fest .fx-kb-row.outline b { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.45); }
+.mw.fest .fx-kb-row.fill { animation: fx-marquee-rev 32s linear infinite; }
+.mw.fest .fx-kb-row.fill b { background-image: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+@keyframes fx-marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+@media (prefers-reduced-motion: reduce) {
+  .mw.fest .mw-hero-l > *, .mw.fest .mw-panel { animation: none; opacity: 1; transform: none; }
+  .mw.fest .fx-kb-row, .mw.fest .mw-sec::before, .mw.fest .mw-btn-primary::after, .mw.fest .mw-album.next { animation: none; }
+}
 
 /* 마무리 */
-.mw.fest .mw-end { background: ${WAVE(FX.pink, FX.white, FX.blue)}; background-size: 200px 55px; }
-.mw.fest .mw-end .mw-in { background: ${FX.ink}; border: 4px solid #fff; box-shadow: 12px 12px 0 ${FX.blue}; padding: 56px 24px; max-width: 900px; }
-.mw.fest .mw-end .mw-chip { border-radius: 0; background: ${FX.lime}; color: ${FX.ink}; }
+.mw.fest .mw-end { background: radial-gradient(ellipse at 50% 120%, rgba(255,46,126,0.55), transparent 60%), radial-gradient(ellipse at 10% 0%, rgba(123,60,255,0.35), transparent 50%), ${FX.base}; border-top: 1px solid ${FX.line}; }
+.mw.fest .mw-end h2 { background: linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.7)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .mw-end .mw-chip { background: ${FX_GRAD}; }
 
 @media (max-width: 640px) {
-  .mw.fest .mw-hero { border-width: 10px; }
-  .mw.fest .fx-big { font-size: 64px; text-shadow: 4px 4px 0 ${FX.blue}, 8px 8px 0 ${FX.pink}; }
-  .mw.fest .fx-date { font-size: 28px; }
-  .mw.fest .fx-box { font-size: 17px; }
-  .mw.fest .mw-hero h1 { font-size: 22px; }
-  .mw.fest .mw-title { font-size: 34px; }
-  .mw.fest .mw-panel { transform: none; box-shadow: 6px 6px 0 ${FX.pink}; }
-  .mw.fest .fx-ticker b { font-size: 18px; padding: 10px 14px; }
-  .mw.fest .mw-sec { padding-top: 100px; }
-  .mw.fest .mw-sec::before { height: 30px; background-size: 110px 30px; }
-  .mw.fest .mw-end .mw-in { padding: 40px 18px; margin: 0 16px; width: auto; }
+  .mw.fest .mw-hero h1 { font-size: 40px; letter-spacing: -1.2px; }
+  .mw.fest .mw-sec::before { width: 420px; height: 420px; filter: blur(100px); }
+  .mw.fest .fx-kb { padding: 16px 0; }
+  .mw.fest .mw-ride-line::before { background: repeating-linear-gradient(180deg, rgba(255,46,126,0.65) 0 7px, transparent 7px 12px); }
+  .mw.fest .fx-kb-row b { font-size: 46px; gap: 20px; padding-right: 20px; letter-spacing: -1px; }
+  .mw.fest .fx-kb-row i { font-size: 22px; }
+  .mw.fest .fx-count-cell { min-width: 0; flex: 1; padding: 10px 6px 8px; }
+  .mw.fest .fx-count-cell b { font-size: 28px; }
 }
 `;
 
@@ -229,6 +282,15 @@ function Logo({ c, size }) {
 
 const Arrow = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>;
 
+function KBand({ words }) {
+  const row = (cls) => (
+    <div className={'fx-kb-row ' + cls}>
+      {[0, 1].map((k) => <span key={k}>{words.map((w) => <b key={w}>{w}<i>✦</i></b>)}</span>)}
+    </div>
+  );
+  return <div className="fx-kb" aria-hidden="true">{row('outline')}{row('fill')}</div>;
+}
+
 /* variant='fest' — /matching-week-v2 축제(포스터) 스킨. 내용·동작은 같고 디자인만 다르다(아래 FEST_CSS). */
 export default function MatchingWeek({ companies, total, daysLeft, variant }) {
   const { t } = useT();
@@ -236,6 +298,17 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
   const PAGE = fest ? '/matching-week-v2' : '/matching-week'; // 이벤트 계측 페이지 구분
   const [copied, setCopied] = useState(false);
   const [slide, setSlide] = useState(0);
+  const [left, setLeft] = useState(null); // v2 카운트다운(마운트 후에만 — 서버/클라 시간이 달라 하이드레이션 어긋남 방지)
+  useEffect(() => {
+    if (!fest) return;
+    const tick = () => {
+      const ms = Math.max(0, EVENT_AT.getTime() - Date.now());
+      setLeft({ d: Math.floor(ms / 864e5), h: Math.floor(ms / 36e5) % 24, m: Math.floor(ms / 6e4) % 60, s: Math.floor(ms / 1e3) % 60 });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [fest]);
   const videoBox = useRef(null);
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
@@ -373,7 +446,6 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         <link rel="canonical" href="https://salary-fyi.com/matching-week" />
         {/* v2 는 직접 링크로만 들어오는 시안 — 검색 노출 막음 */}
         {fest && <meta name="robots" content="noindex, nofollow" />}
-        {fest && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap&subset=vietnamese" />}
       </Head>
 
       <div className={'mw' + (fest ? ' fest' : '')}>
@@ -390,11 +462,10 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           <div className="mw-hero-in">
             <div className="mw-hero-l">
               {fest ? (
-                <div className="fx-poster">
-                  <span className="fx-box">K-TECH CONNECT</span>
-                  <span className="fx-box fx-box-sm">HO CHI MINH · {daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
-                  <div className="fx-big">MATCHING<br />WEEK</div>
-                  <div className="fx-date">19.11.2026<small>(THU)</small></div>
+                <div className="fx-stickers">
+                  <span className="fx-sticker s1">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
+                  <span className="fx-sticker s2">19.11.2026 · TP.HCM</span>
+                  <span className="fx-sticker s3">Matching Week</span>
                 </div>
               ) : (
                 <div className="mw-chips">
@@ -403,6 +474,16 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
                 </div>
               )}
               <h1>{t('mw.title')}</h1>
+              {fest && (
+                <div className="fx-count" aria-label="countdown">
+                  {[['d', 'DAYS'], ['h', 'HRS'], ['m', 'MIN'], ['s', 'SEC']].map(([k, label]) => (
+                    <div key={k} className="fx-count-cell">
+                      <b key={left ? left[k] : '-'}>{left ? String(left[k]).padStart(2, '0') : '--'}</b>
+                      <span>{label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
               <p className="mw-sub">{t('mw.sub', { companies: companies.length, jobs: total })}</p>
               <div className="mw-ctas">
                 <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { page: PAGE })}>{t('mw.cta')}</a>
@@ -419,16 +500,8 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           </div>
         </header>
 
-        {/* v2: 행사 티커 띠 */}
-        {fest && (
-          <div className="fx-ticker" aria-hidden="true">
-            <div className="fx-ticker-track">
-              {Array.from({ length: 2 }).map((_, k) => (
-                <span key={k}>{['NOVEMBER MATCHING WEEK', '19.11.2026', 'HO CHI MINH', '1:1 INTERVIEW', 'HACKATHON', 'MENTORING', `${companies.length} COMPANIES`, `${total} POSITIONS`].map((w) => <b key={w}>{w}<i>✦</i></b>)}</span>
-              ))}
-            </div>
-          </div>
-        )}
+        {/* v2: 대형 키네틱 타이포 띠 — 외곽선 줄과 그라데이션 줄이 서로 반대로 흐른다 */}
+        {fest && <KBand words={['MATCHING WEEK', '19.11.2026', 'HO CHI MINH', '1:1 INTERVIEW', 'HACKATHON', 'MENTORING']} />}
 
         {/* ── 주최·후원 ── */}
         <div className="mw-orgs">
@@ -668,6 +741,8 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           </div>
         </section>
 
+        {fest && <KBand words={[`${companies.length} COMPANIES`, `${total} POSITIONS`, 'ONE DAY', 'SEE YOU AT COBI HOME']} />}
+
         {/* ── 마무리 CTA ── */}
         <section className="mw-end">
           <div className="mw-in">
@@ -684,6 +759,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         </section>
       </div>
 
+      <div className={fest ? 'fx-root' : undefined}>
       {open && (
         <div className="mw-modal" onClick={() => setOpen(null)}>
           <div className="mw-sheet" role="dialog" aria-modal="true" aria-label={open.name} onClick={(e) => e.stopPropagation()}>
@@ -772,6 +848,8 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           </div>
         </div>
       )}
+
+      </div>
 
       {fest && <style dangerouslySetInnerHTML={{ __html: FEST_CSS }} />}
       <style jsx global>{`
