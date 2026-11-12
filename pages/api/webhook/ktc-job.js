@@ -48,8 +48,10 @@ async function examples(db) {
 async function generate(input, shots) {
   const sys = [
     'You write job postings for K-Tech College (KTC): Korean companies hiring Vietnamese talent, posted on the FYI job board.',
-    'Write the new posting in the SAME language, tone, section structure and formatting as the example postings.',
+    'Write EVERY field in Vietnamese, whatever language the input or the examples are in — translate Korean and English input into natural Vietnamese (the title may stay in English). Keep product names, company names and tech terms (React, OOH, API…) as they are. No Hangul anywhere in the output, including the title.',
+    'Follow the tone, section structure and formatting of the example postings.',
     'Use ONLY facts from the input. Never invent salary numbers, benefits, office addresses, tech stacks or company facts.',
+    'Keep EVERY responsibility, qualification and preferred item from the input — translate them one by one; never summarize, merge or drop items.',
     'If a section has no facts, return an empty string for it.',
     'Required qualifications go to requirements; anything marked optional/preferred (우대, ưu tiên, preferred) goes to the end of requirements under a separate preferred heading in the examples\' language.',
     'Return a JSON object only.',
@@ -57,7 +59,7 @@ async function generate(input, shots) {
   const user = `Example postings (format reference only — do not copy their facts):
 ${JSON.stringify(shots, null, 1)}
 
-New position input (may be Korean; translate):
+New position input (may be Korean or English; write the posting in Vietnamese):
 ${JSON.stringify(input, null, 1)}
 
 Return JSON:
