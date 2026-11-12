@@ -1,5 +1,7 @@
 import supabase from '../../../lib/supabaseAdmin'
 import { verifyToken } from '../../../lib/campaignToken'
+import { makeToken as makeKtcToken } from '../../../lib/ktcMailToken'
+import { essayFor } from '../../../lib/jobEssays'
 
 // 담당자 추천 콜드메일 원클릭 랜딩 — 이메일 버튼(개인 토큰 링크)을 누르면 로그인 없이
 // "기업들이 FYI 추천으로 당신 프로필에 관심" 톤으로 추천 공고를 보여주고, 각 공고를
@@ -19,11 +21,11 @@ export default async function handler(req, res) {
 
   try {
     const { data: p } = await supabase.from('user_profiles')
-      .select('full_name, resume_url').eq('id', userId).single()
+      .select('full_name, resume_url, email').eq('id', userId).single()
     if (!p || !p.resume_url) return res.status(404).send(page('noresume'))
 
     const { data: jobs } = await supabase.from('jobs')
-      .select('id, title, company, role, location, logo_url')
+      .select('id, title, company, role, location, logo_url, source, source_id')
       .in('id', jobIds).eq('is_active', true)
     if (!jobs?.length) return res.status(404).send(page('closed'))
     // 링크 순서 유지
@@ -39,14 +41,18 @@ export default async function handler(req, res) {
     }])
 
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
-    return res.status(200).send(landing(p.full_name, token, ordered, applied))
+    // 자소서 요청 공고는 원탭 대신 /ktc/essay 지원 모드로 — 문항 작성 후 같은 원탭 지원으로 접수된다
+    const essayUrl = (j) => (j.source === 'ktc' && essayFor(j.source_id) && p.email
+      ? `/ktc/essay?t=${encodeURIComponent(makeKtcToken(p.email, campaign))}&j=${j.id}&a=${encodeURIComponent(token)}`
+      : null)
+    return res.status(200).send(landing(p.full_name, token, ordered, applied, essayUrl))
   } catch (e) {
     console.error('recommend error:', e.message)
     return res.status(500).send(page('error'))
   }
 }
 
-function landing(name, token, jobs, applied) {
+function landing(name, token, jobs, applied, essayUrl) {
   const cards = jobs.map((j) => {
     const logo = j.logo_url
       ? `<img src="${escHtml(j.logo_url)}" alt="" style="width:44px;height:44px;border-radius:10px;object-fit:cover;flex-shrink:0;background:#f0ebe3">`
@@ -54,6 +60,8 @@ function landing(name, token, jobs, applied) {
     const meta = [j.role, j.location].filter(Boolean).map(escHtml).join(' · ')
     const btn = applied.has(j.id)
       ? '<button disabled style="background:#f0ebe3;color:#8a8073;font-weight:700;font-size:13px;border:0;padding:10px 16px;border-radius:10px;white-space:nowrap">Đã ứng tuyển ✓</button>'
+      : essayUrl(j)
+      ? `<a href="${escHtml(essayUrl(j))}" style="background:#ff6000;color:#fff;font-weight:700;font-size:13px;text-decoration:none;padding:10px 16px;border-radius:10px;white-space:nowrap">Ứng tuyển ngay</a>`
       : `<button onclick="applyJob(this,'${j.id}')" style="background:#ff6000;color:#fff;font-weight:700;font-size:13px;border:0;padding:10px 16px;border-radius:10px;cursor:pointer;white-space:nowrap">Ứng tuyển ngay</button>`
     return `<div style="display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #eee5da;border-radius:14px;padding:16px">
       ${logo}

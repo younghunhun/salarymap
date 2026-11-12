@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/router';
 import { supabase } from '../../lib/supabaseClient';
 import { getStoredUtm, getApplicationSource } from '../../lib/utm';
@@ -6,6 +7,7 @@ import { track } from '../../lib/track';
 import { ktcAppliedUrl } from '../../lib/applyConversion';
 import { useT } from '../../lib/i18n';
 import { BRAND, c, s } from './ktcStyles';
+import EssayForm, { essayLang } from './EssayForm';
 
 /* /ktc 공고 지원 — FYI 일반 공고(/jobs)와 **같은 로직·같은 테이블**을 쓴다.
    · 이력서는 resumes 버킷에 올리고 URL 만 넘긴다(FormData 는 /api/job-applications 가 JSON 파서만 써서 400)
@@ -15,7 +17,7 @@ import { BRAND, c, s } from './ktcStyles';
 
    비로그인은 /login?return=<현재경로> 로 보내고 로그인 후 제자리로 돌아온다(_app.js 와 같은 규약). */
 export default function KtcApply({ job, variant = 'panel' }) {
-  const { t } = useT();
+  const { t, lang } = useT();
   const router = useRouter();
   const fileRef = useRef(null);
 
@@ -24,6 +26,9 @@ export default function KtcApply({ job, variant = 'panel' }) {
   const [resumeFile, setResumeFile] = useState(null);
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState(false);
+  // 기업이 자소서를 요청한 공고(lib/jobEssays.js)는 지원 전에 문항 모달을 띄운다
+  const [essayOpen, setEssayOpen] = useState(false);
+  const [essayErr, setEssayErr] = useState(null);
 
   useEffect(() => {
     try {
@@ -41,15 +46,45 @@ export default function KtcApply({ job, variant = 'panel' }) {
     });
   }, [job.id]);
 
+  /* ?essay=1 — 다른 지원 경로(/jobs·추천 원탭 등)에서 자소서 미작성으로 튕겨 온 경우 모달을 바로 연다.
+     패널·하단바 두 인스턴스가 있으므로 panel 쪽만 연다(모달은 portal 이라 모바일에서도 보인다). */
+  useEffect(() => {
+    if (variant === 'panel' && session && !applied && router.query.essay === '1' && job.essayQuestions?.length) setEssayOpen(true);
+  }, [variant, session, applied, router.query.essay, job.essayQuestions]);
+
+  // 모달은 높이 제한·내부 스크롤 없이 통째로 보이고, 길면 바깥 오버레이가 스크롤된다 — 그동안 뒤 페이지는 고정
+  useEffect(() => {
+    if (!essayOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [essayOpen]);
+
   const goLogin = () => router.push('/login?return=' + encodeURIComponent(router.asPath));
 
-  const submit = async () => {
+  const submit = async (essayAnswers) => {
     if (applying || applied) return;
     if (!session) return goLogin();
     if (!resumeFile && !profileResumeUrl) return fileRef.current?.click();
+    if (job.essayQuestions?.length && !essayAnswers) { setEssayErr(null); setEssayOpen(true); return; }
 
     setApplying(true);
     try {
+      // 자소서 먼저 저장 — (공고, 이메일) upsert 라 지원이 실패해 다시 내도 중복되지 않는다
+      if (essayAnswers) {
+        const er = await fetch('/api/job-essays', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
+          body: JSON.stringify({ jobId: job.id, answers: essayAnswers }),
+        });
+        if (!er.ok) {
+          const err = await er.json().catch(() => ({}));
+          setEssayErr(t('jobs.applyError', { error: err.error || 'unknown error' }));
+          setApplying(false);
+          return;
+        }
+      }
+
       let resumeUrl = profileResumeUrl;
       if (resumeFile) {
         const safeName = resumeFile.name.replace(/[^a-zA-Z0-9._-]/g, '_');
@@ -97,6 +132,7 @@ export default function KtcApply({ job, variant = 'panel' }) {
       }
 
       setApplied(true);
+      setEssayOpen(false);
       try {
         const aj = JSON.parse(localStorage.getItem('fyi_applied_jobs') || '[]');
         if (!aj.includes(job.id)) localStorage.setItem('fyi_applied_jobs', JSON.stringify([...aj, job.id]));
@@ -150,7 +186,7 @@ export default function KtcApply({ job, variant = 'panel' }) {
     <button
       className="ktc-apply-btn"
       style={{ ...s.btnPrimary, width: '100%', opacity: applied || applying ? 0.55 : 1, cursor: applied ? 'default' : 'pointer' }}
-      onClick={submit}
+      onClick={() => submit()}
       disabled={applying || applied}
     >
       {label}{!applied && !applying ? ' →' : ''}
@@ -199,8 +235,35 @@ export default function KtcApply({ job, variant = 'panel' }) {
         onChange={(e) => { const f = e.target.files?.[0]; if (f) setResumeFile(f); }}
       />
       {btn}
+      {/* body 로 portal — 하단 바(backdrop-filter)·숨겨진 패널(display:none) 안에 두면 fixed 모달이 갇히거나 안 보인다 */}
+      {essayOpen && typeof document !== 'undefined' && createPortal(
+        <div onClick={() => !applying && setEssayOpen(false)}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,.45)', overflowY: 'auto', padding: '24px 16px', boxSizing: 'border-box', display: 'flex' }}>
+          <div onClick={(e) => e.stopPropagation()}
+            style={{ width: '100%', maxWidth: 560, margin: 'auto', background: '#fff', borderRadius: 16, padding: '22px 20px', boxSizing: 'border-box', textAlign: 'left' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 6 }}>
+              <h3 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: c.text }}>{ESSAY_HEAD[essayLang(lang)]}</h3>
+              <button onClick={() => !applying && setEssayOpen(false)} aria-label="close"
+                style={{ background: 'none', border: 'none', fontSize: 22, lineHeight: 1, color: c.textFaint, cursor: 'pointer', padding: 0 }}>×</button>
+            </div>
+            <p style={{ margin: '0 0 18px', fontSize: 13, lineHeight: 1.5, color: c.textDim }}>{ESSAY_SUB[essayLang(lang)](job.company)}</p>
+            <EssayForm questions={job.essayQuestions} lang={lang} busy={applying} error={essayErr}
+              submitLabel={applying ? t('ktc.apply.sending') : t('ktc.jobs.apply')}
+              onSubmit={(answers) => submit(answers)} />
+          </div>
+        </div>,
+        document.body
+      )}
       {variant === 'panel' && cvNote}
       {variant === 'panel' && cancelNote}
     </>
   );
 }
+
+// 자소서 모달 문구 — 이 기능 전용이라 전역 사전에 넣지 않는다(pages/lang.js 와 같은 방침)
+const ESSAY_HEAD = { vi: 'Bản giới thiệu bản thân', ko: '자기소개서', en: 'Self-introduction' };
+const ESSAY_SUB = {
+  vi: (co) => `${co} yêu cầu ứng viên trả lời các câu hỏi dưới đây khi ứng tuyển.`,
+  ko: (co) => `${co}에서 지원 시 아래 문항 작성을 요청했습니다.`,
+  en: (co) => `${co} asks applicants to answer the questions below.`,
+};

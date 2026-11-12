@@ -735,6 +735,8 @@ export default function JobsPage({ collection = null }) {
     })
     setSimilarApplying(null)
     if (!res.ok) {
+      // 428 = 자소서 요청 공고 — /ktc 공고 페이지(자소서 모달)로 보낸다(lib/jobEssays.js essayGate)
+      if (res.status === 428) { const g = await res.json().catch(() => ({})); window.location.href = g.redirect || `/ktc/jobs/${job.id}`; return }
       if (res.status === 409) {
         setAppliedJobs(prev => {
           const next = prev.includes(job.id) ? prev : [...prev, job.id]
@@ -815,6 +817,8 @@ export default function JobsPage({ collection = null }) {
     })
     if (!applyRes.ok) {
       setApplying(false)
+      // 428 = 자소서 요청 공고 — /ktc 공고 페이지(자소서 모달)로 보낸다(lib/jobEssays.js essayGate)
+      if (applyRes.status === 428) { const g = await applyRes.json().catch(() => ({})); window.location.href = g.redirect || `/ktc/jobs/${target.id}`; return }
       // 409 = 다른 기기에서 이미 지원(서버 dedup) — 로컬 상태를 서버에 맞춘다.
       if (applyRes.status === 409) {
         setAppliedJobs(prev => {

@@ -2,6 +2,7 @@ import supabase from '../../../lib/supabaseAdmin'
 import { verifyToken } from '../../../lib/campaignToken'
 import { notifyTeamNewApplication } from '../../../lib/notifyTeamNewApplication'
 import { isBlacklisted } from '../../../lib/blacklist'
+import { essayGate } from '../../../lib/jobEssays'
 
 // 콜드메일 공고 랜딩(go-public jobs 캠페인)의 원탭 지원 — 로그인 없이 캠페인 토큰으로
 // 본인 확인 후 프로필의 이력서/정보로 job_applications에 지원을 넣는다.
@@ -20,12 +21,15 @@ export default async function handler(req, res) {
       supabase.from('user_profiles')
         .select('email, full_name, role, resume_url, verified_company_name')
         .eq('id', userId).single(),
-      supabase.from('jobs').select('id, title, company, is_active').eq('id', jobId).single(),
+      supabase.from('jobs').select('id, title, company, is_active, source, source_id').eq('id', jobId).single(),
     ])
     if (!p?.resume_url) return res.status(400).json({ error: 'no_resume' })
     if (!job || !job.is_active) return res.status(400).json({ error: 'job_closed' })
     // 블랙리스트(면접 노쇼 등) — 원탭 지원도 같은 기준으로 막는다.
     if (await isBlacklisted(supabase, { userId, email: p.email })) return res.status(403).json({ error: 'not_eligible' })
+    // 자소서 공고는 답이 있어야 접수(추천 랜딩은 이런 공고를 /ktc/essay 지원 모드로 보내므로 보통 여기 안 걸린다)
+    const gate = await essayGate(supabase, job, { userId, email: p.email })
+    if (gate) return res.status(428).json(gate)
 
     // 중복 지원 방지(버튼 재클릭/재방문) — 이미 지원했으면 성공처럼 응답만.
     // 취소(canceled)된 지원은 재지원 허용 — /api/job-applications 의 dedup 과 같은 기준.

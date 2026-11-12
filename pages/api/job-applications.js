@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js'
 import { isBlacklisted } from '../../lib/blacklist'
 import { notifyTeamNewApplication } from '../../lib/notifyTeamNewApplication'
+import { essayGate } from '../../lib/jobEssays'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -59,6 +60,16 @@ export default async function handler(req, res) {
 
   if (!jobId) {
     return res.status(400).json({ error: 'jobId required' })
+  }
+
+  // 기업이 자소서를 요청한 공고(lib/jobEssays.js)는 답이 있어야 접수한다 — 어느 화면에서 눌렀든
+  // /ktc 공고 페이지(지원 시 자소서 모달)로 돌려보낸다. 클라이언트는 redirect 로 이동한다.
+  {
+    const { data: gj } = await supabase.from('jobs').select('id, source, source_id').eq('id', jobId).maybeSingle()
+    let email = applicantEmail
+    if (userId && !email) email = (await supabase.auth.admin.getUserById(userId)).data?.user?.email
+    const gate = await essayGate(supabase, gj, { userId, email })
+    if (gate) return res.status(428).json(gate)
   }
 
   // 중복 지원 차단 — 원래는 localStorage(fyi_applied_jobs)로만 막아서 기기가 바뀌면 뚫렸다.

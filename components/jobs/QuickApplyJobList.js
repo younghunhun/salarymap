@@ -38,6 +38,8 @@ export default function QuickApplyJobList({ jobs, page, source, resumeUrl = null
       })
       // 409 = 이미 지원한 공고(서버 dedup) — 실패가 아니라 지원됨 상태로 맞춘다.
       if (res.status === 409) { setApplied((a) => ({ ...a, [job.id]: true })); return }
+      // 428 = 자소서 요청 공고 — /ktc 공고 페이지(자소서 모달)로 보낸다(lib/jobEssays.js essayGate)
+      if (res.status === 428) { const g = await res.json().catch(() => ({})); window.location.href = g.redirect || `/ktc/jobs/${job.id}`; return }
       if (!res.ok) throw new Error('apply_failed')
       setApplied((a) => ({ ...a, [job.id]: true }))
       track('submit_application', { meta: { job_id: job.id, source }, page })

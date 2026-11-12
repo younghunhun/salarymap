@@ -199,6 +199,8 @@ function DoneView() {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${session.access_token}` },
         body: JSON.stringify({ jobId: job.id, jobTitle: job.title, jobCompany: job.company, resumeUrl: ru, applicationSource: 'ktc_claim' }),
       })
+      // 428 = 자소서 요청 공고 — /ktc 공고 페이지(자소서 모달)로 보낸다(lib/jobEssays.js essayGate)
+      if (res.status === 428) { const g = await res.json().catch(() => ({})); window.location.href = g.redirect || `/ktc/jobs/${job.id}`; return }
       if (!res.ok) throw new Error('apply_failed')
       setApplied(a => ({ ...a, [job.id]: true }))
       track('submit_application', { meta: { job_id: job.id, source: 'ktc_claim' }, page: '/ktc/claim' })

@@ -23,7 +23,7 @@ function activePageFor(pathname) {
   if (pathname === '/my-applications') return 'my-applications';
   if (pathname === '/saved-jobs') return 'saved-jobs';
   if (pathname === '/profile') return 'profile';
-  if (pathname.startsWith('/ktc')) return 'ktc';
+  if (pathname.startsWith('/ktc') || pathname === '/matching-week') return 'ktc';
   return null;
 }
 

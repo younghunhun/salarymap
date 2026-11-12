@@ -157,7 +157,7 @@ export default function Home({ jobs, companies, mwOn }) {
   };
 
   const news = [
-    mwOn && { key: 'mw', href: '/ktc#jobs', upcoming: true, bg: 'linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.72) 100%), url(/main/matching-week.jpg) center/cover' }, // 사진: 매칭위크 1:1 현장 면접 장면(아래쪽 어둡게 깔아 글자 대비 확보)
+    mwOn && { key: 'mw', href: '/matching-week', upcoming: true, bg: 'linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.72) 100%), url(/main/matching-week.jpg) center/cover' }, // 사진: 매칭위크 1:1 현장 면접 장면(아래쪽 어둡게 깔아 글자 대비 확보)
     { key: 'office', href: '/ktc#about', bg: 'linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.72) 100%), url(/main/ktc-office.jpg) center/cover' }, // 사진: KTC 오피스(COBI work) 내부
     // 지난 행사 소식 — 넘어갈 페이지가 없어 링크 없이 hover 모션만 준다
     { key: 'connect', bg: 'linear-gradient(180deg, rgba(0,0,0,0) 35%, rgba(0,0,0,0.72) 100%), url(/main/connect-day.jpg) center/cover' },
