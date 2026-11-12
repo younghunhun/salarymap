@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import { useT } from '../lib/i18n';
@@ -15,7 +15,6 @@ const EVENT_AT = new Date('2026-11-19T00:00:00+07:00');
    주소·출발 시각(08:30·13:00)·복귀 방식은 엠마 팀 시트 7번 'Organizer support'(2026-11-12) 원문 그대로.
    지도는 API 키 없는 구글맵 임베드(q=좌표). */
 const VENUE = {
-  videoUrl: 'https://www.facebook.com/share/r/1ELuypGcCw/',
   departures: ['08:30', '13:00'],
   mapEmbed: 'https://maps.google.com/maps?q=10.6321154,106.7180673&z=12&hl=vi&output=embed',
   shuttle: { name: 'COBI Tower 2', address: '2-4 Street No. 8, Tan My Ward, Ho Chi Minh City', url: 'https://www.google.com/maps/place/COBI+TOWER+2/@10.7306545,106.7245815,17z/data=!4m6!3m5!1s0x317525f46b232607:0x784e860aec9c7081!8m2!3d10.7306545!4d106.7245815!16s%2Fg%2F11s58_cv1n' },
@@ -61,13 +60,28 @@ const EVENTS = [
   { key: 'may', m: '05', cover: '/matching-week/may-4.jpg', photos: range('may', 10) },
   { key: 'jul', m: '07', cover: '/matching-week/jul-2.jpg', photos: range('jul', 8) },
   { key: 'sep', m: '09', cover: '/matching-week/sep-9.jpg', photos: range('sep', 10) },
-  { key: 'nov', m: '11', next: true, photos: [] },
+  // 11월은 아직 열리지 않아 실제 사진 대신 행사장 데모 이미지(드라이브 'Demo event/IMAGE') — '행사 현장 미리보기' 표시를 붙인다(유저: '3D 예상도'는 스캠처럼 보일 수 있어 피함)
+  { key: 'nov', m: '11', next: true, demo: true, cover: '/matching-week/nov-1.jpg', photos: range('nov', 10) },
 ];
 const PROGRAMS = [
   { key: 'kmajor', cover: '/matching-week/kmajor-10.jpg', photos: range('kmajor', 10) },
   { key: 'trip', cover: '/matching-week/trip-8.jpg', photos: range('trip', 10) },
 ];
 const ALBUMS = [...EVENTS, ...PROGRAMS].filter((a) => a.photos.length > 0); // 갤러리 탭(사진 있는 앨범만)
+
+/* 매칭위크 구성 — 행사 배너 문구 '1:1 INTERVIEW · MENTORING · HACKATHON · ALL IN ONE WEEK' 기준.
+   사진은 지난 매칭위크 앨범에서 장면별로 골랐다(갤러리는 이 묶음끼리 탭으로 넘긴다) */
+const mw = (list) => list.map((x) => `/matching-week/${x}.jpg`);
+const CONTENTS = [
+  { key: 'c-interview', icon: 'interview', cover: '/matching-week/sep-7.jpg', photos: mw(['sep-7', 'may-4', 'sep-10', 'may-10', 'sep-1', 'may-3', 'sep-5', 'may-9', 'jul-4']) },
+  { key: 'c-hackathon', icon: 'hackathon', cover: '/matching-week/sep-9.jpg', photos: mw(['sep-9', 'sep-6', 'may-8', 'sep-4', 'jul-3', 'jul-8', 'may-7', 'jul-5', 'may-6', 'jul-2', 'jul-6']) }, // 시상식은 해커톤 마지막 순서라 같이 묶음
+  { key: 'c-mentoring', icon: 'mentoring', cover: '/matching-week/sep-2.jpg', photos: mw(['sep-2', 'may-1', 'may-2', 'may-5', 'jul-1', 'jul-7', 'sep-8']) },
+];
+const CONTENT_ICONS = {
+  interview: <><circle cx="8" cy="8" r="3" /><circle cx="16" cy="8" r="3" /><path d="M3 20v-1a5 5 0 0110 0v1M11 20v-1a5 5 0 0110 0v1" /></>,
+  hackathon: <><path d="M8 9l-3 3 3 3M16 9l3 3-3 3M13.5 6l-3 12" /></>,
+  mentoring: <><path d="M3 5h18v11H8l-5 4V5z" /><path d="M8 10h8M8 13h5" /></>,
+};
 
 export async function getStaticProps() {
   let jobs = [];
@@ -113,6 +127,44 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
   const { t } = useT();
   const [copied, setCopied] = useState(false);
   const [slide, setSlide] = useState(0);
+  const videoBox = useRef(null);
+  const videoRef = useRef(null);
+  const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(false);
+  const [vt, setVt] = useState({ cur: 0, dur: 0 }); // 재생 위치·길이(초)
+  const userPaused = useRef(false); // 직접 멈췄으면 스크롤로 다시 자동재생하지 않는다
+
+  // 안내 영상: 절반 이상 보이면 재생, 벗어나면 정지(브라우저 자동재생 정책상 음소거 상태로 시작)
+  useEffect(() => {
+    const box = videoBox.current; const v = videoRef.current;
+    if (!box || !v || !('IntersectionObserver' in window)) return;
+    let played = false;
+    const io = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) {
+        if (userPaused.current) return;
+        v.play().catch(() => {});
+        if (!played) { played = true; track('mw_video_play', { page: '/matching-week' }); }
+      } else v.pause();
+    }, { threshold: 0.5 });
+    io.observe(box);
+    return () => io.disconnect();
+  }, []);
+  const togglePlay = () => {
+    const v = videoRef.current; if (!v) return;
+    if (v.paused) { userPaused.current = false; v.play().catch(() => {}); }
+    else { userPaused.current = true; v.pause(); }
+  };
+  const seek = (sec) => {
+    const v = videoRef.current; if (!v || !v.duration) return;
+    v.currentTime = Math.min(Math.max(sec, 0), v.duration - 0.1);
+    setVt({ cur: v.currentTime, dur: v.duration });
+  };
+  const fmt = (x) => `${Math.floor(x / 60)}:${String(Math.floor(x % 60)).padStart(2, '0')}`;
+  const toggleMute = () => {
+    const v = videoRef.current; if (!v) return;
+    v.muted = !muted; setMuted(!muted);
+    if (muted) { v.play().catch(() => {}); track('mw_video_unmute', { page: '/matching-week' }); }
+  };
 
   // 히어로 사진 5초마다 교차 페이드(모션 줄이기 설정이면 첫 장 고정)
   useEffect(() => {
@@ -141,9 +193,16 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, gallery, view]);
 
-  const albumTitle = (a) => (a.m ? t(`mw.past.${a.key}`) : t(`mw.prog.${a.key}.title`));
-  const tabPhotos = !gallery ? [] : gallery === 'all' ? ALBUMS.flatMap((a) => a.photos) : (ALBUMS.find((a) => a.key === gallery)?.photos || []);
-  const tabTitle = !gallery ? '' : gallery === 'all' ? t('mw.album.all') : albumTitle(ALBUMS.find((a) => a.key === gallery) || {});
+  const albumTitle = (a) => (a.m ? t(`mw.past.${a.key}`) : t(`mw.prog.${a.key}.title`)) + (a.demo ? ` · ${t('mw.album.demo')}` : '');
+  // 갤러리 탭 묶음 — 구성(해커톤 등) 카드로 열면 구성끼리, 앨범 카드로 열면 앨범끼리(+전체)
+  const isContent = !!gallery && gallery.startsWith('c-');
+  const group = isContent ? CONTENTS : ALBUMS;
+  const groupTitle = (a) => (isContent ? t(`mw.content.${a.icon}.title`) : albumTitle(a));
+  const tabPhotos = !gallery ? [] : gallery === 'all' ? ALBUMS.flatMap((a) => a.photos) : (group.find((a) => a.key === gallery)?.photos || []);
+  const tabTitle = !gallery ? '' : gallery === 'all' ? t('mw.album.all') : groupTitle(group.find((a) => a.key === gallery) || {});
+  const galleryTabs = isContent
+    ? CONTENTS.map((a) => ({ key: a.key, title: groupTitle(a), n: a.photos.length }))
+    : [{ key: 'all', title: t('mw.album.all'), n: ALBUMS.reduce((n, a) => n + a.photos.length, 0) }, ...ALBUMS.map((a) => ({ key: a.key, title: albumTitle(a), n: a.photos.length }))];
   const step = (d) => setView((i) => (i === null ? i : (i + d + tabPhotos.length) % tabPhotos.length));
   const openAlbum = (a) => {
     if (!a.photos.length) return;
@@ -259,7 +318,27 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             </Reveal>
             <Reveal delay={100}>
               <div className="mw-albums">
-                {EVENTS.map((e) => <AlbumCard key={e.key} a={e} title={t(`mw.past.${e.key}`)} />)}
+                {EVENTS.map((e) => <AlbumCard key={e.key} a={e} title={t(`mw.past.${e.key}`)} desc={e.demo ? t('mw.album.demoDesc') : undefined} />)}
+              </div>
+            </Reveal>
+            {/* 매칭위크에서 하는 것 — 구성별 카드, 누르면 그 장면 사진 갤러리 */}
+            <Reveal delay={120}>
+              <h3 className="mw-subtitle">{t('mw.content.title')}</h3>
+              <p className="mw-lead mw-lead-sm">{t('mw.content.sub')}</p>
+              <div className="mw-contents">
+                {CONTENTS.map((c, i) => (
+                  <button key={c.key} type="button" className="mw-content" onClick={() => openAlbum(c)}>
+                    <span className="mw-content-img" style={{ backgroundImage: `url(${c.cover})` }} aria-hidden="true">
+                      <span className="mw-content-n">0{i + 1}</span>
+                    </span>
+                    <span className="mw-content-body">
+                      <span className="mw-content-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{CONTENT_ICONS[c.icon]}</svg></span>
+                      <b>{t(`mw.content.${c.icon}.title`)}</b>
+                      <small>{t(`mw.content.${c.icon}.desc`)}</small>
+                      <em>{t('mw.album.count', { n: c.photos.length })} →</em>
+                    </span>
+                  </button>
+                ))}
               </div>
             </Reveal>
             <Reveal delay={150}>
@@ -299,6 +378,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
                   <div className="mw-ride-go">
                     <span className="mw-ride-k">{t('mw.venue.go')}</span>
                     <span className="mw-ride-times">{VENUE.departures.map((d) => <b key={d}>{d}</b>)}</span>
+                    <span className="mw-ride-dur">{t('mw.venue.duration')}</span>
                   </div>
                   <div className="mw-ride-line" aria-hidden="true"><span className="mw-ride-bus"><Bus /></span></div>
                   <div className="mw-ride-back">
@@ -317,16 +397,44 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             </Reveal>
             <Reveal delay={140}>
               <div className="mw-venue-grid">
-                <a href={VENUE.videoUrl} target="_blank" rel="noopener noreferrer" className="mw-video"
-                  onClick={() => track('mw_video_click', { page: '/matching-week' })}>
-                  <span className="mw-video-bg" aria-hidden="true" />
-                  <span className="mw-video-tag">Reels</span>
-                  <span className="mw-play" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg></span>
+                {/* 오시는 길 안내 영상(드라이브 'EVENT - HD.mp4' 를 576px·8.5MB 로 압축) — 화면에 보이면 음소거 자동재생, 벗어나면 정지 */}
+                <div className="mw-video" ref={videoBox}>
+                  <video ref={videoRef} src="/matching-week/event.mp4" poster="/matching-week/event-poster.jpg" muted={muted} loop playsInline preload="metadata"
+                    onClick={togglePlay}
+                    onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)}
+                    onLoadedMetadata={(e) => setVt({ cur: e.currentTarget.currentTime, dur: e.currentTarget.duration })}
+                    onTimeUpdate={(e) => setVt({ cur: e.currentTarget.currentTime, dur: e.currentTarget.duration })} />
+                  <button type="button" className="mw-mute" onClick={toggleMute} aria-label={muted ? 'unmute' : 'mute'}>
+                    {muted
+                      ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M23 9l-6 6M17 9l6 6" /></svg>
+                      : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4V5z" /><path d="M15.5 8.5a5 5 0 010 7M19 5a10 10 0 010 14" /></svg>}
+                    <span>{muted ? t('mw.venue.soundOn') : t('mw.venue.soundOff')}</span>
+                  </button>
                   <span className="mw-video-txt">
                     <b>{t('mw.venue.videoTitle')}</b>
                     <span>{t('mw.venue.videoDesc')}</span>
                   </span>
-                </a>
+                  {/* 재생 컨트롤 — 놓친 구간을 다시 볼 수 있게 10초 이동 + 드래그 진행 바 */}
+                  <div className="mw-vctl">
+                    <input type="range" className="mw-vbar" min={0} max={vt.dur || 0} step={0.1} value={vt.cur}
+                      style={{ '--p': vt.dur ? `${(vt.cur / vt.dur) * 100}%` : '0%' }}
+                      onChange={(e) => seek(Number(e.target.value))} aria-label="seek" />
+                    <div className="mw-vbtns">
+                      <button type="button" onClick={() => seek(vt.cur - 10)} aria-label="-10s">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 103-6.7L3 8" /><path d="M3 3v5h5" /></svg><small>10</small>
+                      </button>
+                      <button type="button" className="mw-vplay" onClick={togglePlay} aria-label={playing ? 'pause' : 'play'}>
+                        {playing
+                          ? <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1" /><rect x="14" y="5" width="4" height="14" rx="1" /></svg>
+                          : <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>}
+                      </button>
+                      <button type="button" onClick={() => seek(vt.cur + 10)} aria-label="+10s">
+                        <small>10</small><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 11-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg>
+                      </button>
+                      <span className="mw-vtime">{fmt(vt.cur)} / {fmt(vt.dur)}</span>
+                    </div>
+                  </div>
+                </div>
                 <div className="mw-venue-side">
                   <div className="mw-map"><iframe src={VENUE.mapEmbed} title="COBI Home map" loading="lazy" referrerPolicy="no-referrer-when-downgrade" /></div>
                   <div className="mw-perks">
@@ -491,7 +599,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
               </button>
             </div>
             <div className="mw-gal-tabs" role="tablist">
-              {[{ key: 'all', title: t('mw.album.all'), n: ALBUMS.reduce((n, a) => n + a.photos.length, 0) }, ...ALBUMS.map((a) => ({ key: a.key, title: albumTitle(a), n: a.photos.length }))].map((tab) => (
+              {galleryTabs.map((tab) => (
                 <button key={tab.key} role="tab" aria-selected={gallery === tab.key} className={gallery === tab.key ? 'on' : ''}
                   onClick={() => { setGallery(tab.key); setView(null); }}>
                   {tab.title}<em>({tab.n})</em>
@@ -615,6 +723,18 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
         .mw-album-go { position: absolute; top: 16px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.16); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; transition: background .2s; }
         .mw-album:hover .mw-album-go { background: #ff6000; }
         .mw-subtitle { margin: 64px 0 0; font-size: 26px; font-weight: 800; letter-spacing: -0.6px; }
+        /* 매칭위크 구성 카드 */
+        .mw-contents { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+        .mw-content { display: flex; flex-direction: column; padding: 0; border-radius: 22px; overflow: hidden; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); color: #fff; font: inherit; text-align: left; cursor: pointer; transition: transform .25s, border-color .25s, background .25s; }
+        .mw-content:hover { transform: translateY(-4px); border-color: rgba(255,138,61,0.6); background: rgba(255,255,255,0.07); }
+        .mw-content-img { position: relative; display: block; aspect-ratio: 4 / 3; background-size: cover; background-position: center; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
+        .mw-content-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(20,20,19,0.9)); }
+        .mw-content-n { position: absolute; z-index: 1; top: 12px; left: 14px; font-size: 13px; font-weight: 800; letter-spacing: 1px; padding: 4px 9px; border-radius: 999px; background: rgba(0,0,0,0.45); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+        .mw-content-body { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 0 20px 20px; margin-top: -22px; flex: 1; }
+        .mw-content-ico { width: 44px; height: 44px; border-radius: 14px; background: #ff6000; color: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(255,96,0,0.4); margin-bottom: 6px; }
+        .mw-content-body b { font-size: 18px; }
+        .mw-content-body small { font-size: 13.5px; color: rgba(255,255,255,0.68); line-height: 1.55; }
+        .mw-content-body em { margin-top: auto; padding-top: 10px; font-style: normal; font-size: 13px; font-weight: 700; color: #ff8a3d; }
         .mw-lead-sm { margin-top: 8px; font-size: 15.5px; }
         /* 사진 갤러리 모달 — 탭 + 3열 그리드 스크롤 */
         .mw-gal { position: fixed; inset: 0; z-index: 1050; background: rgba(10,10,10,0.6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; padding: 40px; animation: mw-fade .18s ease; }
@@ -683,16 +803,28 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
         @keyframes mw-bus { 0% { left: 0; } 50% { left: calc(100% - 34px); } 100% { left: 0; } }
         @media (prefers-reduced-motion: reduce) { .mw-ride-bus { animation: none; left: calc(50% - 17px); } }
         /* 영상 · 지도 · 알아두세요 */
-        .mw-venue-grid { margin-top: 16px; display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 16px; }
-        .mw-video { position: relative; display: flex; align-items: flex-end; min-height: 460px; padding: 28px; border-radius: 28px; overflow: hidden; text-decoration: none; color: #fff; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
-        .mw-video-tag { position: absolute; top: 18px; left: 18px; padding: 5px 11px; border-radius: 999px; background: rgba(0,0,0,0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); font-size: 12px; font-weight: 700; letter-spacing: 0.4px; }
-        .mw-video-bg { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.85)), url(/matching-week/video-thumb.jpg) center 52%/cover; transition: transform .7s cubic-bezier(.2,.8,.2,1); }
-        .mw-video:hover .mw-video-bg { transform: scale(1.05); }
-        .mw-play { position: absolute; top: 46%; left: 50%; transform: translate(-50%, -50%); width: 78px; height: 78px; border-radius: 50%; background: #ff6000; color: #fff; display: flex; align-items: center; justify-content: center; padding-left: 4px; box-shadow: 0 0 0 10px rgba(255,96,0,0.25), 0 12px 30px rgba(0,0,0,0.3); transition: transform .2s; }
-        .mw-video:hover .mw-play { transform: translate(-50%, -50%) scale(1.08); }
-        .mw-video-txt { position: relative; display: flex; flex-direction: column; gap: 4px; }
-        .mw-video-txt b { font-size: 21px; }
-        .mw-video-txt span { font-size: 14px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+        .mw-venue-grid { margin-top: 16px; display: grid; grid-template-columns: minmax(0, 380px) 1fr; gap: 16px; align-items: stretch; }
+        .mw-video { position: relative; aspect-ratio: 9 / 16; border-radius: 28px; overflow: hidden; background: #000; box-shadow: 0 24px 60px rgba(0,0,0,0.2); }
+        .mw-video video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .mw-video::after { content: ''; position: absolute; inset: auto 0 0 0; height: 48%; background: linear-gradient(180deg, transparent, rgba(0,0,0,0.78)); pointer-events: none; }
+        .mw-mute { position: absolute; z-index: 2; top: 16px; right: 16px; display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px 0 12px; border-radius: 999px; border: 0; background: rgba(0,0,0,0.5); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: #fff; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .15s; }
+        .mw-mute:hover { background: #ff6000; }
+        .mw-video-txt { position: absolute; z-index: 1; left: 22px; right: 22px; bottom: 96px; display: flex; flex-direction: column; gap: 4px; color: #fff; pointer-events: none; }
+        .mw-video-txt b { font-size: 19px; }
+        .mw-video-txt span { font-size: 13.5px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+        .mw-video video { cursor: pointer; }
+        .mw-vctl { position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 14px; display: flex; flex-direction: column; gap: 8px; }
+        .mw-vbar { -webkit-appearance: none; appearance: none; width: 100%; height: 4px; margin: 0; border-radius: 999px; background: linear-gradient(90deg, #ff6000 var(--p), rgba(255,255,255,0.3) var(--p)); cursor: pointer; }
+        .mw-vbar::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255,96,0,0.6); }
+        .mw-vbar::-moz-range-thumb { width: 14px; height: 14px; border: 0; border-radius: 50%; background: #fff; box-shadow: 0 0 0 3px rgba(255,96,0,0.6); }
+        .mw-vbtns { display: flex; align-items: center; gap: 6px; }
+        .mw-vbtns button { display: inline-flex; align-items: center; justify-content: center; gap: 2px; height: 38px; min-width: 38px; padding: 0 8px; border-radius: 999px; border: 0; background: rgba(0,0,0,0.45); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); color: #fff; font: inherit; cursor: pointer; transition: background .15s; }
+        .mw-vbtns button:hover { background: rgba(255,255,255,0.22); }
+        .mw-vbtns small { font-size: 11px; font-weight: 800; }
+        .mw-vbtns .mw-vplay { width: 44px; height: 44px; padding: 0; background: #ff6000; }
+        .mw-vbtns .mw-vplay:hover { background: #ff7a26; }
+        .mw-vtime { margin-left: auto; font-size: 12.5px; font-weight: 600; color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums; }
+        .mw-ride-dur { font-size: 13px; font-weight: 700; color: #ffb27f; }
         .mw-venue-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
         .mw-map { flex: 1; min-height: 280px; border-radius: 28px; overflow: hidden; border: 1px solid #ececef; background: #f4f4f5; }
         .mw-map iframe { width: 100%; height: 100%; min-height: 280px; border: 0; display: block; }
@@ -819,6 +951,12 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           .mw-album-txt b { font-size: 15px; }
           .mw-album-go { width: 34px; height: 34px; top: 10px; right: 10px; }
           .mw-subtitle { margin-top: 44px; font-size: 21px; }
+          .mw-contents { grid-template-columns: 1fr; gap: 12px; }
+          .mw-content-img { aspect-ratio: 16 / 9; }
+          .mw-content-body { padding: 0 14px 14px; }
+          .mw-content-body b { font-size: 15.5px; }
+          .mw-content-body small { font-size: 12.5px; }
+          .mw-content-ico { width: 38px; height: 38px; }
           .mw-gal { padding: 0; }
           .mw-gal-box { max-height: none; border-radius: 0; }
           .mw-gal-head { padding: 12px 14px 4px; }
@@ -837,11 +975,10 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           .mw-jstop { padding: 18px; }
           .mw-jstop b { font-size: 20px; }
           .mw-ride { padding: 16px 8px; }
-          .mw-video { min-height: 380px; padding: 22px; border-radius: 22px; }
+          .mw-video { border-radius: 22px; max-height: 78vh; margin: 0 auto; width: 100%; }
           .mw-map { border-radius: 22px; }
           .mw-perks { grid-template-columns: 1fr; gap: 10px; }
           .mw-perk { padding: 16px; }
-          .mw-play { width: 64px; height: 64px; }
           .mw-step { padding: 24px 22px; }
           .mw-step-n { font-size: 44px; }
           .mw-cos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
