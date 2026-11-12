@@ -12,6 +12,7 @@ import { isSalaryNegotiable } from '../../utils/salary'
 import { track as trackVisit, getClientId, mirrorClarity } from '../../lib/track'
 import { confirmAppliedInline } from '../../lib/applyConversion'
 import { idbPutCv, idbGetCv, idbClearCv } from '../../lib/pendingCv'
+import { withBold } from '../../lib/withBold'
 
 // 스토리지 URL에서 원본 이력서 파일명 복원 (업로드 시 `${timestamp}_${safeName}`로 저장됨)
 function resumeNameFromUrl(url) {
@@ -404,7 +405,7 @@ export default function JobDetailPage({ job }) {
             {/* Description */}
             <div className="jd-section-title">{t('jobs.about')}</div>
             <div className="jd-desc">
-              {decodeHTML(job.description) || `${job.company} is looking for a ${job.title} to join their team in ${job.location}.\n\nThis is a ${job.type} position offering ${Math.round(job.salary_min / 1e6)}M–${Math.round(job.salary_max / 1e6)}M VND, ideal for candidates with ${job.experience_min}–${job.experience_max} years of experience in ${job.role}.\n\nOur headhunter team will personally introduce you and support you throughout the process.`}
+              {withBold(decodeHTML(job.description)) || `${job.company} is looking for a ${job.title} to join their team in ${job.location}.\n\nThis is a ${job.type} position offering ${Math.round(job.salary_min / 1e6)}M–${Math.round(job.salary_max / 1e6)}M VND, ideal for candidates with ${job.experience_min}–${job.experience_max} years of experience in ${job.role}.\n\nOur headhunter team will personally introduce you and support you throughout the process.`}
             </div>
 
             {/* Benefits */}

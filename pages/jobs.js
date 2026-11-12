@@ -14,6 +14,7 @@ import { COMPANY_PROFILES } from '../data/companyProfiles.js'
 import { formatSalaryCard, isSalaryNegotiable } from '../utils/salary'
 import { generateCompanyDescription } from '../utils/companyDescription'
 import { getStoredUtm, getApplicationSource } from '../lib/utm'
+import { withBold } from '../lib/withBold'
 
 function decodeHTML(str) {
   if (!str || typeof str !== 'string') return str
@@ -1588,7 +1589,7 @@ export default function JobsPage({ collection = null }) {
                 </div>
               ) : (
                 <div className="jd-desc">
-                  {decodeHTML(detailJob.description) || `${detailJob.company} is looking for a ${detailJob.title} to join their team in ${detailJob.location}.\n\nThis is a ${detailJob.type} position offering ${Math.round(detailJob.salary_min / 1e6)}M–${Math.round(detailJob.salary_max / 1e6)}M VND, ideal for candidates with ${detailJob.experience_min}–${detailJob.experience_max} years of experience in ${detailJob.role}.\n\nOur headhunter team will personally introduce you and support you throughout the process.`}
+                  {withBold(decodeHTML(detailJob.description)) || `${detailJob.company} is looking for a ${detailJob.title} to join their team in ${detailJob.location}.\n\nThis is a ${detailJob.type} position offering ${Math.round(detailJob.salary_min / 1e6)}M–${Math.round(detailJob.salary_max / 1e6)}M VND, ideal for candidates with ${detailJob.experience_min}–${detailJob.experience_max} years of experience in ${detailJob.role}.\n\nOur headhunter team will personally introduce you and support you throughout the process.`}
                 </div>
               )}
 

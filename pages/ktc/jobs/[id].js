@@ -5,6 +5,7 @@ import { BRAND, c, s } from '../../../components/ktc/ktcStyles';
 import { useT } from '../../../lib/i18n';
 import { fetchKtcJob } from '../../../lib/ktcJobs';
 import KtcApply from '../../../components/ktc/KtcApply';
+import { withBold } from '../../../lib/withBold';
 
 /* 공고 상세 — 랜딩 안의 인라인 패널이 아니라 독립 페이지.
    서버에서 읽어 넣으므로 공고 본문이 초기 HTML 에 들어간다(공유·검색 대응). */
@@ -49,12 +50,6 @@ function WorkType({ value }) {
     </span>
   );
 }
-
-// "**텍스트**" → <strong>. 홀수 번째 조각이 ** 사이 텍스트다.
-const withBold = (text) =>
-  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
-    i % 2 ? <strong key={i} style={{ color: c.text, fontWeight: 750 }}>{part}</strong> : part
-  );
 
 export default function KtcJobDetail({ job }) {
   const { t, lang } = useT();
@@ -164,7 +159,7 @@ export default function KtcJobDetail({ job }) {
                     {/* 본문은 줄바꿈과 "- " 불릿이 섞인 평문 — pre-line 으로 원문 줄바꿈을 살린다.
                         소제목·강조에 쓰인 **굵게** 만 실제 굵은 글씨로 바꾼다. */}
                     <p style={{ marginTop: 10, fontSize: 14.5, lineHeight: 1.8, color: c.textDim, whiteSpace: 'pre-line' }}>
-                      {withBold(b.body)}
+                      {withBold(b.body, { color: c.text, fontWeight: 750 })}
                     </p>
                   </div>
                 ))}

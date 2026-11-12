@@ -3,6 +3,7 @@
 // public page isn't touched. If the jobs.js detail panel layout/styles change,
 // update this file too to keep the preview faithful. (2026-07 리디자인 반영:
 // 제목 → 회사명 단독 줄 → 지역·형태·경력·마감 서브라인 → 연봉 → 스택 칩 구조)
+import { withBold } from '../../lib/withBold'
 const typeLabel = (t) => t === 'remote' ? 'Remote' : t === 'hybrid' ? 'Hybrid' : t === 'onsite' ? 'On-site' : t || '';
 
 // Normalize the recruiter/admin form shape into the saved-job shape the public
@@ -121,7 +122,7 @@ export default function JobPreview({ form, companyName, fullscreen = false, pane
 
           <div className="jd-section-title">About the Role</div>
           <div className="jd-desc">
-            {job.description || (job.company && job.title
+            {withBold(job.description) || (job.company && job.title
               ? `${job.company} is looking for a ${job.title} to join their team${job.location ? ` in ${job.location}` : ''}.`
               : '')}
           </div>
