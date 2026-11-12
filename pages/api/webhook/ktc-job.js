@@ -49,6 +49,7 @@ async function examples(db) {
 async function generate(input, shots, retry) {
   const sys = [
     'You write job postings for K-Tech College (KTC): Korean companies hiring Vietnamese talent, posted on the FYI job board.',
+    'job_family in the input (Dev, Sales, etc.) is an internal category, not part of the title — never put it in the title.',
     'Write EVERY field in Vietnamese, whatever language the input or the examples are in — translate Korean and English input into natural Vietnamese (the title may stay in English). Keep product names, company names and tech terms (React, OOH, API…) as they are. No Hangul anywhere in the output, including the title.',
     'Follow the tone, section structure and formatting of the example postings.',
     'Use ONLY facts from the input. Never invent salary numbers, benefits, office addresses, tech stacks or company facts.',
@@ -64,7 +65,7 @@ New position input (may be Korean or English; write the posting in Vietnamese):
 ${JSON.stringify(input, null, 1)}
 
 Return JSON:
-{"title":"position title as shown on the board",
+{"title":"position title as shown on the board — a natural job title like \\"Backend Developer\\"; never prefix it with job_family (Dev / Sales / etc.)",
  "location":"work location (e.g. Remote, TP.HCM, Hà Nội, Seoul) — infer from input category/location only",
  "category":"one of ${KTC_CATEGORIES.join(' | ')}",
  "work_type":"Remote | Hybrid | Onsite (input category Remote means Remote)",
@@ -94,6 +95,9 @@ function problemsOf(input, g) {
   const out = []
   const ko = FIELDS.filter((f) => HANGUL.test(s(g[f])))
   if (ko.length) out.push(`Hangul remains in ${ko.join(', ')} — translate to Vietnamese`)
+  if (input.job_family && s(g.title).toLowerCase().startsWith(`${input.job_family.toLowerCase()} /`)) {
+    out.push(`title starts with the internal job_family "${input.job_family} /" — use only the job title`)
+  }
   // 원문과 겹치는 우대 항목이 합쳐지는 정도(1줄)는 허용
   const pairs = [
     ['responsibilities', items(input.responsibilities), items(g.responsibilities)],
@@ -122,7 +126,8 @@ export default async function handler(req, res) {
 
     const input = {
       company, company_ko: s(b.company), ktc_category: s(b.category), location: s(b.location),
-      position: [s(b.positionType), s(b.position)].filter(Boolean).join(' / '), headcount: Number(b.hires) || 1,
+      // positionType(Dev·Sales·etc.)은 KTC Support 내부 분류 — position 에 붙이면 "etc. / …" 가 제목이 된다
+      position: s(b.position) || s(b.positionType), job_family: s(b.positionType), headcount: Number(b.hires) || 1,
       experience: s(b.experience), salary: s(b.salary), responsibilities: s(b.responsibilities),
       qualifications: s(b.qualifications), preferred: s(b.preferred), original_request: s(b.request),
     }
