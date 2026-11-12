@@ -59,7 +59,7 @@ async function getCachedToken() {
   return data.access_token
 }
 
-async function runReport({ startDate, endDate, dimensions = [], metrics = [], orderBys, limit }) {
+export async function runReport({ startDate, endDate, dimensions = [], metrics = [], orderBys, limit }) {
   const token = await getCachedToken()
   const requestBody = {
     dateRanges: [{ startDate, endDate }],

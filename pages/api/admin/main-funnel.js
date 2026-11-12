@@ -41,7 +41,7 @@ const FLOW_FUNNELS = [
     newSignupTerminal: { fromStep: 'cv_register_success', label: ['가입 (신규)', 'Sign-up (new)'] } },
 ]
 
-async function fetchAll(query) {
+export async function fetchAll(query) {
   let all = []
   const PAGE = 1000
   for (let from = 0; ; from += PAGE) {
@@ -52,7 +52,7 @@ async function fetchAll(query) {
   return all
 }
 
-async function listAllUsers() {
+export async function listAllUsers() {
   let page = 1, allUsers = []
   while (true) {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage: 1000 })

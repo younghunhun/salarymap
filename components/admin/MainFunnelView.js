@@ -56,6 +56,73 @@ function DetailTable({ title, columns, rows, left = [0], style }) {
   )
 }
 
+// 메인 개편 전후 비교 — 연봉 메인 vs 새 포털 메인. 상단 기간 선택과 무관한 고정 기간(정의는 /api/admin/main-compare).
+function MainCompare({ token, L }) {
+  const { data, error } = useAdmin('/api/admin/main-compare', token)
+  const md = (d) => d.slice(5).replace('-', '/')
+  const period = (w) => `${md(w.from)}~${md(w.to)} · ${w.days}${L('일', 'd', ' ngày')}`
+  const perDay = (n, w) => (n === null ? '—' : (n / w.days).toFixed(1))
+  const rate = (a, b) => (b > 0 && a !== null ? (a / b) * 100 : null)
+  const pctStr = (v) => (v === null ? '—' : `${v.toFixed(2)}%`)
+  const diffPp = (a, b) => (a === null || b === null ? '—' : `${b - a >= 0 ? '+' : ''}${(b - a).toFixed(2)}%p`)
+  const diffPct = (a, b) => (a > 0 && b !== null && !Number.isNaN(b) ? `${b >= a ? '+' : ''}${(((b - a) / a) * 100).toFixed(0)}%` : '—')
+
+  let body
+  if (!data) {
+    body = <State kind={error ? 'error' : 'loading'}>{error ? L('불러오지 못했습니다.', 'Failed to load.', 'Không tải được.') : L('불러오는 중…', 'Loading…', 'Đang tải…')}</State>
+  } else {
+    const { before: b, after: a } = data
+    const countRow = (label, key) => [label, `${perDay(b[key], b)}`, a ? `${perDay(a[key], a)}` : '—', a ? diffPct(b[key] / b.days, a[key] / a.days) : '—', false]
+    const rateRow = (label, n, d) => {
+      const rb = rate(b[n], b[d]), ra = a ? rate(a[n], a[d]) : null
+      return [label, pctStr(rb), pctStr(ra), diffPp(rb, ra), true]
+    }
+    const rows = [
+      countRow(L('사이트 유입 (GA4 방문자, 일평균)', 'Site visitors (GA4, per day)', 'Lượt truy cập (GA4, TB/ngày)'), 'visitors'),
+      countRow(L('신규 가입 (일평균)', 'Sign-ups (per day)', 'Đăng ký (TB/ngày)'), 'signups'),
+      rateRow(L('가입 전환율 (가입 ÷ 유입)', 'Signup rate (signups ÷ visitors)', 'Tỷ lệ đăng ký'), 'signups', 'visitors'),
+      countRow(L('메인(/) 진입자 (일평균)', 'Home (/) visitors (per day)', 'Người vào trang chủ (TB/ngày)'), 'homeEntrants'),
+      countRow(L('메인 진입 후 당일 가입 (일평균)', 'Same-day sign-ups after home (per day)', 'Đăng ký trong ngày sau trang chủ (TB/ngày)'), 'homeConverted'),
+      rateRow(L('메인 진입 → 가입 전환율', 'Home → signup rate', 'Tỷ lệ trang chủ → đăng ký'), 'homeConverted', 'homeEntrants'),
+    ]
+    body = (
+      <TableCard minWidth={560}>
+        <thead>
+          <tr>
+            <th style={T.th}>{L('지표', 'Metric', 'Chỉ số')}</th>
+            <th style={T.thNum}>{L('이전 · 연봉 메인', 'Before · salary home', 'Trước · trang lương')}<div style={{ fontWeight: 400, color: C.faint }}>{period(b)}</div></th>
+            <th style={T.thNum}>{L('이후 · 새 메인', 'After · new home', 'Sau · trang chủ mới')}<div style={{ fontWeight: 400, color: C.faint }}>{a ? period(a) : '—'}</div></th>
+            <th style={T.thNum}>{L('변화', 'Change', 'Thay đổi')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map(([label, vb, va, dv, isRate]) => (
+            <tr key={label}>
+              <td style={{ ...T.td, fontWeight: isRate ? 600 : 400 }}>{label}</td>
+              <td style={{ ...T.tdNum, fontWeight: isRate ? 600 : 400 }}>{vb}</td>
+              <td style={{ ...T.tdNum, fontWeight: isRate ? 600 : 400 }}>{va}</td>
+              <td style={{ ...T.tdNum, fontWeight: isRate ? 600 : 400 }}>{dv}</td>
+            </tr>
+          ))}
+        </tbody>
+      </TableCard>
+    )
+  }
+
+  return (
+    <div style={{ marginBottom: G.xl }}>
+      <SectionTitle sub={L(
+        '새 메인은 11/11 정오 배포라 11/11 은 양쪽에서 제외합니다. 이후 기간에는 진행 중인 오늘이 포함됩니다. 전환율은 일 단위로 센 값을 합산해 계산합니다. 메인 진입자에서 연봉 광고 유입(현재는 /salary 로 이동)은 제외했습니다.',
+        'New home went live 11/11 noon, so 11/11 is excluded from both. "After" includes today so far. Rates use daily counts summed. Salary-ad landings are excluded from home visitors.',
+        'Trang chủ mới ra mắt trưa 11/11 nên loại 11/11 khỏi cả hai. "Sau" gồm cả hôm nay. Tỷ lệ tính từ số đếm theo ngày cộng lại. Đã loại lượt vào từ quảng cáo lương.',
+      )}>
+        {L('메인 개편 전후 비교 — 유입 대비 가입 전환', 'Home revamp — before vs after (signup conversion)', 'Trước/sau đổi trang chủ — chuyển đổi đăng ký')}
+      </SectionTitle>
+      {body}
+    </div>
+  )
+}
+
 export default function MainFunnelView({ token, lang, dateRange }) {
   const L = (ko, en, vi) => (lang === 'vi' ? (vi ?? en) : lang === 'ko' ? ko : en)
   const [stage, setStage] = useState('traffic')
@@ -107,6 +174,8 @@ export default function MainFunnelView({ token, lang, dateRange }) {
 
   return (
     <>
+      <MainCompare token={token} L={L} />
+
       {/* ── 퍼널 스트립: 4단계 카드 + 단계간 전환율 ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: G.md, flexWrap: 'wrap', marginBottom: G.md }}>
         <span style={{ fontSize: 13, color: C.sub, ...num }}>
