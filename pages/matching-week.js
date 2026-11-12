@@ -34,8 +34,11 @@ const ORGS = [
 
 // 다크 섹션 하단에 흐르는 사진 띠
 const MARQUEE = [
-  ...[1, 2, 3, 5, 7, 9].map((n) => `/matching-week/may-${n}.jpg`),
-  ...[1, 2, 3, 4, 5, 6].flatMap((n) => [`/ktc/gallery/fair-${n}.jpg`, `/ktc/gallery/ktc-${n}.jpg`]),
+  ...[2, 5, 8, 10, 1].map((n) => `/matching-week/sep-${n}.jpg`),
+  ...[1, 3, 7].map((n) => `/matching-week/jul-${n}.jpg`),
+  ...[3, 5, 9, 1].map((n) => `/matching-week/trip-${n}.jpg`),
+  ...[1, 3, 5, 7, 9].map((n) => `/matching-week/may-${n}.jpg`),
+  ...[4, 9].map((n) => `/matching-week/kmajor-${n}.jpg`),
 ];
 
 /* 행사·프로그램 앨범 — 엠마 팀 드라이브 폴더(Matching Month Page 시트 5·6번)에서 받아
@@ -43,10 +46,12 @@ const MARQUEE = [
    폴더: May 1tEQ1hcgW0H3OfS3ytYKZKLGeuS2voesn · July 1t9hogYQRY5fUkhKBDsiGLWfgD2fqTBlh · Sep 1eYyW41Jj8ciPzx4u8nnSn-TSCWvTVzp5
          K-Major 1C-JzQRTyGko5Ox7XegyRgz_xDFriHWCH · Korean Trip 1Lfi5cPnDkPSpDazM7Fx9K_yDiDxJCNzT */
 // 히어로 배경 슬라이드 — 사람이 많이 나온 사진 위주(행사 규모·신뢰감). 드라이브 원본에서 2400px 로 받은 고해상도본.
-// 5월 시상 단체(KTECH CONNECT-03244) · 5월 해커톤 객석(02157) · 7월 해커톤 우승팀 · 5월 1:1 면접(MCW 1905 35). pos 는 얼굴이 잘 보이는 세로 위치
+// 5월 시상 단체 · 서울 Connect Day 단체(Insight Trip) · 9월 VKU 시상 단체 · 9월 VKU 대강당 · 7월 해커톤 우승팀 · 5월 1:1 면접. pos 는 얼굴이 잘 보이는 세로 위치
 const HERO_SLIDES = [
   { src: '/matching-week/hero-1.jpg', pos: 'center 72%' },
-  { src: '/matching-week/hero-2.jpg', pos: 'center 60%' },
+  { src: '/matching-week/hero-6.jpg', pos: 'center 60%' },
+  { src: '/matching-week/hero-5.jpg', pos: 'center 62%' },
+  { src: '/matching-week/hero-7.jpg', pos: 'center 55%' },
   { src: '/matching-week/hero-3.jpg', pos: 'center 62%' },
   { src: '/matching-week/hero-4.jpg', pos: 'center 50%' },
 ];
@@ -55,12 +60,12 @@ const range = (prefix, n) => Array.from({ length: n }, (_, i) => `/matching-week
 const EVENTS = [
   { key: 'may', m: '05', cover: '/matching-week/may-4.jpg', photos: range('may', 10) },
   { key: 'jul', m: '07', cover: '/matching-week/jul-2.jpg', photos: range('jul', 8) },
-  { key: 'sep', m: '09', photos: [] },
+  { key: 'sep', m: '09', cover: '/matching-week/sep-9.jpg', photos: range('sep', 10) },
   { key: 'nov', m: '11', next: true, photos: [] },
 ];
 const PROGRAMS = [
   { key: 'kmajor', cover: '/matching-week/kmajor-10.jpg', photos: range('kmajor', 10) },
-  { key: 'trip', photos: [] },
+  { key: 'trip', cover: '/matching-week/trip-8.jpg', photos: range('trip', 10) },
 ];
 const ALBUMS = [...EVENTS, ...PROGRAMS].filter((a) => a.photos.length > 0); // 갤러리 탭(사진 있는 앨범만)
 
