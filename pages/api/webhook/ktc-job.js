@@ -35,8 +35,9 @@ async function examples(db) {
     .eq('source', 'ktc')
     .not('raw_payload->ktc->>responsibilities', 'is', null)
     .order('created_at', { ascending: false })
-    .limit(3)
-  return (data || []).map((j) => {
+    .limit(10)
+  // 한국어가 섞인 공고를 예시로 주면 새 공고도 한국어로 따라 쓴다(2026-11 K25→R252·R253 연쇄) — 베트남어 공고만 예시로
+  return (data || []).filter((j) => !HANGUL.test(JSON.stringify(j.raw_payload.ktc))).slice(0, 3).map((j) => {
     const k = j.raw_payload.ktc
     return {
       title: j.title, location: j.location, category: k.category, work_type: k.work_type, experience: k.experience,
@@ -45,7 +46,7 @@ async function examples(db) {
   })
 }
 
-async function generate(input, shots) {
+async function generate(input, shots, retry) {
   const sys = [
     'You write job postings for K-Tech College (KTC): Korean companies hiring Vietnamese talent, posted on the FYI job board.',
     'Write EVERY field in Vietnamese, whatever language the input or the examples are in — translate Korean and English input into natural Vietnamese (the title may stay in English). Keep product names, company names and tech terms (React, OOH, API…) as they are. No Hangul anywhere in the output, including the title.',
@@ -53,7 +54,7 @@ async function generate(input, shots) {
     'Use ONLY facts from the input. Never invent salary numbers, benefits, office addresses, tech stacks or company facts.',
     'Keep EVERY responsibility, qualification and preferred item from the input — translate them one by one; never summarize, merge or drop items.',
     'If a section has no facts, return an empty string for it.',
-    'Required qualifications go to requirements; anything marked optional/preferred (우대, ưu tiên, preferred) goes to the end of requirements under a separate preferred heading in the examples\' language.',
+    'Required qualifications go to requirements; anything marked optional/preferred (우대, ưu tiên, preferred) goes to the end of requirements under a separate "**Ưu tiên**" heading.',
     'Return a JSON object only.',
   ].join(' ')
   const user = `Example postings (format reference only — do not copy their facts):
@@ -70,12 +71,36 @@ Return JSON:
  "experience":"like \\"2+ year\\" or \\"1-3 year\\", empty if unknown",
  "description":"company / position introduction",
  "responsibilities":"...", "requirements":"...", "benefits":"salary range text, working conditions, benefits"}`
+  const messages = [{ role: 'system', content: sys }, { role: 'user', content: user }]
+  if (retry) {
+    messages.push({ role: 'assistant', content: JSON.stringify(retry.prev) })
+    messages.push({ role: 'user', content: `Fix these problems and return the full JSON again: ${retry.problems.join(' / ')}` })
+  }
   const r = await openai().chat.completions.create({
-    model: MODEL, temperature: 0.2, max_tokens: 2500,
+    model: MODEL, temperature: 0.2, max_tokens: 3500,
     response_format: { type: 'json_object' },
-    messages: [{ role: 'system', content: sys }, { role: 'user', content: user }],
+    messages,
   })
   return JSON.parse(r.choices[0].message.content || '{}')
+}
+
+// 게재 전 검사 — 한글 잔존, 원문 항목 누락(요약). 문제 목록을 돌려준다(빈 배열 = 통과).
+const HANGUL = /[가-힣]/
+const FIELDS = ['title', 'description', 'responsibilities', 'requirements', 'benefits']
+// 소제목(**…**)·"…:" 안내줄·빈 줄을 뺀 항목 줄 수
+const items = (v) => s(v).split('\n').map((l) => l.trim()).filter((l) => l && !/^\*\*.*\*\*$/.test(l) && !/:$/.test(l)).length
+
+function problemsOf(input, g) {
+  const out = []
+  const ko = FIELDS.filter((f) => HANGUL.test(s(g[f])))
+  if (ko.length) out.push(`Hangul remains in ${ko.join(', ')} — translate to Vietnamese`)
+  // 원문과 겹치는 우대 항목이 합쳐지는 정도(1줄)는 허용
+  const pairs = [
+    ['responsibilities', items(input.responsibilities), items(g.responsibilities)],
+    ['requirements', items(input.qualifications) + items(input.preferred), items(g.requirements)],
+  ]
+  for (const [f, want, got] of pairs) if (want && got < want - 1) out.push(`${f} has ${got} items but the input has ${want} — keep every item`)
+  return out
 }
 
 export default async function handler(req, res) {
@@ -101,9 +126,19 @@ export default async function handler(req, res) {
       experience: s(b.experience), salary: s(b.salary), responsibilities: s(b.responsibilities),
       qualifications: s(b.qualifications), preferred: s(b.preferred), original_request: s(b.request),
     }
-    const g = await generate(input, await examples(db))
+    const shots = await examples(db)
+    let g = await generate(input, shots)
+    let problems = problemsOf(input, g)
+    if (problems.length) {
+      g = await generate(input, shots, { prev: g, problems })
+      problems = problemsOf(input, g)
+    }
     if (!s(g.title) || !(s(g.responsibilities) || s(g.description))) {
       return res.status(422).json({ error: '공고 본문을 만들지 못했습니다', generated: g })
+    }
+    // 재시도 후에도 한글이 남거나 항목이 빠지면 게재하지 않는다 — ktc-support 가 슬랙에 실패로 알린다
+    if (problems.length) {
+      return res.status(422).json({ error: `검사 불통과(게재 안 함): ${problems.join(' / ')}`, generated: g })
     }
 
     const row = {

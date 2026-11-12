@@ -50,6 +50,12 @@ function WorkType({ value }) {
   );
 }
 
+// "**텍스트**" → <strong>. 홀수 번째 조각이 ** 사이 텍스트다.
+const withBold = (text) =>
+  text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 ? <strong key={i} style={{ color: c.text, fontWeight: 750 }}>{part}</strong> : part
+  );
+
 export default function KtcJobDetail({ job }) {
   const { t, lang } = useT();
   const salaryText = formatSalary(job.salaryMin, job.salaryMax, lang);
@@ -67,7 +73,7 @@ export default function KtcJobDetail({ job }) {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content={(job.description || '').slice(0, 155)} />
+        <meta name="description" content={(job.description || '').replace(/\*\*/g, '').slice(0, 155)} />
       </Head>
 
       <div className="ktc-page" style={{ background: c.bg, color: c.text, minHeight: '100vh' }}>
@@ -155,9 +161,10 @@ export default function KtcJobDetail({ job }) {
                 {blocks.map((b) => (
                   <div key={b.key}>
                     <h2 style={{ fontSize: 15.5, fontWeight: 800, color: c.text }}>{b.title}</h2>
-                    {/* 본문은 줄바꿈과 "- " 불릿이 섞인 평문 — pre-line 으로 원문 줄바꿈을 살린다 */}
+                    {/* 본문은 줄바꿈과 "- " 불릿이 섞인 평문 — pre-line 으로 원문 줄바꿈을 살린다.
+                        소제목·강조에 쓰인 **굵게** 만 실제 굵은 글씨로 바꾼다. */}
                     <p style={{ marginTop: 10, fontSize: 14.5, lineHeight: 1.8, color: c.textDim, whiteSpace: 'pre-line' }}>
-                      {b.body}
+                      {withBold(b.body)}
                     </p>
                   </div>
                 ))}
