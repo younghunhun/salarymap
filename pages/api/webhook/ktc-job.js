@@ -19,6 +19,7 @@ export const config = { maxDuration: 60 }
 const JOB_BASE = process.env.KTC_JOB_BASE_URL || 'https://salary-fyi.com/ktc/jobs'
 const MODEL = process.env.KTC_JOB_MODEL || 'gpt-4o'
 const KTC_CATEGORIES = ['IT', 'Designer', 'Marketing', 'HR', 'Business']
+const KTC_OFFICES = 'HCM, HN, ĐN' // R코드 공고가 출근하는 KTC 오피스 — 기존 R 공고 location 표기
 
 const fyi = () => createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
   auth: { autoRefreshToken: false, persistSession: false },
@@ -66,9 +67,9 @@ ${JSON.stringify(input, null, 1)}
 
 Return JSON:
 {"title":"position title as shown on the board — a natural job title like \\"Backend Developer\\"; never prefix it with job_family (Dev / Sales / etc.)",
- "location":"work location (e.g. Remote, TP.HCM, Hà Nội, Seoul) — infer from input category/location only",
+ "location":"work location (e.g. TP.HCM, Hà Nội, Seoul) — infer from input location only",
  "category":"one of ${KTC_CATEGORIES.join(' | ')}",
- "work_type":"Remote | Hybrid | Onsite (input category Remote means Remote)",
+ "work_type":"Remote | Hybrid | Onsite",
  "experience":"like \\"2+ year\\" or \\"1-3 year\\", empty if unknown",
  "description":"company / position introduction",
  "responsibilities":"...", "requirements":"...", "benefits":"salary range text, working conditions, benefits"}`
@@ -144,6 +145,13 @@ export default async function handler(req, res) {
     // 재시도 후에도 한글이 남거나 항목이 빠지면 게재하지 않는다 — ktc-support 가 슬랙에 실패로 알린다
     if (problems.length) {
       return res.status(422).json({ error: `검사 불통과(게재 안 함): ${problems.join(' / ')}`, generated: g })
+    }
+
+    // category Remote(R코드) = 한국 기업과 원격 협업하지만 인재는 베트남 KTC 오피스로 출근한다 → 지원자에겐 Onsite.
+    // GPT 판단에 맡기지 않고 여기서 고정한다(2026-11 R252·R253 이 Remote 로 게재돼 VN팀이 정정).
+    if (input.ktc_category.toLowerCase() === 'remote') {
+      g.work_type = 'Onsite'
+      if (!s(g.location) || /remote|từ xa/i.test(g.location)) g.location = input.location && !/remote/i.test(input.location) ? input.location : KTC_OFFICES
     }
 
     const row = {
