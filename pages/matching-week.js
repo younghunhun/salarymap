@@ -978,7 +978,8 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         .mw-note svg { flex: none; margin-top: 1px; }
 
         /* 04 참가 기업 */
-        .mw-sec-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+        .mw-sec-head { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; } /* 필터는 항상 제목 아래 줄 — 같은 줄에 두면 제목 숫자(16→9) 길이에 따라 줄바꿈되며 위치가 튀었다 */
+        .mw-filters { align-self: flex-start; }
         .mw-filters { display: flex; gap: 6px; padding: 5px; border-radius: 999px; background: #fff; border: 1px solid #e4e4e7; }
         .mw-filter { height: 38px; padding: 0 18px; border-radius: 999px; border: 0; background: transparent; color: #52525b; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
         .mw-filter em { font-style: normal; color: #a1a1aa; margin-left: 3px; }
@@ -1115,7 +1116,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           .mw-step { padding: 24px 22px; }
           .mw-step-n { font-size: 44px; }
           .mw-cos { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
-          .mw-filters { width: 100%; }
+          .mw-filters { width: 100%; box-sizing: border-box; }
           .mw-filter { flex: 1; padding: 0 8px; }
           .mw-co-top { height: 84px; }
           .mw-co-top .mw-logo { width: 52px !important; height: 52px !important; }
