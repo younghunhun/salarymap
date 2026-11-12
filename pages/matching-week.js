@@ -83,162 +83,223 @@ const CONTENT_ICONS = {
   mentoring: <><path d="M3 5h18v11H8l-5 4V5z" /><path d="M8 10h8M8 13h5" /></>,
 };
 
-/* ── v2 '나이트 페스티벌' 스킨 — 축제의 에너지는 살리되 유치하지 않게(컨퍼런스·음악 페스티벌 공식 사이트 톤).
-   이전 시도: 워터밤 복제(X, 레퍼런스는 분위기만) → 색종이·스티커·이모지(X, 유치함).
-   짙은 바탕 + 브랜드 주황→마젠타→바이올렛 글로우, 그라데이션 타이포, 그레인, 유리 카드. ── */
-const FX = { orange: '#ff6000', magenta: '#ff2e7e', violet: '#7b3cff', base: '#0a0a0f', panel: 'rgba(255,255,255,0.05)', line: 'rgba(255,255,255,0.1)' };
-const FX_GRAD = `linear-gradient(100deg, ${FX.orange} 0%, ${FX.magenta} 55%, ${FX.violet} 100%)`;
-const GRAIN = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(#n)' opacity='0.5'/></svg>`)}")`;
+/* ── v2 스킨 — 미아(KTC)가 보낸 무드 이미지 'MAP - NOV NEW.jpg' 기준(2026-11-12).
+   하늘색→바이올렛→핑크 그라데이션, 흰 붓터치, 둥근 두꺼운 글꼴(Baloo 2), 파란 사각 라벨, 말풍선 배지.
+   이전 시도(워터밤 복제·색종이 스티커·다크 나이트)는 모두 반려됨. ── */
+const FX = { blue: '#2d5bff', sky: '#36b0ff', violet: '#8b5cf6', pink: '#ff2e93', ink: '#1c1f5e', cream: '#fdf0b8', mute: '#5b5f8f' };
+const FX_BG = `radial-gradient(ellipse at 85% 15%, rgba(255,46,147,0.35), transparent 45%), radial-gradient(ellipse at 10% 90%, rgba(255,46,147,0.25), transparent 45%), linear-gradient(135deg, #a46bff 0%, #6a7bff 40%, #36b0ff 100%)`;
+const BRUSH = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 120' preserveAspectRatio='none'><path d='M6 74 C70 34 150 44 228 58 S380 18 462 46 S566 60 594 38 L596 74 C522 98 432 82 352 98 S182 112 102 102 S24 108 4 96 Z' fill='white'/><path d='M40 30 C120 18 200 26 260 22' stroke='white' stroke-width='5' fill='none' stroke-linecap='round' opacity='.7'/><path d='M360 112 C430 104 500 110 570 100' stroke='white' stroke-width='4' fill='none' stroke-linecap='round' opacity='.6'/></svg>`)}")`;
+const ROAD = `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='36' height='20' viewBox='0 0 36 20'><path d='M8 5l6 5-6 5M18 5l6 5-6 5' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>`)}")`;
+const FX_FONT = `'Baloo 2', 'Pretendard', sans-serif`;
 const FEST_CSS = `
-.mw.fest { background: ${FX.base}; color: #fff; }
-.mw.fest .mw-sec, .mw.fest .mw-dark, .mw.fest .mw-warm, .mw.fest .mw-gray { background: transparent; color: #fff; }
-.mw.fest .mw-sec { position: relative; overflow: hidden; }
-/* 섹션마다 은은한 빛 번짐 */
-.mw.fest .mw-sec::before { content: ''; position: absolute; width: 720px; height: 720px; border-radius: 50%; filter: blur(140px); opacity: 0.22; pointer-events: none; top: -240px; right: -200px; background: ${FX.magenta}; }
-.mw.fest .mw-warm::before { left: -240px; right: auto; background: ${FX.orange}; }
-.mw.fest .mw-gray::before { background: ${FX.violet}; }
-.mw.fest .mw-sec > .mw-in { position: relative; }
-.mw.fest .mw-title { background: linear-gradient(180deg, #fff 30%, rgba(255,255,255,0.72)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-accent { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-lead, .mw.fest .mw-warm .mw-lead { color: rgba(255,255,255,0.66); }
-.mw.fest .mw-eyebrow { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-eyebrow span { border-color: rgba(255,255,255,0.25); }
-.mw.fest .mw-subtitle { color: #fff; }
+.mw.fest { background: #f4f6ff; color: ${FX.ink}; }
+.mw.fest .mw-title, .mw.fest .mw-subtitle, .mw.fest .mw-end h2 { font-family: ${FX_FONT}; font-weight: 800; letter-spacing: -0.5px; color: ${FX.ink}; }
+.mw.fest .mw-lead { color: ${FX.mute}; }
+.mw.fest .mw-accent { color: ${FX.pink}; }
+.mw.fest .mw-eyebrow { padding: 6px 14px; border-radius: 4px; background: ${FX.blue}; color: #fff; letter-spacing: 1.2px; box-shadow: 0 6px 18px rgba(45,91,255,0.3); }
+.mw.fest .mw-eyebrow span { border-color: rgba(255,255,255,0.4); }
 
-/* 히어로 */
-.mw.fest .mw-hero::after { background: radial-gradient(ellipse at 80% 100%, rgba(123,60,255,0.45), transparent 55%), radial-gradient(ellipse at 10% 100%, rgba(255,46,126,0.38), transparent 50%), linear-gradient(180deg, rgba(10,10,15,0.35) 0%, rgba(10,10,15,0.1) 35%, rgba(10,10,15,0.75) 75%, ${FX.base} 100%); }
-.mw.fest .mw-hero::before { content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none; background: ${GRAIN}; opacity: 0.18; mix-blend-mode: overlay; }
-.mw.fest .fx-stickers { display: flex; flex-wrap: wrap; gap: 8px; }
-.mw.fest .fx-sticker { display: inline-flex; align-items: center; height: 30px; padding: 0 14px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: 0.4px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.08); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); }
-.mw.fest .fx-sticker.s1 { background: ${FX_GRAD}; border-color: transparent; }
-.mw.fest .mw-hero h1 { font-size: 72px; line-height: 1.02; letter-spacing: -2.4px; font-weight: 800; background: linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.75)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
-.mw.fest .mw-btn-primary { background: ${FX_GRAD}; box-shadow: 0 12px 40px rgba(255,46,126,0.4); }
-.mw.fest .mw-btn-primary:hover { background: ${FX_GRAD}; box-shadow: 0 16px 50px rgba(255,46,126,0.55); }
-.mw.fest .mw-panel { background: rgba(10,10,15,0.5); border: 1px solid rgba(255,255,255,0.14); }
-.mw.fest .mw-stat dd { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-hero-dots button.on { background: ${FX.magenta}; }
-
-.mw.fest .mw-orgs { background: #fff; }
-
-/* 카드: 유리 + 호버 시 그라데이션 테두리 */
-.mw.fest .mw-album, .mw.fest .mw-content { border-color: ${FX.line}; }
-.mw.fest .mw-album:not(:disabled):hover, .mw.fest .mw-content:hover { border-color: rgba(255,46,126,0.6); box-shadow: 0 24px 60px rgba(255,46,126,0.18); }
-.mw.fest .mw-album.next { border-color: rgba(255,46,126,0.6); box-shadow: 0 0 60px rgba(255,46,126,0.2); }
-.mw.fest .mw-album.next .mw-album-m { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-album:hover .mw-album-go, .mw.fest .mw-content-ico { background: ${FX_GRAD}; }
-.mw.fest .mw-content-ico { box-shadow: 0 8px 24px rgba(255,46,126,0.35); }
-.mw.fest .mw-content-body em { color: #ff8fb6; }
-.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { background: ${FX.panel}; border: 1px solid ${FX.line}; color: #fff; box-shadow: none; }
-.mw.fest .mw-step:hover, .mw.fest .mw-co:hover { border-color: rgba(255,46,126,0.55); box-shadow: 0 20px 50px rgba(255,46,126,0.15); }
-.mw.fest .mw-step p, .mw.fest .mw-co-jobs li, .mw.fest .mw-perk small { color: rgba(255,255,255,0.62); }
-.mw.fest .mw-step-n { -webkit-text-stroke: 0; background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-co-top { background: rgba(255,255,255,0.03); border-bottom-color: ${FX.line}; }
-.mw.fest .mw-co-foot { border-top-color: ${FX.line}; color: #ff8fb6; }
-.mw.fest .mw-co-jobs .mw-more { color: rgba(255,255,255,0.4); }
-.mw.fest .mw-filters { background: ${FX.panel}; border-color: ${FX.line}; }
-.mw.fest .mw-filter { color: rgba(255,255,255,0.65); }
-.mw.fest .mw-filter:hover { color: #fff; }
-.mw.fest .mw-filter.on { background: ${FX_GRAD}; color: #fff; }
-.mw.fest .mw-filter.on em { color: rgba(255,255,255,0.85); }
-.mw.fest .mw-journey { background: ${FX.panel}; border: 1px solid ${FX.line}; box-shadow: none; }
-.mw.fest .mw-ride-times b { background: ${FX_GRAD}; box-shadow: 0 8px 24px rgba(255,46,126,0.35); }
-.mw.fest .mw-jstop-end .mw-jstop-ico, .mw.fest .mw-perk-ico { background: ${FX_GRAD}; color: #fff; }
-.mw.fest .mw-video, .mw.fest .mw-map { border: 1px solid ${FX.line}; }
-.mw.fest .mw-faq-list, .mw.fest .mw-faq details { border-color: ${FX.line}; }
-.mw.fest .mw-faq summary { color: #fff; }
-.mw.fest .mw-q { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-faq details p { color: rgba(255,255,255,0.66); }
-
-/* ── 주황 잔재 제거: v2 는 그라데이션(주황→마젠타→바이올렛) + 마젠타 포인트로 통일 ── */
-.mw.fest .mw-album.next { background: radial-gradient(circle at 30% 0%, rgba(255,46,126,0.5), transparent 60%), linear-gradient(160deg, #1d0f2e, #0f0a18); }
-.mw.fest .mw-album-txt em.live { color: #ff8fb6; }
-.mw.fest .mw-album-txt em.live::before { background: ${FX.magenta}; animation-name: fx-pulse; }
-@keyframes fx-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,46,126,0.7); } 50% { box-shadow: 0 0 0 6px rgba(255,46,126,0); } }
-.mw.fest .mw-jstop:hover { border-color: rgba(255,46,126,0.55); }
-.mw.fest .mw-jstop-ico { background: rgba(255,46,126,0.14); color: #ff8fb6; }
-.mw.fest .mw-jstop em, .mw.fest .mw-jstop:hover .mw-jstop-go { color: #ff8fb6; }
-.mw.fest .mw-ride-line::before { background: repeating-linear-gradient(90deg, rgba(255,46,126,0.65) 0 7px, transparent 7px 12px); }
-.mw.fest .mw-ride-line::after { border-color: ${FX.magenta}; }
-.mw.fest .mw-ride-bus { color: ${FX.magenta}; }
-.mw.fest .mw-ride-dur { color: #ff8fb6; }
-.mw.fest .mw-note { background: rgba(255,46,126,0.08); border-color: rgba(255,46,126,0.35); color: #ffb3cf; }
-.mw.fest .mw-faq details[open] summary::after { color: ${FX.magenta}; }
-/* 안내 영상(릴스) 컨트롤 */
-.mw.fest .mw-mute:hover { background: ${FX.magenta}; }
-.mw.fest .mw-vbar { background: linear-gradient(90deg, ${FX.orange} 0%, ${FX.magenta} var(--p), rgba(255,255,255,0.3) var(--p)); }
-.mw.fest .mw-vbar::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(255,46,126,0.6); }
-.mw.fest .mw-vbar::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(255,46,126,0.6); }
-.mw.fest .mw-vbtns .mw-vplay, .mw.fest .mw-vbtns .mw-vplay:hover { background: ${FX_GRAD}; }
-/* 팝업·갤러리(페이지 밖 레이어) */
-.fx-root .mw-sheet-head { background: radial-gradient(circle at 0% 0%, #ffe6f0, #fff 60%); }
-.fx-root .mw-sheet-title > span, .fx-root .mw-job-go { color: #e0246c; }
-.fx-root .mw-job:hover { background: #fff2f7; }
-.fx-root .mw-gal-slide:hover { border-color: ${FX.magenta}; color: #e0246c; }
-.fx-root .mw-gal-tabs button.on { color: #e0246c; }
-.fx-root .mw-gal-tabs button.on::after { background: ${FX_GRAD}; }
-.fx-root .mw-lb-nav:hover { background: ${FX.magenta}; }
-.fx-root .mw-lb-thumbs button.on { border-color: ${FX.magenta}; }
-
-/* ── 움직임 ── */
-/* 히어로 첫 등장: 아래에서 차례로 올라온다 */
-.mw.fest .mw-hero-l > * { opacity: 0; transform: translateY(28px); animation: fx-rise .9s cubic-bezier(.16,1,.3,1) forwards; }
-.mw.fest .mw-hero-l > *:nth-child(2) { animation-delay: .12s; }
-.mw.fest .mw-hero-l > *:nth-child(3) { animation-delay: .24s; }
-.mw.fest .mw-hero-l > *:nth-child(4) { animation-delay: .36s; }
-.mw.fest .mw-hero-l > *:nth-child(5) { animation-delay: .48s; }
-.mw.fest .mw-panel { opacity: 0; animation: fx-rise .9s .55s cubic-bezier(.16,1,.3,1) forwards; }
-@keyframes fx-rise { to { opacity: 1; transform: none; } }
-/* 그라데이션 글자·버튼에 빛이 흐른다 */
-.mw.fest .mw-stat dd, .mw.fest .mw-accent, .mw.fest .mw-step-n, .mw.fest .fx-kb-row.fill b { background-size: 220% 100%; animation: fx-shine 5s ease-in-out infinite alternate; }
-@keyframes fx-shine { from { background-position: 0% 50%; } to { background-position: 100% 50%; } }
-.mw.fest .mw-btn-primary { position: relative; overflow: hidden; }
-.mw.fest .mw-btn-primary::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40%; left: -60%; background: linear-gradient(100deg, transparent, rgba(255,255,255,0.45), transparent); transform: skewX(-20deg); animation: fx-sweep 3.2s ease-in-out infinite; }
-@keyframes fx-sweep { 0%, 55% { left: -60%; } 100% { left: 130%; } }
-/* 배경 빛 번짐이 천천히 떠다닌다 */
-.mw.fest .mw-sec::before { animation: fx-drift 16s ease-in-out infinite alternate; }
-@keyframes fx-drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(-120px, 140px) scale(1.25); } }
-/* 11월 카드 숨쉬듯 빛남 */
-.mw.fest .mw-album.next { animation: fx-glow 2.6s ease-in-out infinite; }
-@keyframes fx-glow { 0%, 100% { box-shadow: 0 0 30px rgba(255,46,126,0.15); } 50% { box-shadow: 0 0 70px rgba(255,46,126,0.45); } }
-
+/* 히어로(포스터형) */
+.mw.fest .fx-hero { position: relative; overflow: hidden; background: ${FX_BG}; color: #fff; padding: 118px 0 0; }
+.mw.fest .fx-brush { position: absolute; pointer-events: none; background: ${BRUSH} center/100% 100% no-repeat; opacity: 0.95; }
+.mw.fest .fx-brush-1 { left: -6%; right: 30%; bottom: 120px; height: 150px; transform: rotate(-6deg); }
+.mw.fest .fx-brush-2 { left: 40%; right: -8%; bottom: -10px; height: 170px; transform: rotate(-3deg); }
+.mw.fest .fx-hero-in { position: relative; z-index: 1; width: 90%; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; }
+.mw.fest .fx-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.mw.fest .fx-tag { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border-radius: 4px; background: ${FX.blue}; color: #fff; font-weight: 800; font-size: 14px; letter-spacing: 0.4px; box-shadow: 0 6px 16px rgba(28,31,94,0.25); }
+.mw.fest .fx-tag.pink { background: ${FX.pink}; }
+.mw.fest .fx-h1 { margin: 22px 0 0; display: flex; flex-direction: column; font-family: ${FX_FONT}; font-weight: 800; line-height: 0.95; text-transform: uppercase; }
+.mw.fest .fx-h1 span { font-size: 82px; color: #fff; text-shadow: 3px 3px 0 ${FX.blue}, -3px 3px 0 ${FX.blue}, 3px -3px 0 ${FX.blue}, -3px -3px 0 ${FX.blue}, 0 4px 0 ${FX.blue}, 7px 9px 0 ${FX.pink}; transform: rotate(-3deg); transform-origin: left; }
+.mw.fest .fx-h1 span + span { color: ${FX.pink}; text-shadow: 3px 3px 0 #fff, -3px 3px 0 #fff, 3px -3px 0 #fff, -3px -3px 0 #fff, 0 4px 0 #fff, 7px 9px 0 ${FX.blue}; margin-top: 8px; }
+.mw.fest .fx-when { margin: 26px 0 0; font-family: ${FX_FONT}; font-weight: 800; font-size: 22px; }
+.mw.fest .mw-sub { color: rgba(255,255,255,0.92); margin-top: 14px; }
+.mw.fest .fx-hero-r { position: relative; padding: 20px 30px 60px 10px; }
+.mw.fest .fx-frame { position: relative; aspect-ratio: 4 / 3.3; border-radius: 32px; overflow: hidden; border: 8px solid #fff; box-shadow: 0 30px 70px rgba(28,31,94,0.35); transform: rotate(2deg); background: #fff; }
+.mw.fest .fx-frame .mw-hero-slide { position: absolute; inset: 0; }
+.mw.fest .fx-dots { top: auto; bottom: 14px; right: 16px; }
+.mw.fest .fx-bubble { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 18px; border: 4px solid #fff; color: #fff; font-family: ${FX_FONT}; font-weight: 800; font-size: 22px; white-space: nowrap; box-shadow: 0 12px 30px rgba(28,31,94,0.3); animation: fx-bob 3.4s ease-in-out infinite; }
+.mw.fest .fx-bubble i { font-style: normal; color: #ffc93c; text-shadow: 0 2px 0 #e08a00; }
+.mw.fest .fx-bubble::after { content: ''; position: absolute; bottom: -14px; left: 34px; border: 9px solid transparent; border-top-color: #fff; }
+.mw.fest .fx-bubble.b1 { background: ${FX.pink}; top: -6px; right: -6px; transform: rotate(4deg); }
+.mw.fest .fx-bubble.b2 { background: ${FX.sky}; left: -34px; top: 46%; transform: rotate(-4deg); animation-delay: .6s; }
+.mw.fest .fx-bubble.b3 { background: ${FX.violet}; right: 0; bottom: 4px; transform: rotate(3deg); animation-delay: 1.2s; }
+@keyframes fx-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+.mw.fest .fx-stats { position: relative; z-index: 1; width: 90%; max-width: 1200px; margin: 30px auto 0; padding: 0 0 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.mw.fest .fx-stats div { padding: 18px 22px; border-radius: 22px; background: #fff; color: ${FX.ink}; box-shadow: 0 14px 34px rgba(28,31,94,0.18); }
+.mw.fest .fx-stats dt { font-size: 13px; color: ${FX.mute}; font-weight: 600; }
+.mw.fest .fx-stats dd { margin: 4px 0 0; font-family: ${FX_FONT}; font-weight: 800; font-size: 44px; line-height: 1; color: ${FX.pink}; }
+.mw.fest .fx-stats div:nth-child(2) dd { color: ${FX.blue}; }
+.mw.fest .fx-stats dd.sm { font-size: 19px; line-height: 1.3; margin-top: 8px; color: ${FX.ink}; }
 /* 카운트다운 */
-.mw.fest .fx-count { display: flex; gap: 10px; margin-top: 26px; }
-.mw.fest .fx-count-cell { min-width: 78px; padding: 12px 10px 10px; border-radius: 16px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); text-align: center; }
-.mw.fest .fx-count-cell b { display: block; font-size: 38px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -1px; animation: fx-flip .5s cubic-bezier(.16,1,.3,1); }
-.mw.fest .fx-count-cell:last-child b { background: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .fx-count-cell span { display: block; margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: 2px; color: rgba(255,255,255,0.55); }
+.mw.fest .fx-count { display: flex; gap: 10px; margin-top: 18px; }
+.mw.fest .fx-count-cell { min-width: 76px; padding: 10px 8px 8px; border-radius: 16px; background: #fff; color: ${FX.ink}; text-align: center; box-shadow: 0 8px 22px rgba(28,31,94,0.2); }
+.mw.fest .fx-count-cell b { display: block; font-family: ${FX_FONT}; font-size: 38px; font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; animation: fx-flip .45s cubic-bezier(.16,1,.3,1); }
+.mw.fest .fx-count-cell:last-child b { color: ${FX.pink}; }
+.mw.fest .fx-count-cell span { display: block; margin-top: 4px; font-size: 11px; font-weight: 800; letter-spacing: 1.6px; color: ${FX.blue}; }
 @keyframes fx-flip { from { opacity: 0; transform: translateY(-40%); } to { opacity: 1; transform: none; } }
+/* 버튼 */
+.mw.fest .mw-btn { border-radius: 999px; font-family: ${FX_FONT}; font-weight: 800; font-size: 18px; }
+.mw.fest .mw-btn-primary { background: ${FX.pink}; border: 3px solid #fff; box-shadow: 0 10px 26px rgba(255,46,147,0.45); }
+.mw.fest .mw-btn-primary:hover { background: #ff4aa3; }
+.mw.fest .mw-btn-ghost { background: #fff; color: ${FX.blue}; border: 3px solid #fff; box-shadow: 0 10px 26px rgba(28,31,94,0.2); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.mw.fest .mw-btn-ghost:hover { background: #fff; }
 
-/* 대형 키네틱 타이포 띠 */
-.mw.fest .fx-kb { overflow: hidden; padding: 28px 0; border-top: 1px solid ${FX.line}; border-bottom: 1px solid ${FX.line}; background: ${FX.base}; }
+/* 키네틱 띠 — 흰 바탕, 파란 외곽선 줄 + 핑크→바이올렛 줄 */
+.mw.fest .fx-kb { overflow: hidden; padding: 22px 0; background: #fff; }
 .mw.fest .fx-kb-row { display: flex; width: max-content; }
 .mw.fest .fx-kb-row span { display: flex; }
-.mw.fest .fx-kb-row b { display: inline-flex; align-items: center; gap: 36px; padding-right: 36px; font-size: 92px; font-weight: 900; line-height: 1.08; letter-spacing: -2px; white-space: nowrap; text-transform: uppercase; }
-.mw.fest .fx-kb-row i { font-style: normal; font-size: 40px; color: ${FX.magenta}; -webkit-text-stroke: 0; }
-.mw.fest .fx-kb-row.outline { animation: mw-marquee 38s linear infinite; }
-.mw.fest .fx-kb-row.outline b { color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.45); }
-.mw.fest .fx-kb-row.fill { animation: fx-marquee-rev 32s linear infinite; }
-.mw.fest .fx-kb-row.fill b { background-image: ${FX_GRAD}; -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mw.fest .fx-kb-row b { display: inline-flex; align-items: center; gap: 30px; padding-right: 30px; font-family: ${FX_FONT}; font-size: 76px; font-weight: 800; line-height: 1.05; white-space: nowrap; text-transform: uppercase; }
+.mw.fest .fx-kb-row i { font-style: normal; font-size: 40px; color: #ffc93c; }
+.mw.fest .fx-kb-row.outline { animation: mw-marquee 40s linear infinite; }
+.mw.fest .fx-kb-row.outline b { color: transparent; -webkit-text-stroke: 2px ${FX.blue}; }
+.mw.fest .fx-kb-row.fill { animation: fx-marquee-rev 34s linear infinite; }
+.mw.fest .fx-kb-row.fill b { background-image: linear-gradient(90deg, ${FX.pink}, ${FX.violet}, ${FX.sky}); -webkit-background-clip: text; background-clip: text; color: transparent; }
 @keyframes fx-marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-@media (prefers-reduced-motion: reduce) {
-  .mw.fest .mw-hero-l > *, .mw.fest .mw-panel { animation: none; opacity: 1; transform: none; }
-  .mw.fest .fx-kb-row, .mw.fest .mw-sec::before, .mw.fest .mw-btn-primary::after, .mw.fest .mw-album.next { animation: none; }
-}
+.mw.fest .mw-orgs { background: #fff; border-top: 1px solid #eceefb; }
+
+/* 섹션 */
+.mw.fest .mw-sec { position: relative; }
+.mw.fest .mw-dark { background: ${FX_BG}; color: #fff; overflow: hidden; }
+.mw.fest .mw-dark::before { content: ''; position: absolute; left: -5%; right: 45%; top: -40px; height: 130px; background: ${BRUSH} center/100% 100% no-repeat; transform: rotate(-3deg); opacity: 0.9; pointer-events: none; }
+.mw.fest .mw-dark .mw-title, .mw.fest .mw-dark .mw-subtitle { color: #fff; text-shadow: 0 3px 0 rgba(45,91,255,0.6); }
+.mw.fest .mw-dark .mw-lead { color: rgba(255,255,255,0.9); }
+.mw.fest .mw-dark .mw-eyebrow { background: #fff; color: ${FX.blue}; }
+.mw.fest .mw-dark .mw-eyebrow span { border-color: rgba(45,91,255,0.35); }
+.mw.fest .mw-warm { background: linear-gradient(180deg, #eaf4ff, #f4f6ff); }
+.mw.fest .mw-gray { background: #fff0f7; }
+.mw.fest .mw-sec:not(.mw-dark):not(.mw-warm):not(.mw-gray) { background: #fff; }
+
+/* 앨범·구성 카드 */
+.mw.fest .mw-album { border: 5px solid #fff; border-radius: 26px; box-shadow: 0 16px 36px rgba(28,31,94,0.3); background: linear-gradient(160deg, #5b6bff, #8b5cf6); }
+.mw.fest .mw-album:not(:disabled):hover { transform: translateY(-6px) rotate(-1deg); border-color: #fff; box-shadow: 0 24px 50px rgba(28,31,94,0.4); }
+.mw.fest .mw-album.next { border-color: ${FX.pink}; box-shadow: 0 0 0 4px #fff, 0 20px 50px rgba(255,46,147,0.45); }
+.mw.fest .mw-album.next .mw-album-m { color: #fff; }
+.mw.fest .mw-album-go { background: ${FX.pink}; }
+.mw.fest .mw-album-txt em.live { color: #ffd1e6; }
+.mw.fest .mw-album-txt em.live::before { background: ${FX.pink}; }
+.mw.fest .mw-content { background: #fff; color: ${FX.ink}; border: 0; border-radius: 26px; box-shadow: 0 16px 36px rgba(28,31,94,0.25); }
+.mw.fest .mw-content:hover { background: #fff; transform: translateY(-6px); }
+.mw.fest .mw-content-img::after { background: none; }
+.mw.fest .mw-content-body { margin-top: 0; padding-top: 18px; }
+.mw.fest .mw-content-body b { font-family: ${FX_FONT}; font-size: 22px; }
+.mw.fest .mw-content-body small { color: ${FX.mute}; }
+.mw.fest .mw-content-body em { color: ${FX.pink}; }
+.mw.fest .mw-content-ico { position: absolute; top: -26px; right: 18px; margin: 0; background: ${FX.pink}; border: 3px solid #fff; box-shadow: 0 8px 20px rgba(255,46,147,0.4); }
+.mw.fest .mw-content:nth-child(2) .mw-content-ico { background: ${FX.sky}; box-shadow: 0 8px 20px rgba(54,176,255,0.4); }
+.mw.fest .mw-content:nth-child(3) .mw-content-ico { background: ${FX.violet}; box-shadow: 0 8px 20px rgba(139,92,246,0.4); }
+.mw.fest .mw-marquee-track img { opacity: 1; border: 4px solid #fff; }
+
+/* 오시는 길 — 공식 지도 + 지도색(크림) 경로 카드 + 파란 도로 */
+.mw.fest .fx-venue-head { display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: center; }
+.mw.fest .fx-map { position: relative; display: block; width: 100%; padding: 0; margin: 0; overflow: hidden; border-radius: 24px; border: 5px solid #fff; background: #fff; cursor: zoom-in; box-shadow: 0 24px 60px rgba(28,31,94,0.2); transform: rotate(2deg); transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; }
+.mw.fest .fx-map img { display: block; width: 100%; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+.mw.fest .fx-map:hover { transform: rotate(0deg) scale(1.04); box-shadow: 0 30px 70px rgba(28,31,94,0.32); }
+.mw.fest .fx-map:hover img { transform: scale(1.06); }
+.mw.fest .fx-map-zoom { position: absolute; left: 50%; bottom: 14px; display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; background: ${FX.pink}; color: #fff; font-size: 13px; font-weight: 800; white-space: nowrap; box-shadow: 0 8px 20px rgba(255,46,147,0.45); transform: translate(-50%, 6px); opacity: 0.92; transition: transform .3s, opacity .3s; }
+.mw.fest .fx-map:hover .fx-map-zoom { transform: translate(-50%, 0); opacity: 1; }
+.fx-map-lb .mw-lb-stage { padding: 0 20px 24px; }
+.mw.fest .mw-journey { background: ${FX.cream}; color: ${FX.ink}; border: 6px solid #fff; border-radius: 34px; box-shadow: 0 20px 50px rgba(28,31,94,0.15); }
+.mw.fest .mw-jstop { background: #fff; border: 0; box-shadow: 0 10px 26px rgba(28,31,94,0.12); }
+.mw.fest .mw-jstop:hover { background: #fff; transform: translateY(-3px); }
+.mw.fest .mw-jstop-ico { background: #e6ecff; color: ${FX.blue}; }
+.mw.fest .mw-jstop-end .mw-jstop-ico { background: ${FX.blue}; color: #fff; box-shadow: 0 8px 22px rgba(45,91,255,0.4); }
+.mw.fest .mw-jstop em { display: inline-block; padding: 3px 10px; border-radius: 4px; background: ${FX.blue}; color: #fff; }
+.mw.fest .mw-jstop b { font-family: ${FX_FONT}; font-size: 28px; }
+.mw.fest .mw-jstop small { color: ${FX.mute}; }
+.mw.fest .mw-jstop-go { color: ${FX.blue}; }
+.mw.fest .mw-jstop:hover .mw-jstop-go { color: ${FX.pink}; }
+.mw.fest .mw-ride-k { color: ${FX.mute}; }
+.mw.fest .mw-ride-times b { background: ${FX.pink}; font-family: ${FX_FONT}; border: 3px solid #fff; box-shadow: 0 8px 20px rgba(255,46,147,0.35); }
+.mw.fest .mw-ride-dur { color: ${FX.blue}; font-weight: 800; }
+.mw.fest .mw-ride-desc { color: ${FX.ink}; }
+.mw.fest .mw-ride-line { height: 30px; border-radius: 999px; background: ${ROAD} center/36px 20px repeat-x, ${FX.blue}; animation: fx-road 1.2s linear infinite; }
+.mw.fest .mw-ride-line::before, .mw.fest .mw-ride-line::after { display: none; }
+@keyframes fx-road { from { background-position: 0 center, 0 0; } to { background-position: 36px center, 0 0; } }
+.mw.fest .mw-ride-bus { color: ${FX.blue}; border: 3px solid ${FX.blue}; margin-top: -17px; }
+.mw.fest .mw-video, .mw.fest .mw-map { border: 6px solid #fff; box-shadow: 0 20px 50px rgba(28,31,94,0.18); }
+.mw.fest .mw-mute:hover { background: ${FX.pink}; }
+.mw.fest .mw-vbar { background: linear-gradient(90deg, ${FX.pink} var(--p), rgba(255,255,255,0.35) var(--p)); }
+.mw.fest .mw-vbar::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(255,46,147,0.6); }
+.mw.fest .mw-vbar::-moz-range-thumb { box-shadow: 0 0 0 3px rgba(255,46,147,0.6); }
+.mw.fest .mw-vbtns .mw-vplay, .mw.fest .mw-vbtns .mw-vplay:hover { background: ${FX.pink}; }
+.mw.fest .mw-perk { border: 0; box-shadow: 0 10px 26px rgba(28,31,94,0.1); }
+.mw.fest .mw-perk-ico { background: #ffe3f1; color: ${FX.pink}; }
+.mw.fest .mw-perk:nth-child(2) .mw-perk-ico { background: #e6ecff; color: ${FX.blue}; }
+
+/* 참여 방법·기업·FAQ */
+.mw.fest .mw-step { border: 0; border-radius: 26px; background: #f4f6ff; }
+.mw.fest .mw-step:hover { border: 0; box-shadow: 0 16px 36px rgba(45,91,255,0.15); }
+.mw.fest .mw-step-n { -webkit-text-stroke: 0; color: ${FX.pink}; font-family: ${FX_FONT}; font-weight: 800; }
+.mw.fest .mw-steps > div:nth-child(2) .mw-step-n { color: ${FX.blue}; }
+.mw.fest .mw-steps > div:nth-child(3) .mw-step-n { color: ${FX.violet}; }
+.mw.fest .mw-step b { font-family: ${FX_FONT}; font-size: 21px; }
+.mw.fest .mw-note { border-radius: 18px; background: #fff0f7; border-color: #ffc2de; color: #b0145f; }
+.mw.fest .mw-co { border: 0; border-radius: 24px; box-shadow: 0 10px 26px rgba(28,31,94,0.08); }
+.mw.fest .mw-co:hover { box-shadow: 0 20px 44px rgba(255,46,147,0.18); }
+.mw.fest .mw-co-top { background: linear-gradient(135deg, #f0e9ff, #e6f4ff); }
+.mw.fest .mw-co-name { font-family: ${FX_FONT}; font-size: 19px; }
+.mw.fest .mw-co-foot { color: ${FX.pink}; }
+.mw.fest .mw-filters { border: 0; box-shadow: 0 8px 22px rgba(28,31,94,0.1); }
+.mw.fest .mw-filter.on { background: ${FX.pink}; }
+.mw.fest .mw-filter.on em { color: #fff; }
+.mw.fest .mw-q { color: ${FX.pink}; font-family: ${FX_FONT}; }
+.mw.fest .mw-faq summary { font-family: ${FX_FONT}; font-size: 19px; }
+.mw.fest .mw-faq details[open] summary::after { color: ${FX.pink}; }
 
 /* 마무리 */
-.mw.fest .mw-end { background: radial-gradient(ellipse at 50% 120%, rgba(255,46,126,0.55), transparent 60%), radial-gradient(ellipse at 10% 0%, rgba(123,60,255,0.35), transparent 50%), ${FX.base}; border-top: 1px solid ${FX.line}; }
-.mw.fest .mw-end h2 { background: linear-gradient(180deg, #fff 40%, rgba(255,255,255,0.7)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.mw.fest .mw-end .mw-chip { background: ${FX_GRAD}; }
+.mw.fest .mw-end { background: ${FX_BG}; position: relative; overflow: hidden; }
+.mw.fest .mw-end::before { content: ''; position: absolute; left: 20%; right: -10%; bottom: 10px; height: 160px; background: ${BRUSH} center/100% 100% no-repeat; opacity: 0.35; transform: rotate(-4deg); pointer-events: none; }
+.mw.fest .mw-end .mw-in { position: relative; }
+.mw.fest .mw-end h2 { color: #fff; font-size: 52px; text-shadow: 0 4px 0 ${FX.blue}; }
+.mw.fest .mw-end .mw-chip { background: ${FX.pink}; border-radius: 4px; }
 
+/* 팝업·갤러리(페이지 밖 레이어) */
+.fx-root .mw-sheet-head { background: radial-gradient(circle at 0% 0%, #ffe3f1, #fff 60%); }
+.fx-root .mw-sheet-title > span, .fx-root .mw-job-go { color: #e0157a; }
+.fx-root .mw-job:hover { background: #fff2f8; }
+.fx-root .mw-gal-slide:hover { border-color: ${FX.pink}; color: #e0157a; }
+.fx-root .mw-gal-tabs button.on { color: #e0157a; }
+.fx-root .mw-gal-tabs button.on::after { background: ${FX.pink}; }
+.fx-root .mw-lb-nav:hover { background: ${FX.pink}; }
+.fx-root .mw-lb-thumbs button.on { border-color: ${FX.pink}; }
+
+/* 첫 등장 */
+.mw.fest .fx-hero-l > *, .mw.fest .fx-hero-r { opacity: 0; transform: translateY(26px); animation: fx-rise .8s cubic-bezier(.16,1,.3,1) forwards; }
+.mw.fest .fx-hero-l > *:nth-child(2) { animation-delay: .1s; }
+.mw.fest .fx-hero-l > *:nth-child(3) { animation-delay: .2s; }
+.mw.fest .fx-hero-l > *:nth-child(4) { animation-delay: .28s; }
+.mw.fest .fx-hero-l > *:nth-child(5) { animation-delay: .36s; }
+.mw.fest .fx-hero-l > *:nth-child(6) { animation-delay: .44s; }
+.mw.fest .fx-hero-r { animation-delay: .3s; }
+@keyframes fx-rise { to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .mw.fest .fx-hero-l > *, .mw.fest .fx-hero-r { animation: none; opacity: 1; transform: none; }
+  .mw.fest .fx-kb-row, .mw.fest .fx-bubble, .mw.fest .mw-ride-line { animation: none; }
+}
+
+@media (max-width: 1024px) {
+  .mw.fest .fx-hero-in { grid-template-columns: 1fr; gap: 36px; }
+  .mw.fest .fx-hero-r { max-width: 560px; }
+  .mw.fest .fx-stats { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 640px) {
-  .mw.fest .mw-hero h1 { font-size: 40px; letter-spacing: -1.2px; }
-  .mw.fest .mw-sec::before { width: 420px; height: 420px; filter: blur(100px); }
-  .mw.fest .fx-kb { padding: 16px 0; }
-  .mw.fest .mw-ride-line::before { background: repeating-linear-gradient(180deg, rgba(255,46,126,0.65) 0 7px, transparent 7px 12px); }
-  .mw.fest .fx-kb-row b { font-size: 46px; gap: 20px; padding-right: 20px; letter-spacing: -1px; }
-  .mw.fest .fx-kb-row i { font-size: 22px; }
-  .mw.fest .fx-count-cell { min-width: 0; flex: 1; padding: 10px 6px 8px; }
+  .mw.fest .fx-hero { padding-top: 92px; }
+  .mw.fest .fx-h1 span { font-size: 46px; }
+  .mw.fest .fx-when { font-size: 18px; }
+  .mw.fest .fx-hero-r { padding: 10px 6px 50px; }
+  .mw.fest .fx-bubble { font-size: 15px; padding: 7px 12px; border-width: 3px; }
+  .mw.fest .fx-bubble.b2 { left: -6px; }
+  .mw.fest .fx-count-cell { min-width: 0; flex: 1; }
   .mw.fest .fx-count-cell b { font-size: 28px; }
+  .mw.fest .fx-stats { gap: 10px; padding-bottom: 40px; }
+  .mw.fest .fx-stats dd { font-size: 34px; }
+  .mw.fest .fx-stats dd.sm { font-size: 15px; }
+  .mw.fest .fx-kb-row b { font-size: 40px; gap: 18px; padding-right: 18px; }
+  .mw.fest .fx-kb-row i { font-size: 22px; }
+  .mw.fest .mw-end h2 { font-size: 32px; }
+  .mw.fest .fx-venue-head { grid-template-columns: 1fr; gap: 24px; }
+  .mw.fest .fx-map { max-width: 300px; margin: 0 auto; border-radius: 20px; border-width: 4px; }
+  .mw.fest .mw-ride-line { width: 30px; height: 64px; margin: 0 auto; background: ${FX.blue}; animation: none; }
 }
 `;
 
@@ -359,21 +420,22 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
   // 사진 갤러리(숙소 예약 사이트식): 탭 + 3열 그리드 모달 → 사진을 누르면 크게 보기(view = 현재 탭 사진 인덱스)
   const [gallery, setGallery] = useState(null); // 선택된 탭 key('all' | 앨범 key)
   const [view, setView] = useState(null);
+  const [mapOpen, setMapOpen] = useState(false); // v2 공식 지도 크게 보기
 
   // 팝업·라이트박스가 떠 있는 동안 뒤 페이지 스크롤 잠금 + Esc 로 닫기(라이트박스는 ←/→ 로 넘김)
   useEffect(() => {
-    if (!open && !gallery) return;
+    if (!open && !gallery && !mapOpen) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     const onKey = (e) => {
-      if (e.key === 'Escape') { if (view !== null) setView(null); else { setOpen(null); setGallery(null); } }
+      if (e.key === 'Escape') { if (view !== null) setView(null); else { setOpen(null); setGallery(null); setMapOpen(false); } }
       if (view !== null && e.key === 'ArrowRight') step(1);
       if (view !== null && e.key === 'ArrowLeft') step(-1);
     };
     window.addEventListener('keydown', onKey);
     return () => { document.body.style.overflow = prev; window.removeEventListener('keydown', onKey); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, gallery, view]);
+  }, [open, gallery, view, mapOpen]);
 
   const albumTitle = (a) => (a.m ? t(`mw.past.${a.key}`) : t(`mw.prog.${a.key}.title`)) + (a.demo ? ` · ${t('mw.album.demo')}` : '');
   // 갤러리 탭 묶음 — 구성(해커톤 등) 카드로 열면 구성끼리, 앨범 카드로 열면 앨범끼리(+전체)
@@ -446,10 +508,61 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         <link rel="canonical" href="https://salary-fyi.com/matching-week" />
         {/* v2 는 직접 링크로만 들어오는 시안 — 검색 노출 막음 */}
         {fest && <meta name="robots" content="noindex, nofollow" />}
+        {fest && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap" />}
       </Head>
 
       <div className={'mw' + (fest ? ' fest' : '')}>
+        {/* ── 히어로(v2 포스터형) — 미아 무드 이미지 'MAP - NOV NEW' 톤: 하늘·바이올렛·핑크 그라데이션, 흰 붓터치, 말풍선 ── */}
+        {fest && (
+          <header className="fx-hero">
+            <span className="fx-brush fx-brush-1" aria-hidden="true" />
+            <span className="fx-brush fx-brush-2" aria-hidden="true" />
+            <div className="fx-hero-in">
+              <div className="fx-hero-l">
+                <div className="fx-tags">
+                  <span className="fx-tag">K-Tech College 2026</span>
+                  <span className="fx-tag pink">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
+                </div>
+                <h1 className="fx-h1"><span>November</span><span>Matching Week</span></h1>
+                <p className="fx-when">19.11.2026 · COBI Home, TP.HCM</p>
+                <div className="fx-count" aria-label="countdown">
+                  {[['d', 'DAYS'], ['h', 'HRS'], ['m', 'MIN'], ['s', 'SEC']].map(([k, label]) => (
+                    <div key={k} className="fx-count-cell">
+                      <b key={left ? left[k] : '-'}>{left ? String(left[k]).padStart(2, '0') : '--'}</b>
+                      <span>{label}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="mw-sub">{t('mw.sub', { companies: companies.length, jobs: total })}</p>
+                <div className="mw-ctas">
+                  <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { page: PAGE })}>{t('mw.cta')}</a>
+                  <button className="mw-btn mw-btn-ghost" onClick={share}>{copied ? t('mw.copied') : t('mw.share')}</button>
+                </div>
+              </div>
+              <div className="fx-hero-r">
+                <div className="fx-frame">
+                  {HERO_SLIDES.map((h, i) => (
+                    <span key={h.src} className={'mw-hero-slide' + (i === slide ? ' on' : '')} style={{ backgroundImage: `url(${h.src})`, backgroundPosition: h.pos }} aria-hidden="true" />
+                  ))}
+                  <div className="mw-hero-dots fx-dots">
+                    {HERO_SLIDES.map((h, i) => <button key={h.src} className={i === slide ? 'on' : ''} aria-label={`${i + 1}`} onClick={() => setSlide(i)} />)}
+                  </div>
+                </div>
+                <span className="fx-bubble b1">1:1 Interview <i>★</i></span>
+                <span className="fx-bubble b2"><i>★</i> AI Hackathon</span>
+                <span className="fx-bubble b3">Mentoring <i>★</i></span>
+              </div>
+            </div>
+            <dl className="fx-stats">
+              <div><dt>{t('mw.stat.companies')}</dt><dd>{companies.length}</dd></div>
+              <div><dt>{t('mw.stat.jobs')}</dt><dd>{total}</dd></div>
+              <div><dt>{t('mw.fact.dateLabel')}</dt><dd className="sm">{t('mw.fact.date')}</dd></div>
+              <div><dt>{t('mw.fact.formatLabel')}</dt><dd className="sm">{t('mw.fact.format')}</dd></div>
+            </dl>
+          </header>
+        )}
         {/* ── 히어로 ── */}
+        {!fest && (
         <header className="mw-hero">
           <div className="mw-hero-slides" aria-hidden="true">
             {HERO_SLIDES.map((h, i) => (
@@ -461,29 +574,11 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
           </div>
           <div className="mw-hero-in">
             <div className="mw-hero-l">
-              {fest ? (
-                <div className="fx-stickers">
-                  <span className="fx-sticker s1">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
-                  <span className="fx-sticker s2">19.11.2026 · TP.HCM</span>
-                  <span className="fx-sticker s3">Matching Week</span>
-                </div>
-              ) : (
-                <div className="mw-chips">
-                  <span className="mw-chip">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
-                  <span className="mw-chip mw-chip-ghost">Matching Week · 19.11.2026</span>
-                </div>
-              )}
+              <div className="mw-chips">
+                <span className="mw-chip">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
+                <span className="mw-chip mw-chip-ghost">Matching Week · 19.11.2026</span>
+              </div>
               <h1>{t('mw.title')}</h1>
-              {fest && (
-                <div className="fx-count" aria-label="countdown">
-                  {[['d', 'DAYS'], ['h', 'HRS'], ['m', 'MIN'], ['s', 'SEC']].map(([k, label]) => (
-                    <div key={k} className="fx-count-cell">
-                      <b key={left ? left[k] : '-'}>{left ? String(left[k]).padStart(2, '0') : '--'}</b>
-                      <span>{label}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
               <p className="mw-sub">{t('mw.sub', { companies: companies.length, jobs: total })}</p>
               <div className="mw-ctas">
                 <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { page: PAGE })}>{t('mw.cta')}</a>
@@ -499,6 +594,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
             </dl>
           </div>
         </header>
+        )}
 
         {/* v2: 대형 키네틱 타이포 띠 — 외곽선 줄과 그라데이션 줄이 서로 반대로 흐른다 */}
         {fest && <KBand words={['MATCHING WEEK', '19.11.2026', 'HO CHI MINH', '1:1 INTERVIEW', 'HACKATHON', 'MENTORING']} />}
@@ -565,11 +661,25 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         {/* ── 02 오시는 길 — 위: 탑승지→행사장 이동 경로(다크) / 아래: 안내 영상 · 지도 · 알아두세요 ── */}
         <section className="mw-sec mw-warm">
           <div className="mw-in">
-            <Reveal>
-              <Eyebrow n="02">Getting there</Eyebrow>
-              <h2 className="mw-title">{t('mw.venue.title')}</h2>
-              <p className="mw-lead">{t('mw.venue.sub')}</p>
-            </Reveal>
+            {/* v2 는 제목 오른쪽에 공식 지도 이미지를 나란히(한 줄을 통째로 차지하지 않게) */}
+            <div className={fest ? 'fx-venue-head' : undefined}>
+              <Reveal>
+                <Eyebrow n="02">Getting there</Eyebrow>
+                <h2 className="mw-title">{t('mw.venue.title')}</h2>
+                <p className="mw-lead">{t('mw.venue.sub')}</p>
+              </Reveal>
+              {fest && (
+                <Reveal delay={60}>
+                  <button type="button" className="fx-map" onClick={() => { setMapOpen(true); track('mw_venue_map_open', { page: PAGE }); }} aria-label={t('mw.venue.mapZoom')}>
+                    <img src="/matching-week/venue-map.jpg" alt="Venue map — November Matching Week" loading="lazy" />
+                    <span className="fx-map-zoom">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4.3-4.3M11 8v6M8 11h6" /></svg>
+                      {t('mw.venue.mapZoom')}
+                    </span>
+                  </button>
+                </Reveal>
+              )}
+            </div>
             <Reveal delay={80}>
               <div className="mw-journey">
                 <a href={VENUE.shuttle.url} target="_blank" rel="noopener noreferrer" className="mw-jstop" onClick={() => track('mw_map_click', { meta: { to: 'shuttle' }, page: PAGE })}>
@@ -827,17 +937,17 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
 
       {gallery && view !== null && (
         <div className="mw-lb" onClick={() => setView(null)}>
-          <div className="mw-lb-top" onClick={(e) => e.stopPropagation()}>
+          <div className="mw-lb-top">
             <b>{tabTitle}</b>
             <span>{view + 1} / {tabPhotos.length}</span>
             <button className="mw-lb-x" aria-label="close" onClick={() => setView(null)}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
             </button>
           </div>
-          <div className="mw-lb-stage" onClick={(e) => e.stopPropagation()}>
-            <button className="mw-lb-nav prev" aria-label="prev" onClick={() => step(-1)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg></button>
-            <img key={view} src={tabPhotos[view]} alt={`${tabTitle} ${view + 1}`} />
-            <button className="mw-lb-nav next" aria-label="next" onClick={() => step(1)}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg></button>
+          <div className="mw-lb-stage">
+            <button className="mw-lb-nav prev" aria-label="prev" onClick={(e) => { e.stopPropagation(); step(-1); }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6" /></svg></button>
+            <img key={view} src={tabPhotos[view]} alt={`${tabTitle} ${view + 1}`} onClick={(e) => e.stopPropagation()} />
+            <button className="mw-lb-nav next" aria-label="next" onClick={(e) => { e.stopPropagation(); step(1); }}><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg></button>
           </div>
           <div className="mw-lb-thumbs" onClick={(e) => e.stopPropagation()}>
             {tabPhotos.map((src, i) => (
@@ -849,6 +959,19 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         </div>
       )}
 
+      {mapOpen && (
+        <div className="mw-lb fx-map-lb" onClick={() => setMapOpen(false)}>
+          <div className="mw-lb-top">
+            <b>Venue map · November Matching Week</b>
+            <button className="mw-lb-x" aria-label="close" onClick={() => setMapOpen(false)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M18 6L6 18M6 6l12 12" /></svg>
+            </button>
+          </div>
+          <div className="mw-lb-stage">
+            <img src="/matching-week/venue-map.jpg" alt="Venue map — November Matching Week" onClick={(e) => e.stopPropagation()} />
+          </div>
+        </div>
+      )}
       </div>
 
       {fest && <style dangerouslySetInnerHTML={{ __html: FEST_CSS }} />}
