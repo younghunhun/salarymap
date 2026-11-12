@@ -83,6 +83,112 @@ const CONTENT_ICONS = {
   mentoring: <><path d="M3 5h18v11H8l-5 4V5z" /><path d="M8 10h8M8 13h5" /></>,
 };
 
+/* ── v2 축제(포스터) 스킨 — 핫핑크·일렉트릭블루 물결, 박스 타이포, 두꺼운 테두리+오프셋 그림자 ── */
+const WAVE = (bg, a, b) => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='160' height='44' viewBox='0 0 160 44'><rect width='160' height='44' fill='${bg}'/><path d='M0 11 Q20 -1 40 11 T80 11 T120 11 T160 11' stroke='${a}' stroke-width='7' fill='none'/><path d='M0 30 Q20 18 40 30 T80 30 T120 30 T160 30' stroke='${b}' stroke-width='7' fill='none'/></svg>`)}")`;
+const FX = { pink: '#ff2d95', blue: '#2b2bff', ink: '#0d0a33', lime: '#d4ff3a', white: '#ffffff' };
+const FEST_CSS = `
+.mw.fest { background: ${FX.ink}; color: #fff; }
+.mw.fest .mw-title, .mw.fest .mw-hero h1, .mw.fest .mw-subtitle, .mw.fest .mw-end h2 { font-family: 'Anton', 'Pretendard', sans-serif; font-weight: 400; letter-spacing: 0.3px; text-transform: uppercase; }
+.mw.fest .mw-title { font-size: 52px; line-height: 1.08; }
+.mw.fest .mw-lead { color: rgba(255,255,255,0.85); }
+.mw.fest .mw-eyebrow { display: inline-flex; padding: 6px 12px; background: ${FX.lime}; color: ${FX.ink}; border: 3px solid ${FX.ink}; box-shadow: 4px 4px 0 ${FX.ink}; letter-spacing: 1.5px; transform: rotate(-2deg); }
+.mw.fest .mw-eyebrow span { border-color: ${FX.ink}; }
+.mw.fest .mw-accent { color: ${FX.lime}; }
+
+/* 히어로: 사진 위에 핑크→블루 듀오톤 + 물결 테두리 */
+.mw.fest .mw-hero { border: 16px solid transparent; border-image: ${WAVE(FX.pink, FX.white, FX.blue)} 16 round; min-height: max(700px, 84vh); }
+.mw.fest .mw-hero-slide { filter: saturate(1.15) contrast(1.05); }
+.mw.fest .mw-hero::after { background: linear-gradient(160deg, rgba(255,45,149,0.55) 0%, rgba(43,43,255,0.35) 45%, rgba(13,10,51,0.95) 100%); }
+.mw.fest .fx-poster { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.mw.fest .fx-box { display: inline-block; padding: 6px 14px; background: ${FX.blue}; border: 3px solid #fff; font-family: 'Anton', sans-serif; font-size: 22px; letter-spacing: 1px; line-height: 1.1; }
+.mw.fest .fx-box-sm { font-size: 15px; padding: 3px 10px; background: ${FX.pink}; }
+.mw.fest .fx-big { margin-top: 10px; font-family: 'Anton', sans-serif; font-size: 112px; line-height: 0.9; color: #fff; -webkit-text-stroke: 0; text-shadow: 6px 6px 0 ${FX.blue}, 12px 12px 0 ${FX.pink}; }
+.mw.fest .fx-date { margin-top: 18px; display: inline-flex; align-items: baseline; gap: 8px; padding: 4px 14px; background: #fff; color: ${FX.blue}; font-family: 'Anton', sans-serif; font-size: 40px; line-height: 1.1; box-shadow: 6px 6px 0 ${FX.pink}; }
+.mw.fest .fx-date small { font-size: 20px; }
+.mw.fest .mw-hero h1 { margin-top: 22px; font-size: 30px; line-height: 1.2; text-shadow: none; }
+.mw.fest .mw-btn { border-radius: 0; text-transform: uppercase; font-weight: 800; border: 3px solid #fff; }
+.mw.fest .mw-btn-primary { background: ${FX.pink}; box-shadow: 6px 6px 0 ${FX.blue}; }
+.mw.fest .mw-btn-primary:hover { background: ${FX.pink}; transform: translate(-2px,-2px); box-shadow: 8px 8px 0 ${FX.blue}; }
+.mw.fest .mw-btn-ghost { background: ${FX.blue}; box-shadow: 6px 6px 0 ${FX.pink}; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.mw.fest .mw-btn-ghost:hover { background: ${FX.blue}; transform: translate(-2px,-2px); }
+.mw.fest .mw-panel { background: #fff; color: ${FX.ink}; border: 4px solid ${FX.ink}; border-radius: 0; box-shadow: 10px 10px 0 ${FX.pink}; -webkit-backdrop-filter: none; backdrop-filter: none; transform: rotate(1.5deg); }
+.mw.fest .mw-stat { border-color: rgba(13,10,51,0.15); }
+.mw.fest .mw-stat dt, .mw.fest .mw-row dt { color: rgba(13,10,51,0.6); }
+.mw.fest .mw-stat dd { font-family: 'Anton', sans-serif; font-weight: 400; font-size: 58px; background: none; -webkit-text-fill-color: ${FX.pink}; color: ${FX.pink}; }
+.mw.fest .mw-row + .mw-row { border-color: rgba(13,10,51,0.12); }
+.mw.fest .mw-hero-dots button.on { background: ${FX.lime}; }
+
+/* 티커 띠 */
+.mw.fest .fx-ticker { overflow: hidden; background: ${FX.pink}; border-top: 4px solid ${FX.ink}; border-bottom: 4px solid ${FX.ink}; transform: rotate(-1.2deg); margin: -14px -10px 0; position: relative; z-index: 3; box-shadow: 0 8px 0 ${FX.blue}; }
+.mw.fest .fx-ticker-track { display: flex; width: max-content; animation: mw-marquee 28s linear infinite; }
+.mw.fest .fx-ticker-track span { display: flex; }
+.mw.fest .fx-ticker b { display: inline-flex; align-items: center; gap: 18px; padding: 12px 18px; font-family: 'Anton', sans-serif; font-weight: 400; font-size: 24px; letter-spacing: 1px; color: #fff; white-space: nowrap; }
+.mw.fest .fx-ticker i { font-style: normal; color: ${FX.lime}; }
+
+/* 주최 띠 */
+.mw.fest .mw-orgs { border-bottom: 0; padding-top: 18px; }
+.mw.fest .mw-orgs-in p { color: ${FX.ink}; font-weight: 800; }
+
+/* 섹션 배경 교차 + 위쪽 물결 띠 */
+.mw.fest .mw-sec { padding-top: 136px; }
+.mw.fest .mw-sec::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 44px; background: ${WAVE(FX.pink, FX.white, FX.blue)}; background-size: 160px 44px; }
+.mw.fest .mw-dark { background: ${FX.ink}; }
+.mw.fest .mw-warm { background: ${FX.pink}; }
+.mw.fest .mw-warm::before { background: ${WAVE(FX.blue, FX.white, FX.pink)}; background-size: 160px 44px; }
+.mw.fest .mw-gray { background: ${FX.blue}; }
+.mw.fest .mw-sec:not(.mw-dark):not(.mw-warm):not(.mw-gray) { background: ${FX.ink}; }
+.mw.fest .mw-warm .mw-lead, .mw.fest .mw-gray .mw-lead { color: #fff; }
+
+/* 카드 공통: 흰 바탕 + 두꺼운 잉크 테두리 + 오프셋 그림자 */
+.mw.fest .mw-album, .mw.fest .mw-content { border: 3px solid #fff; border-radius: 18px; box-shadow: 8px 8px 0 ${FX.pink}; }
+.mw.fest .mw-album:not(:disabled):hover, .mw.fest .mw-content:hover { transform: translate(-3px,-3px); box-shadow: 11px 11px 0 ${FX.pink}; border-color: #fff; }
+.mw.fest .mw-album.next { box-shadow: 8px 8px 0 ${FX.lime}; border-color: ${FX.lime}; }
+.mw.fest .mw-album-go, .mw.fest .mw-content-ico { background: ${FX.pink}; }
+.mw.fest .mw-content-body em { color: ${FX.lime}; }
+.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { border: 3px solid ${FX.ink}; border-radius: 16px; box-shadow: 7px 7px 0 ${FX.pink}; }
+.mw.fest .mw-gray .mw-co { box-shadow: 7px 7px 0 ${FX.ink}; }
+.mw.fest .mw-step:hover, .mw.fest .mw-co:hover { transform: translate(-3px,-3px); box-shadow: 10px 10px 0 ${FX.pink}; border-color: ${FX.ink}; }
+.mw.fest .mw-gray .mw-co:hover { box-shadow: 10px 10px 0 ${FX.ink}; }
+.mw.fest .mw-step, .mw.fest .mw-co, .mw.fest .mw-perk { color: ${FX.ink}; }
+.mw.fest .mw-step-n { -webkit-text-stroke: 0; color: ${FX.pink}; font-family: 'Anton', sans-serif; font-weight: 400; }
+.mw.fest .mw-co-top { background: ${WAVE('#ffe3f1', '#ffffff', '#dcdcff')}; background-size: 120px 33px; }
+.mw.fest .mw-co-foot { color: ${FX.pink}; }
+.mw.fest .mw-note { background: ${FX.lime}; color: ${FX.ink}; border: 3px solid ${FX.ink}; border-radius: 0; font-weight: 600; }
+.mw.fest .mw-filters { border: 3px solid ${FX.ink}; box-shadow: 5px 5px 0 ${FX.ink}; }
+.mw.fest .mw-filter.on { background: ${FX.pink}; }
+
+/* 오시는 길 */
+.mw.fest .mw-journey { border: 4px solid ${FX.ink}; border-radius: 22px; box-shadow: 10px 10px 0 ${FX.blue}; }
+.mw.fest .mw-ride-times b { border-radius: 0; background: ${FX.blue}; border: 3px solid #fff; font-family: 'Anton', sans-serif; font-weight: 400; box-shadow: 4px 4px 0 ${FX.pink}; }
+.mw.fest .mw-video, .mw.fest .mw-map { border: 4px solid ${FX.ink}; border-radius: 22px; box-shadow: 10px 10px 0 ${FX.blue}; }
+.mw.fest .mw-perk-ico, .mw.fest .mw-jstop-end .mw-jstop-ico { background: ${FX.pink}; color: #fff; }
+
+/* FAQ */
+.mw.fest .mw-faq-list, .mw.fest .mw-faq details { border-color: rgba(255,255,255,0.18); }
+.mw.fest .mw-faq summary { color: #fff; }
+.mw.fest .mw-q { color: ${FX.lime}; }
+.mw.fest .mw-faq details p { color: rgba(255,255,255,0.78); }
+
+/* 마무리 */
+.mw.fest .mw-end { background: ${WAVE(FX.pink, FX.white, FX.blue)}; background-size: 200px 55px; }
+.mw.fest .mw-end .mw-in { background: ${FX.ink}; border: 4px solid #fff; box-shadow: 12px 12px 0 ${FX.blue}; padding: 56px 24px; max-width: 900px; }
+.mw.fest .mw-end .mw-chip { border-radius: 0; background: ${FX.lime}; color: ${FX.ink}; }
+
+@media (max-width: 640px) {
+  .mw.fest .mw-hero { border-width: 10px; }
+  .mw.fest .fx-big { font-size: 64px; text-shadow: 4px 4px 0 ${FX.blue}, 8px 8px 0 ${FX.pink}; }
+  .mw.fest .fx-date { font-size: 28px; }
+  .mw.fest .fx-box { font-size: 17px; }
+  .mw.fest .mw-hero h1 { font-size: 22px; }
+  .mw.fest .mw-title { font-size: 34px; }
+  .mw.fest .mw-panel { transform: none; box-shadow: 6px 6px 0 ${FX.pink}; }
+  .mw.fest .fx-ticker b { font-size: 18px; padding: 10px 14px; }
+  .mw.fest .mw-sec { padding-top: 100px; }
+  .mw.fest .mw-sec::before { height: 30px; background-size: 110px 30px; }
+  .mw.fest .mw-end .mw-in { padding: 40px 18px; margin: 0 16px; width: auto; }
+}
+`;
+
 export async function getStaticProps() {
   let jobs = [];
   try {
@@ -123,8 +229,11 @@ function Logo({ c, size }) {
 
 const Arrow = () => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6" /></svg>;
 
-export default function MatchingWeek({ companies, total, daysLeft }) {
+/* variant='fest' — /matching-week-v2 축제(포스터) 스킨. 내용·동작은 같고 디자인만 다르다(아래 FEST_CSS). */
+export default function MatchingWeek({ companies, total, daysLeft, variant }) {
   const { t } = useT();
+  const fest = variant === 'fest';
+  const PAGE = fest ? '/matching-week-v2' : '/matching-week'; // 이벤트 계측 페이지 구분
   const [copied, setCopied] = useState(false);
   const [slide, setSlide] = useState(0);
   const videoBox = useRef(null);
@@ -143,7 +252,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
       if (e.isIntersecting) {
         if (userPaused.current) return;
         v.play().catch(() => {});
-        if (!played) { played = true; track('mw_video_play', { page: '/matching-week' }); }
+        if (!played) { played = true; track('mw_video_play', { page: PAGE }); }
       } else v.pause();
     }, { threshold: 0.5 });
     io.observe(box);
@@ -163,7 +272,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
   const toggleMute = () => {
     const v = videoRef.current; if (!v) return;
     v.muted = !muted; setMuted(!muted);
-    if (muted) { v.play().catch(() => {}); track('mw_video_unmute', { page: '/matching-week' }); }
+    if (muted) { v.play().catch(() => {}); track('mw_video_unmute', { page: PAGE }); }
   };
 
   // 히어로 사진 5초마다 교차 페이드(모션 줄이기 설정이면 첫 장 고정)
@@ -207,7 +316,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
   const openAlbum = (a) => {
     if (!a.photos.length) return;
     setGallery(a.key); setView(null);
-    track('mw_album_open', { meta: { album: a.key }, page: '/matching-week' });
+    track('mw_album_open', { meta: { album: a.key }, page: PAGE });
   };
 
   // 앨범 카드 — 사진이 있으면 표지 + 장수, 없으면 월 숫자 플레이스홀더
@@ -230,13 +339,13 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
 
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
-    track('page_view', { page: '/matching-week', meta: { utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'), utm_campaign: q.get('utm_campaign'), referrer: document.referrer || null } });
+    track('page_view', { page: PAGE, meta: { utm_source: q.get('utm_source'), utm_medium: q.get('utm_medium'), utm_campaign: q.get('utm_campaign'), referrer: document.referrer || null } });
   }, []);
 
   // 친구에게 공유 — 모바일은 공유 시트, 아니면 링크 복사
   const share = async () => {
     const url = 'https://salary-fyi.com/matching-week';
-    track('mw_share_click', { page: '/matching-week' });
+    track('mw_share_click', { page: PAGE });
     try {
       if (navigator.share) { await navigator.share({ title: t('mw.metaTitle'), url }); return; }
       await navigator.clipboard.writeText(url);
@@ -262,9 +371,12 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
         <meta property="og:image" content="https://salary-fyi.com/main/matching-week.jpg" />
         <meta property="og:url" content="https://salary-fyi.com/matching-week" />
         <link rel="canonical" href="https://salary-fyi.com/matching-week" />
+        {/* v2 는 직접 링크로만 들어오는 시안 — 검색 노출 막음 */}
+        {fest && <meta name="robots" content="noindex, nofollow" />}
+        {fest && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&display=swap&subset=vietnamese" />}
       </Head>
 
-      <div className="mw">
+      <div className={'mw' + (fest ? ' fest' : '')}>
         {/* ── 히어로 ── */}
         <header className="mw-hero">
           <div className="mw-hero-slides" aria-hidden="true">
@@ -277,14 +389,23 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
           </div>
           <div className="mw-hero-in">
             <div className="mw-hero-l">
-              <div className="mw-chips">
-                <span className="mw-chip">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
-                <span className="mw-chip mw-chip-ghost">Matching Week · 19.11.2026</span>
-              </div>
+              {fest ? (
+                <div className="fx-poster">
+                  <span className="fx-box">K-TECH CONNECT</span>
+                  <span className="fx-box fx-box-sm">HO CHI MINH · {daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
+                  <div className="fx-big">MATCHING<br />WEEK</div>
+                  <div className="fx-date">19.11.2026<small>(THU)</small></div>
+                </div>
+              ) : (
+                <div className="mw-chips">
+                  <span className="mw-chip">{daysLeft > 0 ? `D-${daysLeft}` : 'D-DAY'}</span>
+                  <span className="mw-chip mw-chip-ghost">Matching Week · 19.11.2026</span>
+                </div>
+              )}
               <h1>{t('mw.title')}</h1>
               <p className="mw-sub">{t('mw.sub', { companies: companies.length, jobs: total })}</p>
               <div className="mw-ctas">
-                <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { page: '/matching-week' })}>{t('mw.cta')}</a>
+                <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { page: PAGE })}>{t('mw.cta')}</a>
                 <button className="mw-btn mw-btn-ghost" onClick={share}>{copied ? t('mw.copied') : t('mw.share')}</button>
               </div>
             </div>
@@ -297,6 +418,17 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             </dl>
           </div>
         </header>
+
+        {/* v2: 행사 티커 띠 */}
+        {fest && (
+          <div className="fx-ticker" aria-hidden="true">
+            <div className="fx-ticker-track">
+              {Array.from({ length: 2 }).map((_, k) => (
+                <span key={k}>{['NOVEMBER MATCHING WEEK', '19.11.2026', 'HO CHI MINH', '1:1 INTERVIEW', 'HACKATHON', 'MENTORING', `${companies.length} COMPANIES`, `${total} POSITIONS`].map((w) => <b key={w}>{w}<i>✦</i></b>)}</span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ── 주최·후원 ── */}
         <div className="mw-orgs">
@@ -367,7 +499,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             </Reveal>
             <Reveal delay={80}>
               <div className="mw-journey">
-                <a href={VENUE.shuttle.url} target="_blank" rel="noopener noreferrer" className="mw-jstop" onClick={() => track('mw_map_click', { meta: { to: 'shuttle' }, page: '/matching-week' })}>
+                <a href={VENUE.shuttle.url} target="_blank" rel="noopener noreferrer" className="mw-jstop" onClick={() => track('mw_map_click', { meta: { to: 'shuttle' }, page: PAGE })}>
                   <span className="mw-jstop-ico"><Bus /></span>
                   <em>{t('mw.venue.shuttleLabel')}</em>
                   <b>{VENUE.shuttle.name}</b>
@@ -386,7 +518,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
                     <span className="mw-ride-desc">{t('mw.venue.backDesc')}</span>
                   </div>
                 </div>
-                <a href={VENUE.venue.url} target="_blank" rel="noopener noreferrer" className="mw-jstop mw-jstop-end" onClick={() => track('mw_map_click', { meta: { to: 'venue' }, page: '/matching-week' })}>
+                <a href={VENUE.venue.url} target="_blank" rel="noopener noreferrer" className="mw-jstop mw-jstop-end" onClick={() => track('mw_map_click', { meta: { to: 'venue' }, page: PAGE })}>
                   <span className="mw-jstop-ico"><Pin /></span>
                   <em>{t('mw.venue.venueLabel')}</em>
                   <b>{VENUE.venue.name}</b>
@@ -488,7 +620,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
                 <div className="mw-filters" role="tablist">
                   {FILTERS.map((f) => (
                     <button key={f} role="tab" aria-selected={filter === f} className={'mw-filter' + (filter === f ? ' on' : '')}
-                      onClick={() => { setFilter(f); track('mw_filter_click', { meta: { filter: f }, page: '/matching-week' }); }}>
+                      onClick={() => { setFilter(f); track('mw_filter_click', { meta: { filter: f }, page: PAGE }); }}>
                       {f === 'all' ? t('mw.filter.all') : f} <em>{count(f)}</em>
                     </button>
                   ))}
@@ -498,7 +630,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             {shown.length === 0 ? <p className="mw-empty">{t('main.empty')}</p> : (
               <div className="mw-cos">
                 {shown.map((c) => (
-                  <button key={c.name} className="mw-co" onClick={() => { setOpen(c); track('mw_company_click', { meta: { company: c.name }, page: '/matching-week' }); }}>
+                  <button key={c.name} className="mw-co" onClick={() => { setOpen(c); track('mw_company_click', { meta: { company: c.name }, page: PAGE }); }}>
                     <div className="mw-co-top"><Logo c={c} size={64} /></div>
                     <div className="mw-co-body">
                       <div className="mw-co-name">{c.name}</div>
@@ -527,7 +659,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             </Reveal>
             <div className="mw-faq-list">
               {[1, 2, 3, 4, 5].map((n) => (
-                <details key={n} onToggle={(e) => e.currentTarget.open && track('mw_faq_open', { meta: { n }, page: '/matching-week' })}>
+                <details key={n} onToggle={(e) => e.currentTarget.open && track('mw_faq_open', { meta: { n }, page: PAGE })}>
                   <summary><span className="mw-q">Q</span>{t(`mw.faq.${n}.q`)}</summary>
                   <p>{t(`mw.faq.${n}.a`)}</p>
                 </details>
@@ -544,7 +676,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
               <h2>{t('mw.end.title')}</h2>
               <p>{t('mw.end.sub')}</p>
               <div className="mw-ctas">
-                <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { meta: { at: 'end' }, page: '/matching-week' })}>{t('mw.cta')}</a>
+                <a href="#companies" className="mw-btn mw-btn-primary" onClick={() => track('mw_cta_click', { meta: { at: 'end' }, page: PAGE })}>{t('mw.cta')}</a>
                 <button className="mw-btn mw-btn-ghost" onClick={share}>{copied ? t('mw.copied') : t('mw.share')}</button>
               </div>
             </Reveal>
@@ -571,7 +703,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
             <div className="mw-sheet-body">
               {open.jobs.map((j) => (
                 <Link key={j.id} href={`/jobs/${j.id}`} className="mw-job"
-                  onClick={() => track('click_job_card', { meta: { jobId: j.id, title: j.title, company: j.company, via: 'matching_week' }, page: '/matching-week' })}>
+                  onClick={() => track('click_job_card', { meta: { jobId: j.id, title: j.title, company: j.company, via: 'matching_week' }, page: PAGE })}>
                   <div className="mw-job-main">
                     <div className="mw-job-t">{j.title}</div>
                     <div className="mw-job-tags">
@@ -641,6 +773,7 @@ export default function MatchingWeek({ companies, total, daysLeft }) {
         </div>
       )}
 
+      {fest && <style dangerouslySetInnerHTML={{ __html: FEST_CSS }} />}
       <style jsx global>{`
         .mw { background: #fff; color: #171717; min-height: 100%; overflow-x: hidden; }
         .mw-in { width: 90%; max-width: 1200px; margin: 0 auto; }
