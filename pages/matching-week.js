@@ -32,7 +32,8 @@ const ORGS = [
 ];
 
 /* 회사 소개 — 기업이 직접 쓴 KTC 공고 본문의 '회사 소개' 문단에서 회사 설명만 옮겼다(공고 얘기 문장은 뺌).
-   MNF 는 원문이 영어라 베트남어로 옮김. 키는 getStaticProps 의 회사 묶음 키(뒤 Company 뗀 소문자). 없는 회사는 소개 칸을 숨긴다. */
+   MNF 는 원문이 영어라 베트남어로 옮김. pickcare 부터 아래 6곳은 JD 에 소개가 없어 각 공식 사이트 문구를 베트남어로 옮김.
+   키는 getStaticProps 의 회사 묶음 키(뒤 Company 뗀 소문자). 없는 회사는 소개 칸을 숨긴다. */
 const CO_INTRO = {
   nalda: 'NALDA Co., Ltd. là công ty phát triển sản phẩm công nghệ, hiện đang vận hành Timing - ứng dụng theo dõi và quản lý thời gian theo dạng lưới. Timing hỗ trợ người dùng ghi lại các hoạt động hằng ngày, trực quan hóa cách sử dụng thời gian, theo dõi tỷ lệ tập trung - nghỉ ngơi và nhìn lại thói quen của bản thân.',
   'bada fintech': 'Công ty vận hành nền tảng Fintech tài chính khoản phải thu theo mô hình Supply Chain Finance (SCF), cung cấp giải pháp giải quyết tình trạng chậm thanh toán, chậm quyết toán của hộ kinh doanh, doanh nghiệp và các nền tảng, qua đó hỗ trợ khách hàng nhanh chóng chuyển đổi các khoản phải thu thành nguồn vốn lưu động.',
@@ -43,6 +44,19 @@ const CO_INTRO = {
   d3: 'D3 Co., Ltd. là công ty công nghệ Hàn Quốc chuyên phát triển và vận hành LIMZY, nền tảng quảng cáo đa kênh ứng dụng trí tuệ nhân tạo (AI-powered Multi-channel Advertising Platform).',
   solarnix: 'SOLARNIX là doanh nghiệp chuyên về dịch vụ khảo sát địa điểm (site discovery) cho điện mặt trời tại Hàn Quốc, hỗ trợ ra quyết định ở giai đoạn đầu của dự án điện mặt trời bằng dữ liệu.',
   'mnf solution': 'Lấy nền tảng số làm trung tâm, MNF Solution đang xây dựng một hệ sinh thái di chuyển (mobility) mới. Công ty cung cấp giải pháp quản lý toàn diện cho các doanh nghiệp cho thuê xe ô tô, cùng dịch vụ kênh khách hàng để giao tiếp với khách hàng.',
+  pickcare: 'PickCare là nền tảng dùng AI và dữ liệu để tổng hợp thông tin về sức khỏe và đời sống của thú cưng, giúp người nuôi đưa ra quyết định tốt hơn. Dịch vụ gồm tư vấn thú cưng bằng AI, bản đồ hơn 14.000 địa điểm dành cho thú cưng (PickSpot), tạp chí và cộng đồng người nuôi.',
+  nexacode: 'Nexacode là đội ngũ chuyên phát triển ứng dụng và website tại Seoul, đồng hành cùng khách hàng như một bộ phận IT riêng — từ lên kế hoạch, thiết kế UI/UX đến phát triển, SEO và bảo trì. Đội ngũ từng tự phát triển và vận hành một ứng dụng karaoke đạt 2,5 triệu lượt tải.',
+  rothea: 'Rothea là thương hiệu mỹ phẩm Hàn Quốc theo định hướng "Korean Skin Longevity" — chăm sóc da hiệu quả cao giúp hàng rào bảo vệ da khỏe mạnh. Sản phẩm của Rothea được bán trên Amazon Mỹ và cửa hàng chính thức tại Hàn Quốc.',
+  'the waves': 'The Waves là công ty nội dung tại Seoul, hoạt động trong ba mảng: sản xuất nội dung (media, giải trí), dự án thương hiệu (brand marketing) và kinh doanh âm nhạc (quản lý nghệ sĩ, phát hành âm nhạc).',
+  hyperstar: 'Hyperstar giúp thương hiệu tăng trưởng theo hai cách: phần mềm SaaS dùng AI để tìm kiếm trực tiếp trong hơn 5 triệu influencer, và agency marketing influencer toàn cầu.',
+  until: 'Until là doanh nghiệp Hàn Quốc vận hành Bannerting — dịch vụ chia sẻ băng rôn quảng cáo với sứ mệnh "kết nối giá trị cho từng tấm băng rôn".',
+};
+// 로고 보충 — 매칭위크 공고에 로고가 없던 곳. 각 공식 사이트 로고·파비콘을 정사각형으로 저장(d3 는 흰 로고라 어두운 바탕에 올림)
+const CO_LOGO = {
+  d3: '/matching-week/logos/d3.png',
+  papacompany: '/matching-week/logos/papacompany.png',
+  'the waves': '/matching-week/logos/thewaves.png',
+  hyperstar: '/matching-week/logos/hyperstar.png',
 };
 // 웹사이트 보충 — 매칭위크 공고엔 없어 따로 채운 주소. 위 4곳은 같은 회사의 다른 KTC 공고(company_url)·JD 본문,
 // 아래는 ktc-ops 기업 담당자 이메일 도메인(사이트 제목이 회사명과 맞는지 확인함), hyperstar·pickcare·rothea·bada·until 은 유저 제공
@@ -348,7 +362,7 @@ export async function getStaticProps() {
   const byCo = new Map();
   for (const j of jobs) {
     const key = j.company.replace(/\s+company$/i, '').toLowerCase();
-    const g = byCo.get(key) || { name: j.company, logo: null, website: CO_SITE[key.trim()] || null, intro: CO_INTRO[key.trim()] || null, jobs: [] };
+    const g = byCo.get(key) || { name: j.company, logo: CO_LOGO[key.trim()] || null, website: CO_SITE[key.trim()] || null, intro: CO_INTRO[key.trim()] || null, jobs: [] };
     g.jobs.push(j);
     if (j.company.length > g.name.length) g.name = j.company;
     if (!g.logo && j.logo) g.logo = j.logo;
