@@ -31,6 +31,36 @@ const ORGS = [
   { src: '/ktc/jobkorea.png', h: 18, alt: 'JobKorea' },
 ];
 
+/* 회사 소개 — 기업이 직접 쓴 KTC 공고 본문의 '회사 소개' 문단에서 회사 설명만 옮겼다(공고 얘기 문장은 뺌).
+   MNF 는 원문이 영어라 베트남어로 옮김. 키는 getStaticProps 의 회사 묶음 키(뒤 Company 뗀 소문자). 없는 회사는 소개 칸을 숨긴다. */
+const CO_INTRO = {
+  nalda: 'NALDA Co., Ltd. là công ty phát triển sản phẩm công nghệ, hiện đang vận hành Timing - ứng dụng theo dõi và quản lý thời gian theo dạng lưới. Timing hỗ trợ người dùng ghi lại các hoạt động hằng ngày, trực quan hóa cách sử dụng thời gian, theo dõi tỷ lệ tập trung - nghỉ ngơi và nhìn lại thói quen của bản thân.',
+  'bada fintech': 'Công ty vận hành nền tảng Fintech tài chính khoản phải thu theo mô hình Supply Chain Finance (SCF), cung cấp giải pháp giải quyết tình trạng chậm thanh toán, chậm quyết toán của hộ kinh doanh, doanh nghiệp và các nền tảng, qua đó hỗ trợ khách hàng nhanh chóng chuyển đổi các khoản phải thu thành nguồn vốn lưu động.',
+  papacompany: 'Papa Company là agency marketing của Hàn Quốc, giúp thương hiệu tăng trưởng thông qua content, SNS và performance marketing. Công ty đang mở rộng sang Việt Nam và thị trường nước ngoài.',
+  andwise: 'ANDWISE là doanh nghiệp chuyên về web, với nền tảng là giải pháp gửi email hàng loạt và giải pháp quản lý nội dung (CMS). Công ty cung cấp giải pháp, đồng thời thực hiện phát triển và bảo trì cho các cơ quan công quyền và trường đại học.',
+  jinosys: 'Jinosys Co., Ltd. là doanh nghiệp đổi mới chuyên về lĩnh vực an toàn, phát triển nền tảng IoT an toàn dựa trên AI độc quyền và các hệ thống quản lý thông minh. Với 18 bằng sáng chế và gần một thập kỷ kinh nghiệm là đối tác an toàn chính cho các tập đoàn hàng đầu thế giới như Samsung Electronics, Jinosys tích hợp cảm biến IoT tiên tiến và dữ liệu lớn (big data) để số hóa an toàn công nghiệp và tạo ra môi trường làm việc an toàn.',
+  'camon social': 'Camon Social là nền tảng kết nối xã hội, giúp mọi người kết nối dựa trên những sở thích chung và xây dựng các mối quan hệ thông qua những trải nghiệm trực tiếp ý nghĩa.',
+  d3: 'D3 Co., Ltd. là công ty công nghệ Hàn Quốc chuyên phát triển và vận hành LIMZY, nền tảng quảng cáo đa kênh ứng dụng trí tuệ nhân tạo (AI-powered Multi-channel Advertising Platform).',
+  solarnix: 'SOLARNIX là doanh nghiệp chuyên về dịch vụ khảo sát địa điểm (site discovery) cho điện mặt trời tại Hàn Quốc, hỗ trợ ra quyết định ở giai đoạn đầu của dự án điện mặt trời bằng dữ liệu.',
+  'mnf solution': 'Lấy nền tảng số làm trung tâm, MNF Solution đang xây dựng một hệ sinh thái di chuyển (mobility) mới. Công ty cung cấp giải pháp quản lý toàn diện cho các doanh nghiệp cho thuê xe ô tô, cùng dịch vụ kênh khách hàng để giao tiếp với khách hàng.',
+};
+// 웹사이트 보충 — 매칭위크 공고엔 없어 따로 채운 주소. 위 4곳은 같은 회사의 다른 KTC 공고(company_url)·JD 본문,
+// 아래는 ktc-ops 기업 담당자 이메일 도메인(사이트 제목이 회사명과 맞는지 확인함), hyperstar·pickcare·rothea·bada·until 은 유저 제공
+const CO_SITE = {
+  nexacode: 'https://nexacode.co.kr',
+  andwise: 'https://www.andwise.com/',
+  'camon social': 'https://camon.social/',
+  'mnf solution': 'https://www.mnfsolution.com/',
+  d3: 'https://d3company.co.kr/',
+  papacompany: 'https://papacompany.co.kr/',
+  rothea: 'https://rothea.co.kr/',
+  'the waves': 'https://www.thewaves.kr/',
+  hyperstar: 'https://www.hyper-star.org/',
+  pickcare: 'https://pickcare.co.kr/business',
+  'bada fintech': 'https://badafintech.ai/',
+  until: 'https://bannerting.com/',
+};
+
 // 다크 섹션 하단에 흐르는 사진 띠
 const MARQUEE = [
   ...[2, 5, 8, 10, 1].map((n) => `/matching-week/sep-${n}.jpg`),
@@ -318,7 +348,7 @@ export async function getStaticProps() {
   const byCo = new Map();
   for (const j of jobs) {
     const key = j.company.replace(/\s+company$/i, '').toLowerCase();
-    const g = byCo.get(key) || { name: j.company, logo: null, website: null, jobs: [] };
+    const g = byCo.get(key) || { name: j.company, logo: null, website: CO_SITE[key.trim()] || null, intro: CO_INTRO[key.trim()] || null, jobs: [] };
     g.jobs.push(j);
     if (j.company.length > g.name.length) g.name = j.company;
     if (!g.logo && j.logo) g.logo = j.logo;
@@ -887,6 +917,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant = 'fe
               </button>
             </div>
             <div className="mw-sheet-body">
+              {open.intro && <p className="mw-co-intro">{open.intro}</p>}
               {open.jobs.map((j) => (
                 <Link key={j.id} href={`/jobs/${j.id}`} className="mw-job"
                   onClick={() => track('click_job_card', { meta: { jobId: j.id, title: j.title, company: j.company, via: 'matching_week' }, page: PAGE })}>
@@ -1235,6 +1266,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant = 'fe
         .mw-x { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #f4f4f5; color: #3f3f46; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .mw-x:hover { background: #e4e4e7; }
         .mw-sheet-body { overflow-y: auto; padding: 8px 10px 14px; }
+        .mw-co-intro { margin: 8px 12px 10px; font-size: 14px; line-height: 1.65; color: #3f3f46; }
         .mw-job { display: flex; align-items: center; gap: 16px; padding: 18px 12px; border-radius: 14px; text-decoration: none; color: inherit; transition: background .15s; }
         .mw-job + .mw-job { border-top: 1px solid #f4f4f5; }
         .mw-job:hover { background: #fff7f0; }
