@@ -352,11 +352,11 @@ function KBand({ words }) {
   return <div className="fx-kb" aria-hidden="true">{row('outline')}{row('fill')}</div>;
 }
 
-/* variant='fest' — /matching-week-v2 축제(포스터) 스킨. 내용·동작은 같고 디자인만 다르다(아래 FEST_CSS). */
-export default function MatchingWeek({ companies, total, daysLeft, variant }) {
+/* variant='fest'(기본) — 축제(포스터) 스킨. 'classic' 은 초안 디자인. /matching-week-v2 는 같은 화면을 page 만 바꿔 렌더(계측 구분·noindex). */
+export default function MatchingWeek({ companies, total, daysLeft, variant = 'fest', page = '/matching-week' }) {
   const { t } = useT();
   const fest = variant === 'fest';
-  const PAGE = fest ? '/matching-week-v2' : '/matching-week'; // 이벤트 계측 페이지 구분
+  const PAGE = page; // 이벤트 계측 페이지 구분
   const [copied, setCopied] = useState(false);
   const [slide, setSlide] = useState(0);
   const [left, setLeft] = useState(null); // v2 카운트다운(마운트 후에만 — 서버/클라 시간이 달라 하이드레이션 어긋남 방지)
@@ -507,7 +507,7 @@ export default function MatchingWeek({ companies, total, daysLeft, variant }) {
         <meta property="og:url" content="https://salary-fyi.com/matching-week" />
         <link rel="canonical" href="https://salary-fyi.com/matching-week" />
         {/* v2 는 직접 링크로만 들어오는 시안 — 검색 노출 막음 */}
-        {fest && <meta name="robots" content="noindex, nofollow" />}
+        {PAGE !== '/matching-week' && <meta name="robots" content="noindex, nofollow" />}
         {fest && <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&display=swap" />}
       </Head>
 

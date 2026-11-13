@@ -5,5 +5,5 @@ import MatchingWeek from './matching-week';
 export { getStaticProps } from './matching-week';
 
 export default function MatchingWeekV2(props) {
-  return <MatchingWeek {...props} variant="fest" />;
+  return <MatchingWeek {...props} variant="fest" page="/matching-week-v2" />;
 }
