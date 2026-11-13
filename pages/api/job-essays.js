@@ -1,6 +1,7 @@
 import supabaseAdmin from '../../lib/supabaseAdmin'
 import { verifyToken } from '../../lib/ktcMailToken'
-import { essayFor, cleanAnswers } from '../../lib/jobEssays'
+import { essayFor, essayCode, cleanAnswers } from '../../lib/jobEssays'
+import { syncEssaySheet } from '../../lib/essaySheet'
 
 // 자기소개서 저장 — 신원은 둘 중 하나:
 //   · Authorization: Bearer <세션>  — /ktc/jobs/[id] 에서 지원하면서 작성
@@ -52,5 +53,7 @@ export default async function handler(req, res) {
     user_id: userId,
     meta: { job_id: job.id, code: job.source_id, source, campaign },
   })
+  // 시트 미러 실패는 제출 실패가 아니다 — 15분 cron(ktc-push)이 다시 맞춘다
+  try { await syncEssaySheet(supabaseAdmin, essayCode(job.source_id)) } catch (e) { console.error('syncEssaySheet:', e.message) }
   return res.status(200).json({ ok: true })
 }

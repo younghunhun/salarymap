@@ -4,6 +4,8 @@
 // 시트 FYI 탭 append·시트 동기화 등 무거운 단계는 ktc-sync 에 그대로 두고, 여기선 유입과 스크리닝만.
 // Vercel cron이 Authorization: Bearer ${CRON_SECRET} 헤더로 호출 (ktc-sync.js와 동일).
 import { pushFyiToKtc, syncKtcJobCodes, triggerFyiScreening } from '../../../lib/ktcCandidatesSync'
+import supabaseAdmin from '../../../lib/supabaseAdmin'
+import { syncEssaySheet, essaySheetCodes } from '../../../lib/essaySheet'
 
 export const config = { maxDuration: 120 }
 
@@ -21,7 +23,12 @@ export default async function handler(req, res) {
     // 증분: 최근 3일 지원 건만 (전체 스캔·누락 보정은 일일 ktc-sync 가 한다)
     const push = await pushFyiToKtc({ since: new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString() })
     const screening = await triggerFyiScreening({ since: new Date(Date.now() - 24 * 3600 * 1000).toISOString() })
-    res.json({ ok: true, jobCodes: jobCodes ? jobCodes.set : null, fyiPushed: push.pushed, screening })
+    // 자소서 시트 미러 — 제출 시점에도 갱신되지만 파이프라인 상태·누락분을 여기서 맞춘다
+    const essaySheets = {}
+    for (const code of essaySheetCodes()) {
+      try { essaySheets[code] = await syncEssaySheet(supabaseAdmin, code) } catch (e) { essaySheets[code] = e.message }
+    }
+    res.json({ ok: true, jobCodes: jobCodes ? jobCodes.set : null, fyiPushed: push.pushed, screening, essaySheets })
   } catch (e) {
     console.error('ktc-push:', e)
     res.status(500).json({ error: e.message })
