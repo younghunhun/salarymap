@@ -6,7 +6,7 @@ import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabaseClient'
 import { useT } from '../../lib/i18n'
 import Icon from '../../components/Icon'
-import { DEFAULT_IMAGES, roleLabel, DEFAULT_WORK_DAYS, DEFAULT_WORK_HOURS, DEFAULT_PAID_LEAVE, DEFAULT_CONTRACT } from '../../constants/jobs'
+import { DEFAULT_IMAGES, roleLabel } from '../../constants/jobs'
 import { getStoredUtm } from '../../lib/utm'
 import { isSalaryNegotiable } from '../../utils/salary'
 import { track as trackVisit, getClientId, mirrorClarity } from '../../lib/track'
@@ -327,10 +327,6 @@ export default function JobDetailPage({ job }) {
                 <div className="jd-meta-label">{t('jobs.type')}</div>
                 <div className="jd-meta-value">{typeLabel(job.type)}</div>
               </div>
-              <div className="jd-meta-item">
-                <div className="jd-meta-label">{t('jobs.region')}</div>
-                <div className="jd-meta-value" style={{ textTransform: 'capitalize' }}>{job.country}</div>
-              </div>
               {job.company_size && (
                 <div className="jd-meta-item">
                   <div className="jd-meta-label">Company Size</div>
@@ -350,55 +346,6 @@ export default function JobDetailPage({ job }) {
                   const ddayText = lang === 'vi' ? (days === 0 ? t('jobs.ddayToday') : days > 0 ? t('jobs.dday', { days }) : 'Đã đóng') : days >= 0 ? `D-${days}` : 'Closed'
                   return `${job.deadline} (${ddayText})`
                 })() : t('jobs.ongoing')}</div>
-              </div>
-            </div>
-
-            <div className="jd-divider" />
-
-            {/* Work Information */}
-            <div className="jd-section-title">Work Information</div>
-            <div className="jd-work-info">
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="calendar" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Work Days</div>
-                  <div className="jd-work-value">{job.work_days || DEFAULT_WORK_DAYS}</div>
-                </div>
-              </div>
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="clock" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Work Hours</div>
-                  <div className="jd-work-value">{job.work_hours || DEFAULT_WORK_HOURS}</div>
-                </div>
-              </div>
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="mapPin" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Work Type</div>
-                  <div className="jd-work-value">{job.type === 'remote' ? 'Fully Remote' : job.type === 'hybrid' ? 'Hybrid (Office + Remote)' : 'On-site'}</div>
-                </div>
-              </div>
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="palmTree" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Paid Leave</div>
-                  <div className="jd-work-value">{job.paid_leave || DEFAULT_PAID_LEAVE}</div>
-                </div>
-              </div>
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="clipboard" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Contract</div>
-                  <div className="jd-work-value">{job.contract_type || DEFAULT_CONTRACT}</div>
-                </div>
-              </div>
-              <div className="jd-work-item">
-                <div className="jd-work-icon"><Icon name="hospital" size={18} color="#555" /></div>
-                <div>
-                  <div className="jd-work-label">Insurance</div>
-                  <div className="jd-work-value">Social & Health Insurance</div>
-                </div>
               </div>
             </div>
 
@@ -543,11 +490,6 @@ export default function JobDetailPage({ job }) {
         .jd-meta-label { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
         .jd-meta-value { font-size: 14px; font-weight: 600; color: #111; }
 
-        .jd-work-info { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 24px; }
-        .jd-work-item { display: flex; align-items: center; gap: 10px; background: #fafafa; border: 1px solid #f0f0f0; border-radius: 10px; padding: 12px 14px; }
-        .jd-work-icon { font-size: 18px; flex-shrink: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #fafaf8; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-        .jd-work-label { font-size: 11px; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: .03em; }
-        .jd-work-value { font-size: 13px; color: #222; font-weight: 600; margin-top: 2px; }
 
         .jd-apply-float { position: sticky; bottom: 0; background: #fafaf8; padding: 16px 32px; border-top: 1px solid #f0f0f0; z-index: 2; }
         .jd-apply-btn { width: 100%; padding: 14px; background: #ff4400; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; transition: background .15s; font-family: inherit; }
@@ -572,7 +514,6 @@ export default function JobDetailPage({ job }) {
           .jd-body { padding: 20px 16px 32px; }
           .jd-img { max-height: 280px; }
           .jd-title { font-size: 18px; }
-          .jd-work-info { grid-template-columns: 1fr; }
           .jd-apply-float { position: fixed; bottom: 0; left: 0; right: 0; padding: 12px 16px; background: #fafaf8; border-top: 1px solid #f0f0f0; z-index: 100; }
           .jd-save-btn { width: 44px; height: 44px; }
           .jd-apply-btn { padding: 12px; font-size: 14px; }
