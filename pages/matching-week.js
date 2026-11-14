@@ -50,6 +50,9 @@ const CO_INTRO = {
   'the waves': 'The Waves là công ty nội dung tại Seoul, hoạt động trong ba mảng: sản xuất nội dung (media, giải trí), dự án thương hiệu (brand marketing) và kinh doanh âm nhạc (quản lý nghệ sĩ, phát hành âm nhạc).',
   hyperstar: 'Hyperstar giúp thương hiệu tăng trưởng theo hai cách: phần mềm SaaS dùng AI để tìm kiếm trực tiếp trong hơn 5 triệu influencer, và agency marketing influencer toàn cầu.',
   until: 'Until là doanh nghiệp Hàn Quốc vận hành Bannerting — dịch vụ chia sẻ băng rôn quảng cáo với sứ mệnh "kết nối giá trị cho từng tấm băng rôn".',
+  // VN 리드 참가사(11/14 추가). first marketing 은 JD 본문, golfzon 은 공식 사이트(golfzonvietnam.com) 설명 문구를 베트남어로 옮김
+  'first marketing': 'First Marketing Company là doanh nghiệp Hàn Quốc hoạt động trong lĩnh vực Digital Marketing, Influencer Marketing và Brand Communication, cung cấp các giải pháp marketing tổng thể cho nhiều thương hiệu Hàn Quốc và quốc tế.',
+  golfzon: 'Golfzon Vietnam là công ty golf mô phỏng (golf simulator) hàng đầu tại Việt Nam, mang đến công nghệ golf mô phỏng tốt nhất để người chơi tận hưởng trải nghiệm golf trọn vẹn.',
 };
 // 로고 보충 — 매칭위크 공고에 로고가 없던 곳. 각 공식 사이트 로고·파비콘을 정사각형으로 저장(d3 는 흰 로고라 어두운 바탕에 올림)
 const CO_LOGO = {
@@ -73,6 +76,7 @@ const CO_SITE = {
   pickcare: 'https://pickcare.co.kr/business',
   'bada fintech': 'https://badafintech.ai/',
   until: 'https://bannerting.com/',
+  golfzon: 'https://golfzonvietnam.com/vi', // V259 JD 본문
 };
 
 // 다크 섹션 하단에 흐르는 사진 띠
