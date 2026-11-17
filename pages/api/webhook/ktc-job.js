@@ -107,7 +107,8 @@ function problemsOf(input, g) {
     ['responsibilities', items(input.responsibilities), lines(g.responsibilities)],
     ['requirements', items(input.qualifications) + items(input.preferred), lines(g.requirements)],
   ]
-  for (const [f, want, got] of pairs) if (want && got < want - 1) out.push(`${f} has ${got} items but the input has ${want} — keep every item`)
+  // 원문 소제목·직무명 줄을 GPT 가 항목에 합치거나 빼기도 해(V302 재시도: 항목 10개 전부 있는데 12/14) 20%까지는 허용 — 요약은 이보다 훨씬 많이 줄인다
+  for (const [f, want, got] of pairs) if (want && got < want - Math.max(1, Math.ceil(want * 0.2))) out.push(`${f} has ${got} items but the input has ${want} — keep every item`)
   return out
 }
 
