@@ -91,6 +91,9 @@ const HANGUL = /[가-힣]/
 const FIELDS = ['title', 'description', 'responsibilities', 'requirements', 'benefits']
 // 소제목(**…**)·"…:" 안내줄·빈 줄을 뺀 항목 줄 수
 const items = (v) => s(v).split('\n').map((l) => l.trim()).filter((l) => l && !/^\*\*.*\*\*$/.test(l) && !/:$/.test(l)).length
+// 생성본은 소제목까지 센다 — 원문 소제목이 꾸밈 없는 줄이면 항목으로 세지는데 GPT 는 **소제목** 으로 바꿔
+// 항목 수가 모자란 것처럼 보인다(2026-11 V302: 원문 14줄 중 4줄이 직무명·소제목, 생성본 항목 11 → 오탐 차단)
+const lines = (v) => s(v).split('\n').map((l) => l.trim()).filter(Boolean).length
 
 function problemsOf(input, g) {
   const out = []
@@ -101,8 +104,8 @@ function problemsOf(input, g) {
   }
   // 원문과 겹치는 우대 항목이 합쳐지는 정도(1줄)는 허용
   const pairs = [
-    ['responsibilities', items(input.responsibilities), items(g.responsibilities)],
-    ['requirements', items(input.qualifications) + items(input.preferred), items(g.requirements)],
+    ['responsibilities', items(input.responsibilities), lines(g.responsibilities)],
+    ['requirements', items(input.qualifications) + items(input.preferred), lines(g.requirements)],
   ]
   for (const [f, want, got] of pairs) if (want && got < want - 1) out.push(`${f} has ${got} items but the input has ${want} — keep every item`)
   return out
