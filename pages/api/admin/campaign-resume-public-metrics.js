@@ -22,9 +22,10 @@ const vnDay = (iso) => new Date(new Date(iso).getTime() + ICT_OFFSET_MS).toISOSt
 //   recommend — 기가입 회원 → 특정 공고 지원
 //   photo     — 이력서 보유·사진 없는 회원 → 프로필 사진 등록(원클릭 랜딩)
 //   salary    — 이력서 보유·경력 1년+ 회원 → 현/직전 월급 입력(무로그인 랜딩)
-const GROUP_ORDER = ['vku', 'signup', 'register', 'resume', 'recommend', 'photo', 'salary', 'screen']
+const GROUP_ORDER = ['mw1119', 'vku', 'signup', 'register', 'resume', 'recommend', 'photo', 'salary', 'screen']
 const groupOf = (name) =>
-  /vku/.test(name) ? 'vku' // VKU Job Matching Weekend(9/30) 계열 — 클레임·가입 유도 모두 전환=가입, 맨 위 별도 섹션
+  /^mw1119/.test(name) ? 'mw1119' // 11/19 November Matching Week(HCM 대면면접) 10공고 1인1통 배분 — 어드민 맨 위 별도 섹션
+    : /vku/.test(name) ? 'vku' // VKU Job Matching Weekend(9/30) 계열 — 클레임·가입 유도 모두 전환=가입, 맨 위 별도 섹션
     : /^coldmail-ktc/.test(name) ? 'signup'
     : /^resume-register/.test(name) ? 'register'
       : /recommend/.test(name) || /^kyndof/.test(name) || /^fmc1012-sale-intern/.test(name) ? 'recommend' // fmc1012-sale-intern 은 recommend 발송인데 이름에 recommend 가 빠져 등록(10/12) — 이름 규약 위반 예외

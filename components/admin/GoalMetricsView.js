@@ -811,6 +811,13 @@ function AugustGoalPanel({ g, ko, onRefresh, generatedAt, lang }) {
 // 숫자를 세로로 비교할 수 없다. 그룹 판정은 API(groupOf)가 하고 여기선 라벨만 붙인다.
 const CAMPAIGN_GROUPS = [
   {
+    key: 'mw1119', ko: 'November Matching Week (11/19 호치민)', en: 'November Matching Week (Nov 19, HCM)',
+    koDesc: 'GOLFZON·COBI·Rothea·Nexacode 10공고 HCM 거주자 1인1통 배분 · CV 스크리닝 자동합격 · 전환 = 해당 공고 지원',
+    enDesc: '10 jobs (GOLFZON·COBI·Rothea·Nexacode), one mail per HCM resident · convert = applied',
+    convKo: '지원자', convEn: 'Applicants',
+    convertFrom: 'apply',
+  },
+  {
     key: 'recommend', ko: '1. 공고 추천 → 지원', en: '1. Job recommend',
     koDesc: '이력서 공개 회원에게 맞는 공고 추천 · 전환 = 해당 공고 지원',
     enDesc: 'Matched job recommendations to public-resume members · convert = applied',
@@ -928,7 +935,7 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
       .map((d) => ({ campaign: d.campaign, group: d.group, sent: 0, clicked: 0, converted: 0, clickRate: 0, convertRate: 0, applies: 0, appliers: 0, firstSentDay: null, lastSentDay: null, draft: true }))
     if (!rows.length && !drafts.length) return null
     // recommend 는 캠페인 버킷이 200개+ 라 평면 표로는 못 읽는다 — 발송일 접기 + 프레임 짝 병합.
-    if (g.key === 'recommend') {
+    if (g.key === 'recommend' || g.key === 'mw1119') {
       return <RecommendGroupSection key={g.key} g={g} rows={rows} drafts={drafts} ko={ko}
         pct={pct}
         onPreview={(campaign, tpl) => setMailPreview({ campaign, tpl })} />
@@ -982,11 +989,11 @@ function ColdmailPublicTab({ data, loading, error, ko, lang }) {
   }
   // 요즘 보는 건 공고 추천뿐이라 나머지 그룹(VKU·가입·이력서·사진·연봉·스크리닝)은 접어 둔다.
   const hasCampaigns = (data.campaigns || []).length > 0
-  const otherGroups = CAMPAIGN_GROUPS.filter((g) => g.key !== 'recommend')
+  const otherGroups = CAMPAIGN_GROUPS.filter((g) => g.key !== 'recommend' && g.key !== 'mw1119')
 
   return (
     <div>
-      {hasCampaigns && CAMPAIGN_GROUPS.filter((g) => g.key === 'recommend').map(renderGroup)}
+      {hasCampaigns && CAMPAIGN_GROUPS.filter((g) => g.key === 'mw1119' || g.key === 'recommend').map(renderGroup)}
       {hasCampaigns && (
         <div style={{ marginBottom: G.xl }}>
           <GhostButton size="small" onClick={() => setShowOthers((v) => !v)}
